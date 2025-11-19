@@ -4,8 +4,9 @@ import { SERVICE_UUID } from '../constants';
 import { cache } from '../storage';
 import { notifyPhoneChange } from '../helpers/notify-phone-change';
 import { Alert } from 'react-native';
-import { get, ref } from 'firebase/database';
-import { db } from '../firebaseApp';
+import { deviceService } from '../services';
+
+const { getPhoneNumber } = deviceService;
 
 const COOLDOWN_MS = 10 * 1000;
 
@@ -65,9 +66,8 @@ export async function safeStartScan() {
 
         if (!deviceId || !curPhone) return;
 
-        const snapShot = await get(ref(db, `/device/${deviceId}/phone`));
-        if (!snapShot.exists()) return;
-        const dbPhone = snapShot.val() as string;
+        const dbPhone = await getPhoneNumber(deviceId);
+        if (!dbPhone) return;
 
         if (curPhone === dbPhone) return;
 
@@ -91,9 +91,3 @@ export function stopBackgroundScan() {
 
 const isCandidate = (dev: Device) =>
   !!dev && (dev.name ?? '').startsWith('Parke');
-
-async function safeDisconnect(d?: Device) {
-  try {
-    await d?.cancelConnection();
-  } catch {}
-}

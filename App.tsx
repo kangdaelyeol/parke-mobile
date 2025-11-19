@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar, useColorScheme } from 'react-native';
+import { Alert, StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/components/home-screen';
 import SearchBLEScreen from './src/components/search-ble-screen';
@@ -9,6 +9,8 @@ import ScanComplete from './src/components/scan-complete-screen';
 import './src/background/manager';
 import { safeStartScan } from './src/background/manager';
 import { setupNotifications } from './src/helpers/notify-phone-change';
+import notifee, { EventType } from '@notifee/react-native';
+import { deviceService } from './src/services';
 
 type RootStackParamList = {
   Home: undefined;
@@ -29,9 +31,26 @@ function App() {
 }
 
 function AppContent() {
+  const { updatePhoneNumber } = deviceService;
   useEffect(() => {
     setupNotifications();
     safeStartScan();
+    const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
+      if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
+
+      const actionId = detail.pressAction?.id;
+      const { deviceId, newPhone } = detail.notification?.data || {};
+
+      if (actionId === 'confirm' && deviceId && newPhone) {
+        try {
+          await updatePhoneNumber(String(deviceId), String(newPhone));
+        } catch (e) {
+          Alert.alert('오류', '전화번호 변경에 실패했습니다.');
+        }
+      }
+    });
+
+    return () => unsub();
   }, []);
 
   /** TODO: Android 구현 나중에 */

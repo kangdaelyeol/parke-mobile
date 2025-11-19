@@ -6,10 +6,10 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import notifee, { EventType } from '@notifee/react-native';
-import { update, ref, serverTimestamp } from 'firebase/database';
-import { db } from './src/firebaseApp';
+import { deviceService } from './src/services';
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
+  const { updatePhoneNumber } = deviceService;
   if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
 
   const actionId = detail.pressAction?.id;
@@ -17,10 +17,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 
   if (actionId === 'confirm' && deviceId && newPhone) {
     try {
-      await update(ref(db, `devices/${deviceId}`), {
-        phone: newPhone,
-        updatedAt: serverTimestamp(),
-      });
+      updatePhoneNumber(deviceId, newPhone);
     } catch (e) {
       // bground에서는 Alert 안터짐
     }

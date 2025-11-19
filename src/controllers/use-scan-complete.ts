@@ -1,12 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { db } from '../firebaseApp';
-import { update, ref, serverTimestamp } from 'firebase/database';
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { convertPhone } from '../helpers/convertPhone';
 import { cache } from '../storage';
 import { useNavigation } from '@react-navigation/native';
 import { manager } from '../background/manager';
+import { deviceService } from '../services';
 
 /* For Background
  import { BleManager } from 'react-native-ble-plx';
@@ -17,6 +16,7 @@ import { manager } from '../background/manager';
 */
 
 export const useScanComplete = (route: any) => {
+  const { updatePhoneNumber } = deviceService;
   const navigation = useNavigation<any>();
   const deviceId = route?.params?.value ?? 'abc';
 
@@ -45,10 +45,7 @@ export const useScanComplete = (route: any) => {
     try {
       setSaving(true);
 
-      await update(ref(db, `device/${deviceId}`), {
-        phone,
-        updatedAt: serverTimestamp(),
-      });
+      await updatePhoneNumber(deviceId, phone);
 
       Alert.alert('저장 성공!');
 
@@ -62,48 +59,6 @@ export const useScanComplete = (route: any) => {
       setSaving(false);
     }
   };
-
-  // For Background
-  /*
-  useEffect(() => {
-    manager.startDeviceScan([SERVICE_UUID], null, async (error, device) => {
-      console.log(error, device);
-      if (error || !device) return;
-
-      if ((device.name ?? '').startsWith('Parke') === false) return;
-
-      try {
-        manager.stopDeviceScan();
-        const d = await device.connect();
-        await d.discoverAllServicesAndCharacteristics();
-
-        const ch = await d.readCharacteristicForService(
-          SERVICE_UUID,
-          CHAR_UUID,
-        );
-
-        const id = Buffer.from(ch.value ?? '', 'base64').toString('utf-8');
-
-        navigation.replace('ScanComplete', { value: id });
-
-        const snap = await get(ref(db, `user/${getAppScopedId()}`));
-
-        if (!snap.val()) return;
-
-        const snapVal = snap.val();
-
-        if (id === snapVal.deviceId) {
-          update(ref(db, `user/${getAppScopedId()}`), {
-            phone: snapVal.phone,
-            updatedAt: serverTimestamp(),
-          });
-        }
-
-        await d.cancelConnection();
-      } catch {}
-    });
-  }, []);
-  */
 
   const convertedPhone = convertPhone(phone);
 
