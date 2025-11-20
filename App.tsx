@@ -12,6 +12,7 @@ import { setupNotifications } from './src/helpers/notify-phone-change';
 import notifee, { EventType } from '@notifee/react-native';
 import { deviceService } from './src/services';
 import { cache } from './src/storage';
+import { alertToChangePhone } from './src/utils/alertToChangePhone';
 
 type RootStackParamList = {
   Home: undefined;
@@ -45,6 +46,7 @@ function AppContent() {
       if (actionId === 'confirm' && deviceId && newPhone) {
         try {
           await updatePhoneNumber(String(deviceId), String(newPhone));
+          cache.clearPending();
         } catch (e) {
           Alert.alert('오류', '전화번호 변경에 실패했습니다.');
         }
@@ -57,32 +59,12 @@ function AppContent() {
   // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
   useEffect(() => {
     const sub = AppState.addEventListener('change', async state => {
-      if (state === 'active') {
-        const pending = cache.getPending();
-        if (pending) {
-          Alert.alert(
-            '전화번호 변경',
-            `${pending.phoneNumber}으로 변경할까요?`,
-            [
-              {
-                text: '취소',
-                style: 'cancel',
-                onPress: () => cache.clearPending(),
-              },
-              {
-                text: '변경',
-                onPress: async () => {
-                  await deviceService.updatePhoneNumber(
-                    pending.deviceId,
-                    pending.phoneNumber,
-                  );
-                  cache.clearPending();
-                },
-              },
-            ],
-          );
-        }
-      }
+      if (state !== 'active') return;
+
+      const pending = cache.getPending();
+      if (!pending) return;
+
+      alertToChangePhone(pending.phoneNumber, pending.deviceId);
     });
 
     return () => sub.remove();
