@@ -8,4 +8,8 @@ export const cache = {
   setBLEDeviceId: (k: string) => kv.set('ble:deviceId', k),
   lastSeenAt: (k: string) => kv.getNumber(`ble:lastSeen:${k}`) ?? 0,
   markSeen: (k: string) => kv.set(`ble:lastSeen:${k}`, Date.now()),
+  getPending: () => JSON.parse(kv.getString('ble:pending') ?? 'null'),
+  setPending: (obj: { deviceId: string; phoneNumber: string }) =>
+    kv.set('ble:pending', JSON.stringify(obj)),
+  clearPending: () => kv.set('ble:pending', 'null'),
 };

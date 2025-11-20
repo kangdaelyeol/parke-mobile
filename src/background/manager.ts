@@ -77,6 +77,7 @@ export async function safeStartScan() {
         cache.markSeen(deviceId);
 
         // 알림
+        cache.setPending({ deviceId, phoneNumber: curPhone });
         await notifyPhoneChange(deviceId, dbPhone, curPhone); // test - oldPhone === new phone
       } catch (e) {
         Alert.alert(`[BLE] scan handler error: ${e}`);

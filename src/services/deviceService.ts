@@ -3,7 +3,7 @@ import { db } from '../firebaseApp';
 
 export const deviceService = {
   getPhoneNumber: async (deviceId: string): Promise<string | null> => {
-    const snapShot = await get(ref(db, `/device/${deviceId}/phone`));
+    const snapShot = await get(ref(db, `device/${deviceId}/phone`));
     if (!snapShot.exists()) return null;
     return snapShot.val() as string;
   },

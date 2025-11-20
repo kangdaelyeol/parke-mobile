@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, StatusBar, useColorScheme } from 'react-native';
+import { Alert, AppState, StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/components/home-screen';
 import SearchBLEScreen from './src/components/search-ble-screen';
@@ -11,6 +11,7 @@ import { safeStartScan } from './src/background/manager';
 import { setupNotifications } from './src/helpers/notify-phone-change';
 import notifee, { EventType } from '@notifee/react-native';
 import { deviceService } from './src/services';
+import { cache } from './src/storage';
 
 type RootStackParamList = {
   Home: undefined;
@@ -51,6 +52,40 @@ function AppContent() {
     });
 
     return () => unsub();
+  }, []);
+
+  // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
+  useEffect(() => {
+    const sub = AppState.addEventListener('change', async state => {
+      if (state === 'active') {
+        const pending = cache.getPending();
+        if (pending) {
+          Alert.alert(
+            '전화번호 변경',
+            `${pending.phoneNumber}으로 변경할까요?`,
+            [
+              {
+                text: '취소',
+                style: 'cancel',
+                onPress: () => cache.clearPending(),
+              },
+              {
+                text: '변경',
+                onPress: async () => {
+                  await deviceService.updatePhoneNumber(
+                    pending.deviceId,
+                    pending.phoneNumber,
+                  );
+                  cache.clearPending();
+                },
+              },
+            ],
+          );
+        }
+      }
+    });
+
+    return () => sub.remove();
   }, []);
 
   /** TODO: Android 구현 나중에 */
