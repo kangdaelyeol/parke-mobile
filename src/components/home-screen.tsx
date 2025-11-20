@@ -1,14 +1,22 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { safeStartScan, manager } from '../background/manager';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
     safeStartScan();
   }, []);
+  
   return (
     <View style={styles.container}>
       <View style={styles.textBox}>
+        <Pressable style={styles.settingBtn} onPress={() => {
+          navigation.navigate('Setting')
+        }}>
+          <Icon name="settings" size={40} color="#444" />
+        </Pressable>
         <Text style={styles.upText}>PARKÉ</Text>
         <Text style={styles.downText}>LUXURY</Text>
       </View>
@@ -31,6 +39,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
   },
   textBox: {
+    width: '100%',
+    maxWidth: 1200,
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
@@ -62,5 +72,10 @@ const styles = StyleSheet.create({
   btnText: {
     fontSize: 20,
     color: 'black',
+  },
+  settingBtn: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
   },
 });

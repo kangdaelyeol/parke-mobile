@@ -85,5 +85,9 @@ export const useSearchBle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return { devices };
+  const moveToHome = () => {
+    navigation.replace('Home');
+  };
+
+  return { devices, moveToHome};
 };

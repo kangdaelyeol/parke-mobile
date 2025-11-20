@@ -1,12 +1,24 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
 import Radar from './common/rader';
 import { useSearchBle } from '../controllers/use-search-ble';
 
 export default function SearchBLEScreen() {
-  const { devices } = useSearchBle();
+  const { devices, moveToHome } = useSearchBle();
 
   return (
     <View style={styles.container}>
+      <Pressable onPress={moveToHome}>
+        {({ pressed }) => (
+          <Text
+            style={{
+              ...styles.btnText,
+              backgroundColor: pressed ? '#333' : '#222',
+            }}
+          >
+            Home
+          </Text>
+        )}
+      </Pressable>
       <Text style={styles.uptext}>Searching BLE Tag</Text>
       <Radar style={styles.raderStyle} />
 
@@ -42,4 +54,14 @@ const styles = StyleSheet.create({
   },
   list: { flex: 1, marginTop: 10 },
   deviceText: { color: '#fff', fontSize: 16, marginVertical: 4 },
+  btnText: {
+    color: '#fff',
+    fontWeight: 500,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    position: 'absolute',
+    top: 40,
+    left: 20,
+    borderRadius: 20,
+  },
 });

@@ -13,6 +13,7 @@ import notifee, { EventType } from '@notifee/react-native';
 import { deviceService } from './src/services';
 import { cache } from './src/storage';
 import { alertToChangePhone } from './src/utils/alertToChangePhone';
+import SettingScreen from './src/components/setting-screen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -99,10 +100,14 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Setting"
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
         <Stack.Screen name="ScanComplete" component={ScanComplete} />
+        <Stack.Screen name="Setting" component={SettingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
