@@ -2,20 +2,30 @@ import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { safeStartScan, manager } from '../background/manager';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { useNavigation } from '@react-navigation/native';
 
 export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
     safeStartScan();
   }, []);
-  
+
   return (
     <View style={styles.container}>
       <View style={styles.textBox}>
-        <Pressable style={styles.settingBtn} onPress={() => {
-          navigation.navigate('Setting')
-        }}>
-          <Icon name="settings" size={40} color="#444" />
+        <Pressable
+          style={styles.settingBtn}
+          onPress={() => {
+            navigation.navigate('Setting');
+          }}
+        >
+          {({ pressed }) => {
+            return (
+              <Icon
+                name="settings"
+                size={40}
+                style={{ color: pressed ? '#666' : '#fff' }}
+              />
+            );
+          }}
         </Pressable>
         <Text style={styles.upText}>PARKÉ</Text>
         <Text style={styles.downText}>LUXURY</Text>

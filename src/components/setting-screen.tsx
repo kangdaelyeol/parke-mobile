@@ -1,19 +1,44 @@
-import React, { useState } from 'react';
-import { StyleSheet, Switch, View, Text } from 'react-native';
+import React from 'react';
+import { StyleSheet, Switch, View, Text, Pressable } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { useSetting } from '../controllers/use-setting';
 
 export default function SettingScreen() {
-  const [autoChange, setAutoChange] = useState(false);
-  const [notice, setNotice] = useState(false);
+  const {
+    noticeDisabled,
+    autoChangeDisabled,
+    notice,
+    setActive,
+    onAutoChange,
+    active,
+    setNotice,
+    autoChange,
+  } = useSetting();
 
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
+        <Pressable style={styles.backBtn}>
+          {({ pressed }) => (
+            <Icon
+              name="arrow-back-ios-new"
+              size={30}
+              style={{
+                color: pressed ? '#666' : '#fff',
+              }}
+            />
+          )}
+        </Pressable>
         <Text style={styles.title}>Setting</Text>
         <View style={styles.list}>
           <View style={styles.line}>
             <Text style={styles.lineText}>자동바꿈</Text>
             <View>
-              <Switch value={autoChange} onValueChange={setAutoChange} />
+              <Switch
+                disabled={autoChangeDisabled}
+                value={autoChange}
+                onValueChange={onAutoChange}
+              />
             </View>
           </View>
           <View style={styles.underLine} />
@@ -21,10 +46,18 @@ export default function SettingScreen() {
             <Text style={styles.lineText}>알림</Text>
             <View>
               <Switch
-                style={styles.btn}
+                disabled={noticeDisabled}
                 value={notice}
                 onValueChange={setNotice}
               />
+            </View>
+          </View>
+        </View>
+        <View style={styles.list}>
+          <View style={styles.line}>
+            <Text style={styles.lineText}>활성화</Text>
+            <View>
+              <Switch value={active} onValueChange={setActive} />
             </View>
           </View>
         </View>
@@ -74,5 +107,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 300,
     fontSize: 16,
+  },
+  backBtn: {
+    position: 'absolute',
+    top: 65,
+    left: 30,
+    borderColor: '#444',
+    borderRadius: '50%',
+    color: 'white',
   },
 });
