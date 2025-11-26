@@ -12,4 +12,12 @@ export const cache = {
   setPending: (obj: { deviceId: string; phoneNumber: string }) =>
     kv.set('ble:pending', JSON.stringify(obj)),
   clearPending: () => kv.set('ble:pending', 'null'),
+
+  // settings
+  setActive: (val: boolean) => kv.set('setting:active', val),
+  getActive: () => kv.getBoolean('setting:active') ?? null,
+  setNotice: (val: boolean) => kv.set('setting:notice', val),
+  getNotice: () => kv.getBoolean('setting:notice') ?? null,
+  setAutoSet: (val: boolean) => kv.set('setting:autoSet', val),
+  getAutoSet: () => kv.getBoolean('setting:autoSet') ?? null,
 };

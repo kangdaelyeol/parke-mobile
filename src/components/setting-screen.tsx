@@ -6,19 +6,20 @@ import { useSetting } from '../controllers/use-setting';
 export default function SettingScreen() {
   const {
     noticeDisabled,
-    autoChangeDisabled,
+    autoSetDisabled,
     notice,
-    setActive,
-    onAutoChange,
+    onAutoSetChange,
+    onActiveChange,
+    onNoticeChange,
+    onHomeBtnPress,
     active,
-    setNotice,
-    autoChange,
+    autoSet,
   } = useSetting();
 
   return (
     <View style={styles.container}>
       <View style={styles.inner}>
-        <Pressable style={styles.backBtn}>
+        <Pressable style={styles.backBtn} onPress={onHomeBtnPress}>
           {({ pressed }) => (
             <Icon
               name="arrow-back-ios-new"
@@ -35,9 +36,9 @@ export default function SettingScreen() {
             <Text style={styles.lineText}>자동바꿈</Text>
             <View>
               <Switch
-                disabled={autoChangeDisabled}
-                value={autoChange}
-                onValueChange={onAutoChange}
+                disabled={autoSetDisabled}
+                value={autoSet}
+                onValueChange={onAutoSetChange}
               />
             </View>
           </View>
@@ -48,7 +49,7 @@ export default function SettingScreen() {
               <Switch
                 disabled={noticeDisabled}
                 value={notice}
-                onValueChange={setNotice}
+                onValueChange={onNoticeChange}
               />
             </View>
           </View>
@@ -57,7 +58,7 @@ export default function SettingScreen() {
           <View style={styles.line}>
             <Text style={styles.lineText}>활성화</Text>
             <View>
-              <Switch value={active} onValueChange={setActive} />
+              <Switch value={active} onValueChange={onActiveChange} />
             </View>
           </View>
         </View>

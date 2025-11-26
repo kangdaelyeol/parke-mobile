@@ -1,31 +1,58 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { settingService } from '../services/settingService';
+import { useNavigation } from '@react-navigation/native';
 
 export const useSetting = () => {
-  const [autoChange, setAutoChange] = useState(false);
+  const [autoSet, setAutoSet] = useState(false);
   const [notice, setNotice] = useState(false);
   const [active, setActive] = useState(true);
+  const navigation = useNavigation<any>();
 
-  const onAutoChange = (val: boolean) => {
+  // init settings value on UI
+  useEffect(() => {
+    const settings = settingService.getSettings();
+    setAutoSet(settings.autoSet as boolean);
+    setNotice(settings.notice as boolean);
+    setActive(settings.active as boolean);
+  }, []);
+
+  const onHomeBtnPress = () => {
+    navigation.replace('Home');
+  };
+
+  const onAutoSetChange = (val: boolean) => {
     if (val === false) {
       setNotice(true);
+      settingService.setNotice(true);
     }
 
-    setAutoChange(val);
+    settingService.setAutoSet(val);
+    setAutoSet(val);
   };
-  
-  const noticeDisabled =
-    active === false || autoChange === false ? true : false;
 
-  const autoChangeDisabled = active === false ? true : false;
+  const onActiveChange = (val: boolean) => {
+    setActive(val);
+    settingService.setActive(val);
+  };
+
+  const onNoticeChange = (val: boolean) => {
+    setNotice(val);
+    settingService.setNotice(val);
+  };
+
+  const noticeDisabled = active === false || autoSet === false ? true : false;
+
+  const autoSetDisabled = active === false ? true : false;
 
   return {
     noticeDisabled,
-    autoChangeDisabled,
+    autoSetDisabled,
     notice,
-    setActive,
-    onAutoChange,
-    autoChange,
-    setNotice,
+    onNoticeChange,
+    onActiveChange,
+    onAutoSetChange,
+    onHomeBtnPress,
+    autoSet,
     active,
   };
 };
