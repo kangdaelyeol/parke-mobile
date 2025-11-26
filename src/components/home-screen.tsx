@@ -2,10 +2,18 @@ import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { safeStartScan, manager } from '../background/manager';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { settingService } from '../services/settingService';
 
 export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
-    safeStartScan();
+    const settings = settingService.getSettings();
+    if (settings.active) {
+      safeStartScan();
+    }
+
+    return () => {
+      manager.stopDeviceScan();
+    };
   }, []);
 
   return (

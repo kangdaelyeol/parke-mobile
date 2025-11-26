@@ -58,7 +58,6 @@ export const useSearchBle = () => {
   };
 
   useEffect(() => {
-    manager.stopDeviceScan();
     stopBackgroundScan();
     let sub: { remove: () => void } | undefined;
     let unmounted = false;
@@ -79,6 +78,7 @@ export const useSearchBle = () => {
     })();
 
     return () => {
+      manager.stopDeviceScan();
       unmounted = true;
       sub?.remove();
     };
@@ -89,5 +89,5 @@ export const useSearchBle = () => {
     navigation.replace('Home');
   };
 
-  return { devices, moveToHome};
+  return { devices, moveToHome };
 };
