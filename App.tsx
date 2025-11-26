@@ -12,7 +12,8 @@ import { setupNotifications } from './src/helpers/notify-phone-change';
 import notifee, { EventType } from '@notifee/react-native';
 import { deviceService } from './src/services';
 import { cache } from './src/storage';
-import { alertToChangePhone } from './src/utils/alertToChangePhone';
+import { notifyOnScreenToChangePhone } from './src/utils/notify-on-screen-to-change-phone';
+import SettingScreen from './src/components/setting-screen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -64,7 +65,7 @@ function AppContent() {
       const pending = cache.getPending();
       if (!pending) return;
 
-      alertToChangePhone(pending.phoneNumber, pending.deviceId);
+      notifyOnScreenToChangePhone(pending.phoneNumber, pending.deviceId);
     });
 
     return () => sub.remove();
@@ -99,10 +100,14 @@ function AppContent() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator
+        initialRouteName="Home"
+        screenOptions={{ headerShown: false }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
         <Stack.Screen name="ScanComplete" component={ScanComplete} />
+        <Stack.Screen name="Setting" component={SettingScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -5,7 +5,9 @@ import { cache } from '../storage';
 import { notifyPhoneChange } from '../helpers/notify-phone-change';
 import { Alert } from 'react-native';
 import { deviceService } from '../services';
-import { alertToChangePhone } from '../utils/alertToChangePhone';
+import { notifyOnScreenToChangePhone } from '../utils/notify-on-screen-to-change-phone';
+import { nofifyMessage } from '../helpers/notify-message';
+import { settingService } from '../services/settingService';
 
 const { getPhoneNumber } = deviceService;
 
@@ -79,9 +81,19 @@ export async function safeStartScan() {
 
         // 알림
         cache.setPending({ deviceId, phoneNumber: curPhone });
-        await notifyPhoneChange(deviceId, dbPhone, curPhone); // test - oldPhone === new phone
 
-        alertToChangePhone(curPhone, deviceId);
+        const settings = settingService.getSettings();
+
+        if (!settings.autoSet) {
+          notifyPhoneChange(deviceId, dbPhone, curPhone);
+        } else {
+          deviceService.updatePhoneNumber(deviceId, curPhone);
+          if (settings.notice) {
+            nofifyMessage(curPhone);
+          }
+        }
+
+        notifyOnScreenToChangePhone(curPhone, deviceId);
       } catch (e) {
         Alert.alert(`[BLE] scan handler error: ${e}`);
       }

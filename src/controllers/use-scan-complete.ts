@@ -26,9 +26,11 @@ export const useScanComplete = (route: any) => {
   const isKeyValid = useMemo(() => deviceId && deviceId.length > 0, [deviceId]);
 
   useEffect(() => {
-    manager.stopDeviceScan();
     const phoneNumber = cache.getPhone();
     if (phoneNumber) setPhone(phoneNumber);
+    return () => {
+      manager.stopDeviceScan();
+    };
   }, []);
 
   const savePhone = async () => {
