@@ -1,8 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import ensurePermissions from '../helpers/ensure-permissions';
-import { Buffer } from 'buffer';
-import { CHAR_UUID, SERVICE_UUID } from '../constants';
+import {
+  BLE_DEVICE_NAME,
+  CHAR_UUID,
+  DEFAULT_DEVICE_ID,
+  SERVICE_UUID,
+} from '../constants';
 import { Alert } from 'react-native';
 import { manager, stopBackgroundScan } from '../background/manager';
 
@@ -28,11 +32,12 @@ export const useSearchBle = () => {
           return [...prev, { id: device.id, name: device.name }];
         });
 
-        if ((device.name ?? '').startsWith('Parke') === false) return;
+        if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
 
         try {
           manager.stopDeviceScan();
           const d = await device.connect();
+
           await d.discoverAllServicesAndCharacteristics();
 
           const ch = await d.readCharacteristicForService(
@@ -44,7 +49,7 @@ export const useSearchBle = () => {
             'utf-8',
           );
 
-          if (deviceId === 'abc')
+          if (deviceId !== DEFAULT_DEVICE_ID) {
             navigation.replace('ScanComplete', { value: deviceId });
           else {
             setDevices(prev => {
