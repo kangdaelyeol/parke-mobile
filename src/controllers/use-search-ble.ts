@@ -97,6 +97,7 @@ export const useSearchBle = () => {
         Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
         return;
       }
+      await manager.stopDeviceScan();
 
       sub = manager.onStateChange(state => {
         if (state === 'PoweredOn') {
@@ -107,7 +108,6 @@ export const useSearchBle = () => {
     })();
 
     return () => {
-      manager.stopDeviceScan();
       unmounted = true;
       sub?.remove();
     };

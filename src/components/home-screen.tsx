@@ -10,10 +10,6 @@ export default function HomeScreen({ navigation }: any) {
     if (settings.active) {
       safeStartScan();
     }
-
-    return () => {
-      manager.stopDeviceScan();
-    };
   }, []);
 
   return (
