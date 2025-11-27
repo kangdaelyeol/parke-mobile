@@ -1,6 +1,6 @@
 // manager.ts
 import { BleManager, Device, State } from 'react-native-ble-plx';
-import { SERVICE_UUID } from '../constants';
+import { SCAN_COOLDOWN_MS, SERVICE_UUID } from '../constants';
 import { cache } from '../storage';
 import { notifyPhoneChange } from '../helpers/notify-phone-change';
 import { Alert } from 'react-native';
@@ -10,8 +10,6 @@ import { nofifyMessage } from '../helpers/notify-message';
 import { settingService } from '../services/settingService';
 
 const { getPhoneNumber } = deviceService;
-
-const COOLDOWN_MS = 10 * 1000;
 
 // ===== 싱글톤 보장 =====
 const g = globalThis as any;
@@ -61,11 +59,16 @@ export async function safeStartScan() {
     { allowDuplicates: true },
     async (err, dev) => {
       try {
+        // 기본 스캔 쿨다운
+        if (Date.now() - cache.lastSeenAt() < SCAN_COOLDOWN_MS) return;
+
+        cache.markSeen();
+
         if (err || !dev) return;
         if (!isCandidate(dev)) return;
 
-        const deviceId = cache.getBLEDeviceId() || 'abc';
-        const curPhone = cache.getPhone() || '01024130000';
+        const deviceId = cache.getBLEDeviceId();
+        const curPhone = cache.getPhone();
 
         if (!deviceId || !curPhone) return;
 
@@ -74,12 +77,7 @@ export async function safeStartScan() {
 
         if (curPhone === dbPhone) return;
 
-        if (Date.now() - cache.lastSeenAt(deviceId) < COOLDOWN_MS) return;
-
-        // 알림 쿨다운 기록
-        cache.markSeen(deviceId);
-
-        // 알림
+        // 백그라운드로부터 포그라운드 알림 저장(pending...)
         cache.setPending({ deviceId, phoneNumber: curPhone });
 
         const settings = settingService.getSettings();

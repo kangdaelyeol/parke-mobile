@@ -1,10 +1,17 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import ensurePermissions from '../helpers/ensure-permissions';
-import { Buffer } from 'buffer';
-import { CHAR_UUID, SERVICE_UUID } from '../constants';
+import {
+  BLE_DEVICE_NAME,
+  CHAR_UUID,
+  DEFAULT_DEVICE_ID,
+  SERVICE_UUID,
+} from '../constants';
 import { Alert } from 'react-native';
 import { manager, stopBackgroundScan } from '../background/manager';
+import { generateBase64Id } from '../helpers';
+import { cache } from '../storage';
+import { Buffer } from 'buffer';
 
 export const useSearchBle = () => {
   // temp - 디바이스 조회 잘 되나 확인하기 위함
@@ -21,18 +28,20 @@ export const useSearchBle = () => {
       async (error, device) => {
         if (error || !device) return;
 
-        // temp - 디바이스 조회 잘 되나 확인하기 위함
+        /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
+
         setDevices(prev => {
           const exists = prev.find(d => d.id === device.id);
           if (exists) return prev;
           return [...prev, { id: device.id, name: device.name }];
         });
 
-        if ((device.name ?? '').startsWith('Parke') === false) return;
+        if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
 
         try {
           manager.stopDeviceScan();
           const d = await device.connect();
+
           await d.discoverAllServicesAndCharacteristics();
 
           const ch = await d.readCharacteristicForService(
@@ -40,19 +49,39 @@ export const useSearchBle = () => {
             CHAR_UUID,
           );
 
-          const deviceId = Buffer.from(ch.value ?? '', 'base64').toString(
-            'utf-8',
-          );
+          const deviceId = ch.value as string;
 
-          if (deviceId === 'abc')
+          if (deviceId !== DEFAULT_DEVICE_ID) {
+            cache.setBLEDeviceId(deviceId);
             navigation.replace('ScanComplete', { value: deviceId });
-          else {
+          } else {
+            const base64Id = generateBase64Id();
+            await device.writeCharacteristicWithResponseForService(
+              SERVICE_UUID,
+              CHAR_UUID,
+              base64Id,
+            );
+
+            cache.setBLEDeviceId(base64Id);
+            navigation.replace('ScanComplete', { value: base64Id });
+
+            /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
             setDevices(prev => {
-              return [...prev, { id: deviceId, name: deviceId }];
+              return [
+                ...prev,
+                {
+                  name: deviceId,
+                  id: Buffer.from(deviceId as string, 'base64').toString(
+                    'utf-8',
+                  ),
+                },
+              ];
             });
           }
           await d.cancelConnection();
-        } catch {}
+        } catch (e) {
+          console.log(e);
+        }
       },
     );
   };
@@ -68,6 +97,7 @@ export const useSearchBle = () => {
         Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
         return;
       }
+      await manager.stopDeviceScan();
 
       sub = manager.onStateChange(state => {
         if (state === 'PoweredOn') {
@@ -78,7 +108,6 @@ export const useSearchBle = () => {
     })();
 
     return () => {
-      manager.stopDeviceScan();
       unmounted = true;
       sub?.remove();
     };

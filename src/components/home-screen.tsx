@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { safeStartScan, manager } from '../background/manager';
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { settingService } from '../services/settingService';
 
 export default function HomeScreen({ navigation }: any) {
@@ -10,10 +10,6 @@ export default function HomeScreen({ navigation }: any) {
     if (settings.active) {
       safeStartScan();
     }
-
-    return () => {
-      manager.stopDeviceScan();
-    };
   }, []);
 
   return (
@@ -27,8 +23,9 @@ export default function HomeScreen({ navigation }: any) {
         >
           {({ pressed }) => {
             return (
-              <Icon
-                name="settings"
+              <FontAwesome6
+                name="gear"
+                iconStyle="solid"
                 size={40}
                 style={{ color: pressed ? '#666' : '#fff' }}
               />

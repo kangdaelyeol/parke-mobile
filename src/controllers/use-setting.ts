@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { settingService } from '../services/settingService';
 import { useNavigation } from '@react-navigation/native';
+import { manager } from '../background/manager';
 
 export const useSetting = () => {
   const [autoSet, setAutoSet] = useState(false);
@@ -10,6 +11,7 @@ export const useSetting = () => {
 
   // init settings value on UI
   useEffect(() => {
+    manager.stopDeviceScan();
     const settings = settingService.getSettings();
     setAutoSet(settings.autoSet as boolean);
     setNotice(settings.notice as boolean);
