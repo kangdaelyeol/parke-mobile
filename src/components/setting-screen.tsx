@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, Switch, View, Text, Pressable } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useSetting } from '../controllers/use-setting';
-
+import MaterialIcons from '@react-native-vector-icons/material-icons';
 export default function SettingScreen() {
   const {
     noticeDisabled,
@@ -21,8 +20,8 @@ export default function SettingScreen() {
       <View style={styles.inner}>
         <Pressable style={styles.backBtn} onPress={onHomeBtnPress}>
           {({ pressed }) => (
-            <Icon
-              name="arrow-back-ios-new"
+            <MaterialIcons
+              name="arrow-back-ios"
               size={30}
               style={{
                 color: pressed ? '#666' : '#fff',
