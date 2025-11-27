@@ -9,6 +9,9 @@ import {
 } from '../constants';
 import { Alert } from 'react-native';
 import { manager, stopBackgroundScan } from '../background/manager';
+import { generateBase64Id } from '../helpers';
+import { cache } from '../storage';
+import { Buffer } from 'buffer';
 
 export const useSearchBle = () => {
   // temp - 디바이스 조회 잘 되나 확인하기 위함
@@ -25,7 +28,8 @@ export const useSearchBle = () => {
       async (error, device) => {
         if (error || !device) return;
 
-        // temp - 디바이스 조회 잘 되나 확인하기 위함
+        /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
+
         setDevices(prev => {
           const exists = prev.find(d => d.id === device.id);
           if (exists) return prev;
@@ -45,19 +49,39 @@ export const useSearchBle = () => {
             CHAR_UUID,
           );
 
-          const deviceId = Buffer.from(ch.value ?? '', 'base64').toString(
-            'utf-8',
-          );
+          const deviceId = ch.value as string;
 
           if (deviceId !== DEFAULT_DEVICE_ID) {
+            cache.setBLEDeviceId(deviceId);
             navigation.replace('ScanComplete', { value: deviceId });
-          else {
+          } else {
+            const base64Id = generateBase64Id();
+            await device.writeCharacteristicWithResponseForService(
+              SERVICE_UUID,
+              CHAR_UUID,
+              base64Id,
+            );
+
+            cache.setBLEDeviceId(base64Id);
+            navigation.replace('ScanComplete', { value: base64Id });
+
+            /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
             setDevices(prev => {
-              return [...prev, { id: deviceId, name: deviceId }];
+              return [
+                ...prev,
+                {
+                  name: deviceId,
+                  id: Buffer.from(deviceId as string, 'base64').toString(
+                    'utf-8',
+                  ),
+                },
+              ];
             });
           }
           await d.cancelConnection();
-        } catch {}
+        } catch (e) {
+          console.log(e);
+        }
       },
     );
   };
