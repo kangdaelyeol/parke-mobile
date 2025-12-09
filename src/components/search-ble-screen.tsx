@@ -29,6 +29,13 @@ export default function SearchBLEScreen() {
         )}
       </Pressable>
       <Text style={styles.uptext}>Searching BLE Tag</Text>
+
+      {/* temp */}
+      <Text style={[styles.uptext, { marginTop: 0, fontSize: 20 }]}>
+        스캔된 Parke 와의 거리 {rssi}
+      </Text>
+      {/* temp */}
+
       <Radar style={styles.raderStyle} />
 
       <ScrollView style={styles.list}>

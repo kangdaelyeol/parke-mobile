@@ -1,21 +1,19 @@
 import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import ensurePermissions from '../helpers/ensure-permissions';
-import {
-  BLE_DEVICE_NAME,
-  CHAR_UUID,
-  DEFAULT_DEVICE_ID,
-  SERVICE_UUID,
-} from '../constants';
+import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '../constants';
 import { Alert } from 'react-native';
 import { manager, stopBackgroundScan } from '../background/manager';
-import { generateBase64Id } from '../helpers';
+import { generateBase64Id, getDeviceId } from '../helpers';
 import { cache } from '../storage';
-import { Buffer } from 'buffer';
 
 export const useSearchBle = () => {
   // temp - 디바이스 조회 잘 되나 확인하기 위함
   const [devices, setDevices] = useState<any[]>([]);
+
+  const [rssi, setRssi] = useState('');
+
+  const [scanState, setScanState] = useState('NoneScaned');
 
   const navigation = useNavigation<any>();
 
@@ -38,6 +36,12 @@ export const useSearchBle = () => {
 
         if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
 
+        setRssi(String(device.rssi));
+
+        if (!device.rssi) return;
+
+        if (device.rssi < -40) return;
+
         try {
           manager.stopDeviceScan();
           const d = await device.connect();
@@ -53,22 +57,8 @@ export const useSearchBle = () => {
               CHAR_UUID,
               base64Id,
             );
-
             cache.setBLEDeviceId(base64Id);
             navigation.replace('ScanComplete', { value: base64Id });
-
-            /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
-            setDevices(prev => {
-              return [
-                ...prev,
-                {
-                  name: deviceId,
-                  id: Buffer.from(deviceId as string, 'base64').toString(
-                    'utf-8',
-                  ),
-                },
-              ];
-            });
           }
           await d.cancelConnection();
         } catch (e) {
@@ -110,5 +100,5 @@ export const useSearchBle = () => {
     navigation.replace('Home');
   };
 
-  return { devices, moveToHome };
+  return { devices, moveToHome, rssi, scanState, setScanState };
 };
