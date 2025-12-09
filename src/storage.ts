@@ -6,6 +6,10 @@ export const cache = {
   setPhone: (v: string) => kv.set('ble:phone', v),
   getBLEDeviceId: () => kv.getString('ble:deviceId') ?? null,
   setBLEDeviceId: (k: string) => kv.set('ble:deviceId', k),
+  getSerial: () => kv.getString('ble:serial'),
+  setSerial: (v: string) => {
+    kv.set('ble:serial', v);
+  },
   lastSeenAt: () => kv.getNumber(`ble:lastSeen`) ?? 0,
   markSeen: () => kv.set(`ble:lastSeen:`, Date.now()),
   getPending: () => JSON.parse(kv.getString('ble:pending') ?? 'null'),
