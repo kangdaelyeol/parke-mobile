@@ -1,9 +1,18 @@
 import { StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
 import Radar from './common/rader';
 import { useSearchBle } from '../controllers/use-search-ble';
+import useHeptic from '../hooks/use-heptic';
 
 export default function SearchBLEScreen() {
-  const { devices, moveToHome } = useSearchBle();
+  const { devices, moveToHome, rssi, scanState, setScanState } = useSearchBle();
+
+  const { setTime, setHepticOption } = useHeptic();
+
+  if (scanState === 'NoneScaned' && rssi) {
+    setScanState('Scaned');
+    setTime(200);
+    setHepticOption('impactMedium');
+  }
 
   return (
     <View style={styles.container}>
