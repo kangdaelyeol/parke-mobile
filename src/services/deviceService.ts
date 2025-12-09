@@ -1,15 +1,28 @@
 import { get, ref, serverTimestamp, update } from 'firebase/database';
 import { db } from '../firebaseApp';
 
+interface Device {
+  deviceId: string;
+  phone: string;
+  updatedAt: string;
+}
+
 export const deviceService = {
-  getPhoneNumber: async (deviceId: string): Promise<string | null> => {
-    const snapShot = await get(ref(db, `device/${deviceId}/phone`));
+  getDeviceBySerial: async (serial: string): Promise<Device | null> => {
+    const snapShot = await get(ref(db, `device/${serial}`));
     if (!snapShot.exists()) return null;
-    return snapShot.val() as string;
+
+    return snapShot.val() as Device;
   },
-  updatePhoneNumber: async (deviceId: string, phoneNumber: string) => {
-    await update(ref(db, `device/${deviceId}`), {
-      phone: phoneNumber,
+
+  updatePhoneNumber: async (
+    deviceId: string,
+    phone: string,
+    serial: string,
+  ) => {
+    await update(ref(db, `device/${serial}`), {
+      deviceId,
+      phone,
       updatedAt: serverTimestamp(),
     });
   },

@@ -12,8 +12,16 @@ import {
 import { useScanComplete } from '../controllers/use-scan-complete';
 
 export default function ScanCompleteScreen({ route }: any) {
-  const { convertedPhone, isKeyValid, deviceId, setPhone, savePhone, saving } =
-    useScanComplete(route);
+  const {
+    convertedPhone,
+    isKeyValid,
+    deviceId,
+    setPhone,
+    savePhone,
+    saving,
+    serial,
+    setSerial,
+  } = useScanComplete(route);
 
   return (
     <KeyboardAvoidingView
@@ -26,7 +34,16 @@ export default function ScanCompleteScreen({ route }: any) {
         <Text selectable style={styles.keyValue}>
           {isKeyValid ? `deviceId: ${deviceId}` : '(없음)'}
         </Text>
-        <Text style={[styles.label, { marginTop: 16 }]}>휴대폰 번호</Text>
+        <Text style={[styles.label, { marginTop: 16 }]}>시리얼 번호</Text>
+        <TextInput
+          value={serial}
+          onChangeText={setSerial}
+          placeholder="ABCD"
+          placeholderTextColor="#777"
+          keyboardType="email-address"
+          style={styles.input}
+        />
+        <Text style={[styles.label]}>휴대폰 번호</Text>
         <TextInput
           value={convertedPhone}
           onChangeText={now => setPhone(now.replaceAll('-', ''))}

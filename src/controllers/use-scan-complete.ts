@@ -23,6 +23,8 @@ export const useScanComplete = (route: any) => {
   const [phone, setPhone] = useState('');
   const [saving, setSaving] = useState(false);
 
+  const [serial, setSerial] = useState('');
+
   const isKeyValid = useMemo(() => deviceId && deviceId.length > 0, [deviceId]);
 
   useEffect(() => {
@@ -44,10 +46,15 @@ export const useScanComplete = (route: any) => {
       return;
     }
 
+    if (!serial.trim()) {
+      Alert.alert('입력 필요', '시리얼 변호를 입력해 주세요.');
+      return;
+    }
+
     try {
       setSaving(true);
 
-      await updatePhoneNumber(deviceId, phone);
+      await updatePhoneNumber(deviceId, phone, serial);
 
       Alert.alert('저장 성공!');
 
@@ -71,5 +78,7 @@ export const useScanComplete = (route: any) => {
     setPhone,
     savePhone,
     saving,
+    serial,
+    setSerial,
   };
 };

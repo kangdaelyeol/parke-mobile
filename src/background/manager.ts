@@ -9,7 +9,7 @@ import { notifyOnScreenToChangePhone } from '../utils/notify-on-screen-to-change
 import { nofifyMessage } from '../helpers/notify-message';
 import { settingService } from '../services/settingService';
 
-const { getPhoneNumber } = deviceService;
+const { getDeviceBySerial } = deviceService;
 
 // ===== 싱글톤 보장 =====
 const g = globalThis as any;
@@ -69,11 +69,14 @@ export async function safeStartScan() {
 
         const deviceId = cache.getBLEDeviceId();
         const curPhone = cache.getPhone();
+        const serial = cache.getSerial();
 
-        if (!deviceId || !curPhone) return;
+        if (!deviceId || !curPhone || !serial) return;
 
-        const dbPhone = await getPhoneNumber(deviceId);
-        if (!dbPhone) return;
+        const device = await getDeviceBySerial(serial);
+        if (!device) return;
+
+        const { phone: dbPhone } = device;
 
         if (curPhone === dbPhone) return;
 
@@ -81,11 +84,14 @@ export async function safeStartScan() {
         cache.setPending({ deviceId, phoneNumber: curPhone });
 
         const settings = settingService.getSettings();
-
+        
+        // 자동변경 설정이 아닐시 알림
         if (!settings.autoSet) {
           notifyPhoneChange(deviceId, dbPhone, curPhone);
         } else {
-          deviceService.updatePhoneNumber(deviceId, curPhone);
+          // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
+          deviceService.updatePhoneNumber(deviceId, curPhone, serial);
+          // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
           if (settings.notice) {
             nofifyMessage(curPhone);
           }
