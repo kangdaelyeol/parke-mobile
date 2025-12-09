@@ -41,17 +41,9 @@ export const useSearchBle = () => {
         try {
           manager.stopDeviceScan();
           const d = await device.connect();
-
           await d.discoverAllServicesAndCharacteristics();
-
-          const ch = await d.readCharacteristicForService(
-            SERVICE_UUID,
-            CHAR_UUID,
-          );
-
-          const deviceId = ch.value as string;
-
-          if (deviceId !== DEFAULT_DEVICE_ID) {
+          const deviceId = await getDeviceId(d);
+          if (deviceId) {
             cache.setBLEDeviceId(deviceId);
             navigation.replace('ScanComplete', { value: deviceId });
           } else {
