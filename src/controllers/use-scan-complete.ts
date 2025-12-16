@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { convertPhone } from '../helpers/convertPhone';
 import { cache } from '../storage';
 import { useNavigation } from '@react-navigation/native';
-import { manager } from '../ble-manager';
+import { manager, stopBackgroundScan } from '../ble-manager';
 import { deviceService } from '../services';
 
 /* For Background
@@ -28,11 +28,11 @@ export const useScanComplete = (route: any) => {
   const isKeyValid = useMemo(() => deviceId && deviceId.length > 0, [deviceId]);
 
   useEffect(() => {
+    manager.stopDeviceScan();
+    stopBackgroundScan();
+
     const phoneNumber = cache.getPhone();
     if (phoneNumber) setPhone(phoneNumber);
-    return () => {
-      manager.stopDeviceScan();
-    };
   }, []);
 
   const savePhone = async () => {
@@ -60,6 +60,8 @@ export const useScanComplete = (route: any) => {
 
       cache.setPhone(phone);
       cache.setBLEDeviceId(deviceId);
+      cache.setSerial(serial);
+
       navigation.replace('Home');
     } catch (e: any) {
       console.warn(e);

@@ -47,14 +47,17 @@ function AppContent() {
       if (actionId === 'confirm' && deviceId && newPhone) {
         try {
           await updatePhoneNumber(
+            String(serial),
             String(deviceId),
             String(newPhone),
-            String(serial),
           );
           cache.clearPending();
         } catch (e) {
           Alert.alert('오류', '전화번호 변경에 실패했습니다.');
         }
+      } else {
+        cache.markLastDenied();
+        cache.clearPending();
       }
     });
 
@@ -69,11 +72,8 @@ function AppContent() {
       const pending = cache.getPending();
       if (!pending) return;
 
-      notifyOnScreenToChangePhone(
-        pending.phoneNumber,
-        pending.deviceId,
-        pending.serial,
-      );
+      notifyOnScreenToChangePhone(pending.phoneNumber);
+      cache.clearPending();
     });
 
     return () => sub.remove();

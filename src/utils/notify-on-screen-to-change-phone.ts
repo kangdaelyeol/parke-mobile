@@ -9,13 +9,17 @@ export const notifyOnScreenToChangePhone = (phoneNumber: string) => {
     {
       text: '취소',
       style: 'cancel',
-      onPress: () => cache.clearPending(),
+      onPress: () => {
+        cache.clearPending();
+        cache.markLastDenied();
+      },
     },
     {
       text: '변경',
       onPress: async () => {
         await deviceService.updatePhoneNumber(serial, deviceId, phoneNumber);
         cache.clearPending();
+        cache.clearDeniedAt();
       },
     },
   ]);

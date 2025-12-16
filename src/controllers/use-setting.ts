@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { settingService } from '../services/settingService';
 import { useNavigation } from '@react-navigation/native';
-import { manager } from '../ble-manager';
+import { manager, stopBackgroundScan } from '../ble-manager';
 import { cache } from '../storage';
 
 export const useSetting = () => {
@@ -14,6 +14,7 @@ export const useSetting = () => {
   useEffect(() => {
     cache.clearDeniedAt();
     manager.stopDeviceScan();
+    stopBackgroundScan();
     const settings = settingService.getSettings();
     setAutoSet(settings.autoSet as boolean);
     setNotice(settings.notice as boolean);

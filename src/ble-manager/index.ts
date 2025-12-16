@@ -1,6 +1,11 @@
 // manager.ts
 import { BleManager, Device, State } from 'react-native-ble-plx';
-import { SCAN_COOLDOWN_MS, SERVICE_UUID } from '../constants';
+import {
+  SCAN_COOLDOWN_MS,
+  SERVICE_UUID,
+  RENEW_INTERVAL_MS,
+  NOTIFY_COOLDOWN_MS,
+} from '../constants';
 import { cache } from '../storage';
 import { notifyPhoneChange } from '../helpers/notify-phone-change';
 import { Alert } from 'react-native';
@@ -61,7 +66,6 @@ export async function startBackgroundScan() {
       try {
         // 기본 스캔 쿨다운
         if (Date.now() - cache.lastSeenAt() < SCAN_COOLDOWN_MS) return;
-
         cache.markSeen();
 
         if (err || !dev) return;
@@ -76,17 +80,30 @@ export async function startBackgroundScan() {
         const device = await getDeviceBySerial(serial);
         if (!device) return;
 
-        const { phone: dbPhone } = device;
+        const { phone: dbPhone, updatedAt } = device;
 
-        if (curPhone === dbPhone) return;
+        if (curPhone === dbPhone) {
+          // updatedAt값 갱신
+          deviceService.updatePhoneNumber(serial, deviceId, curPhone);
+          return;
+        }
+
+        // 업데이트 이후 일정 시간동안 db갱신이 안되어 있으면 운전중이 아니므로 다른 번호로 업데이트 진행.
+        // 그렇지 않으면 운전중이기 때문에 updatedAt값 갱신을 함. 따라서 다른 번호로 업데이트를 진행하지 않음.
+        if (Date.now() < Number(updatedAt) + RENEW_INTERVAL_MS) return;
 
         const settings = settingService.getSettings();
 
         // 자동변경 설정이 아닐시 알림
         if (!settings.autoSet) {
+          // 이전에 변경 거부가 있었는지 확인
+          if (Date.now() < cache.lastDeniedAt() + NOTIFY_COOLDOWN_MS) return;
+
           // 백그라운드로부터 포그라운드 알림 저장(pending...)
           cache.setPending({ phoneNumber: curPhone });
           notifyPhoneChange(dbPhone, curPhone, serial);
+          // 앱이 실행중이면 앱 스크린에서 알림
+          notifyOnScreenToChangePhone(curPhone);
         } else {
           // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
           deviceService.updatePhoneNumber(serial, deviceId, curPhone);
@@ -95,8 +112,6 @@ export async function startBackgroundScan() {
             nofifyMessage(curPhone);
           }
         }
-
-        // 앱이 실행중이면 앱 스크린에서 알림
       } catch (e) {
         Alert.alert(`[BLE] scan handler error: ${e}`);
       }

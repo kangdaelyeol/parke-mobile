@@ -14,15 +14,18 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
 
   const actionId = detail.pressAction?.id;
-  const { deviceId, newPhone } = detail.notification?.data || {};
+  const { newPhone, serial, deviceId } = detail.notification?.data || {};
 
-  if (actionId === 'confirm' && deviceId && newPhone) {
+  if (actionId === 'confirm' && serial && newPhone) {
     try {
-      updatePhoneNumber(deviceId, newPhone);
+      updatePhoneNumber(serial, deviceId, newPhone);
       cache.clearPending();
     } catch (e) {
       // bground에서는 Alert 안터짐
     }
+  } else {
+    cache.markLastDenied();
+    cache.clearPending();
   }
 });
 
