@@ -19,7 +19,7 @@ export const useSearchBle = () => {
 
   const navigation = useNavigation<any>();
 
-  const startScan = () => {
+  const startBLEScan = () => {
     setDevices([]);
 
     manager.startDeviceScan(
@@ -85,7 +85,7 @@ export const useSearchBle = () => {
 
       sub = manager.onStateChange(state => {
         if (state === 'PoweredOn') {
-          startScan();
+          startBLEScan();
           sub?.remove();
         }
       }, true);
