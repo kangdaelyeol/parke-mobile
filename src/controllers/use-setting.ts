@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { settingService } from '../services/settingService';
 import { useNavigation } from '@react-navigation/native';
 import { manager } from '../ble-manager';
+import { cache } from '../storage';
 
 export const useSetting = () => {
   const [autoSet, setAutoSet] = useState(false);
@@ -11,6 +12,7 @@ export const useSetting = () => {
 
   // init settings value on UI
   useEffect(() => {
+    cache.clearDeniedAt();
     manager.stopDeviceScan();
     const settings = settingService.getSettings();
     setAutoSet(settings.autoSet as boolean);
