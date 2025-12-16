@@ -1,7 +1,7 @@
 // startBleForeground.ts (안드로이드 전용)
 import notifee, { AndroidImportance } from '@notifee/react-native';
 import { Platform } from 'react-native';
-import { safeStartScan, stopBackgroundScan } from '../background/manager';
+import { startBackgroundScan, stopBackgroundScan } from '../ble-manager';
 
 export async function startBleForeground() {
   if (Platform.OS !== 'android') return;
@@ -26,7 +26,7 @@ export async function startBleForeground() {
 
   notifee.registerForegroundService(async _ => {
     try {
-      await safeStartScan();
+      await startBackgroundScan();
       // 필요하다면 여기서 주기적으로 health-check 수행
     } catch (e) {
       console.warn('FG service error', e);

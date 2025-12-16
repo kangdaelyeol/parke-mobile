@@ -48,7 +48,7 @@ async function ensureReady(): Promise<boolean> {
   return state === State.PoweredOn;
 }
 
-export async function safeStartScan() {
+export async function startBackgroundScan() {
   if (isScanning) return;
   if (!(await ensureReady())) return;
 
@@ -80,13 +80,12 @@ export async function safeStartScan() {
 
         if (curPhone === dbPhone) return;
 
-        // 백그라운드로부터 포그라운드 알림 저장(pending...)
-        cache.setPending({ deviceId, phoneNumber: curPhone });
-
         const settings = settingService.getSettings();
-        
+
         // 자동변경 설정이 아닐시 알림
         if (!settings.autoSet) {
+          // 백그라운드로부터 포그라운드 알림 저장(pending...)
+          cache.setPending({ deviceId, phoneNumber: curPhone, serial });
           notifyPhoneChange(deviceId, dbPhone, curPhone);
         } else {
           // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
@@ -97,7 +96,8 @@ export async function safeStartScan() {
           }
         }
 
-        notifyOnScreenToChangePhone(curPhone, deviceId);
+        // 앱이 실행중이면 앱 스크린에서 알림
+        notifyOnScreenToChangePhone(curPhone, deviceId, serial);
       } catch (e) {
         Alert.alert(`[BLE] scan handler error: ${e}`);
       }

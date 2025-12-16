@@ -4,7 +4,7 @@ import { Alert } from 'react-native';
 import { convertPhone } from '../helpers/convertPhone';
 import { cache } from '../storage';
 import { useNavigation } from '@react-navigation/native';
-import { manager } from '../background/manager';
+import { manager } from '../ble-manager';
 import { deviceService } from '../services';
 
 /* For Background

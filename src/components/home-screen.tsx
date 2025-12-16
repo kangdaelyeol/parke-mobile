@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { safeStartScan, manager } from '../background/manager';
+import { startBackgroundScan, manager } from '../ble-manager';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { settingService } from '../services/settingService';
 
@@ -8,7 +8,7 @@ export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
     const settings = settingService.getSettings();
     if (settings.active) {
-      safeStartScan();
+      startBackgroundScan();
     }
   }, []);
 
