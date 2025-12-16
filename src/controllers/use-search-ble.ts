@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import ensurePermissions from '../helpers/ensure-permissions';
 import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '../constants';
 import { Alert } from 'react-native';
-import { manager, stopBackgroundScan } from '../background/manager';
+import { manager, stopBackgroundScan } from '../ble-manager';
 import { generateBase64Id, getDeviceId } from '../helpers';
 import { cache } from '../storage';
+
+type ScanStateType = 'NoneScaned' | 'Scaned';
 
 export const useSearchBle = () => {
   // temp - 디바이스 조회 잘 되나 확인하기 위함
@@ -13,7 +15,7 @@ export const useSearchBle = () => {
 
   const [rssi, setRssi] = useState('');
 
-  const [scanState, setScanState] = useState('NoneScaned');
+  const [scanState, setScanState] = useState<ScanStateType>('NoneScaned');
 
   const navigation = useNavigation<any>();
 
