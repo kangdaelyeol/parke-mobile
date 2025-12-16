@@ -16,13 +16,13 @@ export const deviceService = {
   },
 
   updatePhoneNumber: async (
+    serial: string,
     deviceId: string,
     phone: string,
-    serial: string,
   ) => {
     await update(ref(db, `device/${serial}`), {
-      deviceId,
       phone,
+      deviceId,
       updatedAt: serverTimestamp(),
     });
   },

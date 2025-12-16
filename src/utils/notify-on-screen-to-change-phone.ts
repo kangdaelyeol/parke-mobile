@@ -2,7 +2,9 @@ import { Alert } from 'react-native';
 import { deviceService } from '../services';
 import { cache } from '../storage';
 
-export const notifyOnScreenToChangePhone = (phoneNumber: string, deviceId: string, serial: string) => {
+export const notifyOnScreenToChangePhone = (phoneNumber: string) => {
+  const serial = cache.getSerial() as string;
+  const deviceId = cache.getBLEDeviceId() as string;
   Alert.alert('전화번호 변경', `${phoneNumber}으로 변경할까요?`, [
     {
       text: '취소',
@@ -12,7 +14,7 @@ export const notifyOnScreenToChangePhone = (phoneNumber: string, deviceId: strin
     {
       text: '변경',
       onPress: async () => {
-        await deviceService.updatePhoneNumber(deviceId, phoneNumber, serial);
+        await deviceService.updatePhoneNumber(serial, deviceId, phoneNumber);
         cache.clearPending();
       },
     },

@@ -54,7 +54,7 @@ export const useScanComplete = (route: any) => {
     try {
       setSaving(true);
 
-      await updatePhoneNumber(deviceId, phone, serial);
+      await updatePhoneNumber(serial, deviceId, phone);
 
       Alert.alert('저장 성공!');
 

@@ -85,11 +85,11 @@ export async function startBackgroundScan() {
         // 자동변경 설정이 아닐시 알림
         if (!settings.autoSet) {
           // 백그라운드로부터 포그라운드 알림 저장(pending...)
-          cache.setPending({ deviceId, phoneNumber: curPhone, serial });
-          notifyPhoneChange(deviceId, dbPhone, curPhone);
+          cache.setPending({ phoneNumber: curPhone });
+          notifyPhoneChange(dbPhone, curPhone, serial);
         } else {
           // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
-          deviceService.updatePhoneNumber(deviceId, curPhone, serial);
+          deviceService.updatePhoneNumber(serial, deviceId, curPhone);
           // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
           if (settings.notice) {
             nofifyMessage(curPhone);
@@ -97,7 +97,6 @@ export async function startBackgroundScan() {
         }
 
         // 앱이 실행중이면 앱 스크린에서 알림
-        notifyOnScreenToChangePhone(curPhone, deviceId, serial);
       } catch (e) {
         Alert.alert(`[BLE] scan handler error: ${e}`);
       }
