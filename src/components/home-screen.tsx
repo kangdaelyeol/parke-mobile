@@ -1,15 +1,25 @@
 import { useEffect } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { startBackgroundScan, manager } from '../ble-manager';
+import { startBackgroundScan } from '../ble-manager';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { settingService } from '../services/settingService';
+import { cache } from '../storage';
+import { deviceService } from '../services';
 
 export default function HomeScreen({ navigation }: any) {
   useEffect(() => {
-    const settings = settingService.getSettings();
-    if (settings.active) {
-      startBackgroundScan();
-    }
+    (async () => {
+      const settings = settingService.getSettings();
+      const deviceId = cache.getBLEDeviceId();
+      const serial = cache.getSerial();
+
+      if (!settings.active || !deviceId || !serial) return;
+
+      const device = await deviceService.getDeviceBySerial(serial);
+      if (device && device.deviceId === deviceId) {
+        startBackgroundScan();
+      }
+    })();
   }, []);
 
   return (
