@@ -28,6 +28,7 @@ export default function HomeScreen({ navigation }: any) {
         <Pressable
           style={styles.settingBtn}
           onPress={() => {
+            cache.setHasSeenOnBoarding(false);
             navigation.navigate('Setting');
           }}
         >

@@ -1,19 +1,14 @@
-import { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Alert, AppState, StatusBar, useColorScheme } from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import HomeScreen from './src/components/home-screen';
 import SearchBLEScreen from './src/components/search-ble-screen';
 import ScanComplete from './src/components/scan-complete-screen';
 import './src/ble-manager';
-import { startBackgroundScan } from './src/ble-manager';
-import { setupNotifications } from './src/helpers/notify-phone-change';
-import notifee, { EventType } from '@notifee/react-native';
-import { deviceService } from './src/services';
-import { cache } from './src/storage';
-import { notifyOnScreenToChangePhone } from './src/utils/notify-on-screen-to-change-phone';
 import SettingScreen from './src/components/setting-screen';
+import { useApp } from './src/controllers/use-app';
+import OnBoardingScreen from './src/components/on-boarding-screen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -34,88 +29,31 @@ function App() {
 }
 
 function AppContent() {
-  const { updatePhoneNumber } = deviceService;
-  useEffect(() => {
-    setupNotifications();
-    startBackgroundScan();
-    const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
-      if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
+  const { loading, hasSeenOnBoarding, setHasSeenOnBoarding } = useApp();
 
-      const actionId = detail.pressAction?.id;
-      const { deviceId, newPhone, serial } = detail.notification?.data || {};
-
-      if (actionId === 'confirm' && deviceId && newPhone) {
-        try {
-          await updatePhoneNumber(
-            String(serial),
-            String(deviceId),
-            String(newPhone),
-          );
-          cache.clearPending();
-        } catch (e) {
-          Alert.alert('오류', '전화번호 변경에 실패했습니다.');
-        }
-      } else {
-        cache.markLastDenied();
-        cache.clearPending();
-      }
-    });
-
-    return () => unsub();
-  }, []);
-
-  // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
-  useEffect(() => {
-    const sub = AppState.addEventListener('change', async state => {
-      if (state !== 'active') return;
-
-      const pending = cache.getPending();
-      if (!pending) return;
-
-      notifyOnScreenToChangePhone(pending.phoneNumber);
-      cache.clearPending();
-    });
-
-    return () => sub.remove();
-  }, []);
-
-  /** TODO: Android 구현 나중에 */
-  // useEffect(() => {
-  //   if (Platform.OS === 'android') {
-  //     startBleForeground(); // 사용자가 동의한 시점에 시작 (권한 OK 후)
-  //   }
-  //   return () => {
-  //     if (Platform.OS === 'android') stopBleForeground();
-  //   };
-  // }, []);
-
-  // useEffect(() => {
-  //   const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
-  //     if (type === EventType.ACTION_PRESS || type === EventType.PRESS) {
-  //       const actionId = detail.pressAction?.id;
-  //       const { deviceId, newPhone } = detail.notification?.data || {};
-  //       if (actionId === 'confirm' && deviceId && newPhone) {
-  //         await update(ref(db, `devices/${deviceId}`), {
-  //           phone: newPhone,
-  //           updatedAt: serverTimestamp(),
-  //         });
-  //       }
-  //       // cancel/default는 무시
-  //     }
-  //   });
-  //   return unsub;
-  // }, []);
+  if (loading) return null;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Home"
-        screenOptions={{ headerShown: false }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
-        <Stack.Screen name="ScanComplete" component={ScanComplete} />
-        <Stack.Screen name="Setting" component={SettingScreen} />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        {!hasSeenOnBoarding ? (
+          <Stack.Screen
+            name="OnBoarding"
+            component={props => (
+              <OnBoardingScreen
+                {...props}
+                setHasSeenOnBoarding={setHasSeenOnBoarding}
+              />
+            )}
+          />
+        ) : (
+          <>
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
+            <Stack.Screen name="ScanComplete" component={ScanComplete} />
+            <Stack.Screen name="Setting" component={SettingScreen} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
