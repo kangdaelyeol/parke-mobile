@@ -8,7 +8,11 @@ import ScanComplete from './src/components/scan-complete-screen';
 import './src/ble-manager';
 import SettingScreen from './src/components/setting-screen';
 import { useApp } from './src/controllers/use-app';
-import onBoardingScreenWithProps from './src/screens/on-boarding/on-boarding-screen';
+import {
+  OnBoardContextProvider,
+  useOnBoard,
+} from './src/contexts/on-board-context';
+import OnBoardingScreen from './src/screens/on-boarding/on-boarding-screen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -21,19 +25,21 @@ function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+    <OnBoardContextProvider>
+      <SafeAreaProvider>
+        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+
+        <AppContent />
+      </SafeAreaProvider>
+    </OnBoardContextProvider>
   );
 }
 
 function AppContent() {
-  const { loading, hasSeenOnBoarding, setHasSeenOnBoarding } = useApp();
+  useApp();
+  const { loading, hasSeenOnBoarding } = useOnBoard();
 
   if (loading) return null;
-
-  const OnBoardingScreen = onBoardingScreenWithProps({ setHasSeenOnBoarding });
 
   return (
     <NavigationContainer>

@@ -1,17 +1,13 @@
 import { cache } from '../../../storage';
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { useContext } from 'react';
-import { OnBoardContext } from '../../../contexts/on-board-context';
+import { useOnBoard } from '../../../contexts/on-board-context';
 
-const Footer = ({
-  setHasSeenOnBoarding,
-}: {
-  setHasSeenOnBoarding: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+const Footer = () => {
   const PAGE_COUNT = 3;
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
-  const { sliderTranslateX, setPageIdx, pageIdx } = useContext(OnBoardContext);
+  const { sliderTranslateX, setPageIdx, pageIdx, setHasSeenOnBoarding } =
+    useOnBoard();
 
   const goToNextPage = () => {
     sliderTranslateX.value -= DEVICE_WIDTH;

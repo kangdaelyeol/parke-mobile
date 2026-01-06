@@ -6,19 +6,6 @@ import { Alert, AppState } from 'react-native';
 import { setupNotifications } from '../helpers';
 import { deviceService } from '../services';
 
-const useFirstSeen = () => {
-  const [loading, setLoading] = useState(true);
-  const [hasSeenOnBoarding, setHasSeenOnBoarding] = useState(false);
-
-  useEffect(() => {
-    const hasSeen = cache.getHasSeenOnBoarding();
-
-    setHasSeenOnBoarding(hasSeen);
-    setLoading(false);
-  }, []);
-
-  return { loading, hasSeenOnBoarding, setHasSeenOnBoarding };
-};
 
 const useForegroundEvent = () => {
   const { updatePhoneNumber } = deviceService;
@@ -68,8 +55,5 @@ const useForegroundEvent = () => {
 };
 
 export const useApp = () => {
-  const { loading, hasSeenOnBoarding, setHasSeenOnBoarding } = useFirstSeen();
   useForegroundEvent();
-
-  return { loading, hasSeenOnBoarding, setHasSeenOnBoarding };
 };

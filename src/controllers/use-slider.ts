@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { Dimensions } from 'react-native';
 import { Gesture } from 'react-native-gesture-handler';
 import {
@@ -7,9 +6,9 @@ import {
   Easing,
   useSharedValue,
 } from 'react-native-reanimated';
-import { OnBoardContext } from '../contexts/on-board-context';
+import { useOnBoard } from '../contexts/on-board-context';
 export const useSlider = () => {
-  const { sliderTranslateX, setPageIdx } = useContext(OnBoardContext);
+  const { sliderTranslateX, setPageIdx } = useOnBoard();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
   const prevTranslateX = useSharedValue(0);
