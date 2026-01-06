@@ -8,7 +8,7 @@ import ScanComplete from './src/components/scan-complete-screen';
 import './src/ble-manager';
 import SettingScreen from './src/components/setting-screen';
 import { useApp } from './src/controllers/use-app';
-import OnBoardingScreen from './src/components/on-boarding-screen';
+import onBoardingScreenWithProps from './src/screens/on-boarding/on-boarding-screen';
 
 type RootStackParamList = {
   Home: undefined;
@@ -33,19 +33,13 @@ function AppContent() {
 
   if (loading) return null;
 
+  const OnBoardingScreen = onBoardingScreenWithProps({ setHasSeenOnBoarding });
+
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!hasSeenOnBoarding ? (
-          <Stack.Screen
-            name="OnBoarding"
-            component={props => (
-              <OnBoardingScreen
-                {...props}
-                setHasSeenOnBoarding={setHasSeenOnBoarding}
-              />
-            )}
-          />
+          <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
         ) : (
           <>
             <Stack.Screen name="Home" component={HomeScreen} />
