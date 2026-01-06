@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { OnBoardingIcon1_1 } from '../../../assets/illustrations';
+import { OnBoardingIcon1_1 } from '@/assets/illustrations';
 
 const MainArticle1 = () => {
   const DEVICE_WIDTH = Dimensions.get('window').width;

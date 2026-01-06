@@ -5,14 +5,14 @@ import {
   SERVICE_UUID,
   RENEW_INTERVAL_MS,
   NOTIFY_COOLDOWN_MS,
-} from '../constants';
-import { cache } from '../storage';
-import { notifyPhoneChange } from '../helpers/notify-phone-change';
+} from '@/constants';
+import { cache } from '@/storage';
+import { notifyPhoneChange } from '@/helpers/notify-phone-change';
 import { Alert } from 'react-native';
-import { deviceService } from '../services';
-import { notifyOnScreenToChangePhone } from '../utils/notify-on-screen-to-change-phone';
-import { nofifyMessage } from '../helpers/notify-message';
-import { settingService } from '../services/settingService';
+import { deviceService } from '@/services';
+import { notifyOnScreenToChangePhone } from '@/utils/notify-on-screen-to-change-phone';
+import { nofifyMessage } from '@/helpers/notify-message';
+import { settingService } from '@/services/settingService';
 
 const { getDeviceBySerial } = deviceService;
 

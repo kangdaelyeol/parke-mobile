@@ -1,5 +1,5 @@
 import { StyleSheet, View } from 'react-native';
-import { LogoIcon, LogoText } from '../../../assets/logo';
+import { LogoIcon, LogoText } from '@/assets/logo';
 
 const Header = () => {
   return (
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Header
+export default Header;

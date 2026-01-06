@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { settingService } from '../services/settingService';
+import { settingService } from '@/services/settingService';
 import { useNavigation } from '@react-navigation/native';
-import { manager, stopBackgroundScan } from '../ble-manager';
-import { cache } from '../storage';
+import { manager, stopBackgroundScan } from '@/ble-manager';
+import { cache } from '@/storage';
 
 export const useSetting = () => {
   const [autoSet, setAutoSet] = useState(false);

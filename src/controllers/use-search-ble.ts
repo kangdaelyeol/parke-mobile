@@ -1,11 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
-import ensurePermissions from '../helpers/ensure-permissions';
-import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '../constants';
 import { Alert } from 'react-native';
-import { manager, stopBackgroundScan } from '../ble-manager';
-import { generateBase64Id, getDeviceId } from '../helpers';
-import { cache } from '../storage';
+import { useNavigation } from '@react-navigation/native';
+import ensurePermissions from '@/helpers/ensure-permissions';
+import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '@/constants';
+import { manager, stopBackgroundScan } from '@/ble-manager';
+import { generateBase64Id, getDeviceId } from '@/helpers';
+import { cache } from '@/storage';
 
 type ScanStateType = 'NoneScaned' | 'Scaned';
 

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useOnBoardFooter } from '../../../controllers/use-on-board-footer';
-import { PAGE_COUNT } from '../constants';
+import { useOnBoardFooter } from '@/controllers/use-on-board-footer';
+import { PAGE_COUNT } from '@/screens/on-boarding/constants';
 
 const Footer = () => {
   const {

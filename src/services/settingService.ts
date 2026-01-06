@@ -1,4 +1,4 @@
-import { cache } from '../storage';
+import { cache } from '@/storage';
 
 const ensureInitialized = () => {
   if (cache.getNotice() === null) {

@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import Header from './components/header';
-import Footer from './components/footer';
-import Slider from './components/slider';
+import { Footer, Header, Slider } from '@/screens/on-boarding/components';
 
 export default function OnBoardingScreen() {
   return (

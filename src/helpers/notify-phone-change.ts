@@ -1,5 +1,5 @@
 import notifee, { AndroidImportance } from '@notifee/react-native';
-import { cache } from '../storage';
+import { cache } from '@/storage';
 
 // 앱 시작 시 1회 실행 (index.ts 등)
 export async function setupNotifications() {

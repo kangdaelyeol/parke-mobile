@@ -1,5 +1,5 @@
 import { get, ref, serverTimestamp, update } from 'firebase/database';
-import { db } from '../firebaseApp';
+import { db } from '@/firebaseApp';
 
 interface Device {
   deviceId: string;

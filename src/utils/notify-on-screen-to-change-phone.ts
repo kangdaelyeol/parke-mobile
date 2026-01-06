@@ -1,6 +1,6 @@
 import { Alert } from 'react-native';
-import { deviceService } from '../services';
-import { cache } from '../storage';
+import { deviceService } from '@/services';
+import { cache } from '@/storage';
 
 export const notifyOnScreenToChangePhone = (phoneNumber: string) => {
   const serial = cache.getSerial() as string;

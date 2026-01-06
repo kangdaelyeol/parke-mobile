@@ -4,10 +4,8 @@ import {
   GestureDetector,
   GestureHandlerRootView,
 } from 'react-native-gesture-handler';
-import MainArticle1 from './main-article-1';
-import MainArticle2 from './main-article-2';
-import MainArticle3 from './main-article-3';
-import { useSlider } from '../../../controllers/use-slider';
+import { useSlider } from '@/controllers/use-slider';
+import { MainArticle1, MainArticle2, MainArticle3 } from '.';
 
 const Slider = () => {
   const { panGesture, animatedStyle } = useSlider();

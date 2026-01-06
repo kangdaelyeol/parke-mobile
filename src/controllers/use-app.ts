@@ -1,11 +1,10 @@
-import notifee, { EventType } from '@notifee/react-native';
 import { useEffect } from 'react';
-import { cache } from '../storage';
-import { notifyOnScreenToChangePhone } from '../utils/notify-on-screen-to-change-phone';
 import { Alert, AppState } from 'react-native';
-import { setupNotifications } from '../helpers';
-import { deviceService } from '../services';
-
+import notifee, { EventType } from '@notifee/react-native';
+import { cache } from '@/storage';
+import { notifyOnScreenToChangePhone } from '@/utils/notify-on-screen-to-change-phone';
+import { setupNotifications } from '@/helpers';
+import { deviceService } from '@/services';
 
 const useForegroundEvent = () => {
   const { updatePhoneNumber } = deviceService;

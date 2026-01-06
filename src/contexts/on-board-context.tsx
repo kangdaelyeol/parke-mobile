@@ -6,7 +6,7 @@ import React, {
   useState,
 } from 'react';
 import { SharedValue, useSharedValue } from 'react-native-reanimated';
-import { cache } from '../storage';
+import { cache } from '@/storage';
 
 export interface OnBoardContextValueType {
   pageIdx: number;

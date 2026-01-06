@@ -1,11 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
-import { convertPhone } from '../helpers/convertPhone';
-import { cache } from '../storage';
+import { convertPhone } from '@/helpers/convertPhone';
+import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
-import { manager, stopBackgroundScan } from '../ble-manager';
-import { deviceService } from '../services';
+import { manager, stopBackgroundScan } from '@/ble-manager';
+import { deviceService } from '@/services';
 
 /* For Background
  import { BleManager } from 'react-native-ble-plx';

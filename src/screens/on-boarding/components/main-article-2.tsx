@@ -1,5 +1,5 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
-import { OnBoardingIcon2 } from "../../../assets/illustrations";
+import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { OnBoardingIcon2 } from '@/assets/illustrations';
 
 const MainArticle2 = () => {
   const DEVICE_WIDTH = Dimensions.get('window').width;
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MainArticle2
+export default MainArticle2;
