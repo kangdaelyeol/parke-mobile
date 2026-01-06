@@ -1,28 +1,17 @@
-import { cache } from '../../../storage';
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
-import { useOnBoard } from '../../../contexts/on-board-context';
+import { StyleSheet, Text, View } from 'react-native';
+import { useOnBoardFooter } from '../../../controllers/use-on-board-footer';
+import { PAGE_COUNT } from '../constants';
 
 const Footer = () => {
-  const PAGE_COUNT = 3;
-  const DEVICE_WIDTH = Dimensions.get('window').width;
-
-  const { sliderTranslateX, setPageIdx, pageIdx, setHasSeenOnBoarding } =
-    useOnBoard();
-
-  const goToNextPage = () => {
-    sliderTranslateX.value -= DEVICE_WIDTH;
-    setPageIdx(prev => prev + 1);
-  };
-
-  const goToThisPage = (idx: number) => {
-    sliderTranslateX.value = -DEVICE_WIDTH * idx;
-    setPageIdx(idx + 1);
-  };
-
-  const goToMain = () => {
-    setHasSeenOnBoarding(true);
-    cache.setHasSeenOnBoarding(true);
-  };
+  const {
+    pageIdx,
+    pressed,
+    onBtnPressedIn,
+    onBtnPressedOut,
+    goToMain,
+    goToThisPage,
+    goToNextPage,
+  } = useOnBoardFooter();
 
   return (
     <View style={styles.container}>
@@ -48,7 +37,9 @@ const Footer = () => {
           selectable={false}
           suppressHighlighting
           onPress={goToNextPage}
-          style={[styles.btn, styles.nextBtn]}
+          onPressIn={onBtnPressedIn}
+          onPressOut={onBtnPressedOut}
+          style={[styles.btn, styles.nextBtn, pressed && styles.pressedNextBtn]}
         >
           다음
         </Text>
@@ -57,7 +48,13 @@ const Footer = () => {
           suppressHighlighting
           selectable={false}
           onPress={goToMain}
-          style={[styles.btn, styles.startBtn]}
+          onPressIn={onBtnPressedIn}
+          onPressOut={onBtnPressedOut}
+          style={[
+            styles.btn,
+            styles.startBtn,
+            pressed && styles.pressedStartBtn,
+          ]}
         >
           시작하기
         </Text>
@@ -91,10 +88,16 @@ const styles = StyleSheet.create({
   nextBtn: {
     backgroundColor: 'white',
   },
+  pressedNextBtn: {
+    backgroundColor: '#d5d5d5',
+  },
   startBtn: {
     backgroundColor: '#5cdeae',
     boxShadow: '0px 0px 20px #5cdeae',
     color: 'white',
+  },
+  pressedStartBtn: {
+    backgroundColor: '#53c79c',
   },
   activeDot: {
     width: 13,
