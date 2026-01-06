@@ -12,7 +12,6 @@ export const useSlider = () => {
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
   const prevTranslateX = useSharedValue(0);
-
   const eventCount = useSharedValue(0);
   const prevPosition = useSharedValue(0);
   const totalMovedX = useSharedValue(0);

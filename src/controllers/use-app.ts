@@ -1,5 +1,5 @@
 import notifee, { EventType } from '@notifee/react-native';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { cache } from '../storage';
 import { notifyOnScreenToChangePhone } from '../utils/notify-on-screen-to-change-phone';
 import { Alert, AppState } from 'react-native';
@@ -36,7 +36,7 @@ const useForegroundEvent = () => {
     });
 
     return () => unsub();
-  }, []);
+  }, [updatePhoneNumber]);
 
   // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
   useEffect(() => {
