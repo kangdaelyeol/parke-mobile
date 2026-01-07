@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useOnBoard } from '../contexts/on-board-context';
 import { Dimensions } from 'react-native';
-import { cache } from '../storage';
+import { useOnBoard } from '@/contexts/on-board-context';
+import { cache } from '@/storage';
 
 export const useOnBoardFooter = () => {
   const DEVICE_WIDTH = Dimensions.get('window').width;

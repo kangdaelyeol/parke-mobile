@@ -1,18 +1,19 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import HomeScreen from './src/components/home-screen';
-import SearchBLEScreen from './src/components/search-ble-screen';
-import ScanComplete from './src/components/scan-complete-screen';
-import './src/ble-manager';
-import SettingScreen from './src/components/setting-screen';
-import { useApp } from './src/controllers/use-app';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { HomeScreen, OnBoardingScreen } from '@/screens';
+import { useApp } from '@/controllers/use-app';
 import {
   OnBoardContextProvider,
   useOnBoard,
-} from './src/contexts/on-board-context';
-import OnBoardingScreen from './src/screens/on-boarding/on-boarding-screen';
+} from '@/contexts/on-board-context';
+import '@/ble-manager';
+
+// ToDo => move to screens dir with renew
+import SearchBLEScreen from './src/components/search-ble-screen';
+import ScanComplete from './src/components/scan-complete-screen';
+import SettingScreen from './src/components/setting-screen';
 
 type RootStackParamList = {
   Home: undefined;
