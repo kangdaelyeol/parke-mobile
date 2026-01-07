@@ -6,6 +6,7 @@ import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
 import { LogoIcon } from '@/assets/logo';
 import { useNavigation } from '@react-navigation/native';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 
 const tempData = {
   id: 'cardIdTest',
@@ -29,11 +30,14 @@ const EmptyCard = () => {
         </View>
       </View>
       <Pressable onPress={() => navigation.replace('SearchBLE')}>
-        {({ pressed }) => (
-          <View
-            style={[cardStyles.emptyCard, pressed && { opacity: 0.4 }]}
-          ></View>
-        )}
+        {({ pressed }) => {
+          pressed && ReactNativeHapticFeedback.trigger('selection');
+          return (
+            <View
+              style={[cardStyles.emptyCard, pressed && { opacity: 0.4 }]}
+            ></View>
+          );
+        }}
       </Pressable>
     </View>
   );
@@ -188,6 +192,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -1,
     width: '102%',
+    left: '-1%',
     backgroundColor: '#17171c',
     height: 90,
     borderTopStartRadius: 35,
@@ -197,9 +202,9 @@ const styles = StyleSheet.create({
   },
   footerWrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 300,
     paddingHorizontal: 30,
     marginHorizontal: 'auto',
-    height: 10,
+    backgroundColor: 'white',
   },
 });
