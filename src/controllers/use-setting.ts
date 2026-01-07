@@ -22,7 +22,7 @@ export const useSetting = () => {
   }, []);
 
   const onHomeBtnPress = () => {
-    navigation.replace('Home');
+    navigation.goBack();
   };
 
   const onAutoSetChange = (val: boolean) => {
