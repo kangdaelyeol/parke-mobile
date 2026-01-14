@@ -3,15 +3,29 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+} from 'react-native-reanimated';
 
 const CARD_WIDTH = 250;
 const CARD_HEIGHT = 140;
 
-export default function EmptyCard() {
+export default function EmptyCard({ idx, selected }: any) {
   const navigation = useNavigation<any>();
 
+  const animatedStyle = useAnimatedStyle(() => {
+    const isSelected = idx === selected.value;
+    return {
+      opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
+      transform: [
+        { translateY: withTiming(isSelected ? 0 : 15, { duration: 200 }) },
+      ],
+    };
+  });
+
   return (
-    <View style={emptyCardStyles.container}>
+    <Animated.View style={[emptyCardStyles.container, animatedStyle]}>
       <View style={emptyCardStyles.iconContainer}>
         <View style={emptyCardStyles.emptyCardIcon}>
           <FontAwesome6
@@ -32,7 +46,7 @@ export default function EmptyCard() {
           );
         }}
       </Pressable>
-    </View>
+    </Animated.View>
   );
 }
 

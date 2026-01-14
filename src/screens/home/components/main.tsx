@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -26,7 +26,7 @@ const tempData = [
   },
 ];
 
-const CARD_LEN = tempData.length + 1;
+const CARD_LEN = tempData.length;
 
 export default function Main() {
   const prevSliderTranslatedX = useSharedValue(0);
@@ -50,8 +50,6 @@ export default function Main() {
     .onEnd(e => {
       const transXPerEvent = e.translationX / eventCnt.value;
 
-      console.log(transXPerEvent);
-
       if (transXPerEvent > 10) {
         selectedCardIdx.value = Math.max(0, selectedCardIdx.value - 1);
         prevSliderTranslatedX.value = sliderTranslatedX.value =
@@ -59,33 +57,28 @@ export default function Main() {
         eventCnt.value = 1;
         return;
       } else if (transXPerEvent < -10) {
-        selectedCardIdx.value = Math.min(
-          CARD_LEN - 1,
-          selectedCardIdx.value + 1,
-        );
+        selectedCardIdx.value = Math.min(CARD_LEN, selectedCardIdx.value + 1);
         prevSliderTranslatedX.value = sliderTranslatedX.value =
           -selectedCardIdx.value * (CARD_WIDTH + SLIDER_GAP);
         eventCnt.value = 1;
         return;
       }
 
-      const minTranslateX = -CARD_WIDTH * CARD_LEN - SLIDER_GAP * CARD_LEN;
       if (sliderTranslatedX.value > 0) {
         prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
         selectedCardIdx.value = 0;
       } else {
-        const nowCardIdx = Math.round(
-          -sliderTranslatedX.value / (CARD_WIDTH + SLIDER_GAP),
+        selectedCardIdx.value = Math.max(
+          0,
+          Math.min(
+            CARD_LEN,
+            Math.round(-sliderTranslatedX.value / (CARD_WIDTH + SLIDER_GAP)),
+          ),
         );
 
-        const translateX = Math.max(
-          -nowCardIdx * CARD_WIDTH - SLIDER_GAP * nowCardIdx,
-          minTranslateX,
-        );
+        const translateX = -selectedCardIdx.value * (CARD_WIDTH + SLIDER_GAP);
 
         prevSliderTranslatedX.value = sliderTranslatedX.value = translateX;
-
-        selectedCardIdx.value = -translateX / (CARD_WIDTH + SLIDER_GAP);
       }
 
       eventCnt.value = 1;
@@ -110,9 +103,14 @@ export default function Main() {
             <View style={styles.cardSlider}>
               <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
                 {tempData.map((card, idx) => (
-                  <Card {...card} idx={idx} selected={selectedCardIdx} />
+                  <Card
+                    key={idx}
+                    {...card}
+                    idx={idx}
+                    selected={selectedCardIdx}
+                  />
                 ))}
-                <EmptyCard />
+                <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
               </Animated.View>
             </View>
           </View>
