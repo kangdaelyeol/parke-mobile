@@ -14,6 +14,7 @@ import '@/ble-manager';
 import SearchBLEScreen from './src/components/search-ble-screen';
 import ScanComplete from './src/components/scan-complete-screen';
 import SettingScreen from './src/components/setting-screen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 type RootStackParamList = {
   Home: undefined;
@@ -29,8 +30,9 @@ function App() {
     <OnBoardContextProvider>
       <SafeAreaProvider>
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-
-        <AppContent />
+        <GestureHandlerRootView>
+          <AppContent />
+        </GestureHandlerRootView>
       </SafeAreaProvider>
     </OnBoardContextProvider>
   );
