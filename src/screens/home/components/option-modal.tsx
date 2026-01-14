@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
+import { MODAL_HEIGHT } from '../constants';
 
 export default function OptionModal() {
   const { gesturePan, animatedStyle } = useCardOptionModalContext();
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    height: 200,
+    height: MODAL_HEIGHT,
   },
   optionModalWrapper: {
     width: '100%',

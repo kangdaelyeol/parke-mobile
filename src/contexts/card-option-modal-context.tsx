@@ -8,6 +8,8 @@ import {
 } from 'react-native-reanimated';
 import { runOnJS } from 'react-native-worklets';
 
+import { MODAL_HEIGHT } from '@/screens/home/constants';
+
 interface cardOptionModalContextValueType {
   animatedStyle: any;
   showOptionModal: (idx: number) => void;
@@ -23,9 +25,9 @@ const CardOptionModalContext = createContext<cardOptionModalContextValueType>(
 export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
   const [selectedIdx, setSelectedCardIdx] = useState(-1);
 
-  const prevTranslateY = useSharedValue(200);
+  const prevTranslateY = useSharedValue(MODAL_HEIGHT);
 
-  const modalTranslateY = useSharedValue(200);
+  const modalTranslateY = useSharedValue(MODAL_HEIGHT);
 
   const showOptionModal = (idx: number) => {
     setSelectedCardIdx(idx);
@@ -38,11 +40,11 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
 
   const hideOptionModal = () => {
     setSelectedCardIdx(-1);
-    modalTranslateY.value = withTiming(200, {
+    modalTranslateY.value = withTiming(MODAL_HEIGHT, {
       duration: 150,
       easing: Easing.out(Easing.circle),
     });
-    prevTranslateY.value = 200;
+    prevTranslateY.value = MODAL_HEIGHT;
   };
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -66,7 +68,7 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
       if (modalTranslateY.value > 30) {
         runOnJS(setSelectedCardIdx)(-1);
         prevTranslateY.value = 200;
-        modalTranslateY.value = withTiming(200, {
+        modalTranslateY.value = withTiming(MODAL_HEIGHT, {
           duration: 150,
           easing: Easing.out(Easing.circle),
         });
