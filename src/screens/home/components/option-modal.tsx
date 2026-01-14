@@ -1,6 +1,6 @@
 import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { MODAL_HEIGHT } from '../constants';
@@ -22,12 +22,30 @@ export default function OptionModal() {
               marginTop: 8,
             }}
           ></View>
-          <View style={styles.editBtn}>
-            <Text style={styles.editText}>Edit</Text>
-          </View>
-          <View style={styles.deleteBtn}>
-            <Text style={styles.deleteText}>Delete</Text>
-          </View>
+          <Pressable>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.editBtn,
+                  pressed && { backgroundColor: '#434343' },
+                ]}
+              >
+                <Text style={styles.editText}>수정스</Text>
+              </View>
+            )}
+          </Pressable>
+          <Pressable>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.deleteBtn,
+                  pressed && { backgroundColor: '#2d2d2d' },
+                ]}
+              >
+                <Text style={styles.deleteText}>삭제스</Text>
+              </View>
+            )}
+          </Pressable>
         </View>
       </Animated.View>
     </GestureDetector>

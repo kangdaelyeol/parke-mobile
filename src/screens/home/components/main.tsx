@@ -10,7 +10,8 @@ import Animated, {
 import { Card } from './card';
 import EmptyCard from './empty-card';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
-
+import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
+import { runOnJS } from 'react-native-worklets';
 
 const tempData = [
   {
@@ -38,11 +39,14 @@ export default function Main() {
 
   const eventCnt = useSharedValue(1);
 
+  const { hideOptionModal, selectedIdx } = useCardOptionModalContext();
+
   const panGesture = Gesture.Pan()
     .onBegin(() => {
       sliderTranslatedX.value = prevSliderTranslatedX.value;
     })
     .onUpdate(e => {
+      if (selectedIdx !== -1) runOnJS(hideOptionModal)();
       const translatedX = prevSliderTranslatedX.value + e.translationX;
       sliderTranslatedX.value = translatedX;
 
@@ -97,28 +101,27 @@ export default function Main() {
   }));
 
   return (
-    
-      <View style={styles.main}>
-        <View style={styles.mainWrapper}>
-          <GestureDetector gesture={panGesture}>
-            <View style={styles.cardContainer}>
-              <View style={styles.cardSlider}>
-                <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
-                  {tempData.map((card, idx) => (
-                    <Card
-                      key={idx}
-                      {...card}
-                      idx={idx}
-                      selected={selectedCardIdx}
-                    />
-                  ))}
-                  <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
-                </Animated.View>
-              </View>
+    <View style={styles.main}>
+      <View style={styles.mainWrapper}>
+        <GestureDetector gesture={panGesture}>
+          <View style={styles.cardContainer}>
+            <View style={styles.cardSlider}>
+              <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
+                {tempData.map((card, idx) => (
+                  <Card
+                    key={idx}
+                    {...card}
+                    idx={idx}
+                    selected={selectedCardIdx}
+                  />
+                ))}
+                <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
+              </Animated.View>
             </View>
-          </GestureDetector>
-        </View>
+          </View>
+        </GestureDetector>
       </View>
+    </View>
   );
 }
 

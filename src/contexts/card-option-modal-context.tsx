@@ -42,7 +42,7 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
     setSelectedCardIdx(-1);
     modalTranslateY.value = withTiming(MODAL_HEIGHT, {
       duration: 150,
-      easing: Easing.out(Easing.circle),
+      easing: Easing.out(Easing.cubic),
     });
     prevTranslateY.value = MODAL_HEIGHT;
   };
@@ -67,7 +67,7 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
     .onEnd(() => {
       if (modalTranslateY.value > 30) {
         runOnJS(setSelectedCardIdx)(-1);
-        prevTranslateY.value = 200;
+        prevTranslateY.value = MODAL_HEIGHT;
         modalTranslateY.value = withTiming(MODAL_HEIGHT, {
           duration: 150,
           easing: Easing.out(Easing.circle),
