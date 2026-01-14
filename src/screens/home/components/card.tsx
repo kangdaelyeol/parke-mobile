@@ -1,14 +1,17 @@
 import { LogoText } from '@/assets/logo';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 import Animated, {
   Easing,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
 
 export const Card = ({ title, phone, idx, selected }: any) => {
+  const { showOptionModal } = useCardOptionModalContext();
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selected.value;
     return {
@@ -25,14 +28,27 @@ export const Card = ({ title, phone, idx, selected }: any) => {
   });
 
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
-      <View style={styles.bottomBackground} />
-      <View style={styles.wrapper}>
-        <LogoText width={50} height={50} />
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.phone}>{phone}</Text>
-      </View>
-    </Animated.View>
+    <Pressable
+      onPress={() => {
+        console.log('presed');
+        showOptionModal(idx);
+      }}
+    >
+      <Animated.View style={[styles.container, animatedStyle]}>
+        <View style={styles.bottomBackground} />
+        <View style={styles.wrapper}>
+          <LogoText width={50} height={50} />
+          <FontAwesome6
+            name="ellipsis"
+            iconStyle="solid"
+            size={17}
+            style={styles.ellipsis}
+          />
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.phone}>{phone}</Text>
+        </View>
+      </Animated.View>
+    </Pressable>
   );
 };
 
@@ -74,4 +90,5 @@ const styles = StyleSheet.create({
     height: 60,
     backgroundColor: 'rgba(38, 43, 55, 0.51)',
   },
+  ellipsis: { color: '#fff', position: 'absolute', right: 15, top: 13 },
 });

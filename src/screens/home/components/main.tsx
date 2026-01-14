@@ -11,6 +11,7 @@ import { Card } from './card';
 import EmptyCard from './empty-card';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
 
+
 const tempData = [
   {
     title: 'my parke 1',
@@ -96,27 +97,28 @@ export default function Main() {
   }));
 
   return (
-    <View style={styles.main}>
-      <View style={styles.mainWrapper}>
-        <GestureDetector gesture={panGesture}>
-          <View style={styles.cardContainer}>
-            <View style={styles.cardSlider}>
-              <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
-                {tempData.map((card, idx) => (
-                  <Card
-                    key={idx}
-                    {...card}
-                    idx={idx}
-                    selected={selectedCardIdx}
-                  />
-                ))}
-                <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
-              </Animated.View>
+    
+      <View style={styles.main}>
+        <View style={styles.mainWrapper}>
+          <GestureDetector gesture={panGesture}>
+            <View style={styles.cardContainer}>
+              <View style={styles.cardSlider}>
+                <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
+                  {tempData.map((card, idx) => (
+                    <Card
+                      key={idx}
+                      {...card}
+                      idx={idx}
+                      selected={selectedCardIdx}
+                    />
+                  ))}
+                  <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
+                </Animated.View>
+              </View>
             </View>
-          </View>
-        </GestureDetector>
+          </GestureDetector>
+        </View>
       </View>
-    </View>
   );
 }
 

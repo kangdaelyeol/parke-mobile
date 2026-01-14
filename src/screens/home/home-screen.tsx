@@ -5,8 +5,9 @@ import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
 
 import Header from './components/header';
-import { CARD_WIDTH } from './constants';
 import Main from './components/main';
+import OptionModal from './components/option-modal';
+import { CardOptionModalProvider } from '@/contexts/card-option-modal-context';
 
 export default function HomeScreen() {
   useEffect(() => {
@@ -25,13 +26,16 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <Header />
-      <Main />
-      <View style={styles.footer}>
-        <View style={styles.footerWrapper}></View>
+    <CardOptionModalProvider>
+      <View style={styles.container}>
+        <Header />
+        <Main />
+        <View style={styles.footer}>
+          <View style={styles.footerWrapper}></View>
+        </View>
       </View>
-    </View>
+      <OptionModal />
+    </CardOptionModalProvider>
   );
 }
 
@@ -39,42 +43,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-  },
-  main: {
-    width: '100%',
-  },
-  mainWrapper: {
-    width: '100%',
-    maxWidth: 480,
-    marginHorizontal: 'auto',
-    overflow: 'hidden',
-  },
-  cardContainer: {
-    width: CARD_WIDTH,
-    height: 200,
-    marginTop: 30,
-    marginHorizontal: 'auto',
-  },
-  cardSlider: {
-    width: CARD_WIDTH,
-    maxWidth: CARD_WIDTH,
-  },
-  cardSliderMover: {
-    width: CARD_WIDTH,
-    flexDirection: 'row',
-    gap: 30,
-  },
-  btn: {
-    backgroundColor: 'white',
-    display: 'flex',
-    alignItems: 'center',
-    paddingVertical: 14,
-    width: 200,
-    borderRadius: 10,
-  },
-  btnText: {
-    fontSize: 20,
-    color: 'black',
   },
 
   footer: {
