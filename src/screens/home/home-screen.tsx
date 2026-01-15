@@ -8,6 +8,7 @@ import Main from './components/main';
 import OptionModal from './components/option-modal';
 import { CardOptionModalProvider } from '@/contexts/card-option-modal-context';
 import Footer from './components/footer';
+import SliderContextProvider from '@/contexts/slider-context';
 
 export default function HomeScreen() {
   useEffect(() => {
@@ -27,12 +28,14 @@ export default function HomeScreen() {
 
   return (
     <CardOptionModalProvider>
-      <View style={styles.container}>
-        <Header />
-        <Main />
-        <Footer />
-      </View>
-      <OptionModal />
+      <SliderContextProvider>
+        <View style={styles.container}>
+          <Header />
+          <Main />
+          <Footer />
+        </View>
+        <OptionModal />
+      </SliderContextProvider>
     </CardOptionModalProvider>
   );
 }

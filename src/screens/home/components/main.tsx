@@ -1,91 +1,19 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Gesture, GestureDetector } from 'react-native-gesture-handler';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import { GestureDetector } from 'react-native-gesture-handler';
+import Animated from 'react-native-reanimated';
 import { Card } from './card';
 import EmptyCard from './empty-card';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
-import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
-import { runOnJS } from 'react-native-worklets';
+
 import { useUserContext } from '@/contexts/user-context';
+import { useCardSliderContext } from '@/contexts/slider-context';
 
 export default function Main() {
   const user = useUserContext();
+  const {panGesture, animatedStyle, selectedCardIdx} = useCardSliderContext()
   const { cards } = user;
   const CARD_LEN = cards && cards.length;
-  const prevSliderTranslatedX = useSharedValue(0);
-
-  const sliderTranslatedX = useSharedValue(0);
-
-  const selectedCardIdx = useSharedValue(0);
-
-  const eventCnt = useSharedValue(1);
-
-  const { hideOptionModal, selectedIdx } = useCardOptionModalContext();
-
-  const panGesture = Gesture.Pan()
-    .onBegin(() => {
-      sliderTranslatedX.value = prevSliderTranslatedX.value;
-    })
-    .onUpdate(e => {
-      if (selectedIdx !== -1) runOnJS(hideOptionModal)();
-      const translatedX = prevSliderTranslatedX.value + e.translationX;
-      sliderTranslatedX.value = translatedX;
-
-      eventCnt.value += 1;
-    })
-    .onEnd(e => {
-      const transXPerEvent = e.translationX / eventCnt.value;
-
-      if (transXPerEvent > 10) {
-        selectedCardIdx.value = Math.max(0, selectedCardIdx.value - 1);
-        prevSliderTranslatedX.value = sliderTranslatedX.value =
-          -selectedCardIdx.value * (CARD_WIDTH + SLIDER_GAP);
-        eventCnt.value = 1;
-        return;
-      } else if (transXPerEvent < -10) {
-        selectedCardIdx.value = Math.min(CARD_LEN, selectedCardIdx.value + 1);
-        prevSliderTranslatedX.value = sliderTranslatedX.value =
-          -selectedCardIdx.value * (CARD_WIDTH + SLIDER_GAP);
-        eventCnt.value = 1;
-        return;
-      }
-
-      if (sliderTranslatedX.value > 0) {
-        prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
-        selectedCardIdx.value = 0;
-      } else {
-        selectedCardIdx.value = Math.max(
-          0,
-          Math.min(
-            CARD_LEN,
-            Math.round(-sliderTranslatedX.value / (CARD_WIDTH + SLIDER_GAP)),
-          ),
-        );
-
-        const translateX = -selectedCardIdx.value * (CARD_WIDTH + SLIDER_GAP);
-
-        prevSliderTranslatedX.value = sliderTranslatedX.value = translateX;
-      }
-
-      eventCnt.value = 1;
-    });
-
-  const animatedStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: withTiming(sliderTranslatedX.value, {
-          duration: 300,
-          easing: Easing.out(Easing.cubic),
-        }),
-      },
-    ],
-  }));
 
   return (
     <View style={styles.main}>
