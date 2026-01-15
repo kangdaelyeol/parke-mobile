@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { createContext, PropsWithChildren, useContext } from 'react';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
 import {
   Easing,
@@ -6,44 +6,34 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { runOnJS } from 'react-native-worklets';
 
 import { MODAL_HEIGHT } from '@/screens/home/constants';
 
-interface cardOptionModalContextValueType {
+interface CardSettingModalContext {
   animatedStyle: any;
-  showOptionModal: (idx: number) => void;
+  showOptionModal: () => void;
   hideOptionModal: () => void;
   gesturePan: PanGesture;
-  selectedIdx: number;
 }
 
-const CardOptionModalContext = createContext<cardOptionModalContextValueType>(
-  {} as cardOptionModalContextValueType,
+const cardSettingModalContext = createContext<CardSettingModalContext>(
+  {} as CardSettingModalContext,
 );
 
-export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
-  const [selectedIdx, setSelectedCardIdx] = useState(-1);
-
+export const CardSettingModalProvider = ({ children }: PropsWithChildren) => {
   const prevTranslateY = useSharedValue(MODAL_HEIGHT);
 
   const modalTranslateY = useSharedValue(MODAL_HEIGHT);
 
-  const showOptionModal = (idx: number) => {
-    setSelectedCardIdx(idx);
-    modalTranslateY.value = withTiming(0, {
-      duration: 150,
-      easing: Easing.out(Easing.circle),
-    });
+  const showOptionModal = () => {
+    'worklet';
+    modalTranslateY.value = 0;
     prevTranslateY.value = 0;
   };
 
   const hideOptionModal = () => {
-    setSelectedCardIdx(-1);
-    modalTranslateY.value = withTiming(MODAL_HEIGHT, {
-      duration: 150,
-      easing: Easing.out(Easing.cubic),
-    });
+    'worklet';
+    modalTranslateY.value = MODAL_HEIGHT;
     prevTranslateY.value = MODAL_HEIGHT;
   };
 
@@ -51,7 +41,10 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
     return {
       transform: [
         {
-          translateY: modalTranslateY.value,
+          translateY: withTiming(modalTranslateY.value, {
+            duration: 150,
+            easing: Easing.out(Easing.cubic),
+          }),
         },
       ],
     };
@@ -66,7 +59,6 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
     })
     .onEnd(() => {
       if (modalTranslateY.value > 30) {
-        runOnJS(setSelectedCardIdx)(-1);
         prevTranslateY.value = MODAL_HEIGHT;
         modalTranslateY.value = withTiming(MODAL_HEIGHT, {
           duration: 150,
@@ -82,19 +74,18 @@ export const CardOptionModalProvider = ({ children }: PropsWithChildren) => {
     });
 
   return (
-    <CardOptionModalContext.Provider
+    <cardSettingModalContext.Provider
       value={{
         animatedStyle,
         showOptionModal,
         hideOptionModal,
         gesturePan,
-        selectedIdx,
       }}
     >
       {children}
-    </CardOptionModalContext.Provider>
+    </cardSettingModalContext.Provider>
   );
 };
 
-export const useCardOptionModalContext = () =>
-  useContext(CardOptionModalContext);
+export const useCardSettingModalContext = () =>
+  useContext(cardSettingModalContext);

@@ -8,12 +8,14 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
+import { useCardSettingModalContext } from '@/contexts/card-setting-modal-context';
+import { useCardSliderContext } from '@/contexts/slider-context';
 
-export const Card = ({ title, phone, idx, selected }: any) => {
-  const { showOptionModal } = useCardOptionModalContext();
+export const Card = ({ title, phone, idx }: any) => {
+  const { showOptionModal } = useCardSettingModalContext();
+  const { selectedCardIdx } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selected.value;
+    const isSelected = idx === selectedCardIdx.value;
     return {
       opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
       transform: [
@@ -30,8 +32,7 @@ export const Card = ({ title, phone, idx, selected }: any) => {
   return (
     <Pressable
       onPress={() => {
-        console.log('presed');
-        showOptionModal(idx);
+        showOptionModal();
       }}
     >
       <Animated.View style={[styles.container, animatedStyle]}>

@@ -6,7 +6,7 @@ import { deviceService, settingService } from '@/services';
 import Header from './components/header';
 import Main from './components/main';
 import OptionModal from './components/option-modal';
-import { CardOptionModalProvider } from '@/contexts/card-option-modal-context';
+import { CardSettingModalProvider } from '@/contexts/card-setting-modal-context';
 import Footer from './components/footer';
 import SliderContextProvider from '@/contexts/slider-context';
 
@@ -27,7 +27,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <CardOptionModalProvider>
+    <CardSettingModalProvider>
       <SliderContextProvider>
         <View style={styles.container}>
           <Header />
@@ -36,7 +36,7 @@ export default function HomeScreen() {
         </View>
         <OptionModal />
       </SliderContextProvider>
-    </CardOptionModalProvider>
+    </CardSettingModalProvider>
   );
 }
 

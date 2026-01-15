@@ -7,8 +7,7 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
-import { runOnJS } from 'react-native-worklets';
+import { useCardSettingModalContext } from '@/contexts/card-setting-modal-context';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
 import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { useUserContext } from './user-context';
@@ -40,7 +39,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const selectedCardIdx = useSharedValue(0);
 
-  const { hideOptionModal, selectedIdx } = useCardOptionModalContext();
+  const { hideOptionModal } = useCardSettingModalContext();
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
 
@@ -70,7 +69,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
       sliderTranslatedX.value = prevSliderTranslatedX.value;
     })
     .onUpdate(e => {
-      if (selectedIdx !== -1) runOnJS(hideOptionModal)();
+      hideOptionModal();
       const translatedX = prevSliderTranslatedX.value + e.translationX;
       sliderTranslatedX.value = translatedX;
     })

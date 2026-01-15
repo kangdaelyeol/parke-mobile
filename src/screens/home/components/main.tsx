@@ -11,7 +11,7 @@ import { useCardSliderContext } from '@/contexts/slider-context';
 
 export default function Main() {
   const user = useUserContext();
-  const {panGesture, animatedStyle, selectedCardIdx} = useCardSliderContext()
+  const { panGesture, animatedStyle } = useCardSliderContext();
   const { cards } = user;
   const CARD_LEN = cards && cards.length;
 
@@ -24,14 +24,9 @@ export default function Main() {
               <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
                 {cards &&
                   cards.map((card, idx) => (
-                    <Card
-                      key={idx}
-                      {...card}
-                      idx={idx}
-                      selected={selectedCardIdx}
-                    />
+                    <Card key={idx} {...card} idx={idx} />
                   ))}
-                <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
+                <EmptyCard idx={CARD_LEN} />
               </Animated.View>
             </View>
           </View>

@@ -1,3 +1,4 @@
+import { useCardSliderContext } from '@/contexts/slider-context';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
@@ -11,11 +12,12 @@ import Animated, {
 const CARD_WIDTH = 250;
 const CARD_HEIGHT = 140;
 
-export default function EmptyCard({ idx, selected }: any) {
+export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
+  const { selectedCardIdx } = useCardSliderContext();
 
   const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selected.value;
+    const isSelected = idx === selectedCardIdx.value;
     return {
       opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
       transform: [
@@ -25,9 +27,9 @@ export default function EmptyCard({ idx, selected }: any) {
   });
 
   return (
-    <Animated.View style={[emptyCardStyles.container, animatedStyle]}>
-      <View style={emptyCardStyles.iconContainer}>
-        <View style={emptyCardStyles.emptyCardIcon}>
+    <Animated.View style={[styles.container, animatedStyle]}>
+      <View style={styles.iconContainer}>
+        <View style={styles.emptyCardIcon}>
           <FontAwesome6
             name="plus"
             iconStyle="solid"
@@ -40,9 +42,7 @@ export default function EmptyCard({ idx, selected }: any) {
         {({ pressed }) => {
           pressed && ReactNativeHapticFeedback.trigger('selection');
           return (
-            <View
-              style={[emptyCardStyles.emptyCard, pressed && { opacity: 0.4 }]}
-            ></View>
+            <View style={[styles.emptyCard, pressed && styles.cardPressed]} />
           );
         }}
       </Pressable>
@@ -50,7 +50,7 @@ export default function EmptyCard({ idx, selected }: any) {
   );
 }
 
-const emptyCardStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     position: 'relative',
     marginHorizontal: 'auto',
@@ -86,4 +86,5 @@ const emptyCardStyles = StyleSheet.create({
     borderRadius: '50%',
     margin: 'auto',
   },
+  cardPressed: { opacity: 0.4 },
 });

@@ -1,4 +1,4 @@
-import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
+import { useCardSettingModalContext } from '@/contexts/card-setting-modal-context';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
@@ -6,7 +6,7 @@ import Animated from 'react-native-reanimated';
 import { MODAL_HEIGHT } from '../constants';
 
 export default function OptionModal() {
-  const { gesturePan, animatedStyle } = useCardOptionModalContext();
+  const { gesturePan, animatedStyle } = useCardSettingModalContext();
   return (
     <GestureDetector gesture={gesturePan}>
       <Animated.View style={[styles.optionModal, animatedStyle]}>
