@@ -17,7 +17,7 @@ export interface OnBoardContextValueType {
   setHasSeenOnBoarding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const OnBoardContext = createContext<OnBoardContextValueType>(
+const onBoardContext = createContext<OnBoardContextValueType>(
   {} as OnBoardContextValueType,
 );
 
@@ -44,10 +44,10 @@ export const OnBoardContextProvider = ({ children }: PropsWithChildren) => {
   };
 
   return (
-    <OnBoardContext.Provider value={initialValue}>
+    <onBoardContext.Provider value={initialValue}>
       {children}
-    </OnBoardContext.Provider>
+    </onBoardContext.Provider>
   );
 };
 
-export const useOnBoard = () => useContext(OnBoardContext);
+export const useOnBoard = () => useContext(onBoardContext);

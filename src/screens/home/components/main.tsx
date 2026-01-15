@@ -12,25 +12,12 @@ import EmptyCard from './empty-card';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
 import { useCardOptionModalContext } from '@/contexts/card-option-modal-context';
 import { runOnJS } from 'react-native-worklets';
-
-const tempData = [
-  {
-    title: 'my parke 1',
-    phone: '010-2413-0510',
-  },
-  {
-    title: 'my parke 2',
-    phone: '010-1234-5678',
-  },
-  {
-    title: 'my parke 3',
-    phone: '010-9876-5432',
-  },
-];
-
-const CARD_LEN = tempData.length;
+import { useUserContext } from '@/contexts/user-context';
 
 export default function Main() {
+  const user = useUserContext();
+  const { cards } = user;
+  const CARD_LEN = cards && cards.length;
   const prevSliderTranslatedX = useSharedValue(0);
 
   const sliderTranslatedX = useSharedValue(0);
@@ -107,14 +94,15 @@ export default function Main() {
           <View style={styles.cardContainer}>
             <View style={styles.cardSlider}>
               <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
-                {tempData.map((card, idx) => (
-                  <Card
-                    key={idx}
-                    {...card}
-                    idx={idx}
-                    selected={selectedCardIdx}
-                  />
-                ))}
+                {cards &&
+                  cards.map((card, idx) => (
+                    <Card
+                      key={idx}
+                      {...card}
+                      idx={idx}
+                      selected={selectedCardIdx}
+                    />
+                  ))}
                 <EmptyCard idx={CARD_LEN} selected={selectedCardIdx} />
               </Animated.View>
             </View>
