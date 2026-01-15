@@ -8,12 +8,13 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useCardSettingModalContext } from '@/contexts/card-setting-modal-context';
+import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
 export const Card = ({ title, phone, idx }: any) => {
-  const { showOptionModal } = useCardSettingModalContext();
-  const { selectedCardIdx } = useCardSliderContext();
+  const { showOptionModal, hideOptionModal } =
+    useCardSettingBottomSheetContext();
+  const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
     return {
@@ -29,12 +30,16 @@ export const Card = ({ title, phone, idx }: any) => {
     };
   });
 
+  const onCardPressed = () => {
+    if (idx === selectedCardIdx.value) showOptionModal();
+    else {
+      sliderController.goToIdx(idx);
+      hideOptionModal();
+    }
+  };
+
   return (
-    <Pressable
-      onPress={() => {
-        showOptionModal();
-      }}
-    >
+    <Pressable onPress={onCardPressed}>
       <Animated.View style={[styles.container, animatedStyle]}>
         <View style={styles.bottomBackground} />
         <View style={styles.wrapper}>

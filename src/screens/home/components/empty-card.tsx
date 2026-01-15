@@ -1,3 +1,4 @@
+import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +15,8 @@ const CARD_HEIGHT = 140;
 
 export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
-  const { selectedCardIdx } = useCardSliderContext();
+  const { selectedCardIdx, sliderController } = useCardSliderContext();
+  const { hideOptionModal } = useCardSettingBottomSheetContext();
 
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
@@ -25,6 +27,14 @@ export default function EmptyCard({ idx }: any) {
       ],
     };
   });
+
+  const onCardPressed = () => {
+    if (selectedCardIdx === idx) navigation.replace('SearchBLE');
+    else {
+      sliderController.goToIdx(idx);
+      hideOptionModal();
+    }
+  };
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
@@ -38,7 +48,7 @@ export default function EmptyCard({ idx }: any) {
           />
         </View>
       </View>
-      <Pressable onPress={() => navigation.replace('SearchBLE')}>
+      <Pressable onPress={onCardPressed}>
         {({ pressed }) => {
           pressed && ReactNativeHapticFeedback.trigger('selection');
           return (

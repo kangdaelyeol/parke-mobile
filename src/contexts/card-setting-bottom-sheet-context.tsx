@@ -9,18 +9,21 @@ import {
 
 import { MODAL_HEIGHT } from '@/screens/home/constants';
 
-interface CardSettingModalContext {
+interface CardSettingBottomSheetContext {
   animatedStyle: any;
   showOptionModal: () => void;
   hideOptionModal: () => void;
   gesturePan: PanGesture;
 }
 
-const cardSettingModalContext = createContext<CardSettingModalContext>(
-  {} as CardSettingModalContext,
-);
+const cardSettingBottomSheetContext =
+  createContext<CardSettingBottomSheetContext>(
+    {} as CardSettingBottomSheetContext,
+  );
 
-export const CardSettingModalProvider = ({ children }: PropsWithChildren) => {
+export const CardSettingBottomSheetProvider = ({
+  children,
+}: PropsWithChildren) => {
   const prevTranslateY = useSharedValue(MODAL_HEIGHT);
 
   const modalTranslateY = useSharedValue(MODAL_HEIGHT);
@@ -74,7 +77,7 @@ export const CardSettingModalProvider = ({ children }: PropsWithChildren) => {
     });
 
   return (
-    <cardSettingModalContext.Provider
+    <cardSettingBottomSheetContext.Provider
       value={{
         animatedStyle,
         showOptionModal,
@@ -83,9 +86,9 @@ export const CardSettingModalProvider = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
-    </cardSettingModalContext.Provider>
+    </cardSettingBottomSheetContext.Provider>
   );
 };
 
-export const useCardSettingModalContext = () =>
-  useContext(cardSettingModalContext);
+export const useCardSettingBottomSheetContext = () =>
+  useContext(cardSettingBottomSheetContext);
