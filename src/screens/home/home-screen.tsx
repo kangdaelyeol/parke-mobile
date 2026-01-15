@@ -3,11 +3,11 @@ import { StyleSheet, View } from 'react-native';
 import { startBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
-
 import Header from './components/header';
 import Main from './components/main';
 import OptionModal from './components/option-modal';
 import { CardOptionModalProvider } from '@/contexts/card-option-modal-context';
+import Footer from './components/footer';
 
 export default function HomeScreen() {
   useEffect(() => {
@@ -30,9 +30,7 @@ export default function HomeScreen() {
       <View style={styles.container}>
         <Header />
         <Main />
-        <View style={styles.footer}>
-          <View style={styles.footerWrapper}></View>
-        </View>
+        <Footer />
       </View>
       <OptionModal />
     </CardOptionModalProvider>
@@ -43,25 +41,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-  },
-
-  footer: {
-    position: 'absolute',
-    bottom: -1,
-    width: '102%',
-    left: '-1%',
-    backgroundColor: '#16181b',
-    height: 90,
-    borderTopStartRadius: 35,
-    borderTopEndRadius: 35,
-    borderColor: '#2d2d2d',
-    borderWidth: 1,
-  },
-  footerWrapper: {
-    width: '100%',
-    maxWidth: 300,
-    paddingHorizontal: 30,
-    marginHorizontal: 'auto',
-    backgroundColor: 'white',
   },
 });

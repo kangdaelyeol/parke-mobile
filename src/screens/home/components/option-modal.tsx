@@ -11,37 +11,17 @@ export default function OptionModal() {
     <GestureDetector gesture={gesturePan}>
       <Animated.View style={[styles.optionModal, animatedStyle]}>
         <View style={styles.optionModalWrapper}>
-          <View
-            style={{
-              backgroundColor: '#e0e0e0',
-              width: 60,
-              marginHorizontal: 'auto',
-              height: 4,
-              borderRadius: 100,
-              opacity: 0.8,
-              marginTop: 8,
-            }}
-          ></View>
+          <View style={styles.scrollBar} />
           <Pressable>
             {({ pressed }) => (
-              <View
-                style={[
-                  styles.editBtn,
-                  pressed && { backgroundColor: '#434343' },
-                ]}
-              >
+              <View style={[styles.editBtn, pressed && styles.editPressed]}>
                 <Text style={styles.editText}>수정스</Text>
               </View>
             )}
           </Pressable>
           <Pressable>
             {({ pressed }) => (
-              <View
-                style={[
-                  styles.deleteBtn,
-                  pressed && { backgroundColor: '#2d2d2d' },
-                ]}
-              >
+              <View style={[styles.deleteBtn, pressed && styles.deletePressed]}>
                 <Text style={styles.deleteText}>삭제스</Text>
               </View>
             )}
@@ -74,7 +54,7 @@ const styles = StyleSheet.create({
   },
   deleteBtn: {
     backgroundColor: '#0d0f11',
-    borderRadius: 25,
+    borderRadius: 15,
     marginTop: 20,
     paddingVertical: 15,
   },
@@ -86,8 +66,19 @@ const styles = StyleSheet.create({
   },
   editBtn: {
     backgroundColor: '#2b2b2b',
-    borderRadius: 25,
+    borderRadius: 15,
     marginTop: 20,
     paddingVertical: 15,
   },
+  scrollBar: {
+    backgroundColor: '#e0e0e0',
+    width: 60,
+    marginHorizontal: 'auto',
+    height: 4,
+    borderRadius: 100,
+    opacity: 0.8,
+    marginTop: 8,
+  },
+  editPressed: { backgroundColor: '#434343' },
+  deletePressed: { backgroundColor: '#2d2d2d' },
 });

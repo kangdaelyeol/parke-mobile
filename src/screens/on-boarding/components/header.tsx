@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <View style={styles.header}>
       <View style={styles.logoContainer}>
-        <LogoIcon style={styles.logoIcon} width={70} height={70} />
+        <LogoIcon style={styles.logoIcon} width={40} height={50} />
         <LogoText style={styles.logoText} width={120} height={50} />
       </View>
     </View>
@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   logoIcon: {
-    marginTop: -10,
+    marginTop: 0,
     marginLeft: -20,
   },
   logoText: {
     marginTop: 5,
+    marginLeft: 10,
   },
 });
 
