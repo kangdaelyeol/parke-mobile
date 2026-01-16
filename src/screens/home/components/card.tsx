@@ -12,7 +12,7 @@ import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
 export const Card = ({ title, phone, idx }: any) => {
-  const { modalController } = useCardSettingContext();
+  const { modalController, settingCard } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
@@ -30,6 +30,7 @@ export const Card = ({ title, phone, idx }: any) => {
   });
 
   const onCardPressed = () => {
+    if (settingCard !== -1) return;
     if (idx === selectedCardIdx.value) modalController.showModal();
     else {
       sliderController.goToIdx(idx);

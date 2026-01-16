@@ -30,6 +30,7 @@ const sliderContext = createContext({} as SliderContext);
 
 export default function SliderContextProvider({ children }: PropsWithChildren) {
   const user = useUserContext();
+  const { settingCard } = useCardSettingContext();
   const { cards } = user;
   const CARD_LEN = cards && cards.length;
 
@@ -64,37 +65,40 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
     },
   };
 
-  const panGesture = Gesture.Pan()
-    .onBegin(() => {
-      sliderTranslatedX.value = prevSliderTranslatedX.value;
-    })
-    .onUpdate(e => {
-      modalController.hideModal();
-      const translatedX = prevSliderTranslatedX.value + e.translationX;
-      sliderTranslatedX.value = translatedX;
-    })
-    .onEnd(e => {
-      if (e.velocityX > 800) {
-        sliderController.goToPrev();
-        return;
-      } else if (e.velocityX < -800) {
-        sliderController.goToNext();
+  const panGesture =
+    settingCard === -1
+      ? Gesture.Pan()
+          .onBegin(() => {
+            sliderTranslatedX.value = prevSliderTranslatedX.value;
+          })
+          .onUpdate(e => {
+            modalController.hideModal();
+            const translatedX = prevSliderTranslatedX.value + e.translationX;
+            sliderTranslatedX.value = translatedX;
+          })
+          .onEnd(e => {
+            if (e.velocityX > 800) {
+              sliderController.goToPrev();
+              return;
+            } else if (e.velocityX < -800) {
+              sliderController.goToNext();
 
-        return;
-      }
+              return;
+            }
 
-      if (sliderTranslatedX.value > 0) {
-        prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
-        selectedCardIdx.value = 0;
-      } else {
-        const idx = clamp(
-          Math.round(-sliderTranslatedX.value / SLIDER_INTERVAL),
-          0,
-          CARD_LEN,
-        );
-        sliderController.goToIdx(idx);
-      }
-    });
+            if (sliderTranslatedX.value > 0) {
+              prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
+              selectedCardIdx.value = 0;
+            } else {
+              const idx = clamp(
+                Math.round(-sliderTranslatedX.value / SLIDER_INTERVAL),
+                0,
+                CARD_LEN,
+              );
+              sliderController.goToIdx(idx);
+            }
+          })
+      : Gesture.Pan();
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [
