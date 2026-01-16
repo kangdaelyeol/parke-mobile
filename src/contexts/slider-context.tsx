@@ -7,7 +7,7 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
 import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { useUserContext } from './user-context';
@@ -39,7 +39,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const selectedCardIdx = useSharedValue(0);
 
-  const { modalController } = useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingContext();
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
 

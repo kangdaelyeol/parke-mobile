@@ -3,10 +3,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { MODAL_HEIGHT } from '../constants';
-import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
 
 export default function OptionModal() {
-  const { gesturePan, animatedStyle } = useCardSettingBottomSheetContext();
+  const { gesturePan, animatedStyle } = useCardSettingContext();
   return (
     <GestureDetector gesture={gesturePan}>
       <Animated.View style={[styles.optionModal, animatedStyle]}>

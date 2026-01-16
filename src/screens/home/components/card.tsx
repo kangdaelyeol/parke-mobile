@@ -8,11 +8,11 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
 export const Card = ({ title, phone, idx }: any) => {
-  const { modalController } = useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;

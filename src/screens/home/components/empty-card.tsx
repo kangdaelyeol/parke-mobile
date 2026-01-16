@@ -1,4 +1,4 @@
-import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom-sheet-context';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useNavigation } from '@react-navigation/native';
@@ -14,7 +14,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const { modalController } = useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingContext();
 
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;

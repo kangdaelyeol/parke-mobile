@@ -6,7 +6,7 @@ import { deviceService, settingService } from '@/services';
 import Header from './components/header';
 import Main from './components/main';
 import OptionModal from './components/option-modal';
-import { CardSettingBottomSheetProvider } from '@/contexts/card-setting-bottom-sheet-context';
+import { CardSettingProvider } from '@/contexts/card-setting-context';
 import Footer from './components/footer';
 import SliderContextProvider from '@/contexts/slider-context';
 
@@ -27,7 +27,7 @@ export default function HomeScreen() {
   }, []);
 
   return (
-    <CardSettingBottomSheetProvider>
+    <CardSettingProvider>
       <SliderContextProvider>
         <View style={styles.container}>
           <Header />
@@ -36,7 +36,7 @@ export default function HomeScreen() {
         </View>
         <OptionModal />
       </SliderContextProvider>
-    </CardSettingBottomSheetProvider>
+    </CardSettingProvider>
   );
 }
 
