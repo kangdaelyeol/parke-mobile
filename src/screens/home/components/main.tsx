@@ -39,16 +39,19 @@ export default function Main() {
 const styles = StyleSheet.create({
   main: {
     width: '100%',
+    flex: 1,
   },
   mainWrapper: {
     width: '100%',
     maxWidth: 480,
     marginHorizontal: 'auto',
+    paddingBottom: 200,
+    flex: 1,
   },
   cardContainer: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    marginTop: 30,
+    marginVertical: 'auto',
     marginHorizontal: 'auto',
   },
   cardSlider: {

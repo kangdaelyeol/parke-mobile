@@ -9,14 +9,12 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
-
-const CARD_WIDTH = 250;
-const CARD_HEIGHT = 140;
+import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 
 export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const { hideOptionModal } = useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingBottomSheetContext();
 
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
@@ -29,10 +27,10 @@ export default function EmptyCard({ idx }: any) {
   });
 
   const onCardPressed = () => {
-    if (selectedCardIdx === idx) navigation.replace('SearchBLE');
+    if (selectedCardIdx.value === idx) navigation.replace('SearchBLE');
     else {
       sliderController.goToIdx(idx);
-      hideOptionModal();
+      modalController.hideModal();
     }
   };
 
