@@ -11,6 +11,7 @@ import { MODAL_HEIGHT } from '@/screens/home/constants';
 
 interface CardSettingContext {
   animatedStyle: any;
+  sliderAnimatedStyle: any;
   modalController: { showModal: () => void; hideModal: () => void };
   gesturePan: PanGesture;
   cardSettingController: {
@@ -24,11 +25,15 @@ interface CardSettingContext {
 const cardSettingContext = createContext<CardSettingContext>(
   {} as CardSettingContext,
 );
+const SLIDER_MARGIN_TOP_ACTIVE = 30;
+const SLIDER_MARGIN_TOP_INACTIVE = 250;
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const prevTranslateY = useSharedValue(MODAL_HEIGHT);
 
   const modalTranslateY = useSharedValue(MODAL_HEIGHT);
+
+  const sliderMarginTop = useSharedValue(SLIDER_MARGIN_TOP_INACTIVE);
 
   const [settingCard, setSettingCard] = useState(-1);
 
@@ -49,9 +54,11 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const cardSettingController = {
     showSetting: (idx: number) => {
       setSettingCard(idx);
+      sliderMarginTop.value = SLIDER_MARGIN_TOP_ACTIVE;
     },
     hideSetting: () => {
       setSettingCard(-1);
+      sliderMarginTop.value = SLIDER_MARGIN_TOP_INACTIVE;
     },
   };
 
@@ -60,11 +67,20 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
       transform: [
         {
           translateY: withTiming(modalTranslateY.value, {
-            duration: 150,
+            duration: 200,
             easing: Easing.out(Easing.cubic),
           }),
         },
       ],
+    };
+  });
+
+  const sliderAnimatedStyle = useAnimatedStyle(() => {
+    return {
+      marginVertical: withTiming(sliderMarginTop.value, {
+        duration: 400,
+        easing: Easing.out(Easing.cubic),
+      }),
     };
   });
 
@@ -100,6 +116,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         gesturePan,
         settingCard,
         setSettingCard,
+        sliderAnimatedStyle,
       }}
     >
       {children}

@@ -49,7 +49,6 @@ export default function ScanCompleteScreen({ route }: any) {
           onChangeText={now => setPhone(now.replaceAll('-', ''))}
           placeholder="010-1234-5678"
           placeholderTextColor="#777"
-          keyboardType="phone-pad"
           style={styles.input}
         />
         <Pressable

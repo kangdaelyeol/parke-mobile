@@ -4,22 +4,35 @@ import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { MODAL_HEIGHT } from '../constants';
 import { useCardSettingContext } from '@/contexts/card-setting-context';
+import { useCardSliderContext } from '@/contexts/slider-context';
 
 export default function OptionModal() {
-  const { gesturePan, animatedStyle } = useCardSettingContext();
+  const { gesturePan, animatedStyle, cardSettingController, modalController } =
+    useCardSettingContext();
+  const { selectedCardIdx } = useCardSliderContext();
+
+  const onEditPressed = () => {
+    cardSettingController.showSetting(selectedCardIdx.value);
+    // modalController.hideModal();
+  };
+
+  const onDeletePressed = () => {
+    cardSettingController.hideSetting();
+  };
+
   return (
     <GestureDetector gesture={gesturePan}>
       <Animated.View style={[styles.optionModal, animatedStyle]}>
         <View style={styles.optionModalWrapper}>
           <View style={styles.scrollBar} />
-          <Pressable>
+          <Pressable onPress={onEditPressed}>
             {({ pressed }) => (
               <View style={[styles.editBtn, pressed && styles.editPressed]}>
                 <Text style={styles.editText}>수정스</Text>
               </View>
             )}
           </Pressable>
-          <Pressable>
+          <Pressable onPress={onDeletePressed}>
             {({ pressed }) => (
               <View style={[styles.deleteBtn, pressed && styles.deletePressed]}>
                 <Text style={styles.deleteText}>삭제스</Text>

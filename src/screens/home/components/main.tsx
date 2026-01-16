@@ -8,10 +8,13 @@ import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
 
 import { useUserContext } from '@/contexts/user-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
+import SettingCard from './setting-card';
 
 export default function Main() {
   const user = useUserContext();
   const { panGesture, animatedStyle } = useCardSliderContext();
+  const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
   const { cards } = user;
   const CARD_LEN = cards && cards.length;
 
@@ -19,7 +22,7 @@ export default function Main() {
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
         <GestureDetector gesture={panGesture}>
-          <View style={styles.cardContainer}>
+          <Animated.View style={[styles.cardContainer, sliderAnimatedStyle]}>
             <View style={styles.cardSlider}>
               <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
                 {cards &&
@@ -29,8 +32,9 @@ export default function Main() {
                 <EmptyCard idx={CARD_LEN} />
               </Animated.View>
             </View>
-          </View>
+          </Animated.View>
         </GestureDetector>
+        {settingCard !== -1 && <SettingCard />}
       </View>
     </View>
   );
@@ -51,7 +55,6 @@ const styles = StyleSheet.create({
   cardContainer: {
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-    marginVertical: 'auto',
     marginHorizontal: 'auto',
   },
   cardSlider: {
