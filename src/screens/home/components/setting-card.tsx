@@ -1,14 +1,37 @@
+import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { convertPhone } from '@/helpers';
-import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 export default function SettingCard() {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [message, setMessage] = useState('');
+  const opacityVal = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: withTiming(opacityVal.value, {
+      duration: 400,
+    }),
+  }));
+
+  const { cardSettingController } = useCardSettingContext();
+
+  useEffect(() => {
+    opacityVal.value = 1;
+  }, [opacityVal]);
+
+  const onSavePress = () => {
+    cardSettingController.hideSetting();
+  };
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.text}>Name</Text>
@@ -39,25 +62,53 @@ export default function SettingCard() {
             onChangeText={setMessage}
           />
         </View>
+        <View style={styles.btnContainer}>
+          <Pressable style={styles.pressable} onPress={onSavePress}>
+            {({ pressed }) => (
+              <Text
+                style={[
+                  styles.btn,
+                  styles.saveBtn,
+                  pressed && styles.saveBtnPressed,
+                ]}
+              >
+                저장
+              </Text>
+            )}
+          </Pressable>
+          <Pressable style={styles.pressable}>
+            {({ pressed }) => (
+              <Text
+                style={[
+                  styles.btn,
+                  styles.deleteBtn,
+                  pressed && styles.deleteBtnPressed,
+                ]}
+              >
+                삭제
+              </Text>
+            )}
+          </Pressable>
+        </View>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 250,
+    top: 200,
     left: 0,
     right: 0,
     marginHorizontal: 'auto',
-    marginTop: 20,
+    marginTop: 0,
   },
   wrapper: {
     width: '100%',
     maxWidth: 350,
     marginHorizontal: 'auto',
-    gap: 20,
+    gap: 15,
   },
   text: {
     color: '#eaeaea',
@@ -73,5 +124,35 @@ const styles = StyleSheet.create({
     marginTop: 8,
     paddingHorizontal: 10,
     fontWeight: 'bold',
+  },
+  btnContainer: {
+    marginTop: 10,
+    flexDirection: 'row',
+    gap: 30,
+  },
+  pressable: {
+    flex: 1,
+  },
+  btn: {
+    paddingVertical: 20,
+    fontSize: 25,
+    textAlign: 'center',
+    borderRadius: 10,
+    fontWeight: 'bold',
+  },
+  saveBtn: {
+    color: '#bcbcbc',
+    backgroundColor: '#17182f',
+  },
+  saveBtnPressed: {
+    backgroundColor: '#262b73',
+  },
+  deleteBtn: {
+    textAlign: 'center',
+    color: '#e24444',
+    backgroundColor: '#1d1616',
+  },
+  deleteBtnPressed: {
+    backgroundColor: '#431616',
   },
 });

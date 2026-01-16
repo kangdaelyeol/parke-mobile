@@ -13,7 +13,7 @@ export default function OptionModal() {
 
   const onEditPressed = () => {
     cardSettingController.showSetting(selectedCardIdx.value);
-    // modalController.hideModal();
+    modalController.hideModal();
   };
 
   const onDeletePressed = () => {

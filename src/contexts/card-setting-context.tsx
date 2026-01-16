@@ -25,7 +25,7 @@ interface CardSettingContext {
 const cardSettingContext = createContext<CardSettingContext>(
   {} as CardSettingContext,
 );
-const SLIDER_MARGIN_TOP_ACTIVE = 30;
+const SLIDER_MARGIN_TOP_ACTIVE = 10;
 const SLIDER_MARGIN_TOP_INACTIVE = 250;
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
