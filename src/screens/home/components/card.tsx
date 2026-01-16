@@ -11,7 +11,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
-export const Card = ({ title, phone, idx }: any) => {
+export const Card = ({ title, phone, idx, message }: any) => {
   const { modalController, settingCard } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
@@ -43,15 +43,20 @@ export const Card = ({ title, phone, idx }: any) => {
       <Animated.View style={[styles.container, animatedStyle]}>
         <View style={styles.bottomBackground} />
         <View style={styles.wrapper}>
-          <LogoText width={50} height={50} />
+          <LogoText width={50} height={45} />
           <FontAwesome6
             name="ellipsis"
             iconStyle="solid"
             size={17}
             style={styles.ellipsis}
           />
+          <Text style={styles.message}>{message}</Text>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.phone}>{phone}</Text>
+        </View>
+        <View style={styles.autoChange}>
+          <View style={styles.onIcon} />
+          <Text style={styles.autoChangeText}>자동변경 On</Text>
         </View>
       </Animated.View>
     </Pressable>
@@ -97,4 +102,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(38, 43, 55, 0.51)',
   },
   ellipsis: { color: '#fff', position: 'absolute', right: 15, top: 13 },
+  message: {
+    color: '#616161',
+    position: 'absolute',
+    left: 10,
+    bottom: 65,
+    fontSize: 15,
+  },
+  autoChange: {
+    position: 'absolute',
+    left: 10,
+    bottom: 8,
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+  },
+  onIcon: {
+    width: 10,
+    height: 10,
+    backgroundColor: '#00ed08',
+    borderRadius: '50%',
+    boxShadow: '0px 0px 5px 2px #299c32',
+  },
+  autoChangeText: {
+    color: '#4fa75c',
+    fontSize: 14,
+    fontWeight: 500,
+  },
 });
