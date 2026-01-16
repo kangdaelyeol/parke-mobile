@@ -39,7 +39,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const selectedCardIdx = useSharedValue(0);
 
-  const { hideOptionModal } = useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingBottomSheetContext();
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
 
@@ -69,7 +69,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
       sliderTranslatedX.value = prevSliderTranslatedX.value;
     })
     .onUpdate(e => {
-      hideOptionModal();
+      modalController.hideModal();
       const translatedX = prevSliderTranslatedX.value + e.translationX;
       sliderTranslatedX.value = translatedX;
     })

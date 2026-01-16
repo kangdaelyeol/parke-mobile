@@ -1,4 +1,4 @@
-import { createContext, PropsWithChildren, useContext } from 'react';
+import { createContext, PropsWithChildren, useContext, useState } from 'react';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
 import {
   Easing,
@@ -11,9 +11,14 @@ import { MODAL_HEIGHT } from '@/screens/home/constants';
 
 interface CardSettingBottomSheetContext {
   animatedStyle: any;
-  showOptionModal: () => void;
-  hideOptionModal: () => void;
+  modalController: { showModal: () => void; hideModal: () => void };
   gesturePan: PanGesture;
+  cardSettingController: {
+    showSetting: (_: number) => void;
+    hideSetting: () => void;
+  };
+  settingCard: number;
+  setSettingCard: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const cardSettingBottomSheetContext =
@@ -28,16 +33,29 @@ export const CardSettingBottomSheetProvider = ({
 
   const modalTranslateY = useSharedValue(MODAL_HEIGHT);
 
-  const showOptionModal = () => {
-    'worklet';
-    modalTranslateY.value = 0;
-    prevTranslateY.value = 0;
+  const [settingCard, setSettingCard] = useState(-1);
+
+  const modalController = {
+    showModal: () => {
+      'worklet';
+      modalTranslateY.value = 0;
+      prevTranslateY.value = 0;
+    },
+
+    hideModal: () => {
+      'worklet';
+      modalTranslateY.value = MODAL_HEIGHT;
+      prevTranslateY.value = MODAL_HEIGHT;
+    },
   };
 
-  const hideOptionModal = () => {
-    'worklet';
-    modalTranslateY.value = MODAL_HEIGHT;
-    prevTranslateY.value = MODAL_HEIGHT;
+  const cardSettingController = {
+    showSetting: (idx: number) => {
+      setSettingCard(idx);
+    },
+    hideSetting: () => {
+      setSettingCard(-1);
+    },
   };
 
   const animatedStyle = useAnimatedStyle(() => {
@@ -80,9 +98,11 @@ export const CardSettingBottomSheetProvider = ({
     <cardSettingBottomSheetContext.Provider
       value={{
         animatedStyle,
-        showOptionModal,
-        hideOptionModal,
+        modalController,
+        cardSettingController,
         gesturePan,
+        settingCard,
+        setSettingCard,
       }}
     >
       {children}

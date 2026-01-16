@@ -12,8 +12,7 @@ import { useCardSettingBottomSheetContext } from '@/contexts/card-setting-bottom
 import { useCardSliderContext } from '@/contexts/slider-context';
 
 export const Card = ({ title, phone, idx }: any) => {
-  const { showOptionModal, hideOptionModal } =
-    useCardSettingBottomSheetContext();
+  const { modalController } = useCardSettingBottomSheetContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
@@ -31,10 +30,10 @@ export const Card = ({ title, phone, idx }: any) => {
   });
 
   const onCardPressed = () => {
-    if (idx === selectedCardIdx.value) showOptionModal();
+    if (idx === selectedCardIdx.value) modalController.showModal();
     else {
       sliderController.goToIdx(idx);
-      hideOptionModal();
+      modalController.hideModal();
     }
   };
 
