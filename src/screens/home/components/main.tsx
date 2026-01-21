@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { Card } from './card';
@@ -10,12 +10,13 @@ import { useUserContext } from '@/contexts/user-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 import { useCardSettingContext } from '@/contexts/card-setting-context';
 import SettingCard from './setting-card';
+import CardOption from './card-option';
 
 export default function Main() {
-  const user = useUserContext();
-  const { panGesture, animatedStyle } = useCardSliderContext();
+  const { panGesture, animatedStyle, selectedCard } =
+    useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
-  const { cards } = user;
+  const { cards } = useUserContext();
   const CARD_LEN = cards && cards.length;
 
   return (
@@ -34,6 +35,7 @@ export default function Main() {
             </View>
           </Animated.View>
         </GestureDetector>
+        {cards[selectedCard] && <CardOption card={cards[selectedCard]} />}
         {settingCard !== -1 && <SettingCard />}
       </View>
     </View>

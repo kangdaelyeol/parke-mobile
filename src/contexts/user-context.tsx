@@ -8,12 +8,14 @@ interface Card {
 
 interface UserContextValueType {
   cards: Card[];
+  phone: string;
 }
 
 const userContext = createContext({} as UserContextValueType);
 
 export default function UserContextProvider({ children }: PropsWithChildren) {
   // temp data
+  const [phone, setPhone] = useState('01024130510');
 
   const [cards] = useState([
     {
@@ -37,7 +39,9 @@ export default function UserContextProvider({ children }: PropsWithChildren) {
   ]);
 
   return (
-    <userContext.Provider value={{ cards }}>{children}</userContext.Provider>
+    <userContext.Provider value={{ cards, phone }}>
+      {children}
+    </userContext.Provider>
   );
 }
 

@@ -26,7 +26,7 @@ const cardSettingContext = createContext<CardSettingContext>(
   {} as CardSettingContext,
 );
 const SLIDER_MARGIN_TOP_ACTIVE = 10;
-const SLIDER_MARGIN_TOP_INACTIVE = 250;
+const SLIDER_MARGIN_TOP_INACTIVE = 220;
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const prevTranslateY = useSharedValue(MODAL_HEIGHT);

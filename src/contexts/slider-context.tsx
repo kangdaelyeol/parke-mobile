@@ -1,4 +1,9 @@
-import React, { createContext, PropsWithChildren, useContext } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useState,
+} from 'react';
 import {
   clamp,
   Easing,
@@ -12,6 +17,7 @@ import { Gesture, PanGesture } from 'react-native-gesture-handler';
 import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { useUserContext } from './user-context';
 import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
+import { runOnJS } from 'react-native-worklets';
 
 interface SliderController {
   goToNext: () => void;
@@ -24,6 +30,7 @@ interface SliderContext {
   animatedStyle: DefaultStyle;
   selectedCardIdx: SharedValue<number>;
   sliderController: SliderController;
+  selectedCard: number;
 }
 
 const sliderContext = createContext({} as SliderContext);
@@ -40,6 +47,8 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const selectedCardIdx = useSharedValue(0);
 
+  const [selectedCard, setSelectedCard] = useState(0);
+
   const { modalController } = useCardSettingContext();
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
@@ -47,21 +56,26 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
   const sliderController = {
     goToNext: () => {
       'worklet';
-      selectedCardIdx.value = Math.min(CARD_LEN, selectedCardIdx.value + 1);
+      const idx = Math.min(CARD_LEN, selectedCardIdx.value + 1);
+      selectedCardIdx.value = idx;
       prevSliderTranslatedX.value = sliderTranslatedX.value =
         -selectedCardIdx.value * SLIDER_INTERVAL;
+      runOnJS(setSelectedCard)(idx);
     },
     goToPrev: () => {
       'worklet';
-      selectedCardIdx.value = Math.max(0, selectedCardIdx.value - 1);
+      const idx = Math.max(0, selectedCardIdx.value - 1);
+      selectedCardIdx.value = idx;
       prevSliderTranslatedX.value = sliderTranslatedX.value =
         -selectedCardIdx.value * SLIDER_INTERVAL;
+      runOnJS(setSelectedCard)(idx);
     },
     goToIdx: (idx: number) => {
       'worklet';
       selectedCardIdx.value = idx;
       const translateX = -idx * SLIDER_INTERVAL;
       prevSliderTranslatedX.value = sliderTranslatedX.value = translateX;
+      runOnJS(setSelectedCard)(idx);
     },
   };
 
@@ -112,7 +126,13 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
   }));
   return (
     <sliderContext.Provider
-      value={{ panGesture, animatedStyle, selectedCardIdx, sliderController }}
+      value={{
+        selectedCard,
+        panGesture,
+        animatedStyle,
+        selectedCardIdx,
+        sliderController,
+      }}
     >
       {children}
     </sliderContext.Provider>
