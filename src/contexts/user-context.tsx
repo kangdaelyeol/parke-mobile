@@ -15,7 +15,7 @@ const userContext = createContext({} as UserContextValueType);
 
 export default function UserContextProvider({ children }: PropsWithChildren) {
   // temp data
-  const [phone, setPhone] = useState('01024130510');
+  const [phone, setPhone] = useState('010-2413-0510');
 
   const [cards] = useState([
     {

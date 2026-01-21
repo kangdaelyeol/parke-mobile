@@ -13,8 +13,7 @@ import SettingCard from './setting-card';
 import CardOption from './card-option';
 
 export default function Main() {
-  const { panGesture, animatedStyle, selectedCard } =
-    useCardSliderContext();
+  const { panGesture, animatedStyle, selectedCard } = useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
   const { cards } = useUserContext();
   const CARD_LEN = cards && cards.length;
@@ -35,8 +34,10 @@ export default function Main() {
             </View>
           </Animated.View>
         </GestureDetector>
-        {cards[selectedCard] && <CardOption card={cards[selectedCard]} />}
-        {settingCard !== -1 && <SettingCard />}
+        {settingCard === -1 && cards[selectedCard] && (
+          <CardOption card={cards[selectedCard]} />
+        )}
+        {settingCard !== -1 && <SettingCard card={cards[selectedCard]} />}
       </View>
     </View>
   );

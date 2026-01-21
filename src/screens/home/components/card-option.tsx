@@ -1,10 +1,18 @@
+import { useCardSettingContext } from '@/contexts/card-setting-context';
+import { useCardSliderContext } from '@/contexts/slider-context';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function CardOption({ card }: any) {
+  const { selectedCard } = useCardSliderContext();
+  const { cardSettingController } = useCardSettingContext();
+  const onEditPressed = () => {
+    cardSettingController.showSetting(selectedCard);
+  };
   const user = useUserContext();
+
   console.log(card.phone, user.phone);
   return (
     <View style={styles.optionContainer}>
@@ -26,7 +34,9 @@ export default function CardOption({ card }: any) {
           <Text style={[styles.text, styles.previewText]}>미리보기</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.text, styles.editText]}>수정</Text>
+          <Text onPress={onEditPressed} style={[styles.text, styles.editText]}>
+            수정
+          </Text>
           <Text style={[styles.text, styles.deleteText]}>삭제</Text>
         </View>
       </View>

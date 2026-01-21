@@ -1,4 +1,5 @@
 import { useCardSettingContext } from '@/contexts/card-setting-context';
+import { useCardSliderContext } from '@/contexts/slider-context';
 import { convertPhone } from '@/helpers';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -9,18 +10,19 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-export default function SettingCard() {
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [message, setMessage] = useState('');
+export default function SettingCard({ card }: any) {
+  const { cardSettingController } = useCardSettingContext();
+  const { selectedCard } = useCardSliderContext();
+  
+  const [name, setName] = useState(card.title);
+  const [phone, setPhone] = useState(card.phone);
+  const [message, setMessage] = useState(card.message);
   const opacityVal = useSharedValue(0);
   const animatedStyle = useAnimatedStyle(() => ({
     opacity: withTiming(opacityVal.value, {
       duration: 400,
     }),
   }));
-
-  const { cardSettingController } = useCardSettingContext();
 
   useEffect(() => {
     opacityVal.value = 1;
