@@ -20,16 +20,19 @@ export default function UserContextProvider({ children }: PropsWithChildren) {
       title: 'my parke 1',
       phone: '010-2413-0510',
       message: 'test',
+      autoChange: false,
     },
     {
       title: 'my parke 2',
       phone: '010-1234-5678',
       message: 'test',
+      autoChange: true,
     },
     {
       title: 'my parke 3',
       phone: '010-9876-5432',
       message: 'test',
+      autoChange: true,
     },
   ]);
 

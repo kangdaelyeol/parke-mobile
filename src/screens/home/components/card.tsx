@@ -11,7 +11,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
-export const Card = ({ title, phone, idx, message }: any) => {
+export const Card = ({ title, phone, idx, message, autoChange }: any) => {
   const { modalController, settingCard } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
@@ -54,10 +54,21 @@ export const Card = ({ title, phone, idx, message }: any) => {
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.phone}>{phone}</Text>
         </View>
-        <View style={styles.autoChange}>
-          <View style={styles.onIcon} />
-          <Text style={styles.autoChangeText}>자동변경 On</Text>
-        </View>
+        {autoChange ? (
+          <View style={styles.autoChange}>
+            <View style={[styles.onIcon, styles.icon]} />
+            <Text style={[styles.autoChangeTextOn, styles.autoChangeText]}>
+              자동변경 On
+            </Text>
+          </View>
+        ) : (
+          <View style={styles.autoChange}>
+            <View style={[styles.offIcon, styles.icon]} />
+            <Text style={[styles.autoChangeTextOff, styles.autoChangeText]}>
+              자동변경 Off
+            </Text>
+          </View>
+        )}
       </Animated.View>
     </Pressable>
   );
@@ -111,22 +122,33 @@ const styles = StyleSheet.create({
   },
   autoChange: {
     position: 'absolute',
-    left: 10,
-    bottom: 8,
+    left: 14,
+    bottom: 10,
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
   },
-  onIcon: {
+  icon: {
     width: 10,
     height: 10,
-    backgroundColor: '#00ed08',
     borderRadius: '50%',
+  },
+  onIcon: {
+    backgroundColor: '#00ed08',
     boxShadow: '0px 0px 5px 2px #299c32',
   },
+  offIcon: {
+    backgroundColor: '#ed3a3a',
+    boxShadow: '0px 0px 5px 2px #fa4c31',
+  },
   autoChangeText: {
-    color: '#4fa75c',
     fontSize: 14,
     fontWeight: 500,
+  },
+  autoChangeTextOn: {
+    color: '#4fa75c',
+  },
+  autoChangeTextOff: {
+    color: '#c02b2b',
   },
 });
