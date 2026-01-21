@@ -28,7 +28,6 @@ interface SliderController {
 interface SliderContext {
   panGesture: PanGesture;
   animatedStyle: DefaultStyle;
-  selectedCardIdx: SharedValue<number>;
   sliderController: SliderController;
   selectedCard: number;
 }
@@ -45,8 +44,6 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const sliderTranslatedX = useSharedValue(0);
 
-  const selectedCardIdx = useSharedValue(0);
-
   const [selectedCard, setSelectedCard] = useState(0);
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
@@ -54,23 +51,20 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
   const sliderController = {
     goToNext: () => {
       'worklet';
-      const idx = Math.min(CARD_LEN, selectedCardIdx.value + 1);
-      selectedCardIdx.value = idx;
+      const idx = Math.min(CARD_LEN, selectedCard + 1);
       prevSliderTranslatedX.value = sliderTranslatedX.value =
-        -selectedCardIdx.value * SLIDER_INTERVAL;
+        -idx * SLIDER_INTERVAL;
       runOnJS(setSelectedCard)(idx);
     },
     goToPrev: () => {
       'worklet';
-      const idx = Math.max(0, selectedCardIdx.value - 1);
-      selectedCardIdx.value = idx;
+      const idx = Math.max(0, selectedCard - 1);
       prevSliderTranslatedX.value = sliderTranslatedX.value =
-        -selectedCardIdx.value * SLIDER_INTERVAL;
+        -idx * SLIDER_INTERVAL;
       runOnJS(setSelectedCard)(idx);
     },
     goToIdx: (idx: number) => {
       'worklet';
-      selectedCardIdx.value = idx;
       const translateX = -idx * SLIDER_INTERVAL;
       prevSliderTranslatedX.value = sliderTranslatedX.value = translateX;
       runOnJS(setSelectedCard)(idx);
@@ -99,7 +93,7 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
             if (sliderTranslatedX.value > 0) {
               prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
-              selectedCardIdx.value = 0;
+              runOnJS(setSelectedCard)(0);
             } else {
               const idx = clamp(
                 Math.round(-sliderTranslatedX.value / SLIDER_INTERVAL),
@@ -127,7 +121,6 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
         selectedCard,
         panGesture,
         animatedStyle,
-        selectedCardIdx,
         sliderController,
       }}
     >

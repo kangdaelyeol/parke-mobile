@@ -12,10 +12,11 @@ import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { useCardSliderContext } from '@/contexts/slider-context';
 
 export const Card = ({ title, phone, idx, message, autoChange }: any) => {
-  const {  settingCard } = useCardSettingContext();
-  const { selectedCardIdx, sliderController } = useCardSliderContext();
+  const { settingCard } = useCardSettingContext();
+  const { selectedCard, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selectedCardIdx.value;
+    const isSelected = idx === selectedCard;
+
     return {
       opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
       transform: [
