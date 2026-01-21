@@ -49,8 +49,6 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
 
   const [selectedCard, setSelectedCard] = useState(0);
 
-  const { modalController } = useCardSettingContext();
-
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
 
   const sliderController = {
@@ -86,7 +84,6 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
             sliderTranslatedX.value = prevSliderTranslatedX.value;
           })
           .onUpdate(e => {
-            modalController.hideModal();
             const translatedX = prevSliderTranslatedX.value + e.translationX;
             sliderTranslatedX.value = translatedX;
           })

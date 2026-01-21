@@ -13,7 +13,6 @@ export default function CardOption({ card }: any) {
   };
   const user = useUserContext();
 
-  console.log(card.phone, user.phone);
   return (
     <View style={styles.optionContainer}>
       <View style={styles.optionWrapper}>

@@ -5,7 +5,6 @@ import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
 import Header from './components/header';
 import Main from './components/main';
-import OptionModal from './components/option-modal';
 import { CardSettingProvider } from '@/contexts/card-setting-context';
 import Footer from './components/footer';
 import SliderContextProvider from '@/contexts/slider-context';
@@ -34,7 +33,6 @@ export default function HomeScreen() {
           <Main />
           <Footer />
         </View>
-        <OptionModal />
       </SliderContextProvider>
     </CardSettingProvider>
   );

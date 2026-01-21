@@ -14,7 +14,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const { modalController, settingCard } = useCardSettingContext();
+  const { settingCard } = useCardSettingContext();
 
   const animatedStyle = useAnimatedStyle(() => {
     const isSelected = idx === selectedCardIdx.value;
@@ -31,7 +31,6 @@ export default function EmptyCard({ idx }: any) {
     if (selectedCardIdx.value === idx) navigation.replace('SearchBLE');
     else {
       sliderController.goToIdx(idx);
-      modalController.hideModal();
     }
   };
 
