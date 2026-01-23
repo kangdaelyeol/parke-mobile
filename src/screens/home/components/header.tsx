@@ -4,12 +4,12 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function Header() {
-  const { phone } = useUserContext();
+  const { user } = useUserContext();
   return (
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
-        <Text style={styles.phone}>{phone}</Text>
+        <Text style={styles.phone}>{user.phone}</Text>
       </View>
     </View>
   );

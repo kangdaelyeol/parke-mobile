@@ -7,7 +7,7 @@ import {
 export const useCardOption = () => {
   const { selectedCard } = useCardSliderContext();
   const { cardSettingController } = useCardSettingContext();
-  const user = useUserContext();
+  const { user } = useUserContext();
 
   const handlers = {
     onEditPressed: () => {

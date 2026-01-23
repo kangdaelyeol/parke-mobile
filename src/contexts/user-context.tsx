@@ -1,23 +1,22 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
 import { CardDto } from '@/domain/card/card-dto';
-export interface Card {
-  id: string;
-  title: string;
-  phone: string;
-  message: string;
-  autoChange: boolean;
-}
+import { UserDto } from '@/domain/user/user-dto';
 
 interface UserContextValueType {
   cards: CardDto[];
-  phone: string;
+  user: UserDto;
+  setCards: React.Dispatch<React.SetStateAction<CardDto[]>>;
 }
 
 const userContext = createContext({} as UserContextValueType);
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   // temp data
-  const [phone, setPhone] = useState('010-2413-0510');
+  const [user, setUser] = useState<UserDto>({
+    id: 'uss',
+    phone: '010-2413-0510',
+    cardIdList: ['123', '456', '789'],
+  });
 
   // temp data
   const [cards, setCards] = useState<CardDto[]>([
@@ -45,7 +44,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   ]);
 
   return (
-    <userContext.Provider value={{ cards, phone }}>
+    <userContext.Provider value={{ cards, user, setCards }}>
       {children}
     </userContext.Provider>
   );
