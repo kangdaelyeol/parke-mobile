@@ -1,2 +1,2 @@
-export * from './deviceService';
-export * from './settingService';
+export * from './device-service';
+export * from './setting-service';

@@ -12,7 +12,7 @@ import { notifyPhoneChange } from '@/helpers/notify-phone-change';
 import { deviceService } from '@/services';
 import { notifyOnScreenToChangePhone } from '@/utils/notify-on-screen-to-change-phone';
 import { nofifyMessage } from '@/helpers/notify-message';
-import { settingService } from '@/services/settingService';
+import { settingService } from '@/services';
 
 const { getDeviceBySerial } = deviceService;
 
