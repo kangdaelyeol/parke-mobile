@@ -1,4 +1,5 @@
 // manager.ts
+import { Alert } from 'react-native';
 import { BleManager, Device, State } from 'react-native-ble-plx';
 import {
   SCAN_COOLDOWN_MS,
@@ -8,7 +9,6 @@ import {
 } from '@/constants';
 import { cache } from '@/storage';
 import { notifyPhoneChange } from '@/helpers/notify-phone-change';
-import { Alert } from 'react-native';
 import { deviceService } from '@/services';
 import { notifyOnScreenToChangePhone } from '@/utils/notify-on-screen-to-change-phone';
 import { nofifyMessage } from '@/helpers/notify-message';

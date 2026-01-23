@@ -1,6 +1,6 @@
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 const ICON_COLOR = '#e7e7e7';
 const ICON_COLOR_PRESSED = '#f3f3f3';

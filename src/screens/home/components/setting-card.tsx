@@ -1,6 +1,3 @@
-import { useCardSettingContext } from '@/contexts/card-setting-context';
-import { useCardSliderContext } from '@/contexts/slider-context';
-import { convertPhone } from '@/helpers';
 import React, { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
@@ -9,11 +6,13 @@ import Animated, {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
+import { useCardSettingContext, useCardSliderContext } from '@/contexts';
+import { convertPhone } from '@/helpers';
 
 export default function SettingCard({ card }: any) {
   const { cardSettingController } = useCardSettingContext();
   const { selectedCard } = useCardSliderContext();
-  
+
   const [name, setName] = useState(card.title);
   const [phone, setPhone] = useState(card.phone);
   const [message, setMessage] = useState(card.message);

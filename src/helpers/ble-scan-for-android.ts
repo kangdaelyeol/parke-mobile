@@ -1,6 +1,6 @@
 // startBleForeground.ts (안드로이드 전용)
-import notifee, { AndroidImportance } from '@notifee/react-native';
 import { Platform } from 'react-native';
+import notifee, { AndroidImportance } from '@notifee/react-native';
 import { startBackgroundScan, stopBackgroundScan } from '../ble-manager';
 
 export async function startBleForeground() {

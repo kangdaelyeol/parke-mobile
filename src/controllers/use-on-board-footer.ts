@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
-import { useOnBoard } from '@/contexts/on-board-context';
+import { useOnBoard } from '@/contexts';
 import { cache } from '@/storage';
 
 export const useOnBoardFooter = () => {

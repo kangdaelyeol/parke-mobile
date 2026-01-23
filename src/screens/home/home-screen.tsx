@@ -3,11 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { startBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
+import { CardSettingProvider, SliderContextProvider } from '@/contexts';
 import Header from './components/header';
 import Main from './components/main';
-import { CardSettingProvider } from '@/contexts/card-setting-context';
 import Footer from './components/footer';
-import SliderContextProvider from '@/contexts/slider-context';
 
 export default function HomeScreen() {
   useEffect(() => {

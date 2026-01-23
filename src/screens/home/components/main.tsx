@@ -2,13 +2,14 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
+import {
+  useUserContext,
+  useCardSliderContext,
+  useCardSettingContext,
+} from '@/contexts';
+import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { Card } from './card';
 import EmptyCard from './empty-card';
-import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '../constants';
-
-import { useUserContext } from '@/contexts/user-context';
-import { useCardSliderContext } from '@/contexts/slider-context';
-import { useCardSettingContext } from '@/contexts/card-setting-context';
 import SettingCard from './setting-card';
 import CardOption from './card-option';
 

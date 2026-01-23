@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, ScrollView, Pressable } from 'react-native';
+import { useSearchBle } from '@/controllers';
+import useHeptic from '@/hooks/use-heptic';
 import Radar from './common/rader';
-import { useSearchBle } from '../controllers/use-search-ble';
-import useHeptic from '../hooks/use-heptic';
 
 export default function SearchBLEScreen() {
   const { devices, moveToHome, rssi, scanState, setScanState } = useSearchBle();

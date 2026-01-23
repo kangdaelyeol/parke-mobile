@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Switch, View, Text, Pressable } from 'react-native';
-import { useSetting } from '../controllers/use-setting';
 import MaterialIcons from '@react-native-vector-icons/material-icons';
+import { useSetting } from '@/controllers/use-setting';
 export default function SettingScreen() {
   const {
     noticeDisabled,

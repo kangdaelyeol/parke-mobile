@@ -1,14 +1,13 @@
-import { useCardSettingContext } from '@/contexts/card-setting-context';
-import { useCardSliderContext } from '@/contexts/slider-context';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { useNavigation } from '@react-navigation/native';
+import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 
 export default function EmptyCard({ idx }: any) {

@@ -15,7 +15,7 @@ import SearchBLEScreen from './src/components/search-ble-screen';
 import ScanComplete from './src/components/scan-complete-screen';
 import SettingScreen from './src/components/setting-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import UserContextProvider from '@/contexts/user-context';
+import { UserContextProvider } from '@/contexts';
 
 type RootStackParamList = {
   Home: undefined;

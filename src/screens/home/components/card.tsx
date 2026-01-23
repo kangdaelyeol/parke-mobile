@@ -1,15 +1,14 @@
-import { LogoText } from '@/assets/logo';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 import Animated, {
   Easing,
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useCardSettingContext } from '@/contexts/card-setting-context';
-import { useCardSliderContext } from '@/contexts/slider-context';
+import { useCardSettingContext, useCardSliderContext } from '@/contexts';
+import { LogoText } from '@/assets/logo';
+import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 
 export const Card = ({ title, phone, idx, message, autoChange }: any) => {
   const { settingCard } = useCardSettingContext();

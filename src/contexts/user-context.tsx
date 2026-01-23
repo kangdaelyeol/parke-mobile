@@ -15,7 +15,7 @@ interface UserContextValueType {
 
 const userContext = createContext({} as UserContextValueType);
 
-export default function UserContextProvider({ children }: PropsWithChildren) {
+export const UserContextProvider = ({ children }: PropsWithChildren) => {
   // temp data
   const [phone, setPhone] = useState('010-2413-0510');
 
@@ -48,6 +48,6 @@ export default function UserContextProvider({ children }: PropsWithChildren) {
       {children}
     </userContext.Provider>
   );
-}
+};
 
 export const useUserContext = () => useContext(userContext);

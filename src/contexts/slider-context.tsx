@@ -7,17 +7,16 @@ import React, {
 import {
   clamp,
   Easing,
-  SharedValue,
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
-import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
-import { useUserContext } from './user-context';
 import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 import { runOnJS } from 'react-native-worklets';
+import { useCardSettingContext } from '@/contexts/card-setting-context';
+import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
+import { useUserContext } from '@/contexts';
 
 interface SliderController {
   goToNext: () => void;
@@ -34,7 +33,7 @@ interface SliderContext {
 
 const sliderContext = createContext({} as SliderContext);
 
-export default function SliderContextProvider({ children }: PropsWithChildren) {
+export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const user = useUserContext();
   const { settingCard } = useCardSettingContext();
   const { cards } = user;
@@ -127,6 +126,6 @@ export default function SliderContextProvider({ children }: PropsWithChildren) {
       {children}
     </sliderContext.Provider>
   );
-}
+};
 
 export const useCardSliderContext = () => useContext(sliderContext);
