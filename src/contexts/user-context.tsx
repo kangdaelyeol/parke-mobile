@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
-
+import { CardDto } from '@/domain/card/card-dto';
 export interface Card {
   id: string;
   title: string;
@@ -9,7 +9,7 @@ export interface Card {
 }
 
 interface UserContextValueType {
-  cards: Card[];
+  cards: CardDto[];
   phone: string;
 }
 
@@ -19,7 +19,8 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   // temp data
   const [phone, setPhone] = useState('010-2413-0510');
 
-  const [cards] = useState([
+  // temp data
+  const [cards, setCards] = useState<CardDto[]>([
     {
       id: '123',
       title: 'my parke 1',

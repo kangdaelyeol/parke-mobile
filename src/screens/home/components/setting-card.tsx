@@ -8,8 +8,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
+import { CardDto } from '@/domain/card/card-dto';
 
-export default function SettingCard({ card }: any) {
+export default function SettingCard({ card }: { card: CardDto }) {
   const { cardSettingController } = useCardSettingContext();
   const { selectedCard } = useCardSliderContext();
 
