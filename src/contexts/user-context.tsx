@@ -1,6 +1,6 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
 
-interface Card {
+export interface Card {
   id: string;
   title: string;
   phone: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {
@@ -19,9 +19,16 @@ export default function Main() {
   const { cards } = useUserContext();
   const CARD_LEN = cards && cards.length;
 
+  const isSettingActivated = settingCard !== -1;
+
   return (
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
+        {!isSettingActivated && cards[selectedCard] && (
+          <View style={styles.title}>
+            <Text style={styles.titleText}>My parke list</Text>
+          </View>
+        )}
         <GestureDetector gesture={panGesture}>
           <Animated.View style={[styles.cardContainer, sliderAnimatedStyle]}>
             <View style={styles.cardSlider}>
@@ -35,10 +42,10 @@ export default function Main() {
             </View>
           </Animated.View>
         </GestureDetector>
-        {settingCard === -1 && cards[selectedCard] && (
+        {!isSettingActivated && cards[selectedCard] && (
           <CardOption card={cards[selectedCard]} />
         )}
-        {settingCard !== -1 && <SettingCard card={cards[selectedCard]} />}
+        {isSettingActivated && <SettingCard card={cards[selectedCard]} />}
       </View>
     </View>
   );
@@ -67,5 +74,16 @@ const styles = StyleSheet.create({
   cardSliderMover: {
     flexDirection: 'row',
     gap: SLIDER_GAP,
+  },
+  title: {
+    position: 'absolute',
+    top: 110,
+    width: '100%',
+  },
+  titleText: {
+    marginHorizontal: 'auto',
+    color: '#ffffffd8',
+    fontSize: 40,
+    fontWeight: 'bold',
   },
 });
