@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { settingService } from '@/services/settingService';
+import { settingService } from '@/services';
 import { useNavigation } from '@react-navigation/native';
 import { manager, stopBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';

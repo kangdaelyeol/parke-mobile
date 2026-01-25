@@ -1,47 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
-import Animated, {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
-import { useCardSettingContext, useCardSliderContext } from '@/contexts';
+import Animated from 'react-native-reanimated';
 import { convertPhone } from '@/helpers';
 import { CardDto } from '@/domain/card/card-dto';
+import { useSettingCard } from '@/controllers/use-setting-card';
 
 export default function SettingCard({ card }: { card: CardDto }) {
-  const { cardSettingController } = useCardSettingContext();
-  const { selectedCard } = useCardSliderContext();
-
-  const [name, setName] = useState(card.title);
-  const [phone, setPhone] = useState(card.phone);
-  const [message, setMessage] = useState(card.message);
-  const opacityVal = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(opacityVal.value, {
-      duration: 400,
-    }),
-  }));
-
-  useEffect(() => {
-    opacityVal.value = 1;
-  }, [opacityVal]);
-
-  const onSavePress = () => {
-    cardSettingController.hideSetting();
-  };
+  const {
+    title,
+    setTitle,
+    message,
+    setMessage,
+    phone,
+    setPhone,
+    animatedStyle,
+    handlers,
+  } = useSettingCard({ card });
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>
       <View style={styles.wrapper}>
         <View>
-          <Text style={styles.text}>Name</Text>
+          <Text style={styles.text}>Title</Text>
           <TextInput
             placeholder="Name"
-            value={name}
+            value={title}
             style={styles.input}
-            onChangeText={setName}
+            onChangeText={setTitle}
           />
         </View>
         <View>
@@ -65,7 +51,7 @@ export default function SettingCard({ card }: { card: CardDto }) {
           />
         </View>
         <View style={styles.btnContainer}>
-          <Pressable style={styles.pressable} onPress={onSavePress}>
+          <Pressable style={styles.pressable} onPress={handlers.savePress}>
             {({ pressed }) => (
               <Text
                 style={[
