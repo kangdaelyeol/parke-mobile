@@ -64,16 +64,16 @@ export default function SettingCard({ card }: { card: CardDto }) {
               </Text>
             )}
           </Pressable>
-          <Pressable style={styles.pressable}>
+          <Pressable style={styles.pressable} onPress={handlers.cancelPress}>
             {({ pressed }) => (
               <Text
                 style={[
                   styles.btn,
-                  styles.deleteBtn,
-                  pressed && styles.deleteBtnPressed,
+                  styles.cancelBtn,
+                  pressed && styles.cancelBtnPressed,
                 ]}
               >
-                삭제
+                취소
               </Text>
             )}
           </Pressable>
@@ -135,12 +135,12 @@ const styles = StyleSheet.create({
   saveBtnPressed: {
     backgroundColor: '#262b73',
   },
-  deleteBtn: {
+  cancelBtn: {
     textAlign: 'center',
-    color: '#e24444',
-    backgroundColor: '#1d1616',
+    color: '#eeeeee',
+    backgroundColor: '#2e2f31',
   },
-  deleteBtnPressed: {
-    backgroundColor: '#431616',
+  cancelBtnPressed: {
+    backgroundColor: '#4e4f53',
   },
 });

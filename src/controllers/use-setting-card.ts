@@ -54,6 +54,10 @@ export const useSettingCard = ({ card }: { card: CardDto }) => {
         // Display Error
       }
     },
+
+    cancelPress: () => {
+      cardSettingController.hideSetting();
+    },
   };
 
   return {
