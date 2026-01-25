@@ -28,7 +28,7 @@ interface SliderContext {
   panGesture: PanGesture;
   animatedStyle: DefaultStyle;
   sliderController: SliderController;
-  selectedCard: number;
+  selectedCardIdx: number;
 }
 
 const sliderContext = createContext({} as SliderContext);
@@ -43,21 +43,21 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
 
   const sliderTranslatedX = useSharedValue(0);
 
-  const [selectedCard, setSelectedCard] = useState(0);
+  const [selectedCardIdx, setSelectedCard] = useState(0);
 
   const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP;
 
   const sliderController = {
     goToNext: () => {
       'worklet';
-      const idx = Math.min(CARD_LEN, selectedCard + 1);
+      const idx = Math.min(CARD_LEN, selectedCardIdx + 1);
       prevSliderTranslatedX.value = sliderTranslatedX.value =
         -idx * SLIDER_INTERVAL;
       runOnJS(setSelectedCard)(idx);
     },
     goToPrev: () => {
       'worklet';
-      const idx = Math.max(0, selectedCard - 1);
+      const idx = Math.max(0, selectedCardIdx - 1);
       prevSliderTranslatedX.value = sliderTranslatedX.value =
         -idx * SLIDER_INTERVAL;
       runOnJS(setSelectedCard)(idx);
@@ -117,7 +117,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   return (
     <sliderContext.Provider
       value={{
-        selectedCard,
+        selectedCardIdx,
         panGesture,
         animatedStyle,
         sliderController,

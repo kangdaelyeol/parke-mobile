@@ -12,9 +12,9 @@ import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 
 export const Card = ({ title, phone, idx, message, autoChange }: any) => {
   const { settingCard } = useCardSettingContext();
-  const { selectedCard, sliderController } = useCardSliderContext();
+  const { selectedCardIdx, sliderController } = useCardSliderContext();
   const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selectedCard;
+    const isSelected = idx === selectedCardIdx;
 
     return {
       opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),

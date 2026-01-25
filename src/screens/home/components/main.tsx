@@ -14,7 +14,7 @@ import SettingCard from './setting-card';
 import CardOption from './card-option';
 
 export default function Main() {
-  const { panGesture, animatedStyle, selectedCard } = useCardSliderContext();
+  const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
   const { cards } = useUserContext();
   const CARD_LEN = cards && cards.length;
@@ -24,7 +24,7 @@ export default function Main() {
   return (
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
-        {!isSettingActivated && cards[selectedCard] && (
+        {!isSettingActivated && cards[selectedCardIdx] && (
           <View style={styles.title}>
             <Text style={styles.titleText}>My parke list</Text>
           </View>
@@ -42,10 +42,10 @@ export default function Main() {
             </View>
           </Animated.View>
         </GestureDetector>
-        {!isSettingActivated && cards[selectedCard] && (
-          <CardOption card={cards[selectedCard]} />
+        {!isSettingActivated && cards[selectedCardIdx] && (
+          <CardOption card={cards[selectedCardIdx]} />
         )}
-        {isSettingActivated && <SettingCard card={cards[selectedCard]} />}
+        {isSettingActivated && <SettingCard card={cards[selectedCardIdx]} />}
       </View>
     </View>
   );

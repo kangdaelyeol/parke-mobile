@@ -12,11 +12,11 @@ import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 
 export default function EmptyCard({ idx }: any) {
   const navigation = useNavigation<any>();
-  const { selectedCard, sliderController } = useCardSliderContext();
+  const { selectedCardIdx, sliderController } = useCardSliderContext();
   const { settingCard } = useCardSettingContext();
 
   const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selectedCard;
+    const isSelected = idx === selectedCardIdx;
     return {
       opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
       transform: [
@@ -27,7 +27,7 @@ export default function EmptyCard({ idx }: any) {
 
   const onCardPressed = () => {
     if (settingCard !== -1) return;
-    if (selectedCard === idx) navigation.replace('SearchBLE');
+    if (selectedCardIdx === idx) navigation.replace('SearchBLE');
     else {
       sliderController.goToIdx(idx);
     }
