@@ -25,9 +25,9 @@ export const cardService = {
     }
   },
   delete: async (card: CardDto): Promise<boolean> => {
-    const cardEntity = Card.create(card);
+    const { id } = card;
     try {
-      // const res = await cardClient.create(cardEntity.toDto());
+      // TODO: delete cara in client layer
       return true;
     } catch (e) {
       console.log(e);
