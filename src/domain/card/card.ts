@@ -1,5 +1,6 @@
 import { generateBase64Id } from '@/helpers';
 import { CardDto } from './card-dto';
+import { serverTimestamp } from 'firebase/database';
 
 export class Card {
   private constructor(
@@ -8,6 +9,7 @@ export class Card {
     private phone: string,
     private message: string,
     private autoChange: boolean,
+    private updatedAt: object,
   ) {}
 
   static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
@@ -17,8 +19,9 @@ export class Card {
     const phone = props.phone ?? '';
     const message = props.message ?? '';
     const autoChange = !!props.autoChange;
+    const updatedAt = props.updatedAt ?? serverTimestamp();
 
-    return new Card(id, title, phone, message, autoChange);
+    return new Card(id, title, phone, message, autoChange, updatedAt);
   }
 
   static fromDto(dto: CardDto): Card {
@@ -32,6 +35,7 @@ export class Card {
       phone: this.phone,
       message: this.message,
       autoChange: this.autoChange,
+      updatedAt: this.updatedAt,
     };
   }
 }

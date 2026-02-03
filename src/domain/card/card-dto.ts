@@ -4,4 +4,5 @@ export interface CardDto {
   phone: string;
   message: string;
   autoChange: boolean;
+  updatedAt: unknown;
 }
