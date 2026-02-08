@@ -14,7 +14,8 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   // temp data
   const [user, setUser] = useState<UserDto>({
     id: 'uss',
-    phone: '010-2413-0510',
+    nickname: 'rkdeofuf',
+    phone: '01024130510',
     cardIdList: ['123', '456', '789'],
   });
 
@@ -23,23 +24,29 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     {
       id: '123',
       title: 'my parke 1',
-      phone: '010-2413-0510',
+      phone: '01024130510',
       message: 'test',
       autoChange: false,
+      updatedAt: Date.now(),
+      updatedBy: 'asd',
     },
     {
       id: '456',
       title: 'my parke 2',
-      phone: '010-1234-5678',
+      phone: '01012345678',
       message: 'test',
       autoChange: true,
+      updatedAt: Date.now(),
+      updatedBy: 'asd',
     },
     {
       id: '789',
       title: 'my parke 3',
-      phone: '010-9876-5432',
+      phone: '01098765432',
       message: 'test',
       autoChange: true,
+      updatedAt: Date.now(),
+      updatedBy: 'asd',
     },
   ]);
 
