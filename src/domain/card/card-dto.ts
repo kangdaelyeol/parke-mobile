@@ -5,4 +5,5 @@ export interface CardDto {
   message: string;
   autoChange: boolean;
   updatedAt: unknown;
+  updatedBy: string;
 }
