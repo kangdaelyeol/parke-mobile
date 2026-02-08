@@ -16,6 +16,7 @@ import ScanComplete from './src/components/scan-complete-screen';
 import SettingScreen from './src/components/setting-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContextProvider } from '@/contexts';
+import Login from '@/screens/login/main';
 
 type RootStackParamList = {
   Home: undefined;
@@ -54,6 +55,7 @@ function AppContent() {
           <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
         ) : (
           <>
+            <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
             <Stack.Screen name="ScanComplete" component={ScanComplete} />
