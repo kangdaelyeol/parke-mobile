@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
@@ -12,6 +12,12 @@ import { Card } from './card';
 import EmptyCard from './empty-card';
 import SettingCard from './setting-card';
 import CardOption from './card-option';
+import {
+  getProfile,
+  login,
+  logout,
+  unlink,
+} from '@react-native-seoul/kakao-login';
 
 export default function Main() {
   const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
@@ -20,14 +26,54 @@ export default function Main() {
   const CARD_LEN = cards && cards.length;
 
   const isSettingActivated = settingCard !== -1;
+  const [busy, setBusy] = useState(false);
 
   return (
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
         {!isSettingActivated && cards[selectedCardIdx] && (
-          <View style={styles.title}>
-            <Text style={styles.titleText}>My parke list</Text>
-          </View>
+          <>
+            <View style={styles.title}>
+              <Text
+                onPress={async () => {
+                  if (busy) return;
+                  setBusy(true);
+                  try {
+                    const res = await login();
+                    const proRes = await getProfile();
+                    console.log('login res', res);
+                    console.log('profile res', proRes);
+                  } catch (e) {
+                    console.log('login err', e);
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+                style={styles.titleText}
+              >
+                My parke list
+              </Text>
+            </View>
+            <View>
+              <Text
+                onPress={async () => {
+                  if (busy) return;
+                  setBusy(true);
+                  try {
+                    const res = await unlink();
+                    console.log('logout res', res);
+                  } catch (e) {
+                    console.log('login err', e);
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+                style={styles.titleText}
+              >
+                My parke list
+              </Text>
+            </View>
+          </>
         )}
         <GestureDetector gesture={panGesture}>
           <Animated.View style={[styles.cardContainer, sliderAnimatedStyle]}>
