@@ -17,6 +17,7 @@ import SettingScreen from './src/components/setting-screen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContextProvider } from '@/contexts';
 import Login from '@/screens/login/main';
+import { AuthContextProvider } from '@/contexts/auth-context';
 
 type RootStackParamList = {
   Home: undefined;
@@ -29,16 +30,20 @@ function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <UserContextProvider>
-      <OnBoardContextProvider>
-        <SafeAreaProvider>
-          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-          <GestureHandlerRootView>
-            <AppContent />
-          </GestureHandlerRootView>
-        </SafeAreaProvider>
-      </OnBoardContextProvider>
-    </UserContextProvider>
+    <AuthContextProvider>
+      <UserContextProvider>
+        <OnBoardContextProvider>
+          <SafeAreaProvider>
+            <StatusBar
+              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+            />
+            <GestureHandlerRootView>
+              <AppContent />
+            </GestureHandlerRootView>
+          </SafeAreaProvider>
+        </OnBoardContextProvider>
+      </UserContextProvider>
+    </AuthContextProvider>
   );
 }
 
