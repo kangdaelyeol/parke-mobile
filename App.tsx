@@ -18,10 +18,16 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContextProvider } from '@/contexts';
 import LoginScreen from '@/screens/login/login-screen';
 import { AuthContextProvider } from '@/contexts/auth-context';
+import InitScreen from '@/screens/init/init-screen';
 
 type RootStackParamList = {
   Home: undefined;
-  Details: { userId: string } | undefined;
+  OnBoarding: undefined;
+  Init: undefined;
+  Login: undefined;
+  SearchBLE: undefined;
+  ScanComplete: undefined;
+  Setting: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -60,6 +66,7 @@ function AppContent() {
           <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
         ) : (
           <>
+            <Stack.Screen name="Init" component={InitScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
