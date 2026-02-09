@@ -1,37 +1,55 @@
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
+import { useUserContext } from '@/contexts';
 import { useAuthContext } from '@/contexts/auth-context';
+import { UserDto } from '@/domain/user';
 import { userService } from '@/services';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Pressable } from 'react-native';
+import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
 
 export default function LoginScreen() {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
+  const { setUser } = useUserContext();
   const [isPending, setPending] = useState(false);
 
   useEffect(() => {
     (async () => {
       const kakaoProfile = await getKakaoProfile();
       if (!kakaoProfile) return;
-      const user = await userService.getById(kakaoProfile.email);
+      const user = await userService.get(kakaoProfile.email);
       if (!user) return;
+      console.log(user);
       // set user
       // go to main page
     })();
   }, []);
 
+  const isUserDto = (dto: any): dto is UserDto => dto.id;
+
   const handleKakaoLoginPress = async () => {
+    console.log(isPending);
     if (isPending) return;
 
     setPending(true);
     const kakaoProfile = await kakaoLogin();
 
     if (kakaoProfile) {
-      const user = await userService.getById(kakaoProfile.email);
+      const { email, nickname } = kakaoProfile;
+      const user = await userService.get(email);
       if (!user) {
-        // create user
-        // go to next page (init user)
+        const userRes = await userService.create({ id: email, nickname });
+        if (!userRes) {
+          Alert.alert('잠시 후 다시 시도해주세요.');
+        }
+
+        if (isUserDto(userRes)) setUser(userRes);
+        console.log(user);
+        // go to init page
+        setPending(false);
       } else {
-        // set user
+        console.log(user);
+        setUser(user);
+        setPending(false);
+
         // go to main page
       }
     }
