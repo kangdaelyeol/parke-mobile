@@ -1,36 +1,16 @@
 import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomeScreen, OnBoardingScreen } from '@/screens';
-import { useApp } from '@/controllers/use-app';
+import RootNavigator from '@/navigation/root-navigator';
+import { useAppController } from '@/controllers/use-app';
 import {
   OnBoardContextProvider,
-  useOnBoard,
+  useOnBoardContext,
 } from '@/contexts/on-board-context';
-import '@/ble-manager';
-
-// ToDo => move to screens dir with renew
-import SearchBLEScreen from './src/components/search-ble-screen';
-import ScanComplete from './src/components/scan-complete-screen';
-import SettingScreen from './src/components/setting-screen';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { UserContextProvider } from '@/contexts';
-import LoginScreen from '@/screens/login/login-screen';
 import { AuthContextProvider } from '@/contexts/auth-context';
-import InitScreen from '@/screens/init/init-screen';
-
-type RootStackParamList = {
-  Home: undefined;
-  OnBoarding: undefined;
-  Init: undefined;
-  Login: undefined;
-  SearchBLE: undefined;
-  ScanComplete: undefined;
-  Setting: undefined;
-};
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import '@/ble-manager';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
@@ -54,27 +34,14 @@ function App() {
 }
 
 function AppContent() {
-  useApp();
-  const { loading, hasSeenOnBoarding } = useOnBoard();
+  useAppController();
+  const { loading } = useOnBoardContext();
 
   if (loading) return null;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {!hasSeenOnBoarding ? (
-          <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
-        ) : (
-          <>
-            <Stack.Screen name="Init" component={InitScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
-            <Stack.Screen name="ScanComplete" component={ScanComplete} />
-            <Stack.Screen name="Setting" component={SettingScreen} />
-          </>
-        )}
-      </Stack.Navigator>
+      <RootNavigator />
     </NavigationContainer>
   );
 }
