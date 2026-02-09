@@ -4,6 +4,7 @@ import { LogoIcon, LogoText } from '@/assets/logo';
 import { useInitController } from '@/controllers';
 import { convertPhone } from '@/helpers';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { Loading } from '@/components';
 type InitStackParamList = {
   Init: undefined;
   Home: undefined;
@@ -12,11 +13,12 @@ type InitStackParamList = {
 type Props = NativeStackScreenProps<InitStackParamList, 'Init'>;
 
 export default function InitScreen({ navigation }: Props) {
-  const { handlers, nicknameFocus, phoneFocuse, nickname, phone } =
+  const { handlers, nicknameFocus, phoneFocus, nickname, phone, loading } =
     useInitController(navigation);
 
   return (
     <View style={styles.container}>
+      {loading && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.logoSection}>
           <LogoIcon width={40} height={40} />
@@ -50,7 +52,7 @@ export default function InitScreen({ navigation }: Props) {
               <Text
                 style={[
                   styles.inputTitle,
-                  phoneFocuse && styles.phoneTitleFocused,
+                  phoneFocus && styles.phoneTitleFocused,
                 ]}
               >
                 연락처
@@ -58,7 +60,7 @@ export default function InitScreen({ navigation }: Props) {
               <TextInput
                 onFocus={handlers.phoneFocus}
                 onBlur={handlers.phoneBlur}
-                style={[styles.input, phoneFocuse && styles.phoneInputFocused]}
+                style={[styles.input, phoneFocus && styles.phoneInputFocused]}
                 placeholder="연락처"
                 value={convertPhone(phone)}
                 onChangeText={handlers.phoneInput}
