@@ -3,8 +3,8 @@ import { convertPhone } from '@/helpers';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { Header } from './components/header';
+import { Loading } from '@/components';
 
 type ProfileStackParamList = {
   Profile: undefined;
@@ -21,6 +21,7 @@ export default function ProfileScreen({ navigation }: Props) {
     <View style={styles.container}>
       <Header handleBackPress={handlers.backPress} />
       <View style={styles.wrapper}>
+        {loading && <Loading />}
         <View style={styles.inputSection}>
           <View style={styles.inputContainer}>
             <Text
@@ -63,7 +64,7 @@ export default function ProfileScreen({ navigation }: Props) {
           </View>
         </View>
         <View style={styles.buttonSection}>
-          <Pressable onPress={handlers.savePress} style={styles.pressable}>
+          <Pressable onPress={handlers.savePress}>
             {({ pressed }) => (
               <View
                 style={[
@@ -76,7 +77,7 @@ export default function ProfileScreen({ navigation }: Props) {
               </View>
             )}
           </Pressable>
-          <Pressable onPress={handlers.logoutPress} style={styles.pressable}>
+          <Pressable onPress={handlers.logoutPress}>
             {({ pressed }) => (
               <View
                 style={[
@@ -89,7 +90,7 @@ export default function ProfileScreen({ navigation }: Props) {
               </View>
             )}
           </Pressable>
-          <Pressable onPress={handlers.deletePress} style={styles.pressable}>
+          <Pressable onPress={handlers.deletePress}>
             {({ pressed }) => (
               <View
                 style={[
