@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Switch, View, Text, Pressable } from 'react-native';
-import MaterialIcons from '@react-native-vector-icons/material-icons';
+import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 import { useSetting } from '@/controllers/use-setting';
 export default function SettingScreen() {
   const {
@@ -20,11 +20,12 @@ export default function SettingScreen() {
       <View style={styles.inner}>
         <Pressable style={styles.backBtn} onPress={onHomeBtnPress}>
           {({ pressed }) => (
-            <MaterialIcons
-              name="arrow-back-ios"
+            <FontAwesome6
+              name="angle-left"
+              iconStyle="solid"
               size={30}
               style={{
-                color: pressed ? '#666' : '#fff',
+                color: pressed ? '#666' : '#ebebeb',
               }}
             />
           )}

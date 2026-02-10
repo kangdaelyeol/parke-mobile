@@ -9,16 +9,16 @@ export class User {
     private cardIdList: string[],
   ) {}
 
-  static create(props: Omit<UserDto, 'id'> & { id?: string }): User {
+  static create(props: Partial<UserDto>): User {
     const id = props.id ?? generateBase64Id();
-    const phone = props.phone.trim();
-    const nickname = props.nickname;
-    const cardIdList = props.cardIdList;
+    const phone = props.phone?.trim() ?? '';
+    const nickname = props.nickname ?? '';
+    const cardIdList = props.cardIdList ?? [];
 
-    return new User(id, phone, nickname, cardIdList);
+    return new User(id, nickname, phone, cardIdList);
   }
 
-  static fromDTO(dto: UserDto) {
+  static fromDto(dto: UserDto) {
     return User.create(dto);
   }
 

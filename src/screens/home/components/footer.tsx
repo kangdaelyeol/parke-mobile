@@ -10,6 +10,9 @@ export default function Footer() {
     {
       name: 'My',
       iconName: 'user',
+      onPress: () => {
+        navigation.navigate('Profile');
+      },
     },
     {
       name: 'Scan',

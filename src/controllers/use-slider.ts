@@ -6,10 +6,10 @@ import {
   Easing,
   useSharedValue,
 } from 'react-native-reanimated';
-import { useOnBoard } from '@/contexts/on-board-context';
+import { useOnBoardContext } from '@/contexts';
 
 export const useSlider = () => {
-  const { sliderTranslateX, setPageIdx } = useOnBoard();
+  const { sliderTranslateX, setPageIdx } = useOnBoardContext();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
   const prevTranslateX = useSharedValue(0);

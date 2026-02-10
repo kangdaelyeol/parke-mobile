@@ -1,5 +1,6 @@
 import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
+import { convertPhone } from '@/helpers';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
@@ -9,7 +10,7 @@ export default function Header() {
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
-        <Text style={styles.phone}>{user.phone}</Text>
+        <Text style={styles.phone}>{convertPhone(user.phone)}</Text>
       </View>
     </View>
   );
