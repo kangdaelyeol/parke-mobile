@@ -86,13 +86,11 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
               return;
             } else if (e.velocityX < -800) {
               sliderController.goToNext();
-
               return;
             }
 
             if (sliderTranslatedX.value > 0) {
-              prevSliderTranslatedX.value = sliderTranslatedX.value = 0;
-              runOnJS(setSelectedCard)(0);
+              sliderController.goToIdx(0);
             } else {
               const idx = clamp(
                 Math.round(-sliderTranslatedX.value / SLIDER_INTERVAL),

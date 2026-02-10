@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4b3582',
   },
   autoChangeText: {
-    backgroundColor: '#582964',
+    backgroundColor: '#441950',
   },
   autoChangeTextPressed: {
     backgroundColor: '#773887',
