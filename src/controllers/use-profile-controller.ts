@@ -60,7 +60,7 @@ export const useProfileController = (navigation: Nav) => {
     logoutPress: () => {
       Alert.alert('Logout', '로그아웃 하시겠습니까?', [
         {
-          text: '로그아웃',
+          text: '예',
           onPress: async () => {
             setLoading(true);
             try {
@@ -73,7 +73,7 @@ export const useProfileController = (navigation: Nav) => {
           },
         },
         {
-          text: '취소',
+          text: '아니오',
           style: 'cancel',
         },
       ]);
@@ -81,7 +81,7 @@ export const useProfileController = (navigation: Nav) => {
     deletePress: async () => {
       Alert.alert('Delete User', '회원탈퇴 하시겠습니까?', [
         {
-          text: '회원탈퇴',
+          text: '예',
           onPress: async () => {
             try {
               setLoading(true);
@@ -95,6 +95,7 @@ export const useProfileController = (navigation: Nav) => {
             }
           },
         },
+        { text: '아니오', style: 'cancel' },
       ]);
     },
   };
