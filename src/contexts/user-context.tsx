@@ -5,6 +5,7 @@ import { UserDto } from '@/domain/user/user-dto';
 interface UserContextValueType {
   cards: CardDto[];
   user: UserDto;
+  setUser: React.Dispatch<React.SetStateAction<UserDto>>;
   setCards: React.Dispatch<React.SetStateAction<CardDto[]>>;
 }
 
@@ -16,42 +17,14 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     id: 'uss',
     nickname: 'rkdeofuf',
     phone: '01024130510',
-    cardIdList: ['123', '456', '789'],
+    cardIdList: [],
   });
 
   // temp data
-  const [cards, setCards] = useState<CardDto[]>([
-    {
-      id: '123',
-      title: 'my parke 1',
-      phone: '01024130510',
-      message: 'test',
-      autoChange: false,
-      updatedAt: Date.now(),
-      updatedBy: 'asd',
-    },
-    {
-      id: '456',
-      title: 'my parke 2',
-      phone: '01012345678',
-      message: 'test',
-      autoChange: true,
-      updatedAt: Date.now(),
-      updatedBy: 'asd',
-    },
-    {
-      id: '789',
-      title: 'my parke 3',
-      phone: '01098765432',
-      message: 'test',
-      autoChange: true,
-      updatedAt: Date.now(),
-      updatedBy: 'asd',
-    },
-  ]);
+  const [cards, setCards] = useState<CardDto[]>([]);
 
   return (
-    <userContext.Provider value={{ cards, user, setCards }}>
+    <userContext.Provider value={{ cards, user, setCards, setUser }}>
       {children}
     </userContext.Provider>
   );
