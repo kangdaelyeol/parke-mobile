@@ -12,7 +12,7 @@ import { Card, CardDto } from '@/domain/card';
 export const cardClient = {
   create: async (dto: CardDto): Promise<CardDto | null> => {
     const entity = Card.fromDto(dto);
-    const { id, title, phone, message, autoChange } = entity.toDto();
+    const { id, title, phone, message, autoChange, updatedBy } = entity.toDto();
     try {
       await set(ref(db, `card/${id}`), {
         id,
@@ -21,11 +21,13 @@ export const cardClient = {
         message,
         autoChange,
         updatedAt: serverTimestamp(),
+        updatedBy,
       });
     } catch (e) {
       console.log(e);
       return null;
     }
+    console.log(dto);
     return dto;
   },
   getById: async (id: string): Promise<CardDto | null> => {
@@ -49,7 +51,10 @@ export const cardClient = {
   },
   update: async (
     dto: { id: string } & Partial<
-      Pick<CardDto, 'autoChange' | 'message' | 'phone' | 'title' | 'updatedAt'>
+      Pick<
+        CardDto,
+        'autoChange' | 'message' | 'phone' | 'title' | 'updatedAt' | 'updatedBy'
+      >
     >,
   ): Promise<boolean> => {
     const { id } = dto;
