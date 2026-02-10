@@ -53,6 +53,6 @@ const useForegroundEvent = () => {
   }, []);
 };
 
-export const useApp = () => {
+export const useAppController = () => {
   useForegroundEvent();
 };
