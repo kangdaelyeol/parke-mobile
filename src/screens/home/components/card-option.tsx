@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useCardOptionController } from '@/controllers';
 import { Loading } from '@/components';
+import { CardDto } from '@/domain/card';
 
 interface PressableBtnProps {
   style: StyleProp<TextStyle>;
@@ -38,7 +39,11 @@ const PressableBtn = ({
   );
 };
 
-export default function CardOption({ card }: any) {
+interface CardOptionProps {
+  card: CardDto;
+}
+
+export const CardOption = ({ card }: CardOptionProps) => {
   const { user, handlers, loading } = useCardOptionController();
 
   const {
@@ -102,7 +107,7 @@ export default function CardOption({ card }: any) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   optionContainer: {

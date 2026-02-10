@@ -11,7 +11,7 @@ import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { Card } from './card';
 import EmptyCard from './empty-card';
 import SettingCard from './setting-card';
-import CardOption from './card-option';
+import { CardOption } from './card-option';
 import { unlink } from '@react-native-seoul/kakao-login';
 import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';

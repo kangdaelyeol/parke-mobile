@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { convertPhone } from '@/helpers/convertPhone';

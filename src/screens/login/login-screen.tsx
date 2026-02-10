@@ -1,13 +1,11 @@
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
-import { useUserContext } from '@/contexts';
-import { useAuthContext } from '@/contexts/auth-context';
+import { useUserContext, useAuthContext } from '@/contexts';
 import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
-import { CommonActions } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
 
 export default function LoginScreen({
   navigation,
@@ -26,7 +24,7 @@ export default function LoginScreen({
       const user = await userService.get(kakaoProfile.email);
       if (!user) return setPending(false);
       setUser(user);
-      navigation.replace('Home');
+      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
     })();
   }, [getKakaoProfile, navigation, setUser]);
 
@@ -45,26 +43,20 @@ export default function LoginScreen({
         const userRes = await userService.create({ id: email, nickname });
         if (!userRes) {
           Alert.alert('잠시 후 다시 시도해주세요.');
+          return setPending(false);
         }
-
+        
         if (isUserDto(userRes)) setUser(userRes);
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Init' as never }],
-          }),
-        );
-        setPending(false);
+        return navigation.reset({
+          index: 0,
+          routes: [{ name: 'Init' }],
+        });
       } else {
         setUser(user);
-        setPending(false);
-
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 0,
-            routes: [{ name: 'Home' as never }],
-          }),
-        );
+        return navigation.reset({
+          index: 0,
+          routes: [{ name: 'Home' }],
+        });
       }
     }
     setPending(false);

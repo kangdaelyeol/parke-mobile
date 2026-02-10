@@ -1,8 +1,8 @@
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
 export default function Header() {
   const { user } = useUserContext();
