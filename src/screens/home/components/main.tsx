@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
@@ -17,19 +17,38 @@ import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { cardService, userService } from '@/services';
 import { CardDto } from '@/domain/card';
+import { Loading } from '@/components';
+
+const isCardList = (v: any): v is CardDto[] => {
+  return v !== null;
+};
 
 export default function Main() {
   const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
   const { cards, setCards, user } = useUserContext();
-  const CARD_LEN = cards && cards.length;
 
-  const isSettingActivated = settingCard !== -1;
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      const cardIdList = Object.values(user.cardIdList ?? {}) || [];
+      const res = await cardService.getList(cardIdList);
+      if (isCardList(res)) setCards(res);
+      else Alert.alert('오류가 발생했');
+      setLoading(false);
+    })();
+  }, []);
+
+  const CARD_LEN = cards?.length ?? 1;
+  const isSettingActivated = settingCard !== -1;
 
   return (
     <View style={styles.main}>
+      {loading && <Loading />}
       <Text
         onPress={async () => {
           if (busy) return;
