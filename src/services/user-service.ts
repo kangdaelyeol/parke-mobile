@@ -1,22 +1,35 @@
+import { userClient } from '@/client';
+import { CardDto } from '@/domain/card';
+import { User } from '@/domain/user';
 import { UserDto } from '@/domain/user/user-dto';
 
 export const userService = {
-  getById(id: string) {
-    // Todo ...
+  get: async (id: string): Promise<UserDto | null> => {
+    const res = await userClient.getById(id);
+    return res;
   },
-  create(user: UserDto) {
-    // Todo ...
+  create: async (
+    user: { id: string } & Partial<
+      Pick<UserDto, 'cardIdList' | 'id' | 'nickname' | 'phone'>
+    >,
+  ): Promise<UserDto | null> => {
+    const dto = User.create(user).toDto();
+    const res = await userClient.create(dto);
+    if (!res) return null;
+    return dto;
   },
-  addCardId(user: UserDto, cardId: string) {
-    // Todo ...
+  updateNicknameAndPhone: async (
+    id: string,
+    nickname: string,
+    phone: string,
+  ): Promise<boolean> => {
+    return await userClient.update({ id, nickname, phone });
   },
-  deleteCardIdByCardId(user: UserDto, cardId: string) {
-    // Todo ...
+  updateCardList: async (id: string, cardList: CardDto[]): Promise<boolean> => {
+    const cardIdList = cardList.map(card => card.id);
+    return await userClient.update({ id, cardIdList });
   },
-  deleteById(id: string) {
-    // Todo ...
-  },
-  updatePhone(user: UserDto, phone: string) {
-    // Todo ...
+  delete: async (id: string): Promise<boolean> => {
+    return await userClient.deleteById(id);
   },
 };
