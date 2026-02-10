@@ -12,12 +12,9 @@ import { Card } from './card';
 import EmptyCard from './empty-card';
 import SettingCard from './setting-card';
 import CardOption from './card-option';
-import {
-  getProfile,
-  login,
-  logout,
-  unlink,
-} from '@react-native-seoul/kakao-login';
+import { unlink } from '@react-native-seoul/kakao-login';
+import { cache } from '@/storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Main() {
   const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
@@ -27,51 +24,33 @@ export default function Main() {
 
   const isSettingActivated = settingCard !== -1;
   const [busy, setBusy] = useState(false);
+  const navigation = useNavigation();
 
   return (
     <View style={styles.main}>
+      <Text
+        onPress={async () => {
+          if (busy) return;
+          setBusy(true);
+          try {
+            unlink();
+            cache.setHasSeenOnBoarding(false);
+            navigation.navigate('OnBoarding');
+          } catch (e) {
+            console.log('login err', e);
+          } finally {
+            setBusy(false);
+          }
+        }}
+        style={styles.test}
+      >
+        RESET
+      </Text>
       <View style={styles.mainWrapper}>
         {!isSettingActivated && cards[selectedCardIdx] && (
           <>
             <View style={styles.title}>
-              <Text
-                onPress={async () => {
-                  if (busy) return;
-                  setBusy(true);
-                  try {
-                    const res = await login();
-                    const proRes = await getProfile();
-                    console.log('login res', res);
-                    console.log('profile res', proRes);
-                  } catch (e) {
-                    console.log('login err', e);
-                  } finally {
-                    setBusy(false);
-                  }
-                }}
-                style={styles.titleText}
-              >
-                My parke list
-              </Text>
-            </View>
-            <View>
-              <Text
-                onPress={async () => {
-                  if (busy) return;
-                  setBusy(true);
-                  try {
-                    const res = await unlink();
-                    console.log('logout res', res);
-                  } catch (e) {
-                    console.log('login err', e);
-                  } finally {
-                    setBusy(false);
-                  }
-                }}
-                style={styles.titleText}
-              >
-                My parke list
-              </Text>
+              <Text style={styles.titleText}>My parke list</Text>
             </View>
           </>
         )}
@@ -131,5 +110,13 @@ const styles = StyleSheet.create({
     color: '#ffffffd8',
     fontSize: 40,
     fontWeight: 'bold',
+  },
+  test: {
+    position: 'absolute',
+    top: 30,
+    left: 30,
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#1234d9',
   },
 });
