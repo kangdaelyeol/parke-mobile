@@ -41,11 +41,16 @@ export const cardService = {
       return null;
     }
   },
-  delete: async (card: CardDto): Promise<boolean> => {
-    const { id } = card;
+  delete: async (id: string): Promise<boolean> => {
     return await cardClient.deleteById(id);
   },
-  updateAutoChange: async (id: string, val: boolean): Promise<boolean> => {
-    return await cardClient.update({ id, autoChange: val });
+  updateAutoChange: async (
+    id: string,
+    autoChange: boolean,
+  ): Promise<boolean> => {
+    return await cardClient.update({ id, autoChange });
+  },
+  updatePhone: async (id: string, phone: string): Promise<Boolean> => {
+    return await cardClient.update({ id, phone });
   },
 };

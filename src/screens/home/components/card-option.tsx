@@ -7,8 +7,8 @@ import {
   TextStyle,
   View,
 } from 'react-native';
-import { useCardOption } from '@/controllers';
-import { convertPhone } from '@/helpers';
+import { useCardOptionController } from '@/controllers';
+import { Loading } from '@/components';
 
 interface PressableBtnProps {
   style: StyleProp<TextStyle>;
@@ -39,7 +39,7 @@ const PressableBtn = ({
 };
 
 export default function CardOption({ card }: any) {
-  const { user, handlers } = useCardOption();
+  const { user, handlers, loading } = useCardOptionController();
 
   const {
     onEditPressed,
@@ -51,6 +51,7 @@ export default function CardOption({ card }: any) {
 
   return (
     <View style={styles.optionContainer}>
+      {loading && <Loading />}
       <View style={styles.optionWrapper}>
         <View style={styles.row}>
           <PressableBtn
@@ -61,7 +62,7 @@ export default function CardOption({ card }: any) {
           />
         </View>
         <View style={styles.row}>
-          {convertPhone(user.phone) !== card.phone ? (
+          {user.phone !== card.phone ? (
             <PressableBtn
               onPressed={onChangePhonePressed}
               text="내 번호로 변경"
@@ -118,11 +119,11 @@ const styles = StyleSheet.create({
   },
   text: {
     color: '#e1e1e1',
-    paddingVertical: 25,
+    paddingVertical: 20,
     flex: 1,
     textAlign: 'center',
     fontSize: 18,
-    fontWeight: 800,
+    fontWeight: 600,
     borderRadius: 10,
   },
   editText: {
@@ -138,26 +139,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#bc3f3f',
   },
   changeText: {
-    backgroundColor: '#292c64',
+    backgroundColor: '#242431',
   },
   changeTextPressed: {
-    backgroundColor: '#35397e',
+    backgroundColor: '#303042',
   },
   previewText: {
-    backgroundColor: '#3a2964',
+    backgroundColor: '#242431',
   },
   previewTextPressed: {
-    backgroundColor: '#4b3582',
+    backgroundColor: '#303042',
   },
   autoChangeText: {
-    backgroundColor: '#441950',
+    backgroundColor: '#242431',
   },
   autoChangeTextPressed: {
-    backgroundColor: '#773887',
+    backgroundColor: '#303042',
   },
   changeTextDisabled: {
-    backgroundColor: '#292c6455',
-    color: '#acacac45',
+    backgroundColor: '#242431',
+    color: '#cdcdcd4f',
   },
   row: {
     flexDirection: 'row',
