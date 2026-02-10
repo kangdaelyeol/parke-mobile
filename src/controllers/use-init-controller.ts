@@ -1,18 +1,23 @@
+import { useUserContext } from '@/contexts';
+import { userService } from '@/services';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
+import { Alert } from 'react-native';
 
 type InitStackParamList = {
   Init: undefined;
   Home: undefined;
 };
 
-export type Nav = NativeStackNavigationProp<InitStackParamList, 'Init'>;
+type Nav = NativeStackNavigationProp<InitStackParamList, 'Init'>;
 
 export const useInitController = (navigation: Nav) => {
+  const { user } = useUserContext();
   const [nicknameFocus, setNicknameFocuse] = useState(false);
-  const [phoneFocuse, setPhoneFocuse] = useState(false);
-  const [nickname, setNickname] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phoneFocus, setPhoneFocus] = useState(false);
+  const [nickname, setNickname] = useState(user.nickname);
+  const [phone, setPhone] = useState(user.phone);
+  const [loading, setLoading] = useState(false);
 
   const handlers = {
     nicknameFocus: () => {
@@ -22,10 +27,10 @@ export const useInitController = (navigation: Nav) => {
       setNicknameFocuse(false);
     },
     phoneFocus: () => {
-      setPhoneFocuse(true);
+      setPhoneFocus(true);
     },
     phoneBlur: () => {
-      setPhoneFocuse(false);
+      setPhoneFocus(false);
     },
 
     phoneInput: (val: string) => {
@@ -33,7 +38,13 @@ export const useInitController = (navigation: Nav) => {
     },
     nicknameInput: (val: string) => setNickname(val),
 
-    savePress: () => {
+    savePress: async () => {
+      setLoading(true);
+      const res = userService.updateNicknameAndPhone(user.id, nickname, phone);
+      if (!res) {
+        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
+        setLoading(false);
+      }
       navigation.replace('Home');
     },
     skipPress: () => {
@@ -44,8 +55,9 @@ export const useInitController = (navigation: Nav) => {
   return {
     handlers,
     nicknameFocus,
-    phoneFocuse,
+    phoneFocus,
     nickname,
     phone,
+    loading,
   };
 };
