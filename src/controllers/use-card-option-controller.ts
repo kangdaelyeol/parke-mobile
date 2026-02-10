@@ -5,7 +5,7 @@ import {
   useCardSliderContext,
   useUserContext,
 } from '@/contexts';
-import { cardService } from '@/services';
+import { cardService, userService } from '@/services';
 
 export const useCardOptionController = () => {
   const { selectedCardIdx } = useCardSliderContext();
@@ -25,14 +25,21 @@ export const useCardOptionController = () => {
           text: '삭제',
           onPress: async () => {
             setLoading(true);
-            const res = await cardService.delete(selectedCard.id);
-            if (!res) {
+
+            const filteredCardList = cards.filter(
+              card => card.id !== selectedCard.id,
+            );
+            const cardDeleteRes = await cardService.delete(selectedCard.id);
+
+            if (!cardDeleteRes) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
               return setLoading(false);
             }
-            setLoading(false);
 
-            setCards(prev => prev.filter(card => card.id !== selectedCard.id));
+            userService.updateCardList(user.id, filteredCardList);
+
+            setLoading(false);
+            setCards(filteredCardList);
           },
         },
         { text: '취소', style: 'cancel' },
