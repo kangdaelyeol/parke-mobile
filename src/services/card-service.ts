@@ -6,9 +6,9 @@ export const cardService = {
     const res = await cardClient.getById(id);
     return res;
   },
-  getList: async (idList: string[]): Promise<CardDto[]> => {
+  getList: async (idList: string[]): Promise<CardDto[] | null> => {
     const res = await Promise.allSettled(idList.map(cardClient.getById));
-
+    if (!res) return null;
     return res
       .filter(
         (r): r is PromiseFulfilledResult<CardDto> =>
