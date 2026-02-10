@@ -1,27 +1,29 @@
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
+import { Loading } from '@/components';
 import { useUserContext } from '@/contexts';
 import { useAuthContext } from '@/contexts/auth-context';
 import { UserDto } from '@/domain/user';
 import { userService } from '@/services';
+import { CommonActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
 
-export default function LoginScreen() {
+export default function LoginScreen({ navigation }: { navigation: any }) {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
   const [isPending, setPending] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setPending(true);
       const kakaoProfile = await getKakaoProfile();
-      if (!kakaoProfile) return;
+      if (!kakaoProfile) return setPending(false);
       const user = await userService.get(kakaoProfile.email);
-      if (!user) return;
-      console.log(user);
-      // set user
-      // go to main page
+      if (!user) return setPending(false);
+      setUser(user);
+      navigation.replace('Home');
     })();
-  }, []);
+  }, [getKakaoProfile, navigation, setUser]);
 
   const isUserDto = (dto: any): dto is UserDto => dto.id;
 
@@ -42,15 +44,24 @@ export default function LoginScreen() {
         }
 
         if (isUserDto(userRes)) setUser(userRes);
-        console.log(user);
-        // go to init page
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Init' as never }],
+          }),
+        );
         setPending(false);
       } else {
         console.log(user);
         setUser(user);
         setPending(false);
 
-        // go to main page
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [{ name: 'Home' as never }],
+          }),
+        );
       }
     }
     setPending(false);
@@ -58,6 +69,7 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
+      {isPending && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.logoSet}>
           <LogoIcon style={styles.icon} width={170} height={200} />
