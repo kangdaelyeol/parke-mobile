@@ -4,7 +4,7 @@ import { TextInput } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { convertPhone } from '@/helpers';
 import { CardDto } from '@/domain/card/card-dto';
-import { useSettingCard } from '@/controllers/use-setting-card';
+import { useSettingCardController } from '@/controllers';
 
 export default function SettingCard({ card }: { card: CardDto }) {
   const {
@@ -16,7 +16,7 @@ export default function SettingCard({ card }: { card: CardDto }) {
     setPhone,
     animatedStyle,
     handlers,
-  } = useSettingCard({ card });
+  } = useSettingCardController({ card });
 
   return (
     <Animated.View style={[styles.container, animatedStyle]}>

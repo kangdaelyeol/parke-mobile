@@ -1,3 +1,9 @@
+import { useEffect, useState } from 'react';
+import {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import {
   useCardSettingContext,
   useCardSliderContext,
@@ -5,14 +11,8 @@ import {
 } from '@/contexts';
 import { CardDto } from '@/domain/card/card-dto';
 import { cardService } from '@/services';
-import { useEffect, useState } from 'react';
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
 
-export const useSettingCard = ({ card }: { card: CardDto }) => {
+export const useSettingCardController = ({ card }: { card: CardDto }) => {
   const { cardSettingController } = useCardSettingContext();
   const { selectedCardIdx } = useCardSliderContext();
   const { cards, setCards } = useUserContext();
