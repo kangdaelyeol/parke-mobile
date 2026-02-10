@@ -1,20 +1,16 @@
-import { useProfileController } from '@/controllers';
-import { convertPhone } from '@/helpers';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import React from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
-import { Header } from './components/header';
+import { useProfileController } from '@/controllers';
+import { convertPhone } from '@/helpers';
 import { Loading } from '@/components';
+import { Header } from './components/header';
+import { ProfileStackNavigationProp } from '@/navigation/types';
 
-type ProfileStackParamList = {
-  Profile: undefined;
-  Home: undefined;
-  Login: undefined;
-};
-
-type Props = NativeStackScreenProps<ProfileStackParamList, 'Profile'>;
-
-export default function ProfileScreen({ navigation }: Props) {
+export default function ProfileScreen({
+  navigation,
+}: {
+  navigation: ProfileStackNavigationProp;
+}) {
   const { handlers, nicknameFocus, phoneFocus, nickname, phone, loading } =
     useProfileController(navigation);
   return (

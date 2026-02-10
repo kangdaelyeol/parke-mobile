@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { cardService, userService } from '@/services';
 import { CardDto } from '@/domain/card';
 import { Loading } from '@/components';
+import { HomeStackNavigationProp } from '@/navigation/types';
 
 const isCardList = (v: any): v is CardDto[] => {
   return v !== null;
@@ -30,7 +31,7 @@ export default function Main() {
 
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(false);
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeStackNavigationProp>();
 
   useEffect(() => {
     (async () => {
@@ -41,7 +42,7 @@ export default function Main() {
       else Alert.alert('오류가 발생했');
       setLoading(false);
     })();
-  }, []);
+  }, [setCards, user.cardIdList]);
 
   const CARD_LEN = cards?.length ?? 1;
   const isSettingActivated = settingCard !== -1;

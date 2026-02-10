@@ -6,6 +6,7 @@ import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '@/constants';
 import { manager, stopBackgroundScan } from '@/ble-manager';
 import { generateBase64Id, getDeviceId } from '@/helpers';
 import { cache } from '@/storage';
+import { SearchBleStackNavigationProp } from '@/navigation/types';
 
 type ScanStateType = 'NoneScaned' | 'Scaned';
 
@@ -17,7 +18,7 @@ export const useSearchBle = () => {
 
   const [scanState, setScanState] = useState<ScanStateType>('NoneScaned');
 
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   const startBLEScan = () => {
     setDevices([]);

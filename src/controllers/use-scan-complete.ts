@@ -6,6 +6,7 @@ import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { manager, stopBackgroundScan } from '@/ble-manager';
 import { deviceService } from '@/services';
+import { ScanCompeleStackNavigationProp } from '@/navigation/types';
 
 /* For Background
  import { BleManager } from 'react-native-ble-plx';
@@ -17,7 +18,7 @@ import { deviceService } from '@/services';
 
 export const useScanComplete = (route: any) => {
   const { updatePhoneNumber } = deviceService;
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<ScanCompeleStackNavigationProp>();
   const deviceId = route?.params?.value ?? 'abc';
 
   const [phone, setPhone] = useState('');

@@ -6,7 +6,7 @@ import { get, ref, remove, set, update } from 'firebase/database';
 export const userClient = {
   create: async (dto: UserDto): Promise<boolean> => {
     const { id, nickname, phone, cardIdList } = dto;
-    const convertedId = id.replaceAll('@', '_').replaceAll(/[\[\].$#]/g, '');
+    const convertedId = convertId(id);
     try {
       await set(ref(db, `user/${convertedId}`), {
         id,

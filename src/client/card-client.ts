@@ -27,7 +27,6 @@ export const cardClient = {
       console.log(e);
       return null;
     }
-    console.log(dto);
     return dto;
   },
   getById: async (id: string): Promise<CardDto | null> => {

@@ -1,19 +1,13 @@
 import { useUserContext } from '@/contexts';
+import { ProfileStackNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
 import { logout } from '@react-native-seoul/kakao-login';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-type ProfileStackParamList = {
-  Profile: undefined;
-  Home: undefined;
-  Login: undefined;
-};
-
-type Nav = NativeStackNavigationProp<ProfileStackParamList, 'Profile'>;
-
-export const useProfileController = (navigation: Nav) => {
+export const useProfileController = (
+  navigation: ProfileStackNavigationProp,
+) => {
   const { user, setUser } = useUserContext();
   const [nicknameFocus, setNicknameFocuse] = useState(false);
   const [phoneFocus, setPhoneFocus] = useState(false);

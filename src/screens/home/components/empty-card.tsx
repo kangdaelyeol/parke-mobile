@@ -9,9 +9,10 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
+import { HomeStackNavigationProp } from '@/navigation/types';
 
-export default function EmptyCard({ idx }: any) {
-  const navigation = useNavigation<any>();
+export default function EmptyCard({ idx }: { idx: number }) {
+  const navigation = useNavigation<HomeStackNavigationProp>();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const { settingCard } = useCardSettingContext();
 

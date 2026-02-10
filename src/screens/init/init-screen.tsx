@@ -3,16 +3,14 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
 import { useInitController } from '@/controllers';
 import { convertPhone } from '@/helpers';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Loading } from '@/components';
-type InitStackParamList = {
-  Init: undefined;
-  Home: undefined;
-};
+import { InitStactNavigationProp } from '@/navigation/types';
 
-type Props = NativeStackScreenProps<InitStackParamList, 'Init'>;
-
-export default function InitScreen({ navigation }: Props) {
+export default function InitScreen({
+  navigation,
+}: {
+  navigation: InitStactNavigationProp;
+}) {
   const { handlers, nicknameFocus, phoneFocus, nickname, phone, loading } =
     useInitController(navigation);
 

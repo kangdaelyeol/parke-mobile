@@ -3,12 +3,17 @@ import { Loading } from '@/components';
 import { useUserContext } from '@/contexts';
 import { useAuthContext } from '@/contexts/auth-context';
 import { UserDto } from '@/domain/user';
+import { LoginStackNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
 import { CommonActions } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
 
-export default function LoginScreen({ navigation }: { navigation: any }) {
+export default function LoginScreen({
+  navigation,
+}: {
+  navigation: LoginStackNavigationProp;
+}) {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
   const [isPending, setPending] = useState(false);
@@ -28,7 +33,6 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
   const isUserDto = (dto: any): dto is UserDto => dto.id;
 
   const handleKakaoLoginPress = async () => {
-    console.log(isPending);
     if (isPending) return;
 
     setPending(true);
@@ -52,7 +56,6 @@ export default function LoginScreen({ navigation }: { navigation: any }) {
         );
         setPending(false);
       } else {
-        console.log(user);
         setUser(user);
         setPending(false);
 

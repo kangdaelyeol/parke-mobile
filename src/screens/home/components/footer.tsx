@@ -2,9 +2,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import FooterIcon from './footer-icon';
+import { HomeStackNavigationProp } from '@/navigation/types';
 
 export default function Footer() {
-  const navigation = useNavigation<any>();
+  const navigation = useNavigation<HomeStackNavigationProp>();
 
   const IconList = [
     {

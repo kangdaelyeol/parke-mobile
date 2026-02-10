@@ -1,17 +1,10 @@
 import { useUserContext } from '@/contexts';
+import { InitStactNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-type InitStackParamList = {
-  Init: undefined;
-  Home: undefined;
-};
-
-type Nav = NativeStackNavigationProp<InitStackParamList, 'Init'>;
-
-export const useInitController = (navigation: Nav) => {
+export const useInitController = (navigation: InitStactNavigationProp) => {
   const { user } = useUserContext();
   const [nicknameFocus, setNicknameFocuse] = useState(false);
   const [phoneFocus, setPhoneFocus] = useState(false);

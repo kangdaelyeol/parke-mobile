@@ -3,9 +3,10 @@ import { Dimensions } from 'react-native';
 import { useOnBoardContext } from '@/contexts';
 import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
+import { OnBoardingStackNavigationProp } from '@/navigation/types';
 
 export const useOnBoardFooter = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<OnBoardingStackNavigationProp>();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
   const [pressed, setPressed] = useState(false);
