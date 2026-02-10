@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import {
@@ -15,11 +15,13 @@ import CardOption from './card-option';
 import { unlink } from '@react-native-seoul/kakao-login';
 import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
+import { cardService, userService } from '@/services';
+import { CardDto } from '@/domain/card';
 
 export default function Main() {
   const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
-  const { cards } = useUserContext();
+  const { cards, setCards, user } = useUserContext();
   const CARD_LEN = cards && cards.length;
 
   const isSettingActivated = settingCard !== -1;
@@ -45,6 +47,26 @@ export default function Main() {
         style={styles.test}
       >
         RESET
+      </Text>
+      <Text
+        onPress={async () => {
+          const res = await cardService.create({
+            id: String(Date.now()),
+            title: 'test title',
+            message: 'test message',
+            phone: '01012311231',
+            updatedAt: Date.now(),
+            updatedBy: 'test',
+            autoChange: false,
+          });
+          if (!res) Alert.alert('오류가 발생했');
+          const newCardList = [...cards, res] as CardDto[];
+          userService.updateCardList(user.id, newCardList);
+          setCards(prev => [...prev, { ...res }] as CardDto[]);
+        }}
+        style={styles.test2}
+      >
+        addCard
       </Text>
       <View style={styles.mainWrapper}>
         {!isSettingActivated && cards[selectedCardIdx] && (
@@ -115,6 +137,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     left: 30,
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#1234d9',
+  },
+  test2: {
+    position: 'absolute',
+    top: 30,
+    left: 120,
     fontWeight: 'bold',
     fontSize: 20,
     color: '#1234d9',
