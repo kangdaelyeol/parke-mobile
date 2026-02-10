@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { Dimensions } from 'react-native';
-import { useOnBoard } from '@/contexts';
+import { useOnBoardContext } from '@/contexts';
 import { cache } from '@/storage';
+import { useNavigation } from '@react-navigation/native';
 
 export const useOnBoardFooter = () => {
+  const navigation = useNavigation();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
   const [pressed, setPressed] = useState(false);
 
-  const { sliderTranslateX, setPageIdx, pageIdx, setHasSeenOnBoarding } =
-    useOnBoard();
+  const { sliderTranslateX, setPageIdx, pageIdx } = useOnBoardContext();
 
   const goToNextPage = () => {
     sliderTranslateX.value -= DEVICE_WIDTH;
@@ -22,7 +23,7 @@ export const useOnBoardFooter = () => {
   };
 
   const goToMain = () => {
-    setHasSeenOnBoarding(true);
+    navigation.navigate('Login');
     cache.setHasSeenOnBoarding(true);
   };
 

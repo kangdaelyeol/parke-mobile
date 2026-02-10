@@ -50,4 +50,4 @@ export const OnBoardContextProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-export const useOnBoard = () => useContext(onBoardContext);
+export const useOnBoardContext = () => useContext(onBoardContext);
