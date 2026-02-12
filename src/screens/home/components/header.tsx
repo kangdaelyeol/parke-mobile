@@ -4,7 +4,7 @@ import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
 
-export default function Header() {
+export const Header = () => {
   const { user } = useUserContext();
   return (
     <View style={styles.header}>
@@ -14,7 +14,7 @@ export default function Header() {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   header: {

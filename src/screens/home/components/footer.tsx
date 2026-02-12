@@ -1,10 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import FooterIcon from './footer-icon';
+import { FooterIcon } from '@home/components';
 import { HomeStackNavigationProp } from '@/navigation/types';
 
-export default function Footer() {
+export const Footer = () => {
   const navigation = useNavigation<HomeStackNavigationProp>();
 
   const IconList = [
@@ -38,7 +38,7 @@ export default function Footer() {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

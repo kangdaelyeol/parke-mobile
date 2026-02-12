@@ -5,7 +5,7 @@ import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 const ICON_COLOR = '#e7e7e7';
 const ICON_COLOR_PRESSED = '#f3f3f3';
 
-export default function FooterIcon({ name, iconName, onPress }: any) {
+export const FooterIcon=({ name, iconName, onPress }: any) =>{
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (

@@ -11,7 +11,7 @@ import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 import { HomeStackNavigationProp } from '@/navigation/types';
 
-export default function EmptyCard({ idx }: { idx: number }) {
+export const EmptyCard = ({ idx }: { idx: number }) => {
   const navigation = useNavigation<HomeStackNavigationProp>();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const { settingCard } = useCardSettingContext();
@@ -56,7 +56,7 @@ export default function EmptyCard({ idx }: { idx: number }) {
       </Pressable>
     </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

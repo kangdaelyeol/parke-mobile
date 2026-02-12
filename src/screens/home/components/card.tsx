@@ -8,8 +8,8 @@ import Animated, {
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { LogoText } from '@/assets/logo';
-import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
 import { convertPhone } from '@/helpers';
+import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 
 export const Card = ({ title, phone, idx, message, autoChange }: any) => {
   const { settingCard } = useCardSettingContext();

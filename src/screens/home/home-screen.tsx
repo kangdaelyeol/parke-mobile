@@ -4,9 +4,7 @@ import { startBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';
 import { deviceService, settingService } from '@/services';
 import { CardSettingProvider, SliderContextProvider } from '@/contexts';
-import Header from './components/header';
-import Main from './components/main';
-import Footer from './components/footer';
+import { Header, Footer, Main } from '@home/components';
 
 export default function HomeScreen() {
   useEffect(() => {

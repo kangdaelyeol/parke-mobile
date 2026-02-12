@@ -6,7 +6,7 @@ import { convertPhone } from '@/helpers';
 import { CardDto } from '@/domain/card/card-dto';
 import { useSettingCardController } from '@/controllers';
 
-export default function SettingCard({ card }: { card: CardDto }) {
+export const SettingCard = ({ card }: { card: CardDto }) => {
   const {
     title,
     setTitle,
@@ -81,7 +81,7 @@ export default function SettingCard({ card }: { card: CardDto }) {
       </View>
     </Animated.View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {

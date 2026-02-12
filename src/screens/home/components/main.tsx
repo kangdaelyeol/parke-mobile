@@ -2,17 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
+import { unlink } from '@react-native-seoul/kakao-login';
 import {
   useUserContext,
   useCardSliderContext,
   useCardSettingContext,
 } from '@/contexts';
-import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
-import { Card } from './card';
-import EmptyCard from './empty-card';
-import SettingCard from './setting-card';
-import { CardOption } from './card-option';
-import { unlink } from '@react-native-seoul/kakao-login';
+import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants';
+import {
+  EmptyCard,
+  SettingCard,
+  CardOption,Card
+} from '@home/components';
 import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { cardService, userService } from '@/services';
@@ -24,7 +25,7 @@ const isCardList = (v: any): v is CardDto[] => {
   return v !== null;
 };
 
-export default function Main() {
+export const Main = () =>{
   const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
   const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
   const { cards, setCards, user } = useUserContext();
