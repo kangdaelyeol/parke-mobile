@@ -8,7 +8,7 @@ import {
 } from 'react-native-reanimated';
 import { useOnBoardContext } from '@/contexts';
 
-export const useSlider = () => {
+export const useOnBoardingSliderController = () => {
   const { sliderTranslateX, setPageIdx } = useOnBoardContext();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
