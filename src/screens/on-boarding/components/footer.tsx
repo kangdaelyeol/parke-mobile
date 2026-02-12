@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useOnBoardFooter } from '@/controllers/use-on-board-footer';
-import { PAGE_COUNT } from '@/screens/on-boarding/constants';
+import { useOnBoardingFooterController } from '@/controllers';
+import { PAGE_COUNT } from '@on-boarding/constants';
 
-const Footer = () => {
+export const Footer = () => {
   const {
     pageIdx,
     pressed,
@@ -11,7 +11,7 @@ const Footer = () => {
     goToMain,
     goToThisPage,
     goToNextPage,
-  } = useOnBoardFooter();
+  } = useOnBoardingFooterController();
 
   return (
     <View style={styles.container}>
@@ -113,5 +113,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#555555',
   },
 });
-
-export default Footer;

@@ -5,7 +5,7 @@ import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { OnBoardingStackNavigationProp } from '@/navigation/types';
 
-export const useOnBoardFooter = () => {
+export const useOnBoardingFooterController = () => {
   const navigation = useNavigation<OnBoardingStackNavigationProp>();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
