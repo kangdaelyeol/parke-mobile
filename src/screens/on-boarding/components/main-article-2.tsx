@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native';
 import { OnBoardingIcon2 } from '@/assets/illustrations';
 
-const MainArticle2 = () => {
+export const MainArticle2 = () => {
   const DEVICE_WIDTH = Dimensions.get('window').width;
   return (
     <View style={[{ width: DEVICE_WIDTH }, styles.container]}>
@@ -42,5 +42,3 @@ const styles = StyleSheet.create({
     lineHeight: 25,
   },
 });
-
-export default MainArticle2;

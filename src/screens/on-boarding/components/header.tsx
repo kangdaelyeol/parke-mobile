@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
 
-const Header = () => {
+export const Header = () => {
   return (
     <View style={styles.header}>
       <View style={styles.logoContainer}>
@@ -29,5 +29,3 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
 });
-
-export default Header;

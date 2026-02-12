@@ -6,7 +6,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "@home/*": ["src/screens/home/*"]
+      "@home/*": ["src/screens/home/*"],
+      "@on-boarding/*": ["src/screens/on-boarding/*"]
     }
   }
 }

@@ -1,6 +1,6 @@
-export { default as Header } from './header';
-export { default as Footer } from './footer';
-export { default as Slider } from './slider';
-export { default as MainArticle1 } from './main-article-1';
-export { default as MainArticle2 } from './main-article-2';
-export { default as MainArticle3 } from './main-article-3';
+export * from './header';
+export * from './footer';
+export * from './slider';
+export * from './main-article-1';
+export * from './main-article-2';
+export * from './main-article-3';
