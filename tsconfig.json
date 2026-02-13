@@ -7,7 +7,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@home/*": ["src/screens/home/*"],
-      "@on-boarding/*": ["src/screens/on-boarding/*"]
+      "@on-boarding/*": ["src/screens/on-boarding/*"],
+      "@profile/*": ["src/screens/profile/*"]
     }
   }
 }

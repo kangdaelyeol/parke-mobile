@@ -11,6 +11,7 @@ module.exports = {
           '@': './src',
           '@home': './src/screens/home',
           '@on-boarding': './src/screens/on-boarding',
+          '@profile': './src/screens/profile',
         },
         extentions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
