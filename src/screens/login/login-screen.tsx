@@ -1,70 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Text, Pressable, Alert } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
-import { useUserContext, useAuthContext } from '@/contexts';
-import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
-import { userService } from '@/services';
+import { UseLoginController } from '@/controllers';
 
 export default function LoginScreen({
   navigation,
 }: {
   navigation: LoginStackNavigationProp;
 }) {
-  const { kakaoLogin, getKakaoProfile } = useAuthContext();
-  const { setUser } = useUserContext();
-  const [isPending, setPending] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      setPending(true);
-      const kakaoProfile = await getKakaoProfile();
-      if (!kakaoProfile) return setPending(false);
-      const user = await userService.get(kakaoProfile.email);
-      if (!user) return setPending(false);
-      setUser(user);
-      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
-    })();
-  }, [getKakaoProfile, navigation, setUser]);
-
-  const isUserDto = (dto: any): dto is UserDto => dto.id;
-
-  const handleKakaoLoginPress = async () => {
-    if (isPending) return;
-
-    setPending(true);
-    const kakaoProfile = await kakaoLogin();
-
-    if (kakaoProfile) {
-      const { email, nickname } = kakaoProfile;
-      const user = await userService.get(email);
-      if (!user) {
-        const userRes = await userService.create({ id: email, nickname });
-        if (!userRes) {
-          Alert.alert('잠시 후 다시 시도해주세요.');
-          return setPending(false);
-        }
-        
-        if (isUserDto(userRes)) setUser(userRes);
-        return navigation.reset({
-          index: 0,
-          routes: [{ name: 'Init' }],
-        });
-      } else {
-        setUser(user);
-        return navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
-      }
-    }
-    setPending(false);
-  };
+  const { loading, handleKakaoLoginPress } = UseLoginController({ navigation });
 
   return (
     <View style={styles.container}>
-      {isPending && <Loading />}
+      {loading && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.logoSet}>
           <LogoIcon style={styles.icon} width={170} height={200} />
