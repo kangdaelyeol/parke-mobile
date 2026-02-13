@@ -1,19 +1,29 @@
 import React from 'react';
-import { ColorValue, Pressable, StyleSheet, Text, View } from 'react-native';
+import {
+  ColorValue,
+  Pressable,
+  StyleProp,
+  StyleSheet,
+  Text,
+  View,
+  ViewStyle,
+} from 'react-native';
 
 interface PressableButtonProps {
   onPress: () => void;
   background: ColorValue[];
   title: string;
+  style?: StyleProp<ViewStyle>;
 }
 
 export const PressableButton = ({
   onPress,
   background,
   title,
+  style,
 }: PressableButtonProps) => {
   return (
-    <Pressable onPress={onPress}>
+    <Pressable style={style} onPress={onPress}>
       {({ pressed }) => (
         <View
           style={[
@@ -31,13 +41,13 @@ export const PressableButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    padding: 18,
-    alignItems: 'center',
     borderRadius: 10,
   },
   buttonText: {
+    padding: 20,
+    textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 17,
+    fontSize: 18,
     color: '#d3d3d3',
   },
 });
