@@ -3,18 +3,18 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
 import { LoginStackNavigationProp } from '@/navigation/types';
-import { UseLoginController } from '@/controllers';
+import { UseLoginViewModel } from '@/view-model';
 
 export default function LoginScreen({
   navigation,
 }: {
   navigation: LoginStackNavigationProp;
 }) {
-  const { loading, handleKakaoLoginPress } = UseLoginController({ navigation });
+  const { state, actions } = UseLoginViewModel({ navigation });
 
   return (
     <View style={styles.container}>
-      {loading && <Loading />}
+      {state.loading && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.logoSet}>
           <LogoIcon style={styles.icon} width={170} height={200} />
@@ -22,7 +22,7 @@ export default function LoginScreen({
         </View>
       </View>
       <View style={styles.loginBtn}>
-        <Pressable onPress={handleKakaoLoginPress}>
+        <Pressable onPress={actions.kakaoLoginPress}>
           <View style={styles.kakaoLogin}>
             <KakaoLogo style={styles.kakaoSymbol} width={30} height={30} />
             <Text style={styles.loginBtnText}>카카오로 시작하기</Text>

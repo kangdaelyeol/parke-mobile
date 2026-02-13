@@ -1,6 +1,7 @@
 import { useAuthContext, useUserContext } from '@/contexts';
 import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
+import { LoginViewModel } from '@/screens/login/types';
 import { userService } from '@/services';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -11,7 +12,9 @@ interface UseLoginControllerProps {
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
-export const UseLoginController = ({ navigation }: UseLoginControllerProps) => {
+export const UseLoginViewModel = ({
+  navigation,
+}: UseLoginControllerProps): LoginViewModel => {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
@@ -28,7 +31,7 @@ export const UseLoginController = ({ navigation }: UseLoginControllerProps) => {
     })();
   }, [getKakaoProfile, navigation, setUser]);
 
-  const handleKakaoLoginPress = async () => {
+  const kakaoLoginPress = async () => {
     if (loading) return;
 
     setLoading(true);
@@ -60,5 +63,5 @@ export const UseLoginController = ({ navigation }: UseLoginControllerProps) => {
     setLoading(false);
   };
 
-  return { loading, handleKakaoLoginPress };
+  return { state: { loading }, actions: { kakaoLoginPress } };
 };

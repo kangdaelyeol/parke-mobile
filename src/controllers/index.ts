@@ -7,4 +7,3 @@ export * from './use-setting';
 export * from './use-setting-card-controller';
 export * from './use-on-boarding-slider-controller';
 export * from './use-init-controller';
-export * from './use-login-controller';
