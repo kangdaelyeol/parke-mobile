@@ -2,42 +2,46 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FocusableInput, Loading, PressableButton } from '@/components';
 import { convertPhone } from '@/helpers';
-import { MainProps } from '@profile/types';
+import { MainViewModel } from '@profile/types';
 
-export const Main = ({ viewModel }: MainProps) => {
-  const { loading, nickname, handlers, phone } = viewModel;
+interface Props {
+  viewModel: MainViewModel;
+}
+
+export const Main = ({ viewModel }: Props) => {
+  const { state, actions } = viewModel;
   return (
     <View>
       <View style={styles.wrapper}>
-        {loading && <Loading />}
+        {state.loading && <Loading />}
         <View style={styles.inputSection}>
           <FocusableInput
             title="닉네임"
             placeholder="닉네임"
-            onChangeText={handlers.nicknameInput}
-            value={nickname}
+            onChangeText={actions.nicknameInput}
+            value={state.nickname}
           />
           <FocusableInput
             title="연락처"
             placeholder="연락처"
-            onChangeText={handlers.phoneInput}
-            value={convertPhone(phone)}
+            onChangeText={actions.phoneInput}
+            value={convertPhone(state.phone)}
           />
         </View>
         <View style={styles.buttonSection}>
           <PressableButton
             title="저장"
-            onPress={handlers.savePress}
+            onPress={actions.savePress}
             background={['#262e83', '#29457e']}
           />
           <PressableButton
             title="로그아웃"
-            onPress={handlers.logoutPress}
+            onPress={actions.logoutPress}
             background={['#2d2d2d', '#525252']}
           />
           <PressableButton
             title="회원탈퇴"
-            onPress={handlers.deletePress}
+            onPress={actions.deletePress}
             background={['#9d2f2f', '#b23535']}
           />
         </View>

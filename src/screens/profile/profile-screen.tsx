@@ -1,20 +1,20 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useProfileController } from '@/controllers';
 import { ProfileStackNavigationProp } from '@/navigation/types';
 import { Main, Header } from '@profile/components';
+import { UseProfileViewModel } from '@/view-model';
 
 export default function ProfileScreen({
   navigation,
 }: {
   navigation: ProfileStackNavigationProp;
 }) {
-  const viewModel = useProfileController(navigation);
+  const viewModel = UseProfileViewModel(navigation);
 
   return (
     <View style={styles.container}>
-      <Header handleBackPress={viewModel.handlers.backPress} />
-      <Main viewModel={viewModel} />
+      <Header viewModel={viewModel.header} />
+      <Main viewModel={viewModel.main} />
     </View>
   );
 }

@@ -1,13 +1,18 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { HeaderProps } from '@profile/types';
+import { HeaderViewModel } from '@profile/types';
 
-export const Header = ({ handleBackPress }: HeaderProps) => {
+interface Props {
+  viewModel: HeaderViewModel;
+}
+
+export const Header = ({ viewModel }: Props) => {
+  const { actions } = viewModel;
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <Pressable style={styles.backBtn} onPress={handleBackPress}>
+        <Pressable style={styles.backBtn} onPress={actions.backPress}>
           {({ pressed }) => (
             <FontAwesome6
               name="angle-left"

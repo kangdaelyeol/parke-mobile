@@ -1,7 +1,6 @@
-export interface HeaderProps {
-  handleBackPress: () => void;
-}
-interface MainAction {
+import { ViewModel } from '@/types/common';
+
+interface MainActions {
   nicknameInput: (v: string) => void;
   phoneInput: (v: string) => void;
   savePress: () => Promise<void>;
@@ -9,13 +8,22 @@ interface MainAction {
   deletePress: () => Promise<void>;
 }
 
-interface MainViewModel {
+interface MainState {
   loading: boolean;
   nickname: string;
-  handlers: MainAction;
   phone: string;
 }
 
-export interface MainProps {
-  viewModel: MainViewModel;
+export type HeaderViewModel = ViewModel<
+  {},
+  {
+    backPress: () => void;
+  }
+>;
+
+export type MainViewModel = ViewModel<MainState, MainActions>;
+
+export interface ProfileViewModel {
+  main: MainViewModel;
+  header: HeaderViewModel;
 }
