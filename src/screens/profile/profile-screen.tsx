@@ -1,10 +1,11 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useProfileController } from '@/controllers';
 import { convertPhone } from '@/helpers';
 import { FocusableInput, Loading } from '@/components';
 import { Header } from './components/header';
 import { ProfileStackNavigationProp } from '@/navigation/types';
+import { PressableButton } from '@/components/pressable-button';
 
 export default function ProfileScreen({
   navigation,
@@ -33,45 +34,21 @@ export default function ProfileScreen({
           />
         </View>
         <View style={styles.buttonSection}>
-          <Pressable onPress={handlers.savePress}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.button,
-                  styles.saveBtn,
-                  pressed && styles.saveBtnPressed,
-                ]}
-              >
-                <Text style={styles.buttonText}>저장</Text>
-              </View>
-            )}
-          </Pressable>
-          <Pressable onPress={handlers.logoutPress}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.button,
-                  styles.logoutBtn,
-                  pressed && styles.logoutBtnPressed,
-                ]}
-              >
-                <Text style={styles.buttonText}>로그아웃</Text>
-              </View>
-            )}
-          </Pressable>
-          <Pressable onPress={handlers.deletePress}>
-            {({ pressed }) => (
-              <View
-                style={[
-                  styles.button,
-                  styles.deleteBtn,
-                  pressed && styles.deleteBtnPressed,
-                ]}
-              >
-                <Text style={styles.buttonText}>회원탈퇴</Text>
-              </View>
-            )}
-          </Pressable>
+          <PressableButton
+            title="저장"
+            onPress={handlers.savePress}
+            background={['#262e83', '#29457e']}
+          />
+          <PressableButton
+            title="로그아웃"
+            onPress={handlers.logoutPress}
+            background={['#2d2d2d', '#525252']}
+          />
+          <PressableButton
+            title="회원탈퇴"
+            onPress={handlers.deletePress}
+            background={['#9d2f2f', '#b23535']}
+          />
         </View>
       </View>
     </View>
@@ -92,41 +69,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
     gap: 20,
   },
-  inputTitle: {
-    color: '#808080',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
   buttonSection: {
     marginTop: 35,
     gap: 15,
-  },
-  button: {
-    padding: 18,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  saveBtn: {
-    backgroundColor: '#262e83',
-  },
-  saveBtnPressed: {
-    backgroundColor: '#29457e',
-  },
-  logoutBtn: {
-    backgroundColor: '#2d2d2d',
-  },
-  logoutBtnPressed: {
-    backgroundColor: '#525252',
-  },
-  deleteBtn: {
-    backgroundColor: '#9d2f2f',
-  },
-  deleteBtnPressed: {
-    backgroundColor: '#b23535',
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 17,
-    color: '#d3d3d3',
   },
 });
