@@ -1,10 +1,8 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { HeaderProps } from '@profile/types';
 
-interface HeaderProps {
-  handleBackPress: () => void;
-}
 export const Header = ({ handleBackPress }: HeaderProps) => {
   return (
     <View style={styles.container}>

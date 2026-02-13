@@ -36,7 +36,7 @@ export const useProfileController = (
     backPress: () => {
       navigation.goBack();
     },
-    logoutPress: () => {
+    logoutPress: async () => {
       Alert.alert('Logout', '로그아웃 하시겠습니까?', [
         {
           text: '예',

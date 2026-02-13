@@ -1,56 +1,20 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useProfileController } from '@/controllers';
-import { convertPhone } from '@/helpers';
-import { FocusableInput, Loading } from '@/components';
-import { Header } from './components/header';
 import { ProfileStackNavigationProp } from '@/navigation/types';
-import { PressableButton } from '@/components/pressable-button';
+import { Main, Header } from '@profile/components';
 
 export default function ProfileScreen({
   navigation,
 }: {
   navigation: ProfileStackNavigationProp;
 }) {
-  const { handlers, nickname, phone, loading } =
-    useProfileController(navigation);
+  const viewModel = useProfileController(navigation);
+
   return (
     <View style={styles.container}>
-      <Header handleBackPress={handlers.backPress} />
-      <View style={styles.wrapper}>
-        {loading && <Loading />}
-        <View style={styles.inputSection}>
-          <FocusableInput
-            title="닉네임"
-            placeholder="닉네임"
-            onChangeText={handlers.nicknameInput}
-            value={nickname}
-          />
-          <FocusableInput
-            title="연락처"
-            placeholder="연락처"
-            onChangeText={handlers.phoneInput}
-            value={convertPhone(phone)}
-          />
-        </View>
-        <View style={styles.buttonSection}>
-          <PressableButton
-            title="저장"
-            onPress={handlers.savePress}
-            background={['#262e83', '#29457e']}
-          />
-          <PressableButton
-            title="로그아웃"
-            onPress={handlers.logoutPress}
-            background={['#2d2d2d', '#525252']}
-          />
-          <PressableButton
-            title="회원탈퇴"
-            onPress={handlers.deletePress}
-            background={['#9d2f2f', '#b23535']}
-          />
-        </View>
-      </View>
+      <Header handleBackPress={viewModel.handlers.backPress} />
+      <Main viewModel={viewModel} />
     </View>
   );
 }
@@ -59,18 +23,5 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000000',
     flex: 1,
-  },
-  wrapper: {
-    marginHorizontal: 'auto',
-    width: '100%',
-    maxWidth: 360,
-  },
-  inputSection: {
-    marginTop: 20,
-    gap: 20,
-  },
-  buttonSection: {
-    marginTop: 35,
-    gap: 15,
   },
 });
