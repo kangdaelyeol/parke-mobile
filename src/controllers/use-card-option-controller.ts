@@ -16,10 +16,10 @@ export const useCardOptionController = () => {
   const selectedCard = cards[selectedCardIdx];
 
   const handlers = {
-    onEditPressed: () => {
+    editPress: () => {
       cardSettingController.showSetting(selectedCardIdx);
     },
-    onDeletePressed: async () => {
+    deletePress: async () => {
       Alert.alert('Parke 삭제', '삭제하시겠습니까? - (재등록 가능)', [
         {
           text: '삭제',
@@ -45,8 +45,8 @@ export const useCardOptionController = () => {
         { text: '취소', style: 'cancel' },
       ]);
     },
-    onPreviewPressed: () => {},
-    onAutoChangePressed: async () => {
+    previewPress: () => {},
+    autoChangePress: async () => {
       setLoading(true);
       const res = await cardService.updateAutoChange(
         selectedCard.id,
@@ -65,7 +65,7 @@ export const useCardOptionController = () => {
         ),
       );
     },
-    onChangePhonePressed: async () => {
+    changePhonePress: async () => {
       const { phone } = user;
       setLoading(true);
       const res = await cardService.updatePhone(selectedCard.id, phone);
