@@ -8,7 +8,7 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { useNavigation } from '@react-navigation/native';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
-import { CARD_HEIGHT, CARD_WIDTH } from '../constants';
+import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { HomeStackNavigationProp } from '@/navigation/types';
 
 export const EmptyCard = ({ idx }: { idx: number }) => {

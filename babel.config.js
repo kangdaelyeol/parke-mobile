@@ -9,7 +9,10 @@ module.exports = {
         root: ['./src'],
         alias: {
           '@': './src',
+          '@home': './src/screens/home',
+          '@on-boarding': './src/screens/on-boarding',
         },
+        extentions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
     ],
     'react-native-worklets/plugin',
