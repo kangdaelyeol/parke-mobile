@@ -1,6 +1,6 @@
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 interface HeaderProps {
   handleBackPress: () => void;
@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 55,
     left: 0,
+    zIndex: 3,
   },
   wrapper: {
     width: '100%',
