@@ -9,26 +9,11 @@ export const useProfileController = (
   navigation: ProfileStackNavigationProp,
 ) => {
   const { user, setUser } = useUserContext();
-  const [nicknameFocus, setNicknameFocuse] = useState(false);
-  const [phoneFocus, setPhoneFocus] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
 
   const handlers = {
-    nicknameFocus: () => {
-      setNicknameFocuse(true);
-    },
-    nicknameBlur: () => {
-      setNicknameFocuse(false);
-    },
-    phoneFocus: () => {
-      setPhoneFocus(true);
-    },
-    phoneBlur: () => {
-      setPhoneFocus(false);
-    },
-
     phoneInput: (val: string) => {
       setPhone(val.replace(/[^0-9]/gi, ''));
     },
@@ -96,8 +81,6 @@ export const useProfileController = (
 
   return {
     handlers,
-    nicknameFocus,
-    phoneFocus,
     nickname,
     phone,
     loading,

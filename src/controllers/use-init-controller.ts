@@ -5,27 +5,12 @@ import { useState } from 'react';
 import { Alert } from 'react-native';
 
 export const useInitController = (navigation: InitStactNavigationProp) => {
-  const { user } = useUserContext();
-  const [nicknameFocus, setNicknameFocuse] = useState(false);
-  const [phoneFocus, setPhoneFocus] = useState(false);
+  const { user, setUser } = useUserContext();
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
 
   const handlers = {
-    nicknameFocus: () => {
-      setNicknameFocuse(true);
-    },
-    nicknameBlur: () => {
-      setNicknameFocuse(false);
-    },
-    phoneFocus: () => {
-      setPhoneFocus(true);
-    },
-    phoneBlur: () => {
-      setPhoneFocus(false);
-    },
-
     phoneInput: (val: string) => {
       setPhone(val.replace(/[^0-9]/gi, ''));
     },
@@ -34,6 +19,7 @@ export const useInitController = (navigation: InitStactNavigationProp) => {
     savePress: async () => {
       setLoading(true);
       const res = userService.updateNicknameAndPhone(user.id, nickname, phone);
+      setUser(prev => ({ ...prev, nickname, phone }));
       if (!res) {
         Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
         setLoading(false);
@@ -47,8 +33,6 @@ export const useInitController = (navigation: InitStactNavigationProp) => {
 
   return {
     handlers,
-    nicknameFocus,
-    phoneFocus,
     nickname,
     phone,
     loading,

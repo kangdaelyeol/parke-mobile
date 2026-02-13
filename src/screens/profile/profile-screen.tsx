@@ -1,8 +1,8 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useProfileController } from '@/controllers';
 import { convertPhone } from '@/helpers';
-import { Loading } from '@/components';
+import { FocusableInput, Loading } from '@/components';
 import { Header } from './components/header';
 import { ProfileStackNavigationProp } from '@/navigation/types';
 
@@ -11,7 +11,7 @@ export default function ProfileScreen({
 }: {
   navigation: ProfileStackNavigationProp;
 }) {
-  const { handlers, nicknameFocus, phoneFocus, nickname, phone, loading } =
+  const { handlers, nickname, phone, loading } =
     useProfileController(navigation);
   return (
     <View style={styles.container}>
@@ -19,45 +19,18 @@ export default function ProfileScreen({
       <View style={styles.wrapper}>
         {loading && <Loading />}
         <View style={styles.inputSection}>
-          <View style={styles.inputContainer}>
-            <Text
-              style={[
-                styles.inputTitle,
-                nicknameFocus && styles.nicknameTitleFocused,
-              ]}
-            >
-              닉네임
-            </Text>
-            <TextInput
-              onFocus={handlers.nicknameFocus}
-              onBlur={handlers.nicknameBlur}
-              style={[
-                styles.input,
-                nicknameFocus && styles.nicknameInputFocused,
-              ]}
-              value={nickname}
-              onChangeText={handlers.nicknameInput}
-              placeholder="닉네임"
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <Text
-              style={[
-                styles.inputTitle,
-                phoneFocus && styles.phoneTitleFocused,
-              ]}
-            >
-              연락처
-            </Text>
-            <TextInput
-              onFocus={handlers.phoneFocus}
-              onBlur={handlers.phoneBlur}
-              style={[styles.input, phoneFocus && styles.phoneInputFocused]}
-              placeholder="연락처"
-              value={convertPhone(phone)}
-              onChangeText={handlers.phoneInput}
-            />
-          </View>
+          <FocusableInput
+            title="닉네임"
+            placeholder="닉네임"
+            onChangeText={handlers.nicknameInput}
+            value={nickname}
+          />
+          <FocusableInput
+            title="연락처"
+            placeholder="연락처"
+            onChangeText={handlers.phoneInput}
+            value={convertPhone(phone)}
+          />
         </View>
         <View style={styles.buttonSection}>
           <Pressable onPress={handlers.savePress}>
@@ -115,42 +88,14 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 360,
   },
-
   inputSection: {
     marginTop: 20,
     gap: 20,
-  },
-  inputContainer: {
-    gap: 10,
   },
   inputTitle: {
     color: '#808080',
     fontWeight: 'bold',
     fontSize: 16,
-  },
-  nicknameTitleFocused: {
-    color: '#eeeeee',
-  },
-  nicknameInputFocused: {
-    borderColor: '#eeeeee',
-  },
-  phoneTitleFocused: {
-    color: '#eeeeee',
-  },
-  phoneInputFocused: {
-    borderColor: '#eeeeee',
-  },
-  input: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#606060',
-    paddingHorizontal: 7,
-    fontSize: 17,
-    height: 50,
-    color: '#dddddd',
-    fontWeight: '500',
-    maxWidth: 400,
   },
   buttonSection: {
     marginTop: 35,

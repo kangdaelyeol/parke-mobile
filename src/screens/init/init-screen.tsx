@@ -1,9 +1,9 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
 import { useInitController } from '@/controllers';
 import { convertPhone } from '@/helpers';
-import { Loading } from '@/components';
+import { FocusableInput, Loading } from '@/components';
 import { InitStactNavigationProp } from '@/navigation/types';
 
 export default function InitScreen({
@@ -11,8 +11,7 @@ export default function InitScreen({
 }: {
   navigation: InitStactNavigationProp;
 }) {
-  const { handlers, nicknameFocus, phoneFocus, nickname, phone, loading } =
-    useInitController(navigation);
+  const { handlers, nickname, phone, loading } = useInitController(navigation);
 
   return (
     <View style={styles.container}>
@@ -25,45 +24,18 @@ export default function InitScreen({
         <Text style={styles.title}>기본 정보를 입력해주세요!</Text>
         <View>
           <View style={styles.inputSection}>
-            <View style={styles.inputContainer}>
-              <Text
-                style={[
-                  styles.inputTitle,
-                  nicknameFocus && styles.nicknameTitleFocused,
-                ]}
-              >
-                닉네임
-              </Text>
-              <TextInput
-                onFocus={handlers.nicknameFocus}
-                onBlur={handlers.nicknameBlur}
-                style={[
-                  styles.input,
-                  nicknameFocus && styles.nicknameInputFocused,
-                ]}
-                value={nickname}
-                onChangeText={handlers.nicknameInput}
-                placeholder="닉네임"
-              />
-            </View>
-            <View style={styles.inputContainer}>
-              <Text
-                style={[
-                  styles.inputTitle,
-                  phoneFocus && styles.phoneTitleFocused,
-                ]}
-              >
-                연락처
-              </Text>
-              <TextInput
-                onFocus={handlers.phoneFocus}
-                onBlur={handlers.phoneBlur}
-                style={[styles.input, phoneFocus && styles.phoneInputFocused]}
-                placeholder="연락처"
-                value={convertPhone(phone)}
-                onChangeText={handlers.phoneInput}
-              />
-            </View>
+            <FocusableInput
+              title="닉네임"
+              value={nickname}
+              onChangeText={handlers.nicknameInput}
+              placeholder="닉네임"
+            />
+            <FocusableInput
+              title="연락처"
+              placeholder="연락처"
+              value={convertPhone(phone)}
+              onChangeText={handlers.phoneInput}
+            />
           </View>
           <View style={styles.buttonSection}>
             <Pressable onPress={handlers.savePress} style={styles.pressable}>
