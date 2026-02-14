@@ -12,11 +12,11 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { Gesture, PanGesture } from 'react-native-gesture-handler';
-import { DefaultStyle } from 'react-native-reanimated/lib/typescript/hook/commonTypes';
 import { runOnJS } from 'react-native-worklets';
 import { useCardSettingContext } from '@/contexts/card-setting-context';
 import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants';
 import { useUserContext } from '@/contexts';
+import { StyleProp, ViewStyle } from 'react-native';
 
 interface SliderController {
   goToNext: () => void;
@@ -26,7 +26,7 @@ interface SliderController {
 
 interface SliderContext {
   panGesture: PanGesture;
-  animatedStyle: DefaultStyle;
+  animatedStyle: StyleProp<ViewStyle>;
   sliderController: SliderController;
   selectedCardIdx: number;
 }

@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { unlink } from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
-import {
-  useUserContext,
-  useCardSliderContext,
-  useCardSettingContext,
-} from '@/contexts';
+import { useUserContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants';
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components';
 import { cache } from '@/storage';
@@ -16,37 +12,20 @@ import { CardDto } from '@/domain/card';
 import { cardService, userService } from '@/services';
 import { Loading } from '@/components';
 import { HomeStackNavigationProp } from '@/navigation/types';
-
-const isCardList = (v: any): v is CardDto[] => {
-  return v !== null;
-};
+import { useHomeMainViewModel } from '@/view-model';
 
 export const Main = () => {
-  const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
-  const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
-  const { cards, setCards, user } = useUserContext();
+  const { state, actions } = useHomeMainViewModel();
 
+  // Test
   const [busy, setBusy] = useState(false);
-  const [loading, setLoading] = useState(false);
   const navigation = useNavigation<HomeStackNavigationProp>();
-
-  useEffect(() => {
-    (async () => {
-      setLoading(true);
-      const cardIdList = Object.values(user.cardIdList ?? {}) || [];
-      const res = await cardService.getList(cardIdList);
-      if (isCardList(res)) setCards(res);
-      else Alert.alert('오류가 발생했');
-      setLoading(false);
-    })();
-  }, [setCards, user.cardIdList]);
-
-  const CARD_LEN = cards?.length ?? 1;
-  const isSettingActivated = settingCard !== -1;
+  const { cards, setCards, user } = useUserContext();
 
   return (
     <View style={styles.main}>
-      {loading && <Loading />}
+      {state.loading && <Loading />}
+      {/* Test Buttons */}
       <Text
         onPress={async () => {
           if (busy) return;
@@ -77,7 +56,7 @@ export const Main = () => {
             autoChange: false,
           });
           if (!res) Alert.alert('오류가 발생했');
-          const newCardList = [...cards, res] as CardDto[];
+          const newCardList = [...state.cards, res] as CardDto[];
           userService.updateCardList(user.id, newCardList);
           setCards(prev => [...prev, { ...res }] as CardDto[]);
         }}
@@ -86,30 +65,34 @@ export const Main = () => {
         addCard
       </Text>
       <View style={styles.mainWrapper}>
-        {!isSettingActivated && cards[selectedCardIdx] && (
+        {!state.isSetting && cards[state.selectedCardIdx] && (
           <>
             <View style={styles.title}>
               <Text style={styles.titleText}>My parke list</Text>
             </View>
           </>
         )}
-        <GestureDetector gesture={panGesture}>
-          <Animated.View style={[styles.cardContainer, sliderAnimatedStyle]}>
+        <GestureDetector gesture={actions.panGesture}>
+          <Animated.View
+            style={[styles.cardContainer, state.sliderAnimatedStyle]}
+          >
             <View style={styles.cardSlider}>
-              <Animated.View style={[animatedStyle, styles.cardSliderMover]}>
+              <Animated.View
+                style={[state.animatedStyle, styles.cardSliderMover]}
+              >
                 {cards &&
                   cards.map((card, idx) => (
                     <Card key={idx} {...card} idx={idx} />
                   ))}
-                <EmptyCard idx={CARD_LEN} />
+                <EmptyCard idx={state.cardLength} />
               </Animated.View>
             </View>
           </Animated.View>
         </GestureDetector>
-        {!isSettingActivated && cards[selectedCardIdx] && (
-          <CardOption card={cards[selectedCardIdx]} />
+        {!state.isSetting && cards[state.selectedCardIdx] && (
+          <CardOption card={cards[state.selectedCardIdx]} />
         )}
-        {isSettingActivated && <SettingCard card={cards[selectedCardIdx]} />}
+        {state.isSetting && <SettingCard card={cards[state.selectedCardIdx]} />}
       </View>
     </View>
   );

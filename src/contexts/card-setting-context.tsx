@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
 import {
   Easing,
   useAnimatedStyle,
@@ -7,7 +8,7 @@ import {
 } from 'react-native-reanimated';
 
 interface CardSettingContext {
-  sliderAnimatedStyle: any;
+  sliderAnimatedStyle: StyleProp<ViewStyle>;
   cardSettingController: {
     showSetting: (_: number) => void;
     hideSetting: () => void;
