@@ -1,11 +1,10 @@
 import { ViewModel } from '@/types/common';
+import { StyleProp, ViewStyle } from 'react-native';
+import { PanGesture } from 'react-native-gesture-handler';
 
-export type ScreenViewModel = ViewModel<
-  {
-    loading: boolean;
-  },
-  {}
->;
+interface ScreenState {
+  loading: boolean;
+}
 
 interface FooterState {
   pageIdx: number;
@@ -17,4 +16,14 @@ interface FooterActions {
   startPress: () => void;
 }
 
-export type OnBoardingFooterViewModel = ViewModel<FooterState, FooterActions>
+interface SliderState {
+  animatedStyle: StyleProp<ViewStyle>;
+}
+
+interface SliderActions {
+  panGesture: PanGesture;
+}
+
+export type ScreenViewModel = ViewModel<ScreenState, {}>;
+export type OnBoardingFooterViewModel = ViewModel<FooterState, FooterActions>;
+export type OnBoardingSliderViewModel = ViewModel<SliderState, SliderActions>;

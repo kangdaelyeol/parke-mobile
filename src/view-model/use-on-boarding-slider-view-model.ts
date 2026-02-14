@@ -7,8 +7,9 @@ import {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useOnBoardingContext } from '@/contexts';
+import { OnBoardingSliderViewModel } from '@/screens/on-boarding/types';
 
-export const useOnBoardingSliderController = () => {
+export const useOnBoardingSliderViewModel = (): OnBoardingSliderViewModel => {
   const { sliderTranslateX, setPageIdx } = useOnBoardingContext();
   const DEVICE_WIDTH = Dimensions.get('window').width;
 
@@ -71,5 +72,5 @@ export const useOnBoardingSliderController = () => {
     ],
   }));
 
-  return { panGesture, animatedStyle };
+  return { actions: { panGesture }, state: { animatedStyle } };
 };
