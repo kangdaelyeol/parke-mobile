@@ -12,7 +12,12 @@ export const Footer = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         {footerIconList.map(icon => (
-          <FooterIcon {...icon} onPress={() => navigation.navigate(icon.key)} />
+          <FooterIcon
+            key={icon.key}
+            iconName={icon.iconName}
+            label={icon.label}
+            onPress={() => navigation.navigate(icon.key)}
+          />
         ))}
       </View>
     </View>

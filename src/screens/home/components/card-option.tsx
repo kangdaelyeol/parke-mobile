@@ -1,15 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { useCardOptionController } from '@/controllers';
 import { Loading, PressableButton } from '@/components';
-import { CardDto } from '@/domain/card';
-
-interface CardOptionProps {
-  card: CardDto;
-}
+import { useHomeCardOptionViewModel } from '@/view-model';
+import { CardOptionProps } from '@home/types';
 
 export const CardOption = ({ card }: CardOptionProps) => {
-  const { user, handlers, loading } = useCardOptionController();
+  const { state, actions } = useHomeCardOptionViewModel();
 
   const {
     editPress,
@@ -17,11 +13,11 @@ export const CardOption = ({ card }: CardOptionProps) => {
     previewPress,
     autoChangePress,
     changePhonePress,
-  } = handlers;
+  } = actions;
 
   return (
     <View style={styles.container}>
-      {loading && <Loading />}
+      {state.loading && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.row}>
           <PressableButton
@@ -32,7 +28,7 @@ export const CardOption = ({ card }: CardOptionProps) => {
           />
         </View>
         <View style={styles.row}>
-          {user.phone !== card.phone ? (
+          {state.user.phone !== card.phone ? (
             <PressableButton
               onPress={changePhonePress}
               title="내 번호로 변경"

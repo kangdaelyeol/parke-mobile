@@ -6,8 +6,9 @@ import {
   useUserContext,
 } from '@/contexts';
 import { cardService, userService } from '@/services';
+import { CardOptionViewModel } from '@home/types';
 
-export const useCardOptionController = () => {
+export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
   const { selectedCardIdx } = useCardSliderContext();
   const { cardSettingController } = useCardSettingContext();
   const { user, setCards, cards } = useUserContext();
@@ -15,11 +16,11 @@ export const useCardOptionController = () => {
 
   const selectedCard = cards[selectedCardIdx];
 
-  const handlers = {
+  const actions = {
     editPress: () => {
       cardSettingController.showSetting(selectedCardIdx);
     },
-    deletePress: async () => {
+    deletePress: () => {
       Alert.alert('Parke 삭제', '삭제하시겠습니까? - (재등록 가능)', [
         {
           text: '삭제',
@@ -82,5 +83,5 @@ export const useCardOptionController = () => {
     },
   };
 
-  return { user, handlers, loading };
+  return { state: { user, loading }, actions };
 };
