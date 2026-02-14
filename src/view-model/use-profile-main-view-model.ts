@@ -1,20 +1,20 @@
 import { useUserContext } from '@/contexts';
 import { ProfileStackNavigationProp } from '@/navigation/types';
-import { ProfileViewModel } from '@/screens/profile/types';
 import { userService } from '@/services';
 import { logout } from '@react-native-seoul/kakao-login';
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-export const useProfileViewModel = (
-  navigation: ProfileStackNavigationProp,
-): ProfileViewModel => {
+export const useProfileMainViewModel = () => {
   const { user, setUser } = useUserContext();
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
 
-  const mainActions = {
+  const navigation = useNavigation<ProfileStackNavigationProp>();
+
+  const actions = {
     phoneInput: (val: string) => {
       setPhone(val.replace(/[^0-9]/gi, ''));
     },
@@ -44,7 +44,7 @@ export const useProfileViewModel = (
             setLoading(true);
             try {
               await logout();
-              return navigation.replace('Login');
+              return navigation.navigate('Login');
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
               return setLoading(false);
@@ -79,24 +79,12 @@ export const useProfileViewModel = (
     },
   };
 
-  const headerActions = {
-    backPress: () => {
-      navigation.goBack();
-    },
-  };
-
   return {
-    main: {
-      state: {
-        loading,
-        nickname,
-        phone,
-      },
-      actions: mainActions,
+    state: {
+      loading,
+      nickname,
+      phone,
     },
-    header: {
-      state: {},
-      actions: headerActions,
-    },
+    actions: actions,
   };
 };

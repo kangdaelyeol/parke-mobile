@@ -1,14 +1,10 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { HeaderViewModel } from '@profile/types';
+import { useProfileHeaderViewModel } from '@/view-model';
 
-interface Props {
-  viewModel: HeaderViewModel;
-}
-
-export const Header = ({ viewModel }: Props) => {
-  const { actions } = viewModel;
+export const Header = () => {
+  const { actions } = useProfileHeaderViewModel();
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -18,9 +14,7 @@ export const Header = ({ viewModel }: Props) => {
               name="angle-left"
               iconStyle="solid"
               size={30}
-              style={{
-                color: pressed ? '#666' : '#ebebeb',
-              }}
+              style={[styles.btn, pressed && styles.btnPressed]}
             />
           )}
         </Pressable>
@@ -53,5 +47,11 @@ const styles = StyleSheet.create({
     maxWidth: 360,
     marginHorizontal: 'auto',
     paddingBottom: 15,
+  },
+  btn: {
+    color: '#666',
+  },
+  btnPressed: {
+    color: '#ebebeb',
   },
 });

@@ -2,14 +2,10 @@ import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FocusableInput, Loading, PressableButton } from '@/components';
 import { convertPhone } from '@/helpers';
-import { MainViewModel } from '@profile/types';
+import { useProfileMainViewModel } from '@/view-model';
 
-interface Props {
-  viewModel: MainViewModel;
-}
-
-export const Main = ({ viewModel }: Props) => {
-  const { state, actions } = viewModel;
+export const Main = () => {
+  const { state, actions } = useProfileMainViewModel();
   return (
     <View>
       <View style={styles.wrapper}>

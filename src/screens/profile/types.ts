@@ -14,16 +14,10 @@ interface MainState {
   phone: string;
 }
 
-export type HeaderViewModel = ViewModel<
-  {},
-  {
-    backPress: () => void;
-  }
->;
+interface HeaderActions {
+  backPress: () => void;
+}
+
+export type HeaderViewModel = ViewModel<{}, HeaderActions>;
 
 export type MainViewModel = ViewModel<MainState, MainActions>;
-
-export interface ProfileViewModel {
-  main: MainViewModel;
-  header: HeaderViewModel;
-}

@@ -1,20 +1,13 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { ProfileStackNavigationProp } from '@/navigation/types';
 import { Main, Header } from '@profile/components';
-import { UseProfileViewModel } from '@/view-model';
 
-export default function ProfileScreen({
-  navigation,
-}: {
-  navigation: ProfileStackNavigationProp;
-}) {
-  const viewModel = UseProfileViewModel(navigation);
+export default function ProfileScreen() {
 
   return (
     <View style={styles.container}>
-      <Header viewModel={viewModel.header} />
-      <Main viewModel={viewModel.main} />
+      <Header />
+      <Main  />
     </View>
   );
 }
