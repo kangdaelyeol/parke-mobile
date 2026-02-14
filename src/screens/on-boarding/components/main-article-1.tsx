@@ -1,10 +1,9 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { OnBoardingIcon1_1 } from '@/assets/illustrations';
 
 export const MainArticle1 = () => {
-  const DEVICE_WIDTH = Dimensions.get('window').width;
   return (
-    <View style={[{ width: DEVICE_WIDTH }]}>
+    <View style={styles.container}>
       <OnBoardingIcon1_1 style={styles.onBoardingIllustrator1} width={350} />
       <View style={styles.textContainer}>
         <Text style={styles.title}>가족이 함께 쓰는 차량, 전화번호는?</Text>
@@ -17,6 +16,9 @@ export const MainArticle1 = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
   textContainer: {
     marginTop: 150,
     alignItems: 'center',

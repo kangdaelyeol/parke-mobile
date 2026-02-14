@@ -1,15 +1,10 @@
-import { Dimensions, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { OnBoardingIcon2 } from '@/assets/illustrations';
 
 export const MainArticle2 = () => {
-  const DEVICE_WIDTH = Dimensions.get('window').width;
   return (
-    <View style={[{ width: DEVICE_WIDTH }, styles.container]}>
-      <OnBoardingIcon2
-        width={DEVICE_WIDTH * 0.7}
-        height={290}
-        style={styles.illustrator}
-      />
+    <View style={styles.container}>
+      <OnBoardingIcon2 width={350} height={290} style={styles.illustrator} />
       <Text style={styles.title}>
         QR 스캔시 운전자에 맞는{'\n'}번호 자동 전환
       </Text>
@@ -22,9 +17,10 @@ export const MainArticle2 = () => {
 };
 
 const styles = StyleSheet.create({
-  container: { alignItems: 'center' },
+  container: { alignItems: 'center', width: '100%' },
   illustrator: {
     marginTop: 50,
+    marginHorizontal: 'auto',
   },
   title: {
     color: 'white',
