@@ -8,40 +8,42 @@ export const Footer = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.pageIndicator}>
-        {Array.from({ length: PAGE_COUNT }, (_, idx) =>
-          state.pageIdx === idx + 1 ? (
-            <Text
-              onPress={() => actions.dotPress(idx)}
-              key={idx}
-              style={styles.activeDot}
-            />
-          ) : (
-            <Text
-              onPress={() => actions.dotPress(idx)}
-              key={idx}
-              style={styles.inActiveDot}
-            />
-          ),
+      <View style={styles.wrapper}>
+        <View style={styles.pageIndicator}>
+          {Array.from({ length: PAGE_COUNT }, (_, idx) =>
+            state.pageIdx === idx + 1 ? (
+              <Text
+                onPress={() => actions.dotPress(idx)}
+                key={idx}
+                style={styles.activeDot}
+              />
+            ) : (
+              <Text
+                onPress={() => actions.dotPress(idx)}
+                key={idx}
+                style={styles.inActiveDot}
+              />
+            ),
+          )}
+        </View>
+        {state.pageIdx < PAGE_COUNT ? (
+          <PressableButton
+            title="다음"
+            onPress={actions.nextPress}
+            background={['#ffffff', '#d5d5d5']}
+            textStyle={styles.nextBtnText}
+            style={styles.btn}
+          />
+        ) : (
+          <PressableButton
+            title="시작하기"
+            onPress={actions.startPress}
+            background={['#53c79c', '#5cdeae']}
+            textStyle={styles.startBtnText}
+            style={[styles.startBtn, styles.btn]}
+          />
         )}
       </View>
-      {state.pageIdx < PAGE_COUNT ? (
-        <PressableButton
-          title="다음"
-          onPress={actions.nextPress}
-          background={['#ffffff', '#d5d5d5']}
-          textStyle={styles.nextBtnText}
-          style={styles.btn}
-        />
-      ) : (
-        <PressableButton
-          title="시작하기"
-          onPress={actions.startPress}
-          background={['#53c79c', '#5cdeae']}
-          textStyle={styles.startBtnText}
-          style={[styles.startBtn, styles.btn]}
-        />
-      )}
     </View>
   );
 };
@@ -52,6 +54,11 @@ const styles = StyleSheet.create({
     height: 300,
     paddingBottom: 20,
     paddingHorizontal: 30,
+  },
+  wrapper: {
+    width: '100%',
+    maxWidth: 360,
+    marginHorizontal: 'auto',
   },
   pageIndicator: {
     flexDirection: 'row',
