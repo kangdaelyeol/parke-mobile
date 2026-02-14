@@ -31,10 +31,20 @@ interface CardOptionActions {
   changePhonePress: () => Promise<void>;
 }
 
-export interface CardOptionProps {
-  card: CardDto;
+interface CardState {
+  animatedStyle: StyleProp<ViewStyle>;
+}
+
+interface CardActions {
+  cardPress: () => void;
 }
 
 export type MainViewModel = ViewModel<MainState, MainActions>;
 
 export type CardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
+
+export type CardViewModel = ViewModel<CardState, CardActions>;
+
+export interface CardOptionProps {
+  card: CardDto;
+}

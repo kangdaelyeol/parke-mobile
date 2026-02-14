@@ -1,43 +1,18 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { LogoText } from '@/assets/logo';
 import { convertPhone } from '@/helpers';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
+import { useHomeCardViewModel } from '@/view-model';
 
 export const Card = ({ title, phone, idx, message, autoChange }: any) => {
-  const { settingCard } = useCardSettingContext();
-  const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const isSelected = idx === selectedCardIdx;
-  const animatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
-      transform: [
-        {
-          translateY: withTiming(isSelected ? 0 : 15, {
-            easing: Easing.out(Easing.cubic),
-            duration: 150,
-          }),
-        },
-      ],
-    };
-  });
-
-  const onCardPressed = () => {
-    if (settingCard !== -1) return;
-
-    if (!isSelected) sliderController.goToIdx(idx);
-  };
+  const { state, actions } = useHomeCardViewModel(idx);
 
   return (
-    <Pressable onPress={onCardPressed}>
-      <Animated.View style={[styles.container, animatedStyle]}>
+    <Pressable onPress={actions.cardPress}>
+      <Animated.View style={[styles.container, state.animatedStyle]}>
         <View style={styles.bottomBackground} />
         <View style={styles.wrapper}>
           <LogoText width={50} height={45} />
