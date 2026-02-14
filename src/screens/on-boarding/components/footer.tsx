@@ -1,63 +1,46 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { useOnBoardingFooterController } from '@/controllers';
+import { useOnBoardingFooterViewModel } from '@/view-model';
 import { PAGE_COUNT } from '@on-boarding/constants';
+import { PressableButton } from '@/components';
 
 export const Footer = () => {
-  const {
-    pageIdx,
-    pressed,
-    onBtnPressedIn,
-    onBtnPressedOut,
-    goToMain,
-    goToThisPage,
-    goToNextPage,
-  } = useOnBoardingFooterController();
+  const { state, actions } = useOnBoardingFooterViewModel();
 
   return (
     <View style={styles.container}>
       <View style={styles.pageIndicator}>
         {Array.from({ length: PAGE_COUNT }, (_, idx) =>
-          pageIdx === idx + 1 ? (
+          state.pageIdx === idx + 1 ? (
             <Text
-              onPress={() => goToThisPage(idx)}
+              onPress={() => actions.dotPress(idx)}
               key={idx}
               style={styles.activeDot}
             />
           ) : (
             <Text
-              onPress={() => goToThisPage(idx)}
+              onPress={() => actions.dotPress(idx)}
               key={idx}
               style={styles.inActiveDot}
             />
           ),
         )}
       </View>
-      {pageIdx < PAGE_COUNT ? (
-        <Text
-          selectable={false}
-          suppressHighlighting
-          onPress={goToNextPage}
-          onPressIn={onBtnPressedIn}
-          onPressOut={onBtnPressedOut}
-          style={[styles.btn, styles.nextBtn, pressed && styles.pressedNextBtn]}
-        >
-          다음
-        </Text>
+      {state.pageIdx < PAGE_COUNT ? (
+        <PressableButton
+          title="다음"
+          onPress={actions.nextPress}
+          background={['#ffffff', '#d5d5d5']}
+          textStyle={styles.nextBtnText}
+          style={styles.btn}
+        />
       ) : (
-        <Text
-          suppressHighlighting
-          selectable={false}
-          onPress={goToMain}
-          onPressIn={onBtnPressedIn}
-          onPressOut={onBtnPressedOut}
-          style={[
-            styles.btn,
-            styles.startBtn,
-            pressed && styles.pressedStartBtn,
-          ]}
-        >
-          시작하기
-        </Text>
+        <PressableButton
+          title="시작하기"
+          onPress={actions.startPress}
+          background={['#53c79c', '#5cdeae']}
+          textStyle={styles.startBtnText}
+          style={[styles.startBtn, styles.btn]}
+        />
       )}
     </View>
   );
@@ -76,29 +59,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     marginBottom: 40,
   },
-  btn: {
-    width: '100%',
-    fontSize: 18,
-    paddingVertical: 28,
-    fontWeight: 600,
-    textAlign: 'center',
-    marginHorizontal: 'auto',
-    borderRadius: 20,
-  },
-  nextBtn: {
-    backgroundColor: 'white',
-  },
-  pressedNextBtn: {
-    backgroundColor: '#d5d5d5',
-  },
-  startBtn: {
-    backgroundColor: '#5cdeae',
-    boxShadow: '0px 0px 20px #5cdeae',
-    color: 'white',
-  },
-  pressedStartBtn: {
-    backgroundColor: '#53c79c',
-  },
   activeDot: {
     width: 13,
     height: 13,
@@ -111,5 +71,19 @@ const styles = StyleSheet.create({
     height: 13,
     borderRadius: '50%',
     backgroundColor: '#555555',
+  },
+  btn: {
+    marginBottom: 10,
+    paddingVertical: 4,
+  },
+  nextBtnText: {
+    color: 'black',
+  },
+  startBtn: {
+    marginBottom: 10,
+    boxShadow: '0px 0px 20px #5cdeae',
+  },
+  startBtnText: {
+    color: 'white',
   },
 });

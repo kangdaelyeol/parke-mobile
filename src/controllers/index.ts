@@ -1,6 +1,5 @@
 export * from './use-app';
 export * from './use-card-option-controller';
-export * from './use-on-boarding-footer-controller';
 export * from './use-scan-complete';
 export * from './use-search-ble';
 export * from './use-setting';
