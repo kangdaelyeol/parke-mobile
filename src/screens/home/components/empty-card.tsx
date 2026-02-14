@@ -1,41 +1,16 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
-import Animated, {
-  useAnimatedStyle,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useNavigation } from '@react-navigation/native';
-import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
-import { HomeStackNavigationProp } from '@/navigation/types';
+import { useHomeEmptyCardViewModel } from '@/view-model';
 
 export const EmptyCard = ({ idx }: { idx: number }) => {
-  const navigation = useNavigation<HomeStackNavigationProp>();
-  const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const { settingCard } = useCardSettingContext();
-
-  const animatedStyle = useAnimatedStyle(() => {
-    const isSelected = idx === selectedCardIdx;
-    return {
-      opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
-      transform: [
-        { translateY: withTiming(isSelected ? 0 : 15, { duration: 200 }) },
-      ],
-    };
-  });
-
-  const onCardPressed = () => {
-    if (settingCard !== -1) return;
-    if (selectedCardIdx === idx) navigation.replace('SearchBLE');
-    else {
-      sliderController.goToIdx(idx);
-    }
-  };
+  const { state, actions } = useHomeEmptyCardViewModel(idx);
 
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
+    <Animated.View style={[styles.container, state.animatedStyle]}>
       <View style={styles.iconContainer}>
         <View style={styles.emptyCardIcon}>
           <FontAwesome6
@@ -46,7 +21,7 @@ export const EmptyCard = ({ idx }: { idx: number }) => {
           />
         </View>
       </View>
-      <Pressable onPress={onCardPressed}>
+      <Pressable onPress={actions.cardPress}>
         {({ pressed }) => {
           pressed && ReactNativeHapticFeedback.trigger('selection');
           return (

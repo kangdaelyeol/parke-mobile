@@ -5,4 +5,5 @@ export * from './use-on-boarding-footer-view-model';
 export * from './use-on-boarding-slider-view-model';
 export * from './use-home-main-view-model';
 export * from './use-home-card-option-view-model';
-export * from './use-home-card-view-model'
+export * from './use-home-card-view-model';
+export * from './use-home-empty-card-view-model';
