@@ -2,15 +2,10 @@ import React from 'react';
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
-import { LoginStackNavigationProp } from '@/navigation/types';
 import { UseLoginViewModel } from '@/view-model';
 
-export default function LoginScreen({
-  navigation,
-}: {
-  navigation: LoginStackNavigationProp;
-}) {
-  const { state, actions } = UseLoginViewModel({ navigation });
+export default function LoginScreen() {
+  const { state, actions } = UseLoginViewModel();
 
   return (
     <View style={styles.container}>

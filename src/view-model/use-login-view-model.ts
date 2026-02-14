@@ -3,21 +3,17 @@ import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
 import { userService } from '@/services';
+import { useNavigation } from '@react-navigation/native';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
-interface UseLoginControllerProps {
-  navigation: LoginStackNavigationProp;
-}
-
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
-export const UseLoginViewModel = ({
-  navigation,
-}: UseLoginControllerProps): LoginViewModel => {
+export const UseLoginViewModel = (): LoginViewModel => {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<LoginStackNavigationProp>();
 
   useEffect(() => {
     (async () => {
@@ -27,7 +23,7 @@ export const UseLoginViewModel = ({
       const user = await userService.get(kakaoProfile.email);
       if (!user) return setLoading(false);
       setUser(user);
-      navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+      navigation.replace('Home');
     })();
   }, [getKakaoProfile, navigation, setUser]);
 
@@ -48,16 +44,10 @@ export const UseLoginViewModel = ({
         }
 
         if (isUserDto(userRes)) setUser(userRes);
-        return navigation.reset({
-          index: 0,
-          routes: [{ name: 'Init' }],
-        });
+        return navigation.replace('Init');
       } else {
         setUser(user);
-        return navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
+        return navigation.replace('Home');
       }
     }
     setLoading(false);
