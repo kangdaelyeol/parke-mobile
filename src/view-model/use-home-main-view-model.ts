@@ -7,7 +7,7 @@ import {
 } from '@/contexts';
 import { cardService } from '@/services';
 import { CardDto } from '@/domain/card';
-import { MainViewModel } from '@/screens/home/types';
+import { MainViewModel } from '@home/types';
 
 const isCardList = (v: any): v is CardDto[] => {
   return v !== null;

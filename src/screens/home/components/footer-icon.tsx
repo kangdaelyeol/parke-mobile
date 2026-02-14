@@ -5,7 +5,13 @@ import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
 const ICON_COLOR = '#e7e7e7';
 const ICON_COLOR_PRESSED = '#f3f3f3';
 
-export const FooterIcon=({ name, iconName, onPress }: any) =>{
+interface FooterProps {
+  label: string;
+  iconName: any;
+  onPress: () => void;
+}
+
+export const FooterIcon = ({ label, iconName, onPress }: FooterProps) => {
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (
@@ -26,13 +32,13 @@ export const FooterIcon=({ name, iconName, onPress }: any) =>{
               styles.title,
             ]}
           >
-            {name}
+            {label}
           </Text>
         </View>
       )}
     </Pressable>
   );
-}
+};
 
 const styles = StyleSheet.create({
   icon: {

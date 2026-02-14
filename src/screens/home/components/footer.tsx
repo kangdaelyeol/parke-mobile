@@ -3,37 +3,16 @@ import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FooterIcon } from '@home/components';
 import { HomeStackNavigationProp } from '@/navigation/types';
+import { footerIconList } from '@home/config/footer.config';
 
 export const Footer = () => {
   const navigation = useNavigation<HomeStackNavigationProp>();
 
-  const IconList = [
-    {
-      name: 'My',
-      iconName: 'user',
-      onPress: () => {
-        navigation.navigate('Profile');
-      },
-    },
-    {
-      name: 'Scan',
-      iconName: 'qrcode',
-      onPress: () => navigation.navigate('SearchBLE'),
-    },
-    {
-      name: '설정',
-      iconName: 'gear',
-      onPress: () => {
-        navigation.navigate('Setting');
-      },
-    },
-  ];
-
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        {IconList.map((icon, idx) => (
-          <FooterIcon {...icon} key={idx} />
+        {footerIconList.map(icon => (
+          <FooterIcon {...icon} onPress={() => navigation.navigate(icon.key)} />
         ))}
       </View>
     </View>
