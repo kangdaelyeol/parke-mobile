@@ -39,11 +39,31 @@ interface CardActions {
   cardPress: () => void;
 }
 
+interface SettingCardState {
+  title: string;
+  message: string;
+  phone: string;
+  animatedStyle: StyleProp<ViewStyle>;
+}
+
+interface SettingCardActions {
+  savePress: () => Promise<void>;
+  cancelPress: () => void;
+  titleInput: (val: string) => void;
+  messageInput: (val: string) => void;
+  phoneInput: (val: string) => void;
+}
+
 export type MainViewModel = ViewModel<MainState, MainActions>;
 
 export type CardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
 
 export type CardViewModel = ViewModel<CardState, CardActions>;
+
+export type SettingCardModelView = ViewModel<
+  SettingCardState,
+  SettingCardActions
+>;
 
 export interface CardOptionProps {
   card: CardDto;

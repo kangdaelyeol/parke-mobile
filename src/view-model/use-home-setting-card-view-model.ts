@@ -9,10 +9,13 @@ import {
   useCardSliderContext,
   useUserContext,
 } from '@/contexts';
-import { CardDto } from '@/domain/card/card-dto';
 import { cardService } from '@/services';
+import { CardDto } from '@/domain/card';
+import { SettingCardModelView } from '@/screens/home/types';
 
-export const useSettingCardController = ({ card }: { card: CardDto }) => {
+export const useHomeSettingCardViewModel = (
+  card: CardDto,
+): SettingCardModelView => {
   const { cardSettingController } = useCardSettingContext();
   const { selectedCardIdx } = useCardSliderContext();
   const { cards, setCards } = useUserContext();
@@ -31,7 +34,7 @@ export const useSettingCardController = ({ card }: { card: CardDto }) => {
     opacityVal.value = 1;
   }, [opacityVal]);
 
-  const handlers = {
+  const actions = {
     savePress: async () => {
       cardSettingController.hideSetting();
       const res = await cardService.update({
@@ -54,20 +57,21 @@ export const useSettingCardController = ({ card }: { card: CardDto }) => {
         // Display Error
       }
     },
-
     cancelPress: () => {
       cardSettingController.hideSetting();
     },
+    titleInput: (val: string) => setTitle(val),
+    messageInput: (val: string) => setMessage(val),
+    phoneInput: (val: string) => setPhone(val),
   };
 
   return {
-    title,
-    setTitle,
-    message,
-    setMessage,
-    phone,
-    setPhone,
-    animatedStyle,
-    handlers,
+    state: {
+      title,
+      message,
+      phone,
+      animatedStyle,
+    },
+    actions,
   };
 };

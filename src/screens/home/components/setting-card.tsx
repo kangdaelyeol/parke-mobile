@@ -4,40 +4,31 @@ import { TextInput } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { convertPhone } from '@/helpers';
 import { CardDto } from '@/domain/card/card-dto';
-import { useSettingCardController } from '@/controllers';
+import { useHomeSettingCardViewModel } from '@/view-model';
 
 export const SettingCard = ({ card }: { card: CardDto }) => {
-  const {
-    title,
-    setTitle,
-    message,
-    setMessage,
-    phone,
-    setPhone,
-    animatedStyle,
-    handlers,
-  } = useSettingCardController({ card });
+  const { state, actions } = useHomeSettingCardViewModel(card);
 
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
+    <Animated.View style={[styles.container, state.animatedStyle]}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.text}>Title</Text>
           <TextInput
             placeholder="Name"
-            value={title}
+            value={state.title}
             style={styles.input}
-            onChangeText={setTitle}
+            onChangeText={actions.titleInput}
           />
         </View>
         <View>
           <Text style={styles.text}>Phone</Text>
           <TextInput
             placeholder="010-1234-5678"
-            value={phone}
+            value={state.phone}
             style={styles.input}
             onChangeText={now => {
-              setPhone(convertPhone(now));
+              actions.phoneInput(convertPhone(now));
             }}
           />
         </View>
@@ -45,13 +36,13 @@ export const SettingCard = ({ card }: { card: CardDto }) => {
           <Text style={styles.text}>Message</Text>
           <TextInput
             placeholder="Message"
-            value={message}
+            value={state.message}
             style={styles.input}
-            onChangeText={setMessage}
+            onChangeText={actions.messageInput}
           />
         </View>
         <View style={styles.btnContainer}>
-          <Pressable style={styles.pressable} onPress={handlers.savePress}>
+          <Pressable style={styles.pressable} onPress={actions.savePress}>
             {({ pressed }) => (
               <Text
                 style={[
@@ -64,7 +55,7 @@ export const SettingCard = ({ card }: { card: CardDto }) => {
               </Text>
             )}
           </Pressable>
-          <Pressable style={styles.pressable} onPress={handlers.cancelPress}>
+          <Pressable style={styles.pressable} onPress={actions.cancelPress}>
             {({ pressed }) => (
               <Text
                 style={[
