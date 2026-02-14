@@ -3,10 +3,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from '@/navigation/root-navigator';
 import { useAppController } from '@/controllers/use-app';
-import {
-  OnBoardContextProvider,
-  useOnBoardContext,
-} from '@/contexts/on-board-context';
 import { UserContextProvider } from '@/contexts';
 import { AuthContextProvider } from '@/contexts/auth-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -18,16 +14,12 @@ function App() {
   return (
     <AuthContextProvider>
       <UserContextProvider>
-        <OnBoardContextProvider>
-          <SafeAreaProvider>
-            <StatusBar
-              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            />
-            <GestureHandlerRootView>
-              <AppContent />
-            </GestureHandlerRootView>
-          </SafeAreaProvider>
-        </OnBoardContextProvider>
+        <SafeAreaProvider>
+          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+          <GestureHandlerRootView>
+            <AppContent />
+          </GestureHandlerRootView>
+        </SafeAreaProvider>
       </UserContextProvider>
     </AuthContextProvider>
   );
@@ -35,9 +27,6 @@ function App() {
 
 function AppContent() {
   useAppController();
-  const { loading } = useOnBoardContext();
-
-  if (loading) return null;
 
   return (
     <NavigationContainer>

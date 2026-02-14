@@ -1,14 +1,28 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Footer, Header, Slider } from '@/screens/on-boarding/components';
+import { OnBoardingContextProvider } from '@/contexts';
+import { useOnBoardingViewModel } from '@/view-model';
+import { Loading } from '@/components';
 
-export default function OnBoardingScreen() {
+const OnBoarding = () => {
+  const { state } = useOnBoardingViewModel();
+
   return (
     <View style={styles.container}>
+      {state.loading && <Loading />}
       <Header />
       <Slider />
       <Footer />
     </View>
+  );
+};
+
+export default function OnBoardingScreen() {
+  return (
+    <OnBoardingContextProvider>
+      <OnBoarding />
+    </OnBoardingContextProvider>
   );
 }
 
