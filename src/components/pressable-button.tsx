@@ -5,6 +5,7 @@ import {
   StyleProp,
   StyleSheet,
   Text,
+  TextStyle,
   View,
   ViewStyle,
 } from 'react-native';
@@ -14,6 +15,7 @@ interface PressableButtonProps {
   background: ColorValue[];
   title: string;
   style?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 }
 
 export const PressableButton = ({
@@ -21,18 +23,20 @@ export const PressableButton = ({
   background,
   title,
   style,
+  textStyle,
 }: PressableButtonProps) => {
   return (
-    <Pressable style={style} onPress={onPress}>
+    <Pressable onPress={onPress}>
       {({ pressed }) => (
         <View
           style={[
             styles.button,
             { backgroundColor: background[0] },
             pressed && { backgroundColor: background[1] },
+            style,
           ]}
         >
-          <Text style={styles.buttonText}>{title}</Text>
+          <Text style={[styles.buttonText, textStyle]}>{title}</Text>
         </View>
       )}
     </Pressable>
