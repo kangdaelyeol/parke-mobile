@@ -16,6 +16,7 @@ interface PressableButtonProps {
   title: string;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
+  pressableStyle?:StyleProp<ViewStyle>
 }
 
 export const PressableButton = ({
@@ -24,9 +25,10 @@ export const PressableButton = ({
   title,
   style,
   textStyle,
+  pressableStyle
 }: PressableButtonProps) => {
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={onPress} style={pressableStyle}>
       {({ pressed }) => (
         <View
           style={[

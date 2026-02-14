@@ -25,7 +25,7 @@ export const CardOption = ({ card }: CardOptionProps) => {
       <View style={styles.wrapper}>
         <View style={styles.row}>
           <PressableButton
-            style={styles.pressable}
+            pressableStyle={styles.pressable}
             onPress={autoChangePress}
             title="자동변경 on/off"
             background={['#242431', '#303042']}
@@ -37,7 +37,7 @@ export const CardOption = ({ card }: CardOptionProps) => {
               onPress={changePhonePress}
               title="내 번호로 변경"
               background={['#242431', '#303042']}
-              style={styles.pressable}
+              pressableStyle={styles.pressable}
             />
           ) : (
             <Text
@@ -52,7 +52,7 @@ export const CardOption = ({ card }: CardOptionProps) => {
             onPress={previewPress}
             title="미리보기"
             background={['#242431', '#303042']}
-            style={styles.pressable}
+            pressableStyle={styles.pressable}
           />
         </View>
         <View style={styles.row}>
@@ -60,13 +60,13 @@ export const CardOption = ({ card }: CardOptionProps) => {
             onPress={editPress}
             title="수정"
             background={['#0098af', '#007e92']}
-            style={styles.pressable}
+            pressableStyle={styles.pressable}
           />
           <PressableButton
             onPress={deletePress}
             title="삭제"
             background={['#a53737', '#bc3f3f']}
-            style={styles.pressable}
+            pressableStyle={styles.pressable}
           />
         </View>
       </View>
@@ -106,5 +106,7 @@ const styles = StyleSheet.create({
   },
   pressable: {
     flex: 1,
+    flexShrink: 1,
+    flexBasis: 0,
   },
 });
