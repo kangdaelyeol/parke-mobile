@@ -2,52 +2,45 @@ import React, {
   createContext,
   PropsWithChildren,
   useContext,
-  useEffect,
   useState,
 } from 'react';
 import { SharedValue, useSharedValue } from 'react-native-reanimated';
-import { cache } from '@/storage';
 
-export interface OnBoardContextValueType {
+export interface OnBoardingContextProps {
   pageIdx: number;
   setPageIdx: React.Dispatch<React.SetStateAction<number>>;
   sliderTranslateX: SharedValue<number>;
   loading: boolean;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
   hasSeenOnBoarding: boolean;
   setHasSeenOnBoarding: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const onBoardContext = createContext<OnBoardContextValueType>(
-  {} as OnBoardContextValueType,
+const onBoardingContext = createContext<OnBoardingContextProps>(
+  {} as OnBoardingContextProps,
 );
 
-export const OnBoardContextProvider = ({ children }: PropsWithChildren) => {
-  const sliderTranslateX = useSharedValue<number>(1);
+export const OnBoardingContextProvider = ({ children }: PropsWithChildren) => {
+  const sliderTranslateX = useSharedValue<number>(0);
   const [pageIdx, setPageIdx] = useState(1);
   const [loading, setLoading] = useState(true);
   const [hasSeenOnBoarding, setHasSeenOnBoarding] = useState(false);
 
-  useEffect(() => {
-    const hasSeen = cache.getHasSeenOnBoarding();
-
-    setHasSeenOnBoarding(hasSeen);
-    setLoading(false);
-  }, []);
-
-  const initialValue: OnBoardContextValueType = {
+  const initialValue = {
     pageIdx,
     setPageIdx,
     sliderTranslateX,
     loading,
+    setLoading,
     hasSeenOnBoarding,
     setHasSeenOnBoarding,
   };
 
   return (
-    <onBoardContext.Provider value={initialValue}>
+    <onBoardingContext.Provider value={initialValue}>
       {children}
-    </onBoardContext.Provider>
+    </onBoardingContext.Provider>
   );
 };
 
-export const useOnBoardContext = () => useContext(onBoardContext);
+export const useOnBoardingContext = () => useContext(onBoardingContext);
