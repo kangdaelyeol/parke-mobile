@@ -3,10 +3,10 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { convertPhone } from '@/helpers';
-import { CardDto } from '@/domain/card/card-dto';
 import { useHomeSettingCardViewModel } from '@/view-model';
+import { SettingCardProps } from '@home/types';
 
-export const SettingCard = ({ card }: { card: CardDto }) => {
+export const SettingCard = ({ card }: SettingCardProps) => {
   const { state, actions } = useHomeSettingCardViewModel(card);
 
   return (

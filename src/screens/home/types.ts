@@ -68,3 +68,25 @@ export type SettingCardModelView = ViewModel<
 export interface CardOptionProps {
   card: CardDto;
 }
+
+export interface CardProps {
+  title: string;
+  phone: string;
+  idx: number;
+  message: string;
+  autoChange: boolean;
+}
+
+export interface EmptyCardProps {
+  idx: number;
+}
+
+export interface FooterProps {
+  label: string;
+  iconName: any;
+  onPress: () => void;
+}
+
+export interface SettingCardProps {
+  card: CardDto
+}

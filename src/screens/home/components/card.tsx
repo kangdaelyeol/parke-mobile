@@ -6,8 +6,9 @@ import { LogoText } from '@/assets/logo';
 import { convertPhone } from '@/helpers';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useHomeCardViewModel } from '@/view-model';
+import { CardProps } from '@home/types';
 
-export const Card = ({ title, phone, idx, message, autoChange }: any) => {
+export const Card = ({ title, phone, idx, message, autoChange }: CardProps) => {
   const { state, actions } = useHomeCardViewModel(idx);
 
   return (
