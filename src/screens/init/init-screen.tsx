@@ -1,21 +1,15 @@
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
-import { useInitController } from '@/controllers';
-import { convertPhone } from '@/helpers';
 import { FocusableInput, Loading } from '@/components';
-import { InitStactNavigationProp } from '@/navigation/types';
+import { useInitViewModel } from '@/view-model';
 
-export default function InitScreen({
-  navigation,
-}: {
-  navigation: InitStactNavigationProp;
-}) {
-  const { handlers, nickname, phone, loading } = useInitController(navigation);
+export default function InitScreen() {
+  const { state, actions } = useInitViewModel();
 
   return (
     <View style={styles.container}>
-      {loading && <Loading />}
+      {state.loading && <Loading />}
       <View style={styles.wrapper}>
         <View style={styles.logoSection}>
           <LogoIcon width={40} height={40} />
@@ -26,19 +20,19 @@ export default function InitScreen({
           <View style={styles.inputSection}>
             <FocusableInput
               title="닉네임"
-              value={nickname}
-              onChangeText={handlers.nicknameInput}
+              value={state.nickname}
+              onChangeText={actions.nicknameInput}
               placeholder="닉네임"
             />
             <FocusableInput
               title="연락처"
               placeholder="연락처"
-              value={convertPhone(phone)}
-              onChangeText={handlers.phoneInput}
+              value={state.phone}
+              onChangeText={actions.phoneInput}
             />
           </View>
           <View style={styles.buttonSection}>
-            <Pressable onPress={handlers.savePress} style={styles.pressable}>
+            <Pressable onPress={actions.savePress} style={styles.pressable}>
               {({ pressed }) => (
                 <View
                   style={[
@@ -51,7 +45,7 @@ export default function InitScreen({
                 </View>
               )}
             </Pressable>
-            <Pressable onPress={handlers.skipPress} style={styles.pressable}>
+            <Pressable onPress={actions.skipPress} style={styles.pressable}>
               {({ pressed }) => (
                 <View
                   style={[

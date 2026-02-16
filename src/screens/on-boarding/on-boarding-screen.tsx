@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Footer, Header, Slider } from '@/screens/on-boarding/components';
+import { Footer, Header, Slider } from '@on-boarding/components';
 import { OnBoardingContextProvider } from '@/contexts';
 import { useOnBoardingViewModel } from '@/view-model';
 import { Loading } from '@/components';

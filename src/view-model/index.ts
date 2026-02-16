@@ -9,3 +9,4 @@ export * from './use-home-empty-card-view-model';
 export * from './use-home-setting-card-view-model';
 export * from './use-profile-main-view-model';
 export * from './use-profile-header-view-model';
+export * from './use-init-view-model';

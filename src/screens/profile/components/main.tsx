@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FocusableInput, Loading, PressableButton } from '@/components';
-import { convertPhone } from '@/helpers';
 import { useProfileMainViewModel } from '@/view-model';
 
 export const Main = () => {
@@ -21,7 +20,7 @@ export const Main = () => {
             title="연락처"
             placeholder="연락처"
             onChangeText={actions.phoneInput}
-            value={convertPhone(state.phone)}
+            value={state.phone}
           />
         </View>
         <View style={styles.buttonSection}>

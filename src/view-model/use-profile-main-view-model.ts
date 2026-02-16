@@ -1,6 +1,8 @@
 import { useUserContext } from '@/contexts';
+import { convertPhone } from '@/helpers';
 import { ProfileStackNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
+import { extractNumber } from '@/utils';
 import { logout } from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
@@ -16,7 +18,7 @@ export const useProfileMainViewModel = () => {
 
   const actions = {
     phoneInput: (val: string) => {
-      setPhone(val.replace(/[^0-9]/gi, ''));
+      setPhone(extractNumber(val));
     },
 
     nicknameInput: (val: string) => setNickname(val),
@@ -83,7 +85,7 @@ export const useProfileMainViewModel = () => {
     state: {
       loading,
       nickname,
-      phone,
+      phone: convertPhone(phone),
     },
     actions: actions,
   };

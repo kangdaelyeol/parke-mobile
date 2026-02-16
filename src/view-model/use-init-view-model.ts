@@ -1,18 +1,23 @@
 import { useUserContext } from '@/contexts';
-import { InitStactNavigationProp } from '@/navigation/types';
+import { convertPhone } from '@/helpers';
+import { InitStackNavigationProp } from '@/navigation/types';
+import { InitViewModel } from '@/screens/init/types';
 import { userService } from '@/services';
+import { extractNumber } from '@/utils';
+import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 
-export const useInitController = (navigation: InitStactNavigationProp) => {
+export const useInitViewModel = (): InitViewModel => {
+  const navigation = useNavigation<InitStackNavigationProp>();
   const { user, setUser } = useUserContext();
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
 
-  const handlers = {
+  const actions = {
     phoneInput: (val: string) => {
-      setPhone(val.replace(/[^0-9]/gi, ''));
+      setPhone(extractNumber(val));
     },
     nicknameInput: (val: string) => setNickname(val),
 
@@ -32,9 +37,11 @@ export const useInitController = (navigation: InitStactNavigationProp) => {
   };
 
   return {
-    handlers,
-    nickname,
-    phone,
-    loading,
+    actions,
+    state: {
+      nickname,
+      phone: convertPhone(phone),
+      loading,
+    },
   };
 };

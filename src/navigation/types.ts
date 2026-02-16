@@ -29,7 +29,7 @@ export type InitStackParamList = {
   Home: undefined;
 };
 
-export type InitStactNavigationProp = NativeStackNavigationProp<
+export type InitStackNavigationProp = NativeStackNavigationProp<
   InitStackParamList,
   'Init'
 >;
