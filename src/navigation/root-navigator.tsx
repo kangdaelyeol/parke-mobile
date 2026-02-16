@@ -4,12 +4,12 @@ import {
   InitScreen,
   LoginScreen,
   ProfileScreen,
+  SettingScreen
 } from '@/screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // ToDo => move to screens dir with renew
 import SearchBLEScreen from '@/components/search-ble-screen';
 import ScanComplete from '@/components/scan-complete-screen';
-import SettingScreen from '@/components/setting-screen';
 
 type RootStackParamList = {
   Home: undefined;
