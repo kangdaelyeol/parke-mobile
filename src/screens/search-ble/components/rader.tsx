@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Circle, Line } from 'react-native-svg';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 const SIZE = width * 0.7;
 const CENTER = SIZE / 2;
 const RADIUS_OUTER = CENTER - 4;
@@ -19,7 +19,7 @@ const DOT_SIZE = 10;
 
 const DELAY = 1300;
 
-export const Rader = () => {
+export const Rader = ({ detected }: { detected: boolean }) => {
   const lineOpacity = useSharedValue(0);
   const lineScale = useSharedValue(0);
   const circleSmallOpacity = useSharedValue(0);
@@ -187,18 +187,20 @@ export const Rader = () => {
             <View style={styles.dot} />
           </Animated.View>
         </Animated.View>
-        <Animated.View style={detectedCircleAnimatedStyle}>
-          <Svg width={SIZE} height={SIZE}>
-            <Circle
-              cx={CENTER}
-              cy={CENTER}
-              r={RADIUS_INNER}
-              stroke="#5ba6ae"
-              strokeWidth="1.5"
-              fill="none"
-            />
-          </Svg>
-        </Animated.View>
+        {detected && (
+          <Animated.View style={detectedCircleAnimatedStyle}>
+            <Svg width={SIZE} height={SIZE}>
+              <Circle
+                cx={CENTER}
+                cy={CENTER}
+                r={RADIUS_INNER}
+                stroke="#5ba6ae"
+                strokeWidth="1.5"
+                fill="none"
+              />
+            </Svg>
+          </Animated.View>
+        )}
       </View>
     </View>
   );
