@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { useSearchBle } from '@/controllers';
 import useHeptic from '@/hooks/use-heptic';
-import { Header, Rader, Title } from '@search-ble/components';
+import { Header, Radar, Title } from '@search-ble/components';
 
 const Test = ({ devices, rssi }: { devices: any; rssi: any }) => {
   return (
@@ -52,7 +52,7 @@ export default function SearchBLEScreen() {
       <Test devices={devices} rssi={rssi} />
       <Header />
       <Title detected={detected} />
-      <Rader detected={detected} />
+      <Radar detected={detected} />
     </View>
   );
 }

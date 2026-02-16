@@ -1,3 +1,3 @@
 export * from './header';
-export * from './rader';
+export * from './radar';
 export * from './title';

@@ -19,7 +19,7 @@ const DOT_SIZE = 10;
 
 const DELAY = 1300;
 
-export const Rader = ({ detected }: { detected: boolean }) => {
+export const Radar = ({ detected }: { detected: boolean }) => {
   const lineOpacity = useSharedValue(0);
   const lineScale = useSharedValue(0);
   const circleSmallOpacity = useSharedValue(0);
