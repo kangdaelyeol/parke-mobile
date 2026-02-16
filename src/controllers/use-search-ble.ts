@@ -8,15 +8,13 @@ import { generateBase64Id, getDeviceId } from '@/helpers';
 import { cache } from '@/storage';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
 
-type ScanStateType = 'NoneScaned' | 'Scaned';
-
 export const useSearchBle = () => {
   // temp - 디바이스 조회 잘 되나 확인하기 위함
   const [devices, setDevices] = useState<any[]>([]);
 
   const [rssi, setRssi] = useState('');
 
-  const [scanState, setScanState] = useState<ScanStateType>('NoneScaned');
+  const [detected, setDetected] = useState(false);
 
   const navigation = useNavigation<SearchBleStackNavigationProp>();
 
@@ -103,5 +101,5 @@ export const useSearchBle = () => {
     navigation.replace('Home');
   };
 
-  return { devices, moveToHome, rssi, scanState, setScanState };
+  return { devices, moveToHome, rssi, detected, setDetected };
 };
