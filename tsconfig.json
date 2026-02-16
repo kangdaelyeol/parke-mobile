@@ -8,7 +8,8 @@
       "@/*": ["src/*"],
       "@home/*": ["src/screens/home/*"],
       "@on-boarding/*": ["src/screens/on-boarding/*"],
-      "@profile/*": ["src/screens/profile/*"]
+      "@profile/*": ["src/screens/profile/*"],
+      "@setting/*": ["src/screens/setting/*"]
     }
   }
 }
