@@ -13,6 +13,7 @@ module.exports = {
           '@on-boarding': './src/screens/on-boarding',
           '@profile': './src/screens/profile',
           '@setting': './src/screens/setting',
+          '@search-ble': './src/screens/search-ble',
         },
         extentions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
