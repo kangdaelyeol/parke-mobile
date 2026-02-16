@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 import { settingService } from '@/services';
-import { useNavigation } from '@react-navigation/native';
 import { manager, stopBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';
+import { SettingMainViewModel } from '@/screens/setting/types';
 
-export const useSetting = () => {
+export const useSettingMainViewModel = (): SettingMainViewModel => {
   const [autoSet, setAutoSet] = useState(false);
   const [notice, setNotice] = useState(false);
   const [active, setActive] = useState(true);
-  const navigation = useNavigation<any>();
 
   // init settings value on UI
   useEffect(() => {
@@ -21,43 +20,42 @@ export const useSetting = () => {
     setActive(settings.active as boolean);
   }, []);
 
-  const onHomeBtnPress = () => {
-    navigation.goBack();
-  };
-
-  const onAutoSetChange = (val: boolean) => {
-    if (val === false) {
-      setNotice(true);
-      settingService.setNotice(true);
-    }
-
-    settingService.setAutoSet(val);
-    setAutoSet(val);
-  };
-
-  const onActiveChange = (val: boolean) => {
-    setActive(val);
-    settingService.setActive(val);
-  };
-
-  const onNoticeChange = (val: boolean) => {
-    setNotice(val);
-    settingService.setNotice(val);
-  };
-
   const noticeDisabled = active === false || autoSet === false ? true : false;
 
   const autoSetDisabled = active === false ? true : false;
 
-  return {
+  const state = {
     noticeDisabled,
     autoSetDisabled,
     notice,
-    onNoticeChange,
-    onActiveChange,
-    onAutoSetChange,
-    onHomeBtnPress,
     autoSet,
     active,
+  };
+
+  const actions = {
+    autoSetChange: (val: boolean) => {
+      if (val === false) {
+        setNotice(true);
+        settingService.setNotice(true);
+      }
+
+      settingService.setAutoSet(val);
+      setAutoSet(val);
+    },
+
+    activeChange: (val: boolean) => {
+      setActive(val);
+      settingService.setActive(val);
+    },
+
+    noticeChange: (val: boolean) => {
+      setNotice(val);
+      settingService.setNotice(val);
+    },
+  };
+
+  return {
+    state,
+    actions,
   };
 };

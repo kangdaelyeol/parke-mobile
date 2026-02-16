@@ -75,3 +75,11 @@ export type SearchBleStackNavigationProp = NativeStackNavigationProp<
   SearchBleStackParamList,
   'SearchBLE'
 >;
+
+export type SettingStackParamList = {
+  Setting: undefined;
+  Home: undefined;
+};
+
+export type SettingStackNavigationProp =
+  NativeStackNavigationProp<SettingStackParamList>;

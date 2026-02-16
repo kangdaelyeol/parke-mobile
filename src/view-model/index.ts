@@ -10,3 +10,5 @@ export * from './use-home-setting-card-view-model';
 export * from './use-profile-main-view-model';
 export * from './use-profile-header-view-model';
 export * from './use-init-view-model';
+export * from './use-setting-header-view-model';
+export * from './use-setting-main-view-model';
