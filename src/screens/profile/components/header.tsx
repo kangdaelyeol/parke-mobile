@@ -49,9 +49,9 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
   },
   btn: {
-    color: '#666',
+    color: '#ebebeb',
   },
   btnPressed: {
-    color: '#ebebeb',
+    color: '#666',
   },
 });
