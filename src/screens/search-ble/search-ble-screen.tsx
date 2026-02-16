@@ -1,99 +1,12 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  Dimensions,
-  LayoutChangeEvent,
-} from 'react-native';
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { useSearchBle } from '@/controllers';
 import useHeptic from '@/hooks/use-heptic';
-import { Header, Rader } from '@search-ble/components';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
-import { useEffect, useState } from 'react';
+import { Header, Rader, Title } from '@search-ble/components';
 
-export default function SearchBLEScreen() {
-  const { devices, rssi, scanState, setScanState } = useSearchBle();
-
-  const { setTime, setHepticOption } = useHeptic();
-  const [reset, setReset] = useState(0);
-  const [titleHeight, setTitleHeight] = useState(0);
-
-  if (scanState === 'NoneScaned' && rssi) {
-    setScanState('Scaned');
-    setTime(200);
-    setHepticOption('impactMedium');
-  }
-  const titleTransY = useSharedValue(45);
-  const titleOpacity = useSharedValue(0);
-  const subTitleOpacity = useSharedValue(0);
-
-  useEffect(() => {
-    if (!titleHeight) return;
-
-    const deviceHeight = Dimensions.get('window').height;
-    console.log(titleHeight);
-    titleTransY.value = deviceHeight / 2 - titleHeight * 3.5;
-    titleTransY.value = withDelay(
-      1500,
-      withTiming(0, {
-        duration: 1000,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      }),
-    );
-    titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }));
-    subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }));
-  }, [reset, titleHeight, titleOpacity, titleTransY, subTitleOpacity]);
-
-  const titleAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      marginTop: 40,
-      opacity: titleOpacity.value,
-      transform: [
-        {
-          translateY: withTiming(titleTransY.value, {
-            duration: 300,
-            easing: Easing.bezier(0.33, 1, 0.68, 1),
-          }),
-        },
-      ],
-    };
-  });
-
-  const subTitleAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      opacity: subTitleOpacity.value,
-    };
-  });
-
-  const ontitleLayout = (e: LayoutChangeEvent) => {
-    setTitleHeight(e.nativeEvent.layout.height);
-  };
-
+const Test = ({ devices, rssi }: { devices: any; rssi: any }) => {
   return (
-    <View style={styles.container}>
+    <>
       {/* test */}
-      <Text
-        onPress={() => {
-          setReset(prev => prev + 1);
-          titleTransY.value = 45;
-        }}
-        style={{
-          color: 'white',
-          position: 'absolute',
-          top: 800,
-          fontSize: 20,
-          zIndex: 3,
-        }}
-      >
-        Reset Animation
-      </Text>
       <Text
         style={{
           position: 'absolute',
@@ -119,18 +32,27 @@ export default function SearchBLEScreen() {
         )}
       </ScrollView>
       {/* test */}
+    </>
+  );
+};
 
+export default function SearchBLEScreen() {
+  const { devices, rssi, detected, setDetected } = useSearchBle();
+
+  const { setTime, setHepticOption } = useHeptic();
+
+  if (!detected && rssi) {
+    setDetected(true);
+    setTime(200);
+    setHepticOption('impactMedium');
+  }
+
+  return (
+    <View style={styles.container}>
+      <Test devices={devices} rssi={rssi} />
       <Header />
-      <Animated.View style={titleAnimatedStyle}>
-        <Text onLayout={ontitleLayout} style={styles.title}>
-          스캔을 시작할게요
-        </Text>
-      </Animated.View>
-      <Animated.View style={subTitleAnimatedStyle}>
-        <Text style={styles.subTitle}>장치를 스캔중입니다.</Text>
-      </Animated.View>
-
-      <Rader />
+      <Title detected={detected} />
+      <Rader detected={detected} />
     </View>
   );
 }
@@ -140,25 +62,12 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#000',
   },
-  title: {
-    color: '#fff',
-    fontSize: 37,
-    fontWeight: 500,
-    textAlign: 'center',
-  },
-
   list: {
     position: 'absolute',
     flex: 1,
     marginTop: 10,
     maxHeight: 300,
     bottom: 0,
-  },
-  subTitle: {
-    color: '#eee',
-    fontSize: 20,
-    textAlign: 'center',
-    marginTop: 15,
   },
   deviceText: { color: '#fff', fontSize: 16, marginVertical: 4, opacity: 0.2 },
 });
