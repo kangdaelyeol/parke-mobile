@@ -1,3 +1,4 @@
+import { useSearchBLEContext } from '@/contexts/search-ble-context';
 import { useEffect } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import Animated, {
@@ -19,7 +20,10 @@ const DOT_SIZE = 10;
 
 const DELAY = 1300;
 
-export const Radar = ({ detected }: { detected: boolean }) => {
+export const Radar = () => {
+  const {
+    state: { detected },
+  } = useSearchBLEContext();
   const lineOpacity = useSharedValue(0);
   const lineScale = useSharedValue(0);
   const circleSmallOpacity = useSharedValue(0);

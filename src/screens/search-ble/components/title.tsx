@@ -1,3 +1,4 @@
+import { useSearchBLEContext } from '@/contexts/search-ble-context';
 import { useEffect, useState } from 'react';
 import { Dimensions, LayoutChangeEvent, StyleSheet, Text } from 'react-native';
 import Animated, {
@@ -14,7 +15,10 @@ const DETECTED_TITLE = '장치를 찾았습니다';
 const SEARCHING_SUBTITLE = '장치를 스캔중입니다';
 const DETECTED_SUBTITLE = '장치를 디바이스에 더 가까이 인식시켜주세요';
 
-export const Title = ({ detected }: { detected: boolean }) => {
+export const Title = () => {
+  const {
+    state: { detected },
+  } = useSearchBLEContext();
   const [titleHeight, setTitleHeight] = useState(0);
   const titleTransY = useSharedValue(0);
   const titleOpacity = useSharedValue(0);
