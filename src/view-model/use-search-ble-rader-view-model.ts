@@ -8,9 +8,9 @@ import {
   Easing,
 } from 'react-native-reanimated';
 import { delay, duration, repeat } from '@search-ble/constants';
-import { UseSearchBLERaderViewModel } from '@search-ble/types';
+import { SearchBLERaderViewModel } from '@search-ble/types';
 
-export const useSearchBLERaderViewModel = (): UseSearchBLERaderViewModel => {
+export const useSearchBLERaderViewModel = (): SearchBLERaderViewModel => {
   const lineOpacity = useSharedValue(0);
   const lineScale = useSharedValue(0);
   const circleSmallOpacity = useSharedValue(0);

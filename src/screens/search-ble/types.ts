@@ -1,11 +1,9 @@
 import { ViewModel } from '@/types/common';
-import { StyleProp, ViewStyle } from 'react-native';
+import { LayoutChangeEvent, StyleProp, ViewStyle } from 'react-native';
 
 interface HeaderActions {
   backPress: () => void;
 }
-
-export type SearchBLEHeaderViewModel = ViewModel<{}, HeaderActions>;
 
 interface RaderState {
   dotSpinAnimatedStyle: StyleProp<ViewStyle>;
@@ -16,4 +14,17 @@ interface RaderState {
   detectedCircleAnimatedStyle: StyleProp<ViewStyle>;
 }
 
-export type UseSearchBLERaderViewModel = ViewModel<RaderState, {}>;
+interface TitleState {
+  titleAnimatedStyle: StyleProp<ViewStyle>;
+  subTitleAnimatedStyle: StyleProp<ViewStyle>;
+}
+
+interface TitleActions {
+  titleLayout: (e: LayoutChangeEvent) => void;
+}
+
+export type SearchBLEHeaderViewModel = ViewModel<{}, HeaderActions>;
+
+export type SearchBLERaderViewModel = ViewModel<RaderState, {}>;
+
+export type SearchBLETitleViewModel = ViewModel<TitleState, TitleActions>;
