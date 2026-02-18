@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useSearchBLEHeaderViewModel } from '@/view-model/use-search-ble-header-view-model';
+import { useSearchBLEHeaderViewModel } from '@/view-model';
 
 export const Header = () => {
   const { actions } = useSearchBLEHeaderViewModel();
