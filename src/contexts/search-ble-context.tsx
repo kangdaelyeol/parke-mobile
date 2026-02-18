@@ -1,4 +1,10 @@
-import { useEffect, useState } from 'react';
+import {
+  createContext,
+  PropsWithChildren,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ensurePermissions from '@/helpers/ensure-permissions';
@@ -7,8 +13,24 @@ import { manager, stopBackgroundScan } from '@/ble-manager';
 import { generateBase64Id, getDeviceId } from '@/helpers';
 import { cache } from '@/storage';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
+import useHeptic from '@/hooks/use-heptic';
 
-export const useSearchBle = () => {
+interface SearchBLEContextValue {
+  state: {
+    devices: any[];
+    rssi: string;
+    detected: boolean;
+  };
+  actions: {
+    goBack: () => void;
+  };
+}
+
+const searchBLEContext = createContext({} as SearchBLEContextValue);
+
+export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
+  const { setTime, setHepticOption } = useHeptic();
+
   // temp - 디바이스 조회 잘 되나 확인하기 위함
   const [devices, setDevices] = useState<any[]>([]);
 
@@ -17,6 +39,12 @@ export const useSearchBle = () => {
   const [detected, setDetected] = useState(false);
 
   const navigation = useNavigation<SearchBleStackNavigationProp>();
+
+  if (!detected && rssi) {
+    setDetected(true);
+    setTime(200);
+    setHepticOption('impactMedium');
+  }
 
   const startBLEScan = () => {
     setDevices([]);
@@ -97,9 +125,22 @@ export const useSearchBle = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const moveToHome = () => {
-    navigation.replace('Home');
+  const goBack = () => {
+    navigation.goBack();
   };
 
-  return { devices, moveToHome, rssi, detected, setDetected };
+  return (
+    <searchBLEContext.Provider
+      value={{
+        state: { devices, detected, rssi },
+        actions: {
+          goBack,
+        },
+      }}
+    >
+      {children}
+    </searchBLEContext.Provider>
+  );
 };
+
+export const useSearchBLEContext = () => useContext(searchBLEContext);
