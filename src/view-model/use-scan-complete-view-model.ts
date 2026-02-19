@@ -15,7 +15,7 @@ import { ScanCompeleStackNavigationProp } from '@/navigation/types';
  const manager = new BleManager();
 */
 
-export const useScanComplete = (route: any) => {
+export const useScanCompleteViewModel = (route: any) => {
   const { updatePhoneNumber } = deviceService;
   const navigation = useNavigation<ScanCompeleStackNavigationProp>();
   const deviceId = route?.params?.value ?? 'abc';
