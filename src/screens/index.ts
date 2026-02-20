@@ -4,4 +4,5 @@ export { default as InitScreen } from './init/init-screen';
 export { default as LoginScreen } from './login/login-screen';
 export { default as ProfileScreen } from './profile/profile-screen';
 export { default as SettingScreen } from './setting/setting-screen';
-export {default as SearchBLEScreen} from './search-ble/search-ble-screen'
+export { default as SearchBLEScreen } from './search-ble/search-ble-screen';
+export { default as ScanCompleteScreen } from './scan-complete/scan-complete-screen';
