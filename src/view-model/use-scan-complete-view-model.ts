@@ -5,7 +5,7 @@ import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { manager, stopBackgroundScan } from '@/ble-manager';
 import { deviceService } from '@/services';
-import { ScanCompeleStackNavigationProp } from '@/navigation/types';
+import { ScanCompleteStackNavigationProp } from '@/navigation/types';
 
 /* For Background
  import { BleManager } from 'react-native-ble-plx';
@@ -17,7 +17,7 @@ import { ScanCompeleStackNavigationProp } from '@/navigation/types';
 
 export const useScanCompleteViewModel = (route: any) => {
   const { updatePhoneNumber } = deviceService;
-  const navigation = useNavigation<ScanCompeleStackNavigationProp>();
+  const navigation = useNavigation<ScanCompleteStackNavigationProp>();
   const deviceId = route?.params?.value ?? 'abc';
 
   const [phone, setPhone] = useState('');
@@ -62,7 +62,10 @@ export const useScanCompleteViewModel = (route: any) => {
       cache.setBLEDeviceId(deviceId);
       cache.setSerial(serial);
 
-      navigation.replace('Home');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Home' }],
+      });
     } catch (e: any) {
       console.warn(e);
       Alert.alert('저장 실패', e?.message ?? '알 수 없는 오류');
