@@ -60,7 +60,7 @@ export type ScanCompleteStackParamList = {
   Home: undefined;
 };
 
-export type ScanCompeleStackNavigationProp = NativeStackNavigationProp<
+export type ScanCompleteStackNavigationProp = NativeStackNavigationProp<
   ScanCompleteStackParamList,
   'ScanComplete'
 >;
