@@ -25,9 +25,8 @@ export const userService = {
   ): Promise<boolean> => {
     return await userClient.update({ id, nickname, phone });
   },
-  updateCardList: async (id: string, cardList: CardDto[]): Promise<boolean> => {
-    const cardIdList = cardList.map(card => card.id);
-    return await userClient.update({ id, cardIdList });
+  updateCardList: async (id: string, cardList: string[]): Promise<boolean> => {
+    return await userClient.update({ id, cardIdList: cardList });
   },
   delete: async (id: string): Promise<boolean> => {
     return await userClient.deleteById(id);
