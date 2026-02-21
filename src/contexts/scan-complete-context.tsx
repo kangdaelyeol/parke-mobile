@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { extractNumber } from '@/utils';
-import { cardService } from '@/services';
+import { cardService, userService } from '@/services';
 import { ScanCompleteStackNavigationProp } from '@/navigation/types';
 
 interface ScanCompleteContextValue {
@@ -24,6 +24,9 @@ interface ScanCompleteContextValue {
     nextPress: () => void;
     savePress: (deviceId: string) => Promise<void>;
     prevPress: () => void;
+    scanPress: () => void;
+    scanBackPress: () => void;
+    serialInputPress: () => void;
   };
   state: {
     phone: string;
@@ -32,6 +35,8 @@ interface ScanCompleteContextValue {
     serial: string;
     currentStep: number;
     loading: boolean;
+    scanPage: boolean;
+    serialInput: boolean;
   };
 }
 
@@ -41,12 +46,16 @@ export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
   const { user } = useUserContext();
+
   const [phone, setPhone] = useState('');
   const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
   const [message, setMessage] = useState('');
   const [serial, setSerial] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [scanPage, setScanPage] = useState(true);
+  const [serialInput, setSerialInput] = useState(false);
+
   const navigation = useNavigation<ScanCompleteStackNavigationProp>();
 
   const actions = {
@@ -71,7 +80,7 @@ export const ScanCompleteContextProvider = ({
     savePress: async (deviceId: string) => {
       setLoading(true);
 
-      const res = await cardService.create({
+      const cardRes = await cardService.create({
         id: serial,
         phone,
         message,
@@ -82,11 +91,32 @@ export const ScanCompleteContextProvider = ({
         deviceId,
       });
 
-      if (!res) {
+      if (!cardRes) {
         Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         return setLoading(false);
       }
+
+      const userRes = await userService.updateCardList(user.id, [
+        ...user.cardIdList,
+        serial,
+      ]);
+
+      if (!userRes) {
+        Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
+        return setLoading(false);
+      }
+
+      Alert.alert('저장 성공!');
       navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    },
+    scanPress: () => {
+      setScanPage(true);
+    },
+    scanBackPress: () => {
+      setScanPage(false);
+    },
+    serialInputPress: () => {
+      setSerialInput(true);
     },
   };
 
@@ -97,6 +127,8 @@ export const ScanCompleteContextProvider = ({
     serial,
     currentStep,
     loading,
+    scanPage,
+    serialInput,
   };
 
   useEffect(() => {
