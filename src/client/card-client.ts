@@ -12,7 +12,8 @@ import { Card, CardDto } from '@/domain/card';
 export const cardClient = {
   create: async (dto: CardDto): Promise<CardDto | null> => {
     const entity = Card.fromDto(dto);
-    const { id, title, phone, message, autoChange, updatedBy } = entity.toDto();
+    const { id, title, phone, message, autoChange, updatedBy, deviceId } =
+      entity.toDto();
     try {
       await set(ref(db, `card/${id}`), {
         id,
@@ -22,6 +23,7 @@ export const cardClient = {
         autoChange,
         updatedAt: serverTimestamp(),
         updatedBy,
+        deviceId,
       });
     } catch (e) {
       console.log(e);
