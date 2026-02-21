@@ -7,9 +7,16 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ScanCompleteContextProvider } from '@/contexts/scan-complete-context';
+import { ScanCompleteContextProvider } from '@/contexts';
 import { Main, ProgressStepper, Card } from './components';
-export default function ScanCompleteScreen({ route }: any) {
+import { RouteProp } from '@react-navigation/native';
+import { ScanCompleteStackParamList } from '@/navigation/types';
+
+type ScanCompleteProps = {
+  route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;
+};
+
+export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
   const deviceId = route?.params?.value ?? 'abc';
 
   return (
@@ -24,8 +31,8 @@ export default function ScanCompleteScreen({ route }: any) {
             <Text selectable style={styles.keyValue}>
               {deviceId && deviceId.length ? `deviceId: ${deviceId}` : '(없음)'}
             </Text>
-            <Card />
-            <Main />
+            <Card deviceId={deviceId}/>
+            <Main deviceId={deviceId} />
           </View>
         </ScanCompleteContextProvider>
       </ScrollView>

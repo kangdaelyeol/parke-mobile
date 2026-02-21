@@ -56,7 +56,7 @@ export type ProfileStackNavigationProp = NativeStackNavigationProp<
 >;
 
 export type ScanCompleteStackParamList = {
-  ScanComplete: undefined;
+  ScanComplete: { value: string };
   Home: undefined;
 };
 

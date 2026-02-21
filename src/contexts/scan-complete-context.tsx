@@ -22,7 +22,7 @@ interface ScanCompleteContextValue {
     messageInput: (v: string) => void;
     serialInput: (v: string) => void;
     nextPress: () => void;
-    savePress: () => Promise<void>;
+    savePress: (deviceId: string) => Promise<void>;
     prevPress: () => void;
   };
   state: {
@@ -68,7 +68,7 @@ export const ScanCompleteContextProvider = ({
     prevPress: () => {
       setCurrentStep(prev => prev - 1);
     },
-    savePress: async () => {
+    savePress: async (deviceId: string) => {
       setLoading(true);
 
       const res = await cardService.create({
@@ -79,6 +79,7 @@ export const ScanCompleteContextProvider = ({
         updatedBy: user.nickname,
         updatedAt: serverTimestamp(),
         autoChange: true,
+        deviceId,
       });
 
       if (!res) {

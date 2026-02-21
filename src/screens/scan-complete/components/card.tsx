@@ -1,25 +1,34 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Animated, { useAnimatedStyle } from 'react-native-reanimated';
 import { LogoText } from '@/assets/logo';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
 
-export const Card = () => {
+type CardProps = {
+  deviceId: string;
+};
+
+export const Card = ({ deviceId }: CardProps) => {
   const {
     state: { name, phone, message },
   } = useScanCompleteContext();
-  const animatedStyle = useAnimatedStyle(() => ({}));
+
   return (
-    <Animated.View style={[styles.container, animatedStyle]}>
+    <View style={styles.container}>
       <View style={styles.bottomBackground} />
       <View style={styles.wrapper}>
         <LogoText width={50} height={45} />
+        <View style={styles.deviceIdLabel}>
+          <Text style={styles.deviceIdTitle}>device ID</Text>
+          <Text style={styles.deviceId}>{deviceId}1923091203120931</Text>
+          <View style={styles.row} />
+          <Text style={styles.deviceIdTitle}>serial</Text>
+        </View>
         <Text style={styles.message}>{message}</Text>
         <Text style={styles.title}>{name}</Text>
         <Text style={styles.phone}>{phone}</Text>
       </View>
-    </Animated.View>
+    </View>
   );
 };
 
@@ -31,13 +40,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#1f222b',
     borderRadius: 20,
     overflow: 'hidden',
-    marginTop: 40,
   },
   wrapper: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    ...StyleSheet.absoluteFillObject,
     paddingHorizontal: 10,
   },
+
   title: {
     position: 'absolute',
     bottom: 30,
@@ -82,5 +90,27 @@ const styles = StyleSheet.create({
     width: 10,
     height: 10,
     borderRadius: '50%',
+  },
+  deviceIdLabel: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    // flexDirection: 'row',
+  },
+  deviceIdTitle: {
+    color: '#7b86ff',
+    fontSize: 11,
+    fontWeight: 500,
+  },
+  deviceId: {
+    color: '#000000',
+    fontSize: 10,
+    fontWeight: 500,
+    textAlign: 'right',
+  },
+  row: {
+    height: 1,
+    backgroundColor: '#00032d',
+    marginVertical: 2,
   },
 });

@@ -4,7 +4,11 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export const Step2 = () => {
+type Step2Props = {
+  deviceId: string;
+};
+
+export const Step2 = ({ deviceId }: Step2Props) => {
   const { actions } = useScanCompleteContext();
   return (
     <View style={styles.container}>
@@ -32,7 +36,7 @@ export const Step2 = () => {
         </View>
         <View style={styles.buttonContainer}>
           <PressableButton
-            onPress={actions.savePress}
+            onPress={() => actions.savePress(deviceId)}
             title="저장"
             background={['#304abb', '#3955cf']}
             pressableStyle={styles.button}
