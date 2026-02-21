@@ -7,13 +7,35 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ScanCompleteContextProvider } from '@/contexts';
-import { Main, ProgressStepper, Card } from './components';
+import {
+  ScanCompleteContextProvider,
+  useScanCompleteContext,
+} from '@/contexts';
+import { Main, ProgressStepper, Card, QrScan } from './components';
 import { RouteProp } from '@react-navigation/native';
 import { ScanCompleteStackParamList } from '@/navigation/types';
 
 type ScanCompleteProps = {
   route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;
+};
+
+type ScanCompleteBody = {
+  deviceId: string;
+};
+
+const ScanCompleteBody = ({ deviceId }: ScanCompleteBody) => {
+  const { state } = useScanCompleteContext();
+
+  return (
+    <>
+      {state.scanPage && <QrScan />}
+      <ProgressStepper />
+      <View style={styles.wrapper}>
+        <Card deviceId={deviceId} />
+        <Main deviceId={deviceId} />
+      </View>
+    </>
+  );
 };
 
 export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
@@ -26,14 +48,7 @@ export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ScanCompleteContextProvider>
-          <ProgressStepper />
-          <View style={styles.wrapper}>
-            <Text selectable style={styles.keyValue}>
-              {deviceId && deviceId.length ? `deviceId: ${deviceId}` : '(없음)'}
-            </Text>
-            <Card deviceId={deviceId}/>
-            <Main deviceId={deviceId} />
-          </View>
+          <ScanCompleteBody deviceId={deviceId} />
         </ScanCompleteContextProvider>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -47,6 +62,7 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
   wrapper: {
+    marginTop: 25,
     width: '100%',
     maxWidth: 380,
     marginHorizontal: 'auto',

@@ -6,3 +6,4 @@ export * from './step-node';
 export * from './step1';
 export * from './step2';
 export * from './card';
+export * from './qr-scan';
