@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -8,6 +7,7 @@ import Animated, {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 
 interface StepProps {
   label: string;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Footer, Header, Slider } from '@on-boarding/components';
 import { OnBoardingContextProvider } from '@/contexts';

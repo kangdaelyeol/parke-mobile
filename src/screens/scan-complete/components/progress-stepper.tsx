@@ -1,8 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { StepNode } from './step-node';
-import { StepLine } from './step-line';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
+import { StepNode, StepLine } from '@scan-complete/components';
 
 const stepConfig = [{ label: '기본정보 등록' }, { label: '기기정보 등록' }];
 

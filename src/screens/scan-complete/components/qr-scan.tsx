@@ -1,6 +1,3 @@
-import { LogoIcon } from '@/assets/logo';
-import { PressableButton } from '@/components';
-import { useScanCompleteContext } from '@/contexts';
 import React, { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
@@ -8,6 +5,9 @@ import {
   useCameraDevice,
   useCameraPermission,
 } from 'react-native-vision-camera';
+import { LogoIcon } from '@/assets/logo';
+import { PressableButton } from '@/components';
+import { useScanCompleteContext } from '@/contexts';
 
 export const QrScan = () => {
   const device = useCameraDevice('back');

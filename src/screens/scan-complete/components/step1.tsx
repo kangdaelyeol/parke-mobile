@@ -1,7 +1,6 @@
+import { StyleSheet, Text, View } from 'react-native';
 import { FocusableInput, PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
 
 export const Step1 = () => {
   const { state, actions } = useScanCompleteContext();

@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, Switch, View, Text } from 'react-native';
 import { useSettingMainViewModel } from '@/view-model';
 

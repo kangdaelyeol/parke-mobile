@@ -1,8 +1,7 @@
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { FocusableInput, PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 type Step2Props = {
   deviceId: string;

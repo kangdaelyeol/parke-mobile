@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { FocusableInput, Loading, PressableButton } from '@/components';
 import { useProfileMainViewModel } from '@/view-model';

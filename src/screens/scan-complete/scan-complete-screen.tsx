@@ -10,9 +10,9 @@ import {
   ScanCompleteContextProvider,
   useScanCompleteContext,
 } from '@/contexts';
-import { Main, ProgressStepper, Card, QrScan } from './components';
 import { RouteProp } from '@react-navigation/native';
 import { ScanCompleteStackParamList } from '@/navigation/types';
+import { Main, ProgressStepper, Card, QrScan } from '@scan-complete/components';
 
 type ScanCompleteProps = {
   route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;

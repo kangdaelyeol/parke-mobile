@@ -45,7 +45,7 @@ const ScanCompleteContext = createContext({} as ScanCompleteContextValue);
 export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
-  const { user, setCards, setUser } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   const [phone, setPhone] = useState('');
   const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
@@ -53,7 +53,7 @@ export const ScanCompleteContextProvider = ({
   const [serial, setSerial] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [loading, setLoading] = useState(false);
-  const [scanPage, setScanPage] = useState(true);
+  const [scanPage, setScanPage] = useState(false);
   const [serialInput, setSerialInput] = useState(false);
 
   const navigation = useNavigation<ScanCompleteStackNavigationProp>();
