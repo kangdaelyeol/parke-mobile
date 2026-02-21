@@ -9,17 +9,9 @@ import {
   ScanCompleteScreen,
 } from '@/screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RootStackParamList } from './types';
 
-type RootStackParamList = {
-  Home: undefined;
-  OnBoarding: undefined;
-  Init: undefined;
-  Login: undefined;
-  SearchBLE: undefined;
-  ScanComplete: undefined;
-  Setting: undefined;
-  Profile: undefined;
-};
+
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

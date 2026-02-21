@@ -1,5 +1,16 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
+export type RootStackParamList = {
+  Home: undefined;
+  OnBoarding: undefined;
+  Init: undefined;
+  Login: undefined;
+  SearchBLE: undefined;
+  ScanComplete: { value: string };
+  Setting: undefined;
+  Profile: undefined;
+};
+
 export type LoginStackParamList = {
   Login: undefined;
   Init: undefined;
