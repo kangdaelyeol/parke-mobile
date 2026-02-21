@@ -11,6 +11,7 @@ export class Card {
     private autoChange: boolean,
     private updatedAt: object,
     private updatedBy: string,
+    private deviceId: string,
   ) {}
 
   static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
@@ -22,6 +23,7 @@ export class Card {
     const autoChange = !!props.autoChange;
     const updatedAt = props.updatedAt ?? serverTimestamp();
     const updatedBy = props.updatedBy ?? '';
+    const deviceId = props.deviceId ?? '';
 
     return new Card(
       id,
@@ -31,6 +33,7 @@ export class Card {
       autoChange,
       updatedAt,
       updatedBy,
+      deviceId,
     );
   }
 
@@ -47,6 +50,7 @@ export class Card {
       autoChange: this.autoChange,
       updatedAt: this.updatedAt,
       updatedBy: this.updatedBy,
+      deviceId: this.deviceId,
     };
   }
 }

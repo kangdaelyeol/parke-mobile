@@ -6,4 +6,5 @@ export interface CardDto {
   autoChange: boolean;
   updatedAt: unknown;
   updatedBy: string;
+  deviceId: string;
 }
