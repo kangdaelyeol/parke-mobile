@@ -10,7 +10,8 @@
       "@on-boarding/*": ["src/screens/on-boarding/*"],
       "@profile/*": ["src/screens/profile/*"],
       "@setting/*": ["src/screens/setting/*"],
-      "@search-ble/*": ["src/screens/search-ble/*"]
+      "@search-ble/*": ["src/screens/search-ble/*"],
+      "@scan-complete/*": ["src/screens/scan-complete/*"]
     }
   }
 }

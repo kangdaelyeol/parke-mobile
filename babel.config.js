@@ -14,6 +14,7 @@ module.exports = {
           '@profile': './src/screens/profile',
           '@setting': './src/screens/setting',
           '@search-ble': './src/screens/search-ble',
+          '@scan-complete': './src/screens/scan-complete',
         },
         extentions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
