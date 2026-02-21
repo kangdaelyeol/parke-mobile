@@ -45,7 +45,7 @@ const ScanCompleteContext = createContext({} as ScanCompleteContextValue);
 export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
-  const { user } = useUserContext();
+  const { user, setCards, setUser } = useUserContext();
 
   const [phone, setPhone] = useState('');
   const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
@@ -96,15 +96,15 @@ export const ScanCompleteContextProvider = ({
         return setLoading(false);
       }
 
-      const userRes = await userService.updateCardList(user.id, [
-        ...user.cardIdList,
-        serial,
-      ]);
+      const newCardIdList = [...user.cardIdList, serial];
+
+      const userRes = await userService.updateCardList(user.id, newCardIdList);
 
       if (!userRes) {
         Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         return setLoading(false);
       }
+      setUser(prev => ({ ...prev, cardIdList: newCardIdList }));
 
       Alert.alert('저장 성공!');
       navigation.reset({ index: 0, routes: [{ name: 'Home' }] });

@@ -14,17 +14,12 @@ import { Loading } from '@/components';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
 
-export const Main = () => {
-  const { state, actions } = useHomeMainViewModel();
-
-  // Test
+const Test = () => {
   const [busy, setBusy] = useState(false);
   const navigation = useNavigation<HomeStackNavigationProp>();
-  const { cards, setCards, user } = useUserContext();
-
+  const { setCards, user } = useUserContext();
   return (
-    <View style={styles.main}>
-      {state.loading && <Loading />}
+    <>
       {/* Test Buttons */}
       <Text
         onPress={async () => {
@@ -54,16 +49,32 @@ export const Main = () => {
             updatedAt: Date.now(),
             updatedBy: 'test',
             autoChange: false,
+            deviceId: 'test',
           });
-          if (!res) Alert.alert('오류가 발생했');
-          const newCardList = [...state.cards, res] as CardDto[];
-          userService.updateCardList(user.id, newCardList);
+          if (res === null) Alert.alert('오류가 발생했');
+
+          await userService.updateCardList(user.id, [
+            ...user.cardIdList,
+            res?.id ?? '',
+          ]);
           setCards(prev => [...prev, { ...res }] as CardDto[]);
         }}
         style={styles.test2}
       >
         addCard
       </Text>
+    </>
+  );
+};
+
+export const Main = () => {
+  const { state, actions } = useHomeMainViewModel();
+  const { cards } = useUserContext();
+
+  return (
+    <View style={styles.main}>
+      {state.loading && <Loading />}
+      <Test />
       <View style={styles.mainWrapper}>
         {!state.isSetting && cards[state.selectedCardIdx] && (
           <>

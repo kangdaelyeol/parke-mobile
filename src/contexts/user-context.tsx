@@ -22,7 +22,6 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
   // temp data
   const [cards, setCards] = useState<CardDto[]>([]);
-
   return (
     <userContext.Provider value={{ cards, user, setCards, setUser }}>
       {children}
