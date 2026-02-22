@@ -89,6 +89,7 @@ export const ScanCompleteContextProvider = ({
         updatedAt: serverTimestamp(),
         autoChange: true,
         deviceId,
+        ownerList: [user.id],
       });
 
       if (!cardRes) {

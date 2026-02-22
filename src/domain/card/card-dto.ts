@@ -7,4 +7,5 @@ export interface CardDto {
   updatedAt: unknown;
   updatedBy: string;
   deviceId: string;
+  ownerList: string[]
 }

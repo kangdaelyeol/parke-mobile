@@ -50,6 +50,7 @@ const Test = () => {
             updatedBy: 'test',
             autoChange: false,
             deviceId: 'test',
+            ownerList: [],
           });
           if (res === null) Alert.alert('오류가 발생했');
 

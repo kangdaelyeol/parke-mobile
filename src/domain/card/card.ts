@@ -12,6 +12,7 @@ export class Card {
     private updatedAt: object,
     private updatedBy: string,
     private deviceId: string,
+    private ownerList: string[],
   ) {}
 
   static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
@@ -24,6 +25,7 @@ export class Card {
     const updatedAt = props.updatedAt ?? serverTimestamp();
     const updatedBy = props.updatedBy ?? '';
     const deviceId = props.deviceId ?? '';
+    const ownerList = props.ownerList ?? [];
 
     return new Card(
       id,
@@ -34,6 +36,7 @@ export class Card {
       updatedAt,
       updatedBy,
       deviceId,
+      ownerList,
     );
   }
 
@@ -51,6 +54,7 @@ export class Card {
       updatedAt: this.updatedAt,
       updatedBy: this.updatedBy,
       deviceId: this.deviceId,
+      ownerList: this.ownerList,
     };
   }
 }
