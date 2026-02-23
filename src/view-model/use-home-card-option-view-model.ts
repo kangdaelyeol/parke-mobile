@@ -30,15 +30,18 @@ export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
             const filteredCardList = cards.filter(
               card => card.id !== selectedCard.id,
             );
-            const cardDeleteRes = await cardService.delete(selectedCard.id);
+            const cardDeleteRes = await cardService.delete(
+              selectedCard.id,
+              user.id,
+            );
 
             if (!cardDeleteRes) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
               return setLoading(false);
             }
 
-            userService.updateCardList(user.id, filteredCardList);
-
+            userService.deleteCard(user.id, selectedCard.id);
+            
             setLoading(false);
             setCards(filteredCardList);
           },

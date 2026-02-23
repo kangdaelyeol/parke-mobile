@@ -99,12 +99,16 @@ export const ScanCompleteContextProvider = ({
 
       const newCardIdList = [...user.cardIdList, serial];
 
-      const userRes = await userService.updateCardList(user.id, newCardIdList);
+      const userRes = await userService.updateCardIdList(
+        user.id,
+        newCardIdList,
+      );
 
       if (!userRes) {
         Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
         return setLoading(false);
       }
+
       setUser(prev => ({ ...prev, cardIdList: newCardIdList }));
 
       Alert.alert('저장 성공!');

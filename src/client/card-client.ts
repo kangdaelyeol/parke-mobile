@@ -8,6 +8,7 @@ import {
 } from 'firebase/database';
 import { db } from '@/firebaseApp';
 import { Card, CardDto } from '@/domain/card';
+import { toIdList } from '@/utils';
 
 export const cardClient = {
   create: async (dto: CardDto): Promise<CardDto | null> => {
@@ -44,7 +45,10 @@ export const cardClient = {
     try {
       const snapShot = await get(ref(db, `/card/${id}`));
       if (!snapShot.exists()) return null;
-      return snapShot.val() as CardDto;
+
+      const card = snapShot.val() as CardDto;
+      // card.ownerList = toIdList(card.ownerList);
+      return card;
     } catch (e) {
       console.log(e);
       return null;
@@ -63,7 +67,13 @@ export const cardClient = {
     dto: { id: string } & Partial<
       Pick<
         CardDto,
-        'autoChange' | 'message' | 'phone' | 'title' | 'updatedAt' | 'updatedBy'
+        | 'autoChange'
+        | 'message'
+        | 'phone'
+        | 'title'
+        | 'updatedAt'
+        | 'updatedBy'
+        | 'ownerList'
       >
     >,
   ): Promise<boolean> => {

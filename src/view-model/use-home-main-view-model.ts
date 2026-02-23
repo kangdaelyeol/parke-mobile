@@ -23,7 +23,7 @@ export const useHomeMainViewModel = (): MainViewModel => {
   useEffect(() => {
     (async () => {
       setLoading(true);
-      const res = await cardService.getList(user.cardIdList);
+      const res = await cardService.getList(user.cardIdList || []);
       if (isCardList(res)) setCards(res);
       else Alert.alert('오류가 발생했');
       setLoading(false);

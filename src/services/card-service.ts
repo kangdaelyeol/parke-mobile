@@ -41,8 +41,12 @@ export const cardService = {
       return null;
     }
   },
-  delete: async (id: string): Promise<boolean> => {
-    return await cardClient.deleteById(id);
+  delete: async (cardId: string, userId: string): Promise<boolean> => {
+    const card = await cardClient.getById(cardId);
+    if (!card) return false;
+    const newOwnerList = card.ownerList.filter(id => id !== userId);
+    if (newOwnerList.length === 0) return await cardClient.deleteById(cardId);
+    return cardClient.update({ ...card, ownerList: newOwnerList });
   },
   updateAutoChange: async (
     id: string,
