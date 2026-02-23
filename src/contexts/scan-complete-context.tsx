@@ -1,4 +1,3 @@
-import { manager, stopBackgroundScan } from '@/ble-manager';
 import {
   createContext,
   PropsWithChildren,
@@ -9,7 +8,7 @@ import {
 import { serverTimestamp } from 'firebase/database';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { useUserContext } from '@/contexts';
+import { useUserContext, useBleContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { extractNumber } from '@/utils';
 import { cardService, userService } from '@/services';
@@ -46,6 +45,7 @@ export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
   const { user, setUser } = useUserContext();
+  const { actions: bleActions } = useBleContext();
 
   const [phone, setPhone] = useState('');
   const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
@@ -137,10 +137,10 @@ export const ScanCompleteContextProvider = ({
   };
 
   useEffect(() => {
-    manager.stopDeviceScan();
-    stopBackgroundScan();
+    bleActions.stopBackgroundScan();
+    bleActions.stopBleScan();
     setPhone(user.phone);
-  }, [user.phone]);
+  }, [user.phone, bleActions]);
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>

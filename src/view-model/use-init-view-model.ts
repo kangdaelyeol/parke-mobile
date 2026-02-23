@@ -1,11 +1,11 @@
-import { useUserContext } from '@/contexts';
+import { useBleContext, useUserContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { InitStackNavigationProp } from '@/navigation/types';
 import { InitViewModel } from '@/screens/init/types';
 import { userService } from '@/services';
 import { extractNumber } from '@/utils';
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 
 export const useInitViewModel = (): InitViewModel => {
@@ -14,6 +14,12 @@ export const useInitViewModel = (): InitViewModel => {
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
+  const { actions: bleActions } = useBleContext();
+
+  useEffect(() => {
+    bleActions.stopBackgroundScan();
+    bleActions.stopBleScan();
+  });
 
   const actions = {
     phoneInput: (val: string) => {

@@ -1,3 +1,3 @@
 export * from './convert-id';
-export * from './notify-on-screen-to-change-phone';
+export * from './notify-change-phone-on-screen';
 export * from './extract-number';
