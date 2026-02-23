@@ -1,6 +1,8 @@
-import { Header, Main } from '@setting/components';
 import { StyleSheet, View } from 'react-native';
+import { useSettingViewModel } from '@/view-model';
+import { Header, Main } from '@setting/components';
 export default function SettingScreen() {
+  useSettingViewModel();
   return (
     <View style={styles.container}>
       <Header />
