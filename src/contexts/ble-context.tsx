@@ -122,7 +122,6 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
             await d.discoverAllServicesAndCharacteristics();
             const deviceId = await getDeviceId(d);
             if (deviceId) {
-              cache.setBLEDeviceId(deviceId);
               navigation.replace('ScanComplete', { value: deviceId });
             } else {
               const base64Id = generateBase64Id();
@@ -131,7 +130,6 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
                 CHAR_UUID,
                 base64Id,
               );
-              cache.setBLEDeviceId(base64Id);
               navigation.replace('ScanComplete', { value: base64Id });
             }
             await d.cancelConnection();

@@ -2,14 +2,6 @@ import { MMKV } from 'react-native-mmkv';
 export const kv = new MMKV();
 
 export const cache = {
-  // scan info
-  getPhone: () => kv.getString('ble:phone') ?? null,
-  setPhone: (v: string) => kv.set('ble:phone', v),
-  getBLEDeviceId: () => kv.getString('ble:deviceId') ?? null,
-  setBLEDeviceId: (k: string) => kv.set('ble:deviceId', k),
-  getSerial: () => kv.getString('ble:serial'),
-  setSerial: (v: string) => kv.set('ble:serial', v),
-
   lastSeenAt: () => kv.getNumber(`ble:lastSeen`) ?? 0,
   markSeen: () => kv.set(`ble:lastSeen`, Date.now()),
   lastDeniedAt: () => kv.getNumber('ble:lastDenied') ?? 0,
