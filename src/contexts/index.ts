@@ -5,3 +5,4 @@ export * from './user-context';
 export * from './auth-context';
 export * from './scan-complete-context';
 export * from './search-ble-context';
+export * from './ble-context';
