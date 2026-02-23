@@ -1,5 +1,4 @@
 import notifee, { AndroidImportance } from '@notifee/react-native';
-import { cache } from '@/storage';
 
 // 앱 시작 시 1회 실행 (index.ts 등)
 export async function setupNotifications() {
@@ -27,13 +26,12 @@ export async function setupNotifications() {
 export async function notifyPhoneChange(
   oldPhone: string,
   newPhone: string,
-  serial: string,
+  cardId: string,
 ) {
-  const deviceId = cache.getBLEDeviceId() as string;
   notifee.displayNotification({
     title: '전화번호 변경 확인',
     body: `등록된 번호 ${oldPhone}을(를) ${newPhone}으로 변경하시겠습니까?\n번호를 변경하려면 길게 눌러 버튼을 확인해부라`,
-    data: { newPhone, deviceId, serial }, // 문자열이면 OK
+    data: { newPhone, cardId }, // 문자열이면 OK
 
     ios: {
       categoryId: 'CONFIRM_PHONE', // ✅ iOS 액션 표시 필수

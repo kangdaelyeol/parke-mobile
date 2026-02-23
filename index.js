@@ -6,19 +6,18 @@ import { AppRegistry } from 'react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import notifee, { EventType } from '@notifee/react-native';
-import { deviceService } from './src/services';
+import { cardService } from './src/services';
 import { cache } from './src/storage';
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
-  const { updatePhoneNumber } = deviceService;
   if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
 
   const actionId = detail.pressAction?.id;
-  const { newPhone, serial, deviceId } = detail.notification?.data || {};
+  const { newPhone, cardId } = detail.notification?.data || {};
 
-  if (actionId === 'confirm' && serial && newPhone) {
+  if (actionId === 'confirm' && cardId && newPhone) {
     try {
-      updatePhoneNumber(serial, deviceId, newPhone);
+      cardService.updatePhone(cardId, newPhone);
       cache.clearPending();
     } catch (e) {
       // bground에서는 Alert 안터짐
