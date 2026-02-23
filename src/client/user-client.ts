@@ -1,6 +1,6 @@
 import { UserDto } from '@/domain/user';
 import { db } from '@/firebaseApp';
-import { convertId, toIdList } from '@/utils';
+import { convertId } from '@/utils';
 import { get, ref, remove, set, update } from 'firebase/database';
 
 export const userClient = {
@@ -43,9 +43,7 @@ export const userClient = {
       const snapShot = await get(ref(db, `user/${convertedId}`));
       if (!snapShot.exists()) return null;
       const userRaw = snapShot.val();
-      console.log(userRaw.cardIdList);
-      // userRaw.cardIdList = toIdList(userRaw.cardIdList);
-      console.log(userRaw);
+      if (!userRaw.cardIdList) userRaw.cardIdList = [];
       return userRaw as UserDto;
     } catch (e) {
       console.log(e);

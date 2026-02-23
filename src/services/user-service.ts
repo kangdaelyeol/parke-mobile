@@ -5,8 +5,8 @@ import { UserDto } from '@/domain/user/user-dto';
 
 export const userService = {
   get: async (id: string): Promise<UserDto | null> => {
-    const res = await userClient.getById(id);
-    return res;
+    const user = await userClient.getById(id);
+    return user;
   },
   create: async (
     user: { id: string } & Partial<
@@ -35,7 +35,7 @@ export const userService = {
     const user = await userClient.getById(id);
     if (!user) return false;
 
-    user.cardIdList?.forEach(async cardId => {
+    user.cardIdList.forEach(async cardId => {
       const card = (await cardClient.getById(cardId)) as CardDto;
       card.ownerList = card.ownerList.filter(userId => userId !== id);
       if (card.ownerList.length === 0) await cardClient.deleteById(cardId);
