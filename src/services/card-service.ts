@@ -57,4 +57,7 @@ export const cardService = {
   updatePhone: async (id: string, phone: string): Promise<Boolean> => {
     return await cardClient.update({ id, phone });
   },
+  updateUpdatedAt: async (id: string): Promise<boolean> => {
+    return await cardClient.update({ id });
+  },
 };
