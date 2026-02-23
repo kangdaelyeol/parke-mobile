@@ -1,10 +1,10 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
-import { UseLoginViewModel } from '@/view-model';
+import { useLoginViewModel } from '@/view-model';
 
 export default function LoginScreen() {
-  const { state, actions } = UseLoginViewModel();
+  const { state, actions } = useLoginViewModel();
 
   return (
     <View style={styles.container}>

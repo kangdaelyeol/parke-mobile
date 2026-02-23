@@ -7,7 +7,7 @@ import {
   useSharedValue,
 } from 'react-native-reanimated';
 import { useOnBoardingContext } from '@/contexts';
-import { OnBoardingSliderViewModel } from '@/screens/on-boarding/types';
+import { OnBoardingSliderViewModel } from '@on-boarding/types';
 
 export const useOnBoardingSliderViewModel = (): OnBoardingSliderViewModel => {
   const { sliderTranslateX, setPageIdx } = useOnBoardingContext();

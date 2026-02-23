@@ -1,12 +1,12 @@
+import { logout } from '@react-native-seoul/kakao-login';
+import { useNavigation } from '@react-navigation/native';
+import { useState } from 'react';
+import { Alert } from 'react-native';
 import { useUserContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { ProfileStackNavigationProp } from '@/navigation/types';
 import { userService } from '@/services';
 import { extractNumber } from '@/utils';
-import { logout } from '@react-native-seoul/kakao-login';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { Alert } from 'react-native';
 
 export const useProfileMainViewModel = () => {
   const { user, setUser } = useUserContext();

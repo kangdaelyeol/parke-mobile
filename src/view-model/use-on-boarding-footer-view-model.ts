@@ -3,7 +3,7 @@ import { useOnBoardingContext } from '@/contexts';
 import { cache } from '@/storage';
 import { useNavigation } from '@react-navigation/native';
 import { OnBoardingStackNavigationProp } from '@/navigation/types';
-import { OnBoardingFooterViewModel } from '@/screens/on-boarding/types';
+import { OnBoardingFooterViewModel } from '@on-boarding/types';
 
 export const useOnBoardingFooterViewModel = (): OnBoardingFooterViewModel => {
   const navigation = useNavigation<OnBoardingStackNavigationProp>();

@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { settingService } from '@/services';
-import { manager, stopBackgroundScan } from '@/ble-manager';
 import { cache } from '@/storage';
-import { SettingMainViewModel } from '@/screens/setting/types';
+import { SettingMainViewModel } from '@setting/types';
 
 export const useSettingMainViewModel = (): SettingMainViewModel => {
   const [autoSet, setAutoSet] = useState(false);
@@ -12,8 +11,6 @@ export const useSettingMainViewModel = (): SettingMainViewModel => {
   // init settings value on UI
   useEffect(() => {
     cache.clearDeniedAt();
-    manager.stopDeviceScan();
-    stopBackgroundScan();
     const settings = settingService.getSettings();
     setAutoSet(settings.autoSet as boolean);
     setNotice(settings.notice as boolean);

@@ -11,7 +11,7 @@ import {
 } from '@/contexts';
 import { cardService } from '@/services';
 import { CardDto } from '@/domain/card';
-import { SettingCardModelView } from '@/screens/home/types';
+import { SettingCardModelView } from '@home/types';
 
 export const useHomeSettingCardViewModel = (
   card: CardDto,

@@ -1,9 +1,9 @@
+import { useEffect } from 'react';
+import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useBleContext, useOnBoardingContext } from '@/contexts';
 import { OnBoardingStackParamList } from '@/navigation/types';
-import { ScreenViewModel } from '@/screens/on-boarding/types';
+import { ScreenViewModel } from '@on-boarding/types';
 import { cache } from '@/storage';
-import { NavigationProp, useNavigation } from '@react-navigation/native';
-import { useEffect } from 'react';
 
 export const useOnBoardingViewModel = (): ScreenViewModel => {
   const navigation = useNavigation<NavigationProp<OnBoardingStackParamList>>();

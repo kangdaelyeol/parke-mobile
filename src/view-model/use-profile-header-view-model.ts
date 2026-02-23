@@ -1,5 +1,5 @@
-import { HeaderViewModel } from '@profile/types';
 import { useNavigation } from '@react-navigation/native';
+import { HeaderViewModel } from '@profile/types';
 
 export const useProfileHeaderViewModel = (): HeaderViewModel => {
   const navigation = useNavigation();

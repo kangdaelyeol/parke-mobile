@@ -9,7 +9,7 @@ import { Alert } from 'react-native';
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
-export const UseLoginViewModel = (): LoginViewModel => {
+export const useLoginViewModel = (): LoginViewModel => {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
   const { actions } = useBleContext();
