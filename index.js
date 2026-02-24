@@ -3,11 +3,12 @@
  */
 
 import { AppRegistry } from 'react-native';
+import notifee, { EventType } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import notifee, { EventType } from '@notifee/react-native';
-import { cardService } from './src/services';
-import { cache } from './src/storage';
+import { cardService } from '@/services';
+import { cache } from '@/storage';
+import { extractNumber } from '@/utils';
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
@@ -17,7 +18,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 
   if (actionId === 'confirm' && cardId && newPhone) {
     try {
-      cardService.updatePhone(cardId, newPhone);
+      cardService.updatePhone(cardId, extractNumber(newPhone));
       cache.clearPending();
     } catch (e) {
       // bground에서는 Alert 안터짐

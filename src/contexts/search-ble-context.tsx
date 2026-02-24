@@ -6,20 +6,15 @@ import {
   useState,
 } from 'react';
 import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import ensurePermissions from '@/helpers/ensure-permissions';
-import { SearchBleStackNavigationProp } from '@/navigation/types';
 import useHeptic from '@/hooks/use-heptic';
-import { useBleContext } from './ble-context';
+import { useBleContext } from '@/contexts';
 
 interface SearchBLEContextValue {
   state: {
     devices: any[];
     rssi: string;
     detected: boolean;
-  };
-  actions: {
-    goBack: () => void;
   };
 }
 
@@ -33,16 +28,25 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
 
   const [detected, setDetected] = useState(false);
 
-  const navigation = useNavigation<SearchBleStackNavigationProp>();
+  useEffect(() => {
+    console.log('SearchBLE mounted', detected);
 
-  if (!detected && bleState.rssi) {
-    setDetected(true);
-    setTime(200);
-    setHepticOption('impactMedium');
-  }
+    return () => {
+      console.log('SearchBLE unmounted', detected);
+    };
+  }, [detected]);
 
   useEffect(() => {
-    actions.stopBackgroundScan();
+    if (!detected && bleState.rssi) {
+      setDetected(true);
+      setTime(200);
+      setHepticOption('impactMedium');
+    }
+  }, [detected, bleState.rssi, setTime, setHepticOption]);
+
+  useEffect(() => {
+    console.log('asd');
+    actions.stopBleScan();
     let sub: { remove: () => void } | undefined;
     let unmounted = false;
 
@@ -65,21 +69,15 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
     return () => {
       unmounted = true;
       sub?.remove();
+      actions.stopBleScan();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const goBack = () => {
-    navigation.goBack();
-  };
 
   return (
     <searchBLEContext.Provider
       value={{
         state: { devices: bleState.devices, detected, rssi: bleState.rssi },
-        actions: {
-          goBack,
-        },
       }}
     >
       {children}

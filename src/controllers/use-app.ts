@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import { Alert, AppState } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
 import { cache } from '@/storage';
-import { notifyOnScreenToChangePhone } from '@/utils';
 import { setupNotifications } from '@/helpers';
-import { deviceService } from '@/services';
+import { cardService } from '@/services';
+import { notifyChangePhoneOnScreen } from '@/utils';
 
 const useForegroundEvent = () => {
-  const { updatePhoneNumber } = deviceService;
   useEffect(() => {
     setupNotifications();
 
@@ -15,15 +14,11 @@ const useForegroundEvent = () => {
       if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
 
       const actionId = detail.pressAction?.id;
-      const { deviceId, newPhone, serial } = detail.notification?.data || {};
+      const { cardId, newPhone } = detail.notification?.data || {};
 
-      if (actionId === 'confirm' && deviceId && newPhone) {
+      if (actionId === 'confirm' && newPhone) {
         try {
-          await updatePhoneNumber(
-            String(serial),
-            String(deviceId),
-            String(newPhone),
-          );
+          await cardService.updatePhone(String(cardId), String(newPhone));
           cache.clearPending();
         } catch (e) {
           Alert.alert('오류', '전화번호 변경에 실패했습니다.');
@@ -35,7 +30,7 @@ const useForegroundEvent = () => {
     });
 
     return () => unsub();
-  }, [updatePhoneNumber]);
+  }, []);
 
   // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
   useEffect(() => {
@@ -45,7 +40,7 @@ const useForegroundEvent = () => {
       const pending = cache.getPending();
       if (!pending) return;
 
-      notifyOnScreenToChangePhone(pending.phoneNumber);
+      notifyChangePhoneOnScreen(pending.cardId, pending.phone);
       cache.clearPending();
     });
 
