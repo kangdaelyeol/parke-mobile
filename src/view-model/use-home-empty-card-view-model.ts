@@ -21,7 +21,7 @@ export const useHomeEmptyCardViewModel = (idx: number): CardViewModel => {
 
   const cardPress = () => {
     if (settingCard !== -1) return;
-    if (selectedCardIdx === idx) navigation.replace('SearchBLE');
+    if (selectedCardIdx === idx) navigation.navigate('SearchBLE');
     else {
       sliderController.goToIdx(idx);
     }
