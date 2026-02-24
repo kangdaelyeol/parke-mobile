@@ -2,14 +2,19 @@ import { StyleSheet, Text, View } from 'react-native';
 import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
+import { useBleContext } from '@/contexts';
 
 export const Header = () => {
   const { user } = useUserContext();
+  const { state } = useBleContext();
   return (
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
-        <Text style={styles.phone}>{convertPhone(user.phone)}</Text>
+        <Text style={styles.phone}>
+          {convertPhone(user.phone)}
+          {state.isBackgroundScanning ? 'Yes' : 'No'}
+        </Text>
       </View>
     </View>
   );
