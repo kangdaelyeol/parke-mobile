@@ -18,13 +18,15 @@ export const useLoginViewModel = (): LoginViewModel => {
 
   useEffect(() => {
     (async () => {
+      if (!navigation) return;
       setLoading(true);
       const kakaoProfile = await getKakaoProfile();
       if (!kakaoProfile) return setLoading(false);
+
       const user = await userService.get(kakaoProfile.email);
       if (!user) return setLoading(false);
       setUser(user);
-      navigation.navigate('Home');
+      navigation.replace('Home');
     })();
     actions.stopBleScan();
   }, [navigation, setUser]);
@@ -38,6 +40,7 @@ export const useLoginViewModel = (): LoginViewModel => {
     if (kakaoProfile) {
       const { email, nickname } = kakaoProfile;
       const user = await userService.get(email);
+
       if (!user) {
         const userRes = await userService.create({ id: email, nickname });
         if (!userRes) {
