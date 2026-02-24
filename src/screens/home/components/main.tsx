@@ -10,7 +10,6 @@ import { EmptyCard, SettingCard, CardOption, Card } from '@home/components';
 import { cache } from '@/storage';
 import { CardDto } from '@/domain/card';
 import { cardService, userService } from '@/services';
-import { Loading } from '@/components';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
 
@@ -54,7 +53,7 @@ const Test = () => {
           });
           if (res === null) Alert.alert('오류가 발생했');
 
-          await userService.updateCardList(user.id, [
+          await userService.updateCardIdList(user.id, [
             ...user.cardIdList,
             res?.id ?? '',
           ]);
@@ -70,14 +69,13 @@ const Test = () => {
 
 export const Main = () => {
   const { state, actions } = useHomeMainViewModel();
-  const { cards } = useUserContext();
 
   return (
     <View style={styles.main}>
-      {state.loading && <Loading />}
+      
       <Test />
       <View style={styles.mainWrapper}>
-        {!state.isSetting && cards[state.selectedCardIdx] && (
+        {!state.isSetting && state.cards[state.selectedCardIdx] && (
           <>
             <View style={styles.title}>
               <Text style={styles.titleText}>My parke list</Text>
@@ -92,8 +90,8 @@ export const Main = () => {
               <Animated.View
                 style={[state.animatedStyle, styles.cardSliderMover]}
               >
-                {cards &&
-                  cards.map((card, idx) => (
+                {state.cards &&
+                  state.cards.map((card, idx) => (
                     <Card key={idx} {...card} idx={idx} />
                   ))}
                 <EmptyCard idx={state.cardLength} />
@@ -101,10 +99,12 @@ export const Main = () => {
             </View>
           </Animated.View>
         </GestureDetector>
-        {!state.isSetting && cards[state.selectedCardIdx] && (
-          <CardOption card={cards[state.selectedCardIdx]} />
+        {!state.isSetting && state.cards[state.selectedCardIdx] && (
+          <CardOption card={state.cards[state.selectedCardIdx]} />
         )}
-        {state.isSetting && <SettingCard card={cards[state.selectedCardIdx]} />}
+        {state.isSetting && (
+          <SettingCard card={state.cards[state.selectedCardIdx]} />
+        )}
       </View>
     </View>
   );
