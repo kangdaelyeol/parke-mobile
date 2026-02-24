@@ -5,7 +5,7 @@ import {
   useCardSliderContext,
   useUserContext,
 } from '@/contexts';
-import { cardService, userService } from '@/services';
+import { cardService } from '@/services';
 import { CardOptionViewModel } from '@home/types';
 
 export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
@@ -40,8 +40,6 @@ export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
               return setLoading(false);
             }
 
-            userService.deleteCard(user.id, selectedCard.id);
-            
             setLoading(false);
             setCards(filteredCardList);
           },

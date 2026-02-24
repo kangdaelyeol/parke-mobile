@@ -1,4 +1,4 @@
-import { cardClient } from '@/client';
+import { cardClient, userClient } from '@/client';
 import { Card, CardDto } from '@/domain/card';
 
 export const cardService = {
@@ -43,7 +43,15 @@ export const cardService = {
   },
   delete: async (cardId: string, userId: string): Promise<boolean> => {
     const card = await cardClient.getById(cardId);
-    if (!card) return false;
+    const user = await userClient.getById(userId);
+    if (!user || !card) return false;
+    const newCardIdList = user.cardIdList.filter(id => id !== cardId);
+
+    const res = await userClient.update({
+      id: userId,
+      cardIdList: newCardIdList,
+    });
+    if (!res) return false;
     const newOwnerList = card.ownerList.filter(id => id !== userId);
     if (newOwnerList.length === 0) return await cardClient.deleteById(cardId);
     return cardClient.update({ ...card, ownerList: newOwnerList });

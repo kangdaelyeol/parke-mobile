@@ -51,7 +51,7 @@ export const userService = {
 
     const newCardIdList = user.cardIdList.filter(id => id !== cardId);
     user.cardIdList = newCardIdList;
-    userClient.update(user);
+    await userClient.update(user);
 
     const newCardOwnerList = card.ownerList.filter(id => id !== userId);
     if (newCardOwnerList.length === 0) return cardClient.deleteById(cardId);
