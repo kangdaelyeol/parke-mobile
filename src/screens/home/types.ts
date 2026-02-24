@@ -11,7 +11,6 @@ interface MainState {
   isSetting: boolean;
   cards: CardDto[];
   cardLength: number;
-  loading: boolean;
 }
 
 interface MainActions {

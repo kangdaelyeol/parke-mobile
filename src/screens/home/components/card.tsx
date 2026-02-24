@@ -24,7 +24,7 @@ export const Card = ({ title, phone, idx, message, autoChange }: CardProps) => {
           />
           <Text style={styles.message}>{message}</Text>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.phone}>{convertPhone(phone)}</Text>
+          <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
         </View>
         {autoChange ? (
           <View style={styles.autoChange}>
