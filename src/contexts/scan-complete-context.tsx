@@ -137,10 +137,9 @@ export const ScanCompleteContextProvider = ({
   };
 
   useEffect(() => {
-    bleActions.stopBackgroundScan();
     bleActions.stopBleScan();
     setPhone(user.phone);
-  }, [user.phone, bleActions]);
+  }, [user.phone, setPhone]);
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>

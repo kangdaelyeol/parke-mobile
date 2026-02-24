@@ -24,11 +24,10 @@ export const useLoginViewModel = (): LoginViewModel => {
       const user = await userService.get(kakaoProfile.email);
       if (!user) return setLoading(false);
       setUser(user);
-      navigation.replace('Home');
+      navigation.navigate('Home');
     })();
-    actions.startBackgroundScan();
     actions.stopBleScan();
-  }, [getKakaoProfile, navigation, setUser, actions]);
+  }, [navigation, setUser]);
 
   const kakaoLoginPress = async () => {
     if (loading) return;

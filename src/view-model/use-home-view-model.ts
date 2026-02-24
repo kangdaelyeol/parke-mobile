@@ -12,7 +12,7 @@ export const useHomeViewModel = () => {
       if (!settings.active) return;
       if (cards.length === 0) return;
 
-      actions.startBackgroundScan();
-    })();
-  }, [actions, cards.length]);
+        actions.startBackgroundScan();
+      })();
+
 };

@@ -17,9 +17,8 @@ export const useInitViewModel = (): InitViewModel => {
   const { actions: bleActions } = useBleContext();
 
   useEffect(() => {
-    bleActions.stopBackgroundScan();
     bleActions.stopBleScan();
-  });
+  }, []);
 
   const actions = {
     phoneInput: (val: string) => {

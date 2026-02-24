@@ -5,7 +5,6 @@ export const useProfileViewModel = () => {
   const { actions } = useBleContext();
 
   useEffect(() => {
-    actions.stopBackgroundScan();
     actions.stopBleScan();
-  }, [actions]);
+  }, []);
 };

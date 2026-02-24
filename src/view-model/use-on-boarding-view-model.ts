@@ -13,10 +13,9 @@ export const useOnBoardingViewModel = (): ScreenViewModel => {
   useEffect(() => {
     const hasSeen = cache.getHasSeenOnBoarding();
     if (hasSeen) navigation.navigate('Login');
-    bleActions.stopBackgroundScan();
     bleActions.stopBleScan();
     setLoading(false);
-  }, [navigation, setLoading, bleActions]);
+  }, [navigation, setLoading]);
 
   return {
     state: { loading },
