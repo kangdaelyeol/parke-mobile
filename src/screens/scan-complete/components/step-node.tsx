@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
   useAnimatedStyle,
@@ -16,52 +16,57 @@ interface StepProps {
 }
 
 export const StepNode = ({ label, step, currentStep }: StepProps) => {
-  const dotBoxStyles = { backgroundColor: '#ffffff' };
-  const dotStyles = { backgroundColor: '#000000' };
+  const dotBackgroundColor = useSharedValue('#000000');
   const dotScale = useSharedValue(0);
   const checkIconOpacity = useSharedValue(0);
 
-  if (step === currentStep) {
-    dotBoxStyles.backgroundColor = '#000000';
-    dotStyles.backgroundColor = '#396cf8';
-    dotScale.value = withTiming(1, {
-      duration: 300,
-      easing: Easing.bezier(0.33, 1, 0.68, 1),
-    });
-    checkIconOpacity.value = withDelay(
-      500,
-      withTiming(0, { duration: 200, easing: Easing.bezier(0.33, 1, 0.68, 1) }),
-    );
-  }
+  useEffect(() => {
+    if (step === currentStep) {
+      dotBackgroundColor.value = '#396cf8';
+      dotScale.value = withTiming(1, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+      checkIconOpacity.value = withDelay(
+        500,
+        withTiming(0, {
+          duration: 200,
+          easing: Easing.bezier(0.33, 1, 0.68, 1),
+        }),
+      );
+    }
 
-  if (step < currentStep) {
-    dotStyles.backgroundColor = '#396cf8';
-    dotBoxStyles.backgroundColor = '#000000';
-    dotScale.value = withTiming(2, {
-      duration: 300,
-      easing: Easing.bezier(0.33, 1, 0.68, 1),
-    });
-    checkIconOpacity.value = withDelay(
-      300,
-      withTiming(1, { duration: 200, easing: Easing.linear }),
-    );
-  }
+    if (step < currentStep) {
+      dotBackgroundColor.value = '#396cf8';
+      dotScale.value = withTiming(2, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+      checkIconOpacity.value = withDelay(
+        300,
+        withTiming(1, { duration: 200, easing: Easing.linear }),
+      );
+    }
 
-  if (step > currentStep) {
-    dotBoxStyles.backgroundColor = '#000000';
-    dotStyles.backgroundColor = '#000000';
-    dotScale.value = withTiming(0, {
-      duration: 300,
-      easing: Easing.bezier(0.33, 1, 0.68, 1),
-    });
-    checkIconOpacity.value = withDelay(
-      500,
-      withTiming(0, { duration: 200, easing: Easing.bezier(0.33, 1, 0.68, 1) }),
-    );
-  }
+    if (step > currentStep) {
+      dotBackgroundColor.value = '#000000';
+      dotScale.value = withTiming(0, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+      checkIconOpacity.value = withDelay(
+        500,
+        withTiming(0, {
+          duration: 200,
+          easing: Easing.bezier(0.33, 1, 0.68, 1),
+        }),
+      );
+    }
+  }, [checkIconOpacity, currentStep, dotBackgroundColor, dotScale, step]);
 
   const dotAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: dotScale.value }],
+    backgroundColor: dotBackgroundColor.value,
   }));
 
   const checkIconAnimatedStyle = useAnimatedStyle(() => ({
@@ -70,14 +75,8 @@ export const StepNode = ({ label, step, currentStep }: StepProps) => {
 
   return (
     <View style={styles.container}>
-      <View style={[styles.dotBox, dotBoxStyles as StyleProp<ViewStyle>]}>
-        <Animated.View
-          style={[
-            styles.dot,
-            dotStyles as StyleProp<ViewStyle>,
-            dotAnimatedStyle,
-          ]}
-        >
+      <View style={[styles.dotBox]}>
+        <Animated.View style={[styles.dot, dotAnimatedStyle]}>
           <Animated.View style={checkIconAnimatedStyle}>
             {step < currentStep && (
               <FontAwesome6

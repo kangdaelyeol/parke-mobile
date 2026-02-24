@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
   Easing,
@@ -14,21 +15,24 @@ interface StepBarProps {
 export const StepLine = ({ step, currentStep }: StepBarProps) => {
   const blueLineWidth = useSharedValue(0);
 
-  if (currentStep > step) {
-    blueLineWidth.value = withTiming(130, {
-      duration: 300,
-      easing: Easing.bezier(0.33, 1, 0.68, 1),
-    });
-  } else {
-    blueLineWidth.value = withTiming(0, {
-      duration: 300,
-      easing: Easing.bezier(0.33, 1, 0.68, 1),
-    });
-  }
+  useEffect(() => {
+    if (currentStep > step) {
+      blueLineWidth.value = withTiming(130, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+    } else {
+      blueLineWidth.value = withTiming(0, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+    }
+  }, [step, currentStep, blueLineWidth]);
 
   const BlueLineAnimatedStyle = useAnimatedStyle(() => ({
     width: blueLineWidth.value,
   }));
+  
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.blueLine, BlueLineAnimatedStyle]} />
