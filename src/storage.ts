@@ -8,7 +8,7 @@ export const cache = {
   clearDeniedAt: () => kv.set('ble:lastDenied', 0),
   markLastDenied: () => kv.set('ble:lastDenied', Date.now()),
   getPending: () => JSON.parse(kv.getString('ble:pending') ?? 'null'),
-  setPending: (obj: { phoneNumber: string }) =>
+  setPending: (obj: { phone: string; cardId: string }) =>
     kv.set('ble:pending', JSON.stringify(obj)),
   clearPending: () => kv.set('ble:pending', 'null'),
 
