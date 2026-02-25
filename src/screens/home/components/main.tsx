@@ -8,7 +8,6 @@ import { useUserContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants';
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components';
 import { cache } from '@/storage';
-import { CardDto } from '@/domain/card';
 import { cardService, userService } from '@/services';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
@@ -16,7 +15,7 @@ import { useHomeMainViewModel } from '@/view-model';
 const Test = () => {
   const [busy, setBusy] = useState(false);
   const navigation = useNavigation<HomeStackNavigationProp>();
-  const { setCards, user } = useUserContext();
+  const { user, syncCardList } = useUserContext();
   return (
     <>
       {/* Test Buttons */}
@@ -48,8 +47,8 @@ const Test = () => {
             updatedAt: Date.now(),
             updatedBy: 'test',
             autoChange: false,
-            deviceId: 'test',
-            ownerList: [],
+            deviceId: 'abcd' + Date.now(),
+            ownerList: ['asa47972000@kakao.com'],
           });
           if (res === null) Alert.alert('오류가 발생했');
 
@@ -57,7 +56,8 @@ const Test = () => {
             ...user.cardIdList,
             res?.id ?? '',
           ]);
-          setCards(prev => [...prev, { ...res }] as CardDto[]);
+
+          await syncCardList();
         }}
         style={styles.test2}
       >
@@ -72,7 +72,6 @@ export const Main = () => {
 
   return (
     <View style={styles.main}>
-      
       <Test />
       <View style={styles.mainWrapper}>
         {!state.isSetting && state.cards[state.selectedCardIdx] && (
