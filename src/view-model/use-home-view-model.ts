@@ -1,35 +1,62 @@
 import { useBleContext, useUserContext } from '@/contexts';
+import { startBackgroundScan } from '@/helpers';
 import ensurePermissions from '@/helpers/ensure-permissions';
 import { settingService } from '@/services';
 import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 
 export const useHomeViewModel = () => {
   const {
-    actions: { stopBleScan, startBackgroundScan },
+    actions: { stopBleScan },
     state: bleState,
   } = useBleContext();
-  const { cards, user, syncCardList } = useUserContext();
+  const { cards, user, syncCardList, setCards } = useUserContext();
+  const { bleManager, scanSessionRef, bgScanRef } = bleState;
   const [loading, setLoading] = useState(false);
+
+  const cardsRef = useRef(cards);
+  const userRef = useRef(user);
+
+  useEffect(() => {
+    cardsRef.current = cards;
+  }, [cards]);
+  useEffect(() => {
+    userRef.current = user;
+  }, [user]);
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const startBackgroundScanMemorized = useCallback(async () => {
+    if (!bleManager) return;
+
+    await startBackgroundScan({
+      scanSessionRef,
+      bleManager,
+      bgScanRef,
+      cardsRef,
+      setCards,
+      userRef,
+    });
+  }, [scanSessionRef, bleManager, bgScanRef, userRef, cardsRef, setCards]);
 
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return;
-      if (!bleState.bleManager) return;
+      if (!bleManager) return;
       (async () => {
         setLoading(true);
         await syncCardList();
         setLoading(false);
       })();
-    }, [bleState.bleManager, syncCardList, user?.id]),
+    }, [bleManager, syncCardList, user?.id]),
   );
 
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return;
-      if (!bleState.bleManager) return;
-      const nowSession = bleState.scanSessionRef.current + 1;
+      if (!bleManager) return;
+      if (!startBackgroundScanMemorized) return;
+      const nowSession = scanSessionRef.current + 1;
 
       let sub: { remove: () => void } | undefined;
       (async () => {
@@ -42,10 +69,10 @@ export const useHomeViewModel = () => {
           return;
         }
 
-        sub = bleState.bleManager?.onStateChange(state => {
+        sub = bleManager?.onStateChange(state => {
           console.log(state);
           if (state === 'PoweredOn') {
-            startBackgroundScan();
+            startBackgroundScanMemorized();
             sub?.remove();
           }
         }, true);
@@ -56,10 +83,10 @@ export const useHomeViewModel = () => {
       };
     }, [
       cards.length,
-      bleState.bleManager,
-      startBackgroundScan,
+      bleManager,
+      startBackgroundScanMemorized,
       stopBleScan,
-      bleState.scanSessionRef,
+      scanSessionRef,
       user.id,
     ]),
   );
