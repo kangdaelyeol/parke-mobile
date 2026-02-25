@@ -1,12 +1,11 @@
 import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { NavigationContainer } from '@react-navigation/native';
 import RootNavigator from '@/navigation/root-navigator';
 import { useAppController } from '@/controllers/use-app';
 import { BleContextProvider, UserContextProvider } from '@/contexts';
 import { AuthContextProvider } from '@/contexts/auth-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { navigationRef } from '@/navigation/navigation-ref';
+import { NavigationContainer } from '@react-navigation/native';
 
 function App() {
   useAppController();
@@ -15,7 +14,7 @@ function App() {
   return (
     <GestureHandlerRootView style={styles.handlerView}>
       <SafeAreaProvider>
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer>
           <AuthContextProvider>
             <UserContextProvider>
               <BleContextProvider>
