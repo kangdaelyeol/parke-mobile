@@ -45,7 +45,9 @@ export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
   const { user, setUser } = useUserContext();
-  const { actions: bleActions } = useBleContext();
+  const {
+    actions: { stopBleScan },
+  } = useBleContext();
 
   const [phone, setPhone] = useState('');
   const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
@@ -137,9 +139,9 @@ export const ScanCompleteContextProvider = ({
   };
 
   useEffect(() => {
-    bleActions.stopBleScan();
+    stopBleScan();
     setPhone(user.phone);
-  }, [user.phone, setPhone]);
+  }, [user.phone, setPhone, stopBleScan]);
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>

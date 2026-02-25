@@ -14,11 +14,13 @@ export const useInitViewModel = (): InitViewModel => {
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);
   const [loading, setLoading] = useState(false);
-  const { actions: bleActions } = useBleContext();
+  const {
+    actions: { stopBleScan },
+  } = useBleContext();
 
   useEffect(() => {
-    bleActions.stopBleScan();
-  }, []);
+    stopBleScan();
+  }, [stopBleScan]);
 
   const actions = {
     phoneInput: (val: string) => {

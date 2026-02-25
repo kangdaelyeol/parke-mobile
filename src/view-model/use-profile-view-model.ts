@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { useBleContext } from '@/contexts';
 
 export const useProfileViewModel = () => {
-  const { actions } = useBleContext();
+  const {
+    actions: { stopBleScan },
+  } = useBleContext();
 
   useEffect(() => {
-    actions.stopBleScan();
-  }, []);
+    stopBleScan();
+  }, [stopBleScan]);
 };

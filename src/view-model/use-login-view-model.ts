@@ -12,7 +12,9 @@ const isUserDto = (dto: any): dto is UserDto => dto.id;
 export const useLoginViewModel = (): LoginViewModel => {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
-  const { actions } = useBleContext();
+  const {
+    actions: { stopBleScan },
+  } = useBleContext();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<LoginStackNavigationProp>();
 
@@ -28,8 +30,8 @@ export const useLoginViewModel = (): LoginViewModel => {
       setUser(user);
       navigation.replace('Home');
     })();
-    actions.stopBleScan();
-  }, [navigation, setUser]);
+    stopBleScan();
+  }, [getKakaoProfile, navigation, setUser, stopBleScan]);
 
   const kakaoLoginPress = async () => {
     if (loading) return;
