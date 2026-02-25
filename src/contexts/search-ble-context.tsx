@@ -10,8 +10,9 @@ import useHeptic from '@/hooks/use-heptic';
 import { useBleContext } from '@/contexts';
 import { useNavigation } from '@react-navigation/native';
 import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '@/constants';
-import { generateBase64Id, getDeviceId } from '@/helpers';
+import { ensurePermissions, generateBase64Id, getDeviceId } from '@/helpers';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
+import { Alert } from 'react-native';
 
 interface SearchBLEContextValue {
   state: {
@@ -44,7 +45,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   }, [detected, rssi, setTime, setHepticOption]);
 
   const actions = {
-    startSearchBle: useCallback(() => {
+    startSearchBle: useCallback(async () => {
       bleState.scanSessionRef.current++;
       const bleManager = bleState.bleManager;
       console.log('startSearchBle1');
@@ -52,6 +53,12 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
       console.log('startSearchBle2');
       bleState.searchBleRef.current = true;
       setDevices([]);
+
+      const ok = await ensurePermissions();
+      if (!ok) {
+        Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
+        navigation.goBack();
+      }
 
       bleManager?.startDeviceScan(
         null,

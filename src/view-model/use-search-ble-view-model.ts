@@ -1,8 +1,8 @@
-import { useBleContext, useSearchBleContext } from '@/contexts';
-import ensurePermissions from '@/helpers/ensure-permissions';
-import { SearchBleScreenViewModel } from '@/screens/search-ble/types';
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
+import { useBleContext, useSearchBleContext } from '@/contexts';
+import { ensurePermissions } from '@/helpers';
+import { SearchBleScreenViewModel } from '@search-ble/types';
 
 export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
   const { state: searchBleState, actions: searchBleActions } =

@@ -1,6 +1,5 @@
 import { useBleContext, useUserContext } from '@/contexts';
-import { startBackgroundScan } from '@/helpers';
-import ensurePermissions from '@/helpers/ensure-permissions';
+import { startBackgroundScan, ensurePermissions } from '@/helpers';
 import { settingService } from '@/services';
 import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -11,8 +10,8 @@ export const useHomeViewModel = () => {
     actions: { stopBleScan },
     state: bleState,
   } = useBleContext();
-  const { cards, user, syncCardList, setCards } = useUserContext();
   const { bleManager, scanSessionRef, bgScanRef } = bleState;
+  const { cards, user, syncCardList, setCards } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const cardsRef = useRef(cards);

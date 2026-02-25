@@ -1,12 +1,12 @@
+import { useState } from 'react';
+import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useUserContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { InitStackNavigationProp } from '@/navigation/types';
 import { InitViewModel } from '@/screens/init/types';
 import { userService } from '@/services';
 import { extractNumber } from '@/utils';
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { Alert } from 'react-native';
 
 export const useInitViewModel = (): InitViewModel => {
   const navigation = useNavigation<InitStackNavigationProp>();
