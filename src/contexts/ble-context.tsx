@@ -1,6 +1,7 @@
 import {
   createContext,
   PropsWithChildren,
+  useCallback,
   useContext,
   useEffect,
   useRef,
@@ -49,8 +50,10 @@ const isCandidate = (dev: Device) =>
 
 export const BleContextProvider = ({ children }: PropsWithChildren) => {
   const { user, cards, setCards } = useUserContext();
-  const [bleManager] = useState<BleManager>(
-    new BleManager({
+  const bleManagerRef = useRef<BleManager | null>(null);
+
+  useEffect(() => {
+    bleManagerRef.current ??= new BleManager({
       restoreStateIdentifier: 'com.app.ble',
       restoreStateFunction: async _restored => {
         try {
@@ -59,8 +62,13 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           console.warn('Restore callback before JS ready:', err);
         }
       },
-    }),
-  );
+    });
+
+    return () => {
+      bleManagerRef.current?.destroy();
+      bleManagerRef.current = null;
+    };
+  }, []);
 
   const cardsRef = useRef(cards);
   const userRef = useRef(user);
@@ -82,6 +90,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
   // Bluetooth PoweredOn/권한 대기
   async function ensureReady(): Promise<boolean> {
     // (안드로이드 12+ 권한 체크/요청은 여기에—생략)
+    const bleManager = bleManagerRef.current;
     if (!bleManager) return false;
 
     let state = await bleManager.state();
@@ -100,9 +109,11 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const actions = {
-    startSearchBle: () => {
+    startSearchBle: useCallback(() => {
+      const bleManager = bleManagerRef.current;
+      console.log('startSearchBle1');
       if (searchbleRef.current) return;
-      console.log('startSearchBle');
+      console.log('startSearchBle2');
       searchbleRef.current = true;
       setDevices([]);
 
@@ -154,8 +165,9 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           }
         },
       );
-    },
-    startBackgroundScan: async () => {
+    }, []),
+    startBackgroundScan: useCallback(async () => {
+      const bleManager = bleManagerRef.current;
       if (bgScanRef.current) return;
       // const a = await ensureReady();
       // console.log(a);
@@ -247,15 +259,15 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           }
         },
       );
-    },
+    },[setCards]),
 
-    stopBleScan: async () => {
+    stopBleScan: useCallback(async () => {
+      if (!bleManagerRef.current) return;
       console.log('stopScanning');
       bgScanRef.current = false;
       searchbleRef.current = false;
-
-      await bleManager?.stopDeviceScan();
-    },
+      await bleManagerRef.current.stopDeviceScan();
+    }, [bleManagerRef]),
   };
 
   return (
@@ -263,7 +275,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         actions,
         state: {
-          bleManager,
+          bleManager: bleManagerRef.current,
           devices,
           rssi,
           isBackgroundScanning: bgScanRef.current,

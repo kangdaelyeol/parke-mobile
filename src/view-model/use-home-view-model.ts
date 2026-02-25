@@ -4,20 +4,21 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback, useState } from 'react';
 
 export const useHomeViewModel = () => {
-  const { actions } = useBleContext();
-  const { cards, user, setCards, syncCardList } = useUserContext();
+  const {
+    actions: { stopBleScan, startBackgroundScan },
+  } = useBleContext();
+  const { cards, user, syncCardList } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
-      if (!user) return;
+      if (!user?.id) return;
       (async () => {
         const settings = settingService.getSettings();
 
         if (!settings.active) return;
         if (cards.length === 0) return;
-
-        actions.startBackgroundScan();
+        startBackgroundScan();
       })();
 
       (async () => {
@@ -25,11 +26,12 @@ export const useHomeViewModel = () => {
         await syncCardList();
         setLoading(false);
       })();
+      console.log(user.id, cards.length);
 
       return () => {
-        actions.stopBleScan();
+        stopBleScan();
       };
-    }, [user, cards.length, syncCardList]),
+    }, [user.id, cards.length, syncCardList, startBackgroundScan, stopBleScan]),
   );
 
   return { state: { loading } };
