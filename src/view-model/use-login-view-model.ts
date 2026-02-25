@@ -1,4 +1,4 @@
-import { useAuthContext, useBleContext, useUserContext } from '@/contexts';
+import { useAuthContext, useUserContext } from '@/contexts';
 import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
@@ -12,9 +12,6 @@ const isUserDto = (dto: any): dto is UserDto => dto.id;
 export const useLoginViewModel = (): LoginViewModel => {
   const { kakaoLogin, getKakaoProfile } = useAuthContext();
   const { setUser } = useUserContext();
-  const {
-    actions: { stopBleScan },
-  } = useBleContext();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<LoginStackNavigationProp>();
 
@@ -30,8 +27,7 @@ export const useLoginViewModel = (): LoginViewModel => {
       setUser(user);
       navigation.replace('Home');
     })();
-    stopBleScan();
-  }, [getKakaoProfile, navigation, setUser, stopBleScan]);
+  }, [getKakaoProfile, navigation, setUser]);
 
   const kakaoLoginPress = async () => {
     if (loading) return;
