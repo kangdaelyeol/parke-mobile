@@ -29,14 +29,6 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
   const [detected, setDetected] = useState(false);
 
   useEffect(() => {
-    console.log('SearchBLE mounted', detected);
-
-    return () => {
-      console.log('SearchBLE unmounted', detected);
-    };
-  }, [detected]);
-
-  useEffect(() => {
     if (!detected && bleState.rssi) {
       setDetected(true);
       setTime(200);
@@ -45,7 +37,6 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
   }, [detected, bleState.rssi, setTime, setHepticOption]);
 
   useEffect(() => {
-    console.log('asd');
     actions.stopBleScan();
     let sub: { remove: () => void } | undefined;
     let unmounted = false;
@@ -58,7 +49,10 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
       }
       await actions.stopBleScan();
 
+      console.log(bleState.bleManager);
+
       sub = bleState.bleManager?.onStateChange(state => {
+        console.log(state);
         if (state === 'PoweredOn') {
           actions.startSearchBle();
           sub?.remove();
