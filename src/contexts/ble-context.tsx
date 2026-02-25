@@ -5,7 +5,6 @@ import {
   useContext,
   useEffect,
   useRef,
-  useState,
 } from 'react';
 import { Alert } from 'react-native';
 import { BleManager, Device } from 'react-native-ble-plx';
@@ -14,8 +13,6 @@ import {
   SERVICE_UUID,
   RENEW_INTERVAL_MS,
   NOTIFY_COOLDOWN_MS,
-  BLE_DEVICE_NAME,
-  CHAR_UUID,
 } from '@/constants';
 import { cache } from '@/storage';
 import { notifyPhoneChange } from '@/helpers/notify-phone-change';
@@ -23,21 +20,16 @@ import { cardService } from '@/services';
 import { nofifyMessage } from '@/helpers/notify-message';
 import { settingService } from '@/services';
 import { useUserContext } from './user-context';
-import { getDeviceId, generateBase64Id } from '@/helpers';
+import { getDeviceId } from '@/helpers';
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils';
-import { navigationRef } from '@/navigation/navigation-ref';
-import { StackActions } from '@react-navigation/native';
 
 interface BleContextValue {
   actions: {
     startBackgroundScan: () => Promise<void>;
     stopBleScan: (session: number) => Promise<void>;
-    startSearchBle: () => void;
   };
   state: {
     bleManager: BleManager | null;
-    devices: any[];
-    rssi: string;
     isBackgroundScanning: boolean;
     scanSessionRef: React.RefObject<number>;
   };
@@ -85,69 +77,8 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
   }, [user]);
 
   // temp - 디바이스 조회 잘 되나 확인하기 위함
-  const [devices, setDevices] = useState<any[]>([]);
-
-  const [rssi, setRssi] = useState('');
 
   const actions = {
-    startSearchBle: useCallback(() => {
-      scanSessionRef.current++;
-      const bleManager = bleManagerRef.current;
-      console.log('startSearchBle1');
-      if (searchbleRef.current) return;
-      console.log('startSearchBle2');
-      searchbleRef.current = true;
-      setDevices([]);
-
-      bleManager?.startDeviceScan(
-        null,
-        { allowDuplicates: true },
-        async (error, device) => {
-          if (error || !device) return;
-
-          /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
-
-          setDevices(prev => {
-            const exists = prev.find(d => d.id === device.id);
-            if (exists) return prev;
-            return [...prev, { id: device.id, name: device.name }];
-          });
-
-          if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
-
-          setRssi(String(device.rssi));
-
-          if (!device.rssi || device.rssi < -40) return;
-
-          try {
-            bleManager?.stopDeviceScan();
-            const d = await device.connect();
-            await d.discoverAllServicesAndCharacteristics();
-            const deviceId = await getDeviceId(d);
-            if (deviceId) {
-              if (navigationRef.isReady())
-                navigationRef.dispatch(
-                  StackActions.replace('ScanComplete', { value: deviceId }),
-                );
-            } else {
-              const base64Id = generateBase64Id();
-              await device.writeCharacteristicWithResponseForService(
-                SERVICE_UUID,
-                CHAR_UUID,
-                base64Id,
-              );
-              if (navigationRef.isReady())
-                navigationRef.dispatch(
-                  StackActions.replace('ScanComplete', { value: base64Id }),
-                );
-            }
-            await d.cancelConnection();
-          } catch (e) {
-            console.log(e);
-          }
-        },
-      );
-    }, []),
     startBackgroundScan: useCallback(async () => {
       scanSessionRef.current++;
       const bleManager = bleManagerRef.current;
@@ -264,8 +195,6 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
         actions,
         state: {
           bleManager: bleManagerRef.current,
-          devices,
-          rssi,
           isBackgroundScanning: bgScanRef.current,
           scanSessionRef,
         },

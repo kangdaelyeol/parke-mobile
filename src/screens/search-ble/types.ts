@@ -23,8 +23,15 @@ interface TitleActions {
   titleLayout: (e: LayoutChangeEvent) => void;
 }
 
+interface ScreenStates {
+  rssi: string;
+  devices: any[];
+}
+
 export type SearchBLEHeaderViewModel = ViewModel<{}, HeaderActions>;
 
 export type SearchBLERaderViewModel = ViewModel<RaderState, {}>;
 
 export type SearchBLETitleViewModel = ViewModel<TitleState, TitleActions>;
+
+export type SearchBLEScreenViewModel = ViewModel<ScreenStates, {}>;

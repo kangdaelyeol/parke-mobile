@@ -1,12 +1,12 @@
 import { StyleSheet, Text } from 'react-native';
 import Animated from 'react-native-reanimated';
-import { useSearchBLEContext } from '@/contexts/search-ble-context';
+import { useSearchBleContext } from '@/contexts';
 import { useSearchBLETitleViewModel } from '@/view-model';
 import { title, subTitle } from '@search-ble/constants';
 export const Title = () => {
   const {
     state: { detected },
-  } = useSearchBLEContext();
+  } = useSearchBleContext();
   const { state, actions } = useSearchBLETitleViewModel();
 
   return (

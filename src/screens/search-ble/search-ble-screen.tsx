@@ -1,12 +1,10 @@
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Header, Radar, Title } from '@search-ble/components';
-import {
-  SearchBLEProvider,
-  useSearchBLEContext,
-} from '@/contexts/search-ble-context';
+import { SearchBleProvider } from '@/contexts';
+import { useSearchBleViewModel } from '@/view-model';
 
 const Test = () => {
-  const { state } = useSearchBLEContext();
+  const { state } = useSearchBleViewModel();
   return (
     <>
       {/* test */}
@@ -41,14 +39,14 @@ const Test = () => {
 
 export default function SearchBLEScreen() {
   return (
-    <SearchBLEProvider>
+    <SearchBleProvider>
       <View style={styles.container}>
         <Test />
         <Header />
         <Title />
         <Radar />
       </View>
-    </SearchBLEProvider>
+    </SearchBleProvider>
   );
 }
 
