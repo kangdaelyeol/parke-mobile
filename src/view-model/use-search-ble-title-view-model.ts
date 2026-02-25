@@ -7,9 +7,9 @@ import {
   withDelay,
   withTiming,
 } from 'react-native-reanimated';
-import { SearchBLETitleViewModel } from '@search-ble/types';
+import { SearchBleTitleViewModel } from '@search-ble/types';
 
-export const useSearchBLETitleViewModel = (): SearchBLETitleViewModel => {
+export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
   const [titleHeight, setTitleHeight] = useState(0);
   const titleTransY = useSharedValue(0);
   const titleOpacity = useSharedValue(0);

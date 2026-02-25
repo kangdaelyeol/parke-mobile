@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated';
 import Svg, { Circle, Line } from 'react-native-svg';
 import { useSearchBleContext } from '@/contexts';
 import { size } from '@search-ble/constants';
-import { useSearchBLERaderViewModel } from '@/view-model';
+import { useSearchBleRaderViewModel } from '@/view-model';
 
 const { width } = Dimensions.get('window');
 const SIZE = width * size.WIDTH_RATIO;
@@ -16,7 +16,7 @@ export const Radar = () => {
     state: { detected },
   } = useSearchBleContext();
 
-  const { state } = useSearchBLERaderViewModel();
+  const { state } = useSearchBleRaderViewModel();
 
   return (
     <View style={styles.container}>

@@ -28,10 +28,10 @@ interface ScreenStates {
   devices: any[];
 }
 
-export type SearchBLEHeaderViewModel = ViewModel<{}, HeaderActions>;
+export type SearchBleHeaderViewModel = ViewModel<{}, HeaderActions>;
 
-export type SearchBLERaderViewModel = ViewModel<RaderState, {}>;
+export type SearchBleRaderViewModel = ViewModel<RaderState, {}>;
 
-export type SearchBLETitleViewModel = ViewModel<TitleState, TitleActions>;
+export type SearchBleTitleViewModel = ViewModel<TitleState, TitleActions>;
 
-export type SearchBLEScreenViewModel = ViewModel<ScreenStates, {}>;
+export type SearchBleScreenViewModel = ViewModel<ScreenStates, {}>;
