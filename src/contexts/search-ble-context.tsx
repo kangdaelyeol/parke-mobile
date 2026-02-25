@@ -4,15 +4,14 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from 'react';
 import useHeptic from '@/hooks/use-heptic';
 import { useBleContext } from '@/contexts';
-import { navigationRef } from '@/navigation/navigation-ref';
-import { StackActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '@/constants';
 import { generateBase64Id, getDeviceId } from '@/helpers';
+import { SearchBleStackNavigationProp } from '@/navigation/types';
 
 interface SearchBLEContextValue {
   state: {
@@ -30,11 +29,11 @@ const searchBLEContext = createContext({} as SearchBLEContextValue);
 export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   const { setTime, setHepticOption } = useHeptic();
   const { state: bleState } = useBleContext();
-  const searchbleRef = useRef(false);
 
   const [detected, setDetected] = useState(false);
   const [devices, setDevices] = useState<any[]>([]);
   const [rssi, setRssi] = useState('');
+  const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   useEffect(() => {
     if (!detected && rssi) {
@@ -49,9 +48,9 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
       bleState.scanSessionRef.current++;
       const bleManager = bleState.bleManager;
       console.log('startSearchBle1');
-      if (searchbleRef.current) return;
+      if (bleState.searchBleRef.current) return;
       console.log('startSearchBle2');
-      searchbleRef.current = true;
+      bleState.searchBleRef.current = true;
       setDevices([]);
 
       bleManager?.startDeviceScan(
@@ -80,10 +79,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
             await d.discoverAllServicesAndCharacteristics();
             const deviceId = await getDeviceId(d);
             if (deviceId) {
-              if (navigationRef.isReady())
-                navigationRef.dispatch(
-                  StackActions.replace('ScanComplete', { value: deviceId }),
-                );
+              navigation.replace('ScanComplete', { value: deviceId });
             } else {
               const base64Id = generateBase64Id();
               await device.writeCharacteristicWithResponseForService(
@@ -91,10 +87,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
                 CHAR_UUID,
                 base64Id,
               );
-              if (navigationRef.isReady())
-                navigationRef.dispatch(
-                  StackActions.replace('ScanComplete', { value: base64Id }),
-                );
+              navigation.replace('ScanComplete', { value: base64Id });
             }
             await d.cancelConnection();
           } catch (e) {
@@ -102,7 +95,12 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
           }
         },
       );
-    }, [bleState.bleManager, bleState.scanSessionRef]),
+    }, [
+      bleState.bleManager,
+      bleState.scanSessionRef,
+      bleState.searchBleRef,
+      navigation,
+    ]),
   };
 
   return (

@@ -32,6 +32,7 @@ interface BleContextValue {
     bleManager: BleManager | null;
     isBackgroundScanning: boolean;
     scanSessionRef: React.RefObject<number>;
+    searchBleRef: React.RefObject<boolean>;
   };
 }
 
@@ -67,7 +68,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
   const cardsRef = useRef(cards);
   const userRef = useRef(user);
   const bgScanRef = useRef(false);
-  const searchbleRef = useRef(false);
+  const searchBleRef = useRef(false);
 
   useEffect(() => {
     cardsRef.current = cards;
@@ -182,7 +183,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
         if (!bleManagerRef.current) return;
         console.log('stopScanning');
         bgScanRef.current = false;
-        searchbleRef.current = false;
+        searchBleRef.current = false;
         await bleManagerRef.current.stopDeviceScan();
       },
       [bleManagerRef],
@@ -197,6 +198,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           bleManager: bleManagerRef.current,
           isBackgroundScanning: bgScanRef.current,
           scanSessionRef,
+          searchBleRef
         },
       }}
     >
