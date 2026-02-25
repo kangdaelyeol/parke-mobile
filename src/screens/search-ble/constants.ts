@@ -21,7 +21,7 @@ export const duration = {
 };
 
 export const title = {
-  SEARCH: '스캔을 시작할게요',
+  SEARCH: '스캔을 시작합니다',
   DETECT: '장치를 찾았습니다',
 };
 
