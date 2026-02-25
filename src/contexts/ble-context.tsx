@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 import { Alert } from 'react-native';
-import { BleManager, Device, State } from 'react-native-ble-plx';
+import { BleManager, Device } from 'react-native-ble-plx';
 import {
   SCAN_COOLDOWN_MS,
   SERVICE_UUID,
@@ -31,7 +31,7 @@ import { StackActions } from '@react-navigation/native';
 interface BleContextValue {
   actions: {
     startBackgroundScan: () => Promise<void>;
-    stopBleScan: () => Promise<void>;
+    stopBleScan: (session: number) => Promise<void>;
     startSearchBle: () => void;
   };
   state: {
@@ -39,6 +39,7 @@ interface BleContextValue {
     devices: any[];
     rssi: string;
     isBackgroundScanning: boolean;
+    scanSessionRef: React.RefObject<number>;
   };
 }
 
@@ -51,6 +52,7 @@ const isCandidate = (dev: Device) =>
 export const BleContextProvider = ({ children }: PropsWithChildren) => {
   const { user, cards, setCards } = useUserContext();
   const bleManagerRef = useRef<BleManager | null>(null);
+  const scanSessionRef = useRef(0);
 
   useEffect(() => {
     bleManagerRef.current ??= new BleManager({
@@ -87,29 +89,9 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
 
   const [rssi, setRssi] = useState('');
 
-  // Bluetooth PoweredOn/권한 대기
-  async function ensureReady(): Promise<boolean> {
-    // (안드로이드 12+ 권한 체크/요청은 여기에—생략)
-    const bleManager = bleManagerRef.current;
-    if (!bleManager) return false;
-
-    let state = await bleManager.state();
-    if (state !== State.PoweredOn) {
-      await new Promise<void>(resolve => {
-        const sub = bleManager.onStateChange(s => {
-          if (s === State.PoweredOn) {
-            sub.remove();
-            resolve();
-          }
-        }, true);
-      });
-      state = await bleManager.state();
-    }
-    return state === State.PoweredOn;
-  }
-
   const actions = {
     startSearchBle: useCallback(() => {
+      scanSessionRef.current++;
       const bleManager = bleManagerRef.current;
       console.log('startSearchBle1');
       if (searchbleRef.current) return;
@@ -167,6 +149,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
       );
     }, []),
     startBackgroundScan: useCallback(async () => {
+      scanSessionRef.current++;
       const bleManager = bleManagerRef.current;
       if (bgScanRef.current) return;
       // const a = await ensureReady();
@@ -216,7 +199,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
             console.log('settings: ', settings);
 
             // 자동변경 설정이 아닐시 알림
-            if (!settings.autoSet) {
+            if (!settings.autoSet || !card.autoChange) {
               // 이전에 변경 거부가 있었는지 확인
               if (Date.now() < cache.lastDeniedAt() + NOTIFY_COOLDOWN_MS)
                 return;
@@ -227,7 +210,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
               notifyPhoneChange(card.phone, userNow.phone, card.deviceId);
 
               // 앱이 실행중이면 앱 스크린에서 알림
-              notifyChangePhoneOnScreen(card.id, userNow.phone);
+              notifyChangePhoneOnScreen(card.id, userNow.phone, setCards);
             } else {
               // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
               const res = await cardService.updatePhone(
@@ -259,15 +242,20 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           }
         },
       );
-    },[setCards]),
+    }, [setCards]),
 
-    stopBleScan: useCallback(async () => {
-      if (!bleManagerRef.current) return;
-      console.log('stopScanning');
-      bgScanRef.current = false;
-      searchbleRef.current = false;
-      await bleManagerRef.current.stopDeviceScan();
-    }, [bleManagerRef]),
+    stopBleScan: useCallback(
+      async (session: number) => {
+        console.log(session);
+        if (scanSessionRef.current !== session) return;
+        if (!bleManagerRef.current) return;
+        console.log('stopScanning');
+        bgScanRef.current = false;
+        searchbleRef.current = false;
+        await bleManagerRef.current.stopDeviceScan();
+      },
+      [bleManagerRef],
+    ),
   };
 
   return (
@@ -279,6 +267,7 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
           devices,
           rssi,
           isBackgroundScanning: bgScanRef.current,
+          scanSessionRef,
         },
       }}
     >

@@ -37,22 +37,17 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
   }, [detected, bleState.rssi, setTime, setHepticOption]);
 
   useEffect(() => {
-    actions.stopBleScan();
     let sub: { remove: () => void } | undefined;
-    let unmounted = false;
+    const nowSession = bleState.scanSessionRef.current + 1;
 
     (async () => {
       const ok = await ensurePermissions();
-      if (!ok || unmounted) {
+      if (!ok) {
         Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
         return;
       }
-      await actions.stopBleScan();
-
-      console.log(bleState.bleManager);
 
       sub = bleState.bleManager?.onStateChange(state => {
-        console.log(state);
         if (state === 'PoweredOn') {
           actions.startSearchBle();
           sub?.remove();
@@ -61,9 +56,8 @@ export const SearchBLEProvider = ({ children }: PropsWithChildren) => {
     })();
 
     return () => {
-      unmounted = true;
       sub?.remove();
-      actions.stopBleScan();
+      actions.stopBleScan(nowSession);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
