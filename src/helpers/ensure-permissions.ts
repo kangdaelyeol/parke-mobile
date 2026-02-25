@@ -1,6 +1,6 @@
 import { PermissionsAndroid, Platform } from 'react-native';
 
-export default async function ensurePermissions(): Promise<Boolean> {
+export const ensurePermissions = async (): Promise<Boolean> => {
   if (Platform.OS === 'android') {
     if (Platform.Version >= 31) {
       const res = await PermissionsAndroid.requestMultiple([
@@ -19,4 +19,4 @@ export default async function ensurePermissions(): Promise<Boolean> {
   }
 
   return true;
-}
+};
