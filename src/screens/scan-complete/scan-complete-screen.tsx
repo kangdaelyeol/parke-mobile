@@ -6,12 +6,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { RouteProp } from '@react-navigation/native';
+import { ScanCompleteStackParamList } from '@/navigation/types';
 import {
   ScanCompleteContextProvider,
   useScanCompleteContext,
 } from '@/contexts';
-import { RouteProp } from '@react-navigation/native';
-import { ScanCompleteStackParamList } from '@/navigation/types';
 import { Main, ProgressStepper, Card, QrScan } from '@scan-complete/components';
 import { Loading } from '@/components';
 
@@ -19,11 +19,11 @@ type ScanCompleteProps = {
   route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;
 };
 
-type ScanCompleteBody = {
+type ScanCompleteContentProps = {
   deviceId: string;
 };
 
-const ScanCompleteBody = ({ deviceId }: ScanCompleteBody) => {
+const ScanCompleteContent = ({ deviceId }: ScanCompleteContentProps) => {
   const { state } = useScanCompleteContext();
 
   return (
@@ -49,7 +49,7 @@ export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
     >
       <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
         <ScanCompleteContextProvider>
-          <ScanCompleteBody deviceId={deviceId} />
+          <ScanCompleteContent deviceId={deviceId} />
         </ScanCompleteContextProvider>
       </ScrollView>
     </KeyboardAvoidingView>

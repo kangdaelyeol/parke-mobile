@@ -4,7 +4,7 @@ import { OnBoardingContextProvider } from '@/contexts';
 import { useOnBoardingViewModel } from '@/view-model';
 import { Loading } from '@/components';
 
-const OnBoarding = () => {
+const OnBoardingContent = () => {
   const { state } = useOnBoardingViewModel();
 
   return (
@@ -20,7 +20,7 @@ const OnBoarding = () => {
 export default function OnBoardingScreen() {
   return (
     <OnBoardingContextProvider>
-      <OnBoarding />
+      <OnBoardingContent />
     </OnBoardingContextProvider>
   );
 }

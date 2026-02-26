@@ -37,7 +37,7 @@ const Test = () => {
   );
 };
 
-export default function SearchBLEScreen() {
+export default function SearchBleScreen() {
   return (
     <SearchBleProvider>
       <View style={styles.container}>
