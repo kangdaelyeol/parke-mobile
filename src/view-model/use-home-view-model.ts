@@ -1,9 +1,9 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Alert } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { useBleContext, useUserContext } from '@/contexts';
 import { startBackgroundScan, ensurePermissions } from '@/helpers';
 import { settingService } from '@/services';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { Alert } from 'react-native';
 
 export const useHomeViewModel = () => {
   const {
@@ -24,7 +24,6 @@ export const useHomeViewModel = () => {
     userRef.current = user;
   }, [user]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const startBackgroundScanMemorized = useCallback(async () => {
     if (!bleManager) return;
 

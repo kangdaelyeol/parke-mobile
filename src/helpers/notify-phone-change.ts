@@ -1,7 +1,8 @@
 import notifee, { AndroidImportance } from '@notifee/react-native';
+import { convertPhone } from './convertPhone';
 
 // 앱 시작 시 1회 실행 (index.ts 등)
-export async function setupNotifications() {
+export const setupNotifications = async () => {
   await notifee.requestPermission();
   await notifee.setNotificationCategories([
     {
@@ -20,17 +21,19 @@ export async function setupNotifications() {
     name: 'BLE Device Notifications',
     importance: AndroidImportance.HIGH,
   });
-}
+};
 
 // 알림 띄우기
-export async function notifyPhoneChange(
+export const notifyPhoneChange = (
   oldPhone: string,
   newPhone: string,
   cardId: string,
-) {
+) => {
   notifee.displayNotification({
     title: '전화번호 변경 확인',
-    body: `등록된 번호 ${oldPhone}을(를) ${newPhone}으로 변경하시겠습니까?\n번호를 변경하려면 길게 눌러 버튼을 확인해부라`,
+    body: `등록된 번호 ${convertPhone(oldPhone)}을(를) ${convertPhone(
+      newPhone,
+    )}으로 변경하시겠습니까?\n번호를 변경하려면 길게 눌러서 확인해주세요.`,
     data: { newPhone, cardId }, // 문자열이면 OK
 
     ios: {
@@ -45,4 +48,4 @@ export async function notifyPhoneChange(
       ],
     },
   });
-}
+};
