@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, Linking } from 'react-native';
 import {
   useCardSettingContext,
   useCardSliderContext,
@@ -7,6 +7,7 @@ import {
 } from '@/contexts';
 import { cardService } from '@/services';
 import { CardOptionViewModel } from '@home/types';
+import { WEB_URL } from '@/constants';
 
 export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
   const { selectedCardIdx } = useCardSliderContext();
@@ -47,7 +48,14 @@ export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
         { text: '취소', style: 'cancel' },
       ]);
     },
-    previewPress: () => {},
+    previewPress: async () => {
+      const url = WEB_URL + selectedCard.id;
+
+      const supported = await Linking.canOpenURL(url);
+      if (!supported)
+        return Alert.alert('웹 사이트를 열 수 없습니다. 확인해주세요');
+      await Linking.openURL(url);
+    },
     autoChangePress: async () => {
       setLoading(true);
       const res = await cardService.updateAutoChange(

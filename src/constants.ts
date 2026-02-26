@@ -5,3 +5,4 @@ export const BLE_DEVICE_NAME = 'Parke';
 export const SCAN_COOLDOWN_MS = 1 * 5000;
 export const RENEW_INTERVAL_MS = 30 * 60 * 1000;
 export const NOTIFY_COOLDOWN_MS = 60 * 60 * 1000;
+export const WEB_URL = 'https://parke-web.netlify.app/';

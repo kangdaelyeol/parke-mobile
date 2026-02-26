@@ -1,5 +1,6 @@
 import { cardClient, userClient } from '@/client';
 import { Card, CardDto } from '@/domain/card';
+import { serverTimestamp } from 'firebase/database';
 
 export const cardService = {
   get: async (id: string): Promise<CardDto | null> => {
@@ -66,6 +67,6 @@ export const cardService = {
     return await cardClient.update({ id, phone });
   },
   updateUpdatedAt: async (id: string): Promise<boolean> => {
-    return await cardClient.update({ id });
+    return await cardClient.update({ id, updatedAt: serverTimestamp() });
   },
 };

@@ -2,13 +2,14 @@ import { Alert } from 'react-native';
 import { cache } from '@/storage';
 import { cardService } from '@/services';
 import { CardDto } from '@/domain/card';
+import { convertPhone } from '@/helpers';
 
 export const notifyChangePhoneOnScreen = (
   cardId: string,
   phone: string,
   setCards: React.Dispatch<React.SetStateAction<CardDto[]>>,
 ) => {
-  Alert.alert('전화번호 변경', `${phone}으로 변경할까요?`, [
+  Alert.alert('전화번호 변경', `${convertPhone(phone)}으로 변경할까요?`, [
     {
       text: '취소',
       style: 'cancel',

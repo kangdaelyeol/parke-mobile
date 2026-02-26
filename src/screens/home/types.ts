@@ -25,7 +25,7 @@ interface CardOptionState {
 interface CardOptionActions {
   editPress: () => void;
   deletePress: () => void;
-  previewPress: () => void;
+  previewPress: () => Promise<void>;
   autoChangePress: () => Promise<void>;
   changePhonePress: () => Promise<void>;
 }
@@ -87,5 +87,5 @@ export interface FooterProps {
 }
 
 export interface SettingCardProps {
-  card: CardDto
+  card: CardDto;
 }
