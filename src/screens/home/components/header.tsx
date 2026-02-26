@@ -13,7 +13,7 @@ export const Header = () => {
         <LogoIcon width={35} height={35} style={styles.icon} />
         <Text style={styles.phone}>
           {convertPhone(user.phone)}
-          {state.isBackgroundScanning ? 'Yes' : 'No'}
+          {state.bleManagerIsReady ? 'Yes' : 'No'}
         </Text>
       </View>
     </View>

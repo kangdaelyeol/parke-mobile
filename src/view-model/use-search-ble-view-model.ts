@@ -21,7 +21,7 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
         return;
       }
 
-      sub = bleState.bleManager?.onStateChange(state => {
+      sub = bleState.bleManagerRef.current?.onStateChange(state => {
         console.log(state);
         if (state === 'PoweredOn') {
           searchBleActions.startSearchBle();

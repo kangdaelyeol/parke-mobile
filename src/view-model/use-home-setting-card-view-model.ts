@@ -1,3 +1,5 @@
+import { convertPhone } from '@/helpers';
+import { extractNumber } from '@/utils';
 import { useEffect, useState } from 'react';
 import {
   useAnimatedStyle,
@@ -11,11 +13,11 @@ import {
 } from '@/contexts';
 import { cardService } from '@/services';
 import { CardDto } from '@/domain/card';
-import { SettingCardModelView } from '@home/types';
+import { SettingCardViewModel } from '@home/types';
 
 export const useHomeSettingCardViewModel = (
   card: CardDto,
-): SettingCardModelView => {
+): SettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext();
   const { selectedCardIdx } = useCardSliderContext();
   const { cards, setCards } = useUserContext();
@@ -40,7 +42,7 @@ export const useHomeSettingCardViewModel = (
       const res = await cardService.update({
         ...cards[selectedCardIdx],
         title,
-        phone,
+        phone: extractNumber(phone),
         message,
       });
 
@@ -62,7 +64,7 @@ export const useHomeSettingCardViewModel = (
     },
     titleInput: (val: string) => setTitle(val),
     messageInput: (val: string) => setMessage(val),
-    phoneInput: (val: string) => setPhone(val),
+    phoneInput: (val: string) => setPhone(convertPhone(val)),
   };
 
   return {

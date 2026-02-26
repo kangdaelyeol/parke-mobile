@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
-import { convertPhone } from '@/helpers';
 import { useHomeSettingCardViewModel } from '@/view-model';
 import { SettingCardProps } from '@home/types';
 
@@ -26,9 +25,7 @@ export const SettingCard = ({ card }: SettingCardProps) => {
             placeholder="010-1234-5678"
             value={state.phone}
             style={styles.input}
-            onChangeText={now => {
-              actions.phoneInput(convertPhone(now));
-            }}
+            onChangeText={actions.phoneInput}
           />
         </View>
         <View>

@@ -47,7 +47,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   const actions = {
     startSearchBle: useCallback(async () => {
       bleState.scanSessionRef.current++;
-      const bleManager = bleState.bleManager;
+      const bleManager = bleState.bleManagerRef.current;
       console.log('startSearchBle1');
       if (bleState.searchBleRef.current) return;
       console.log('startSearchBle2');
@@ -103,7 +103,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
         },
       );
     }, [
-      bleState.bleManager,
+      bleState.bleManagerRef,
       bleState.scanSessionRef,
       bleState.searchBleRef,
       navigation,

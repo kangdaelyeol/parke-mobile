@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useRef,
+  useState,
 } from 'react';
 import { BleManager } from 'react-native-ble-plx';
 
@@ -13,11 +14,11 @@ interface BleContextValue {
     stopBleScan: (session: number) => Promise<void>;
   };
   state: {
-    bleManager: BleManager | null;
-    isBackgroundScanning: boolean;
+    bleManagerRef: React.RefObject<BleManager | null>;
     scanSessionRef: React.RefObject<number>;
     searchBleRef: React.RefObject<boolean>;
     bgScanRef: React.RefObject<boolean>;
+    bleManagerIsReady: boolean;
   };
 }
 
@@ -27,8 +28,10 @@ const g = globalThis as any;
 export const BleContextProvider = ({ children }: PropsWithChildren) => {
   const bleManagerRef = useRef<BleManager | null>(null);
   const scanSessionRef = useRef(0);
+  const [bleManagerIsReady, setBleManagerIsReady] = useState(false);
 
   useEffect(() => {
+    setBleManagerIsReady(true);
     bleManagerRef.current ??= new BleManager({
       restoreStateIdentifier: 'com.app.ble',
       restoreStateFunction: async _restored => {
@@ -71,11 +74,11 @@ export const BleContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         actions,
         state: {
-          bleManager: bleManagerRef.current,
-          isBackgroundScanning: bgScanRef.current,
+          bleManagerRef,
           scanSessionRef,
           searchBleRef,
           bgScanRef,
+          bleManagerIsReady,
         },
       }}
     >

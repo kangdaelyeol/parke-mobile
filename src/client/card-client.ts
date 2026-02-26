@@ -46,8 +46,7 @@ export const cardClient = {
       if (!snapShot.exists()) return null;
 
       const card = snapShot.val() as CardDto;
-      // card.ownerList = toIdList(card.ownerList);
-      return card;
+      return { ...card, phone: String(card.phone) };
     } catch (e) {
       console.log(e);
       return null;

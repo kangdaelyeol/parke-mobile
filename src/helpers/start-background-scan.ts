@@ -14,7 +14,7 @@ import { CardDto } from '@/domain/card';
 import { UserDto } from '@/domain/user';
 
 interface params {
-  bleManager: BleManager;
+  bleManagerRef: React.RefObject<BleManager | null>;
   scanSessionRef: React.RefObject<number>;
   bgScanRef: React.RefObject<boolean>;
   cardsRef: React.RefObject<CardDto[]>;
@@ -27,7 +27,7 @@ const isCandidate = (dev: Device) =>
 
 export const startBackgroundScan = async ({
   scanSessionRef,
-  bleManager,
+  bleManagerRef,
   bgScanRef,
   cardsRef,
   userRef,
@@ -38,13 +38,13 @@ export const startBackgroundScan = async ({
   // const a = await ensureReady();
   // console.log(a);
   // if (!(await ensureReady())) return;
-  if (!bleManager) return;
+  if (!bleManagerRef.current) return;
 
   bgScanRef.current = true;
 
   console.log('startBackground');
 
-  bleManager.startDeviceScan(
+  bleManagerRef.current.startDeviceScan(
     [SERVICE_UUID],
     { allowDuplicates: true },
     async (err, dev) => {
@@ -62,8 +62,12 @@ export const startBackgroundScan = async ({
         device = await dev.connect();
         await device.discoverAllServicesAndCharacteristics();
         const deviceId = await getDeviceId(device);
-        const card = cardsNow.find(c => c.deviceId === deviceId);
+        const cardState = cardsNow.find(c => c.deviceId === deviceId);
+        if (!cardState) return;
+
+        const card = await cardService.get(cardState.id);
         if (!card) return;
+
         console.log('find: ', card);
 
         // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
@@ -75,6 +79,7 @@ export const startBackgroundScan = async ({
 
         // 업데이트 이후 일정 시간동안 db갱신이 안되어 있으면 운전중이 아니므로 다른 번호로 업데이트 진행.
         // 그렇지 않으면 운전중이기 때문에 updatedAt값 갱신을 함. 따라서 다른 번호로 업데이트를 진행하지 않음.
+        console.log(Number(card.updatedAt) + RENEW_INTERVAL_MS, Date.now());
         if (Date.now() < Number(card.updatedAt) + RENEW_INTERVAL_MS) return;
 
         const settings = settingService.getSettings();

@@ -59,7 +59,7 @@ export type CardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
 
 export type CardViewModel = ViewModel<CardState, CardActions>;
 
-export type SettingCardModelView = ViewModel<
+export type SettingCardViewModel = ViewModel<
   SettingCardState,
   SettingCardActions
 >;

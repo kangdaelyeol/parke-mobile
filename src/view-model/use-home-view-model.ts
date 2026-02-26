@@ -10,7 +10,7 @@ export const useHomeViewModel = () => {
     actions: { stopBleScan },
     state: bleState,
   } = useBleContext();
-  const { bleManager, scanSessionRef, bgScanRef } = bleState;
+  const { bleManagerRef, scanSessionRef, bgScanRef } = bleState;
   const { cards, user, syncCardList, setCards } = useUserContext();
   const [loading, setLoading] = useState(false);
 
@@ -25,35 +25,49 @@ export const useHomeViewModel = () => {
   }, [user]);
 
   const startBackgroundScanMemorized = useCallback(async () => {
-    if (!bleManager) return;
+    if (!bleState.bleManagerIsReady) return;
+    if (!bleManagerRef.current) return;
 
     await startBackgroundScan({
       scanSessionRef,
-      bleManager,
       bgScanRef,
       cardsRef,
       setCards,
       userRef,
+      bleManagerRef,
     });
-  }, [scanSessionRef, bleManager, bgScanRef, userRef, cardsRef, setCards]);
+  }, [
+    scanSessionRef,
+    bleManagerRef,
+    bgScanRef,
+    userRef,
+    cardsRef,
+    setCards,
+    bleState.bleManagerIsReady,
+  ]);
 
   useFocusEffect(
     useCallback(() => {
+      console.log(bleManagerRef);
+      if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
-      if (!bleManager) return;
+      if (!bleManagerRef) return;
       (async () => {
         setLoading(true);
         await syncCardList();
         setLoading(false);
       })();
-    }, [bleManager, syncCardList, user?.id]),
+    }, [bleManagerRef, syncCardList, user?.id, bleState.bleManagerIsReady]),
   );
 
   useFocusEffect(
     useCallback(() => {
+      console.log(bleManagerRef, startBackgroundScanMemorized);
+      if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
-      if (!bleManager) return;
+      if (!bleManagerRef) return;
       if (!startBackgroundScanMemorized) return;
+
       const nowSession = scanSessionRef.current + 1;
 
       let sub: { remove: () => void } | undefined;
@@ -67,7 +81,7 @@ export const useHomeViewModel = () => {
           return;
         }
 
-        sub = bleManager?.onStateChange(state => {
+        sub = bleManagerRef.current?.onStateChange(state => {
           console.log(state);
           if (state === 'PoweredOn') {
             startBackgroundScanMemorized();
@@ -80,12 +94,13 @@ export const useHomeViewModel = () => {
         stopBleScan(nowSession);
       };
     }, [
-      cards.length,
-      bleManager,
-      startBackgroundScanMemorized,
-      stopBleScan,
-      scanSessionRef,
       user.id,
+      bleManagerRef,
+      startBackgroundScanMemorized,
+      scanSessionRef,
+      cards.length,
+      stopBleScan,
+      bleState.bleManagerIsReady,
     ]),
   );
 
