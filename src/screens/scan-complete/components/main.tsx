@@ -1,7 +1,7 @@
-import { useScanCompleteContext } from '@/contexts/scan-complete-context';
 import React from 'react';
 import { View } from 'react-native';
 import { Step1, Step2 } from '@scan-complete/components';
+import { useScanCompleteViewModel } from '@/view-model';
 
 type MainProps = {
   deviceId: string;
@@ -10,11 +10,11 @@ type MainProps = {
 export const Main = ({ deviceId }: MainProps) => {
   const {
     state: { currentStep },
-  } = useScanCompleteContext();
+  } = useScanCompleteViewModel({ deviceId });
   return (
     <View>
       {currentStep === 0 && <Step1 />}
-      {currentStep === 1 && <Step2 deviceId={deviceId} />}
+      {currentStep === 1 && <Step2 />}
     </View>
   );
 };

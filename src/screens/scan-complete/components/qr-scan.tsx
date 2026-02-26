@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import {
   Camera,
   useCameraDevice,
@@ -8,6 +8,7 @@ import {
 import { LogoIcon } from '@/assets/logo';
 import { PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts';
+import { WEB_URL } from '@/constants';
 
 export const QrScan = () => {
   const device = useCameraDevice('back');
@@ -15,22 +16,37 @@ export const QrScan = () => {
   const [scanned, setScanned] = useState(false);
 
   const { actions } = useScanCompleteContext();
-  
+
   useEffect(() => {
-    if (!hasPermission) requestPermission();
-  }, [hasPermission, requestPermission]);
+    (async () => {
+      if (!hasPermission) {
+        const res = await requestPermission();
+        if (!res) Alert.alert('카메라 권한이 필요합니다.');
+        actions.scanBackPress();
+      }
+    })();
+  }, [hasPermission, requestPermission, actions]);
 
   const codeScanner = useMemo(
     () => ({
       codeTypes: ['qr'],
       onCodeScanned: (codes: any[]) => {
+        if (scanned) return;
+        setScanned(true);
         const v = codes?.[0].value;
         if (!v) return;
-        console.log(v);
-        setScanned(true);
+        const scannedUrl = String(v);
+        if (!scannedUrl.startsWith(WEB_URL)) {
+          Alert.alert(
+            '잘못된 QR코드를 스캔했습니다.\n다시 시도하거나 시리얼 번호를 직접 입력해주세요.',
+          );
+          return actions.scanBackPress();
+        }
+        const serial = scannedUrl.split('/').at(-1);
+        actions.serialScan(serial as string);
       },
     }),
-    [],
+    [actions, scanned],
   );
 
   if (!device)

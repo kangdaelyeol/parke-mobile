@@ -3,11 +3,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { FocusableInput, PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
 
-type Step2Props = {
-  deviceId: string;
-};
-
-export const Step2 = ({ deviceId }: Step2Props) => {
+export const Step2 = () => {
   const { actions, state } = useScanCompleteContext();
   return (
     <View style={styles.container}>
@@ -33,7 +29,7 @@ export const Step2 = ({ deviceId }: Step2Props) => {
               title="시리얼 번호"
               value={state.serial}
               onChangeText={actions.serialInput}
-              placeholder='시리얼 번호'
+              placeholder="시리얼 번호"
             />
           ) : (
             <Pressable onPress={actions.serialInputPress}>
@@ -52,7 +48,7 @@ export const Step2 = ({ deviceId }: Step2Props) => {
         </View>
         <View style={styles.buttonContainer}>
           <PressableButton
-            onPress={() => actions.savePress(deviceId)}
+            onPress={() => actions.savePress()}
             title="저장"
             background={['#304abb', '#3955cf']}
             pressableStyle={styles.button}
