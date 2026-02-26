@@ -5,7 +5,7 @@ import { useScanCompleteContext } from '@/contexts';
 interface ScanCompleteViewModelProps {
   deviceId: string;
 }
-export const useScanCompleteViewModel = ({
+export const useScanCompleteMainViewModel = ({
   deviceId,
 }: ScanCompleteViewModelProps): ScanCompleteViewModel => {
   const { actions, state } = useScanCompleteContext();

@@ -13,6 +13,7 @@ import {
 import { RouteProp } from '@react-navigation/native';
 import { ScanCompleteStackParamList } from '@/navigation/types';
 import { Main, ProgressStepper, Card, QrScan } from '@scan-complete/components';
+import { Loading } from '@/components';
 
 type ScanCompleteProps = {
   route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;
@@ -27,6 +28,7 @@ const ScanCompleteBody = ({ deviceId }: ScanCompleteBody) => {
 
   return (
     <>
+      {state.loading && <Loading />}
       {state.scanPage && <QrScan />}
       <ProgressStepper />
       <View style={styles.wrapper}>
