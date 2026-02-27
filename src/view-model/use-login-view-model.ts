@@ -7,6 +7,8 @@ import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
 import { userService } from '@/services';
 import { getApp } from '@react-native-firebase/app';
+import firebase from '@react-native-firebase/app';
+import '@react-native-firebase/auth';
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
@@ -28,6 +30,8 @@ export const useLoginViewModel = (): LoginViewModel => {
 
       const user = await userService.get(kakaoProfile.email);
       if (!user) return setLoading(false);
+
+      console.log(firebase.app().auth().currentUser);
       setUser(user);
       navigation.replace('Home');
     })();

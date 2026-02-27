@@ -1,7 +1,7 @@
+import { get, ref, remove, set, update } from '@react-native-firebase/database';
 import { UserDto } from '@/domain/user';
 import { db } from '@/firebaseApp';
 import { toDbKey } from '@/helpers';
-import { get, ref, remove, set, update } from 'firebase/database';
 
 export const userClient = {
   create: async (dto: UserDto): Promise<boolean> => {

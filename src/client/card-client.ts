@@ -1,3 +1,4 @@
+import { db } from '@/firebaseApp';
 import {
   get,
   ref,
@@ -5,8 +6,7 @@ import {
   serverTimestamp,
   set,
   update,
-} from 'firebase/database';
-import { db } from '@/firebaseApp';
+} from '@react-native-firebase/database';
 import { Card, CardDto } from '@/domain/card';
 
 export const cardClient = {
