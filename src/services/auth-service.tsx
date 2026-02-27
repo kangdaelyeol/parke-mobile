@@ -9,32 +9,29 @@ import {
   KakaoProfile,
   login,
 } from '@react-native-seoul/kakao-login';
-import { createContext, PropsWithChildren, useContext } from 'react';
 
 interface kakaoProfile {
   email: string;
   nickname: string;
 }
 
-interface AuthContext {
+interface AuthService {
   getKakaoProfile: () => Promise<kakaoProfile | null>;
   kakaoLogin: () => Promise<kakaoProfile | null>;
   firebaseLogin: (email: string, password: string) => Promise<string | null>;
   firebaseSignIn: (email: string, password: string) => Promise<string | null>;
 }
 
-const authContext = createContext({} as AuthContext);
-
-export const AuthContextProvider = ({ children }: PropsWithChildren) => {
-  const getKakaoProfile = async (): Promise<kakaoProfile | null> => {
+export const authService: AuthService = {
+  getKakaoProfile: async (): Promise<kakaoProfile | null> => {
     try {
       const profile: KakaoProfile = await getProfile();
       return { email: profile.email, nickname: profile.nickname };
     } catch (e) {
       return null;
     }
-  };
-  const kakaoLogin = async (): Promise<kakaoProfile | null> => {
+  },
+  kakaoLogin: async (): Promise<kakaoProfile | null> => {
     try {
       const res: KakaoOAuthToken = await login();
       if (res) {
@@ -45,8 +42,8 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
     } catch (e) {
       return null;
     }
-  };
-  const firebaseLogin = async (
+  },
+  firebaseLogin: async (
     email: string,
     password: string,
   ): Promise<string | null> => {
@@ -57,9 +54,9 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
       console.log(e);
       return null;
     }
-  };
+  },
 
-  const firebaseSignIn = async (
+  firebaseSignIn: async (
     email: string,
     password: string,
   ): Promise<string | null> => {
@@ -73,14 +70,5 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
     } catch (e) {
       return null;
     }
-  };
-  return (
-    <authContext.Provider
-      value={{ getKakaoProfile, kakaoLogin, firebaseLogin, firebaseSignIn }}
-    >
-      {children}
-    </authContext.Provider>
-  );
+  },
 };
-
-export const useAuthContext = () => useContext(authContext);

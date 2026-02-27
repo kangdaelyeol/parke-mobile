@@ -3,17 +3,15 @@ import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import '@react-native-firebase/auth';
 import { UserDto } from '@/domain/user';
-import { useAuthContext, useUserContext } from '@/contexts';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
-import { userService } from '@/services';
+import { userService, authService } from '@/services';
 import { getHashedPassword } from '@/helpers';
+import { useUserContext } from '@/contexts';
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
 export const useLoginViewModel = (): LoginViewModel => {
-  const { kakaoLogin, getKakaoProfile, firebaseLogin, firebaseSignIn } =
-    useAuthContext();
   const { setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<LoginStackNavigationProp>();
@@ -22,11 +20,11 @@ export const useLoginViewModel = (): LoginViewModel => {
     (async () => {
       if (!navigation) return;
       setLoading(true);
-      const kakaoProfile = await getKakaoProfile();
+      const kakaoProfile = await authService.getKakaoProfile();
       if (!kakaoProfile) return setLoading(false);
 
       const password = getHashedPassword(kakaoProfile.email);
-      const uid = await firebaseLogin(kakaoProfile.email, password);
+      const uid = await authService.firebaseLogin(kakaoProfile.email, password);
       if (!uid) return setLoading(false);
 
       const user = await userService.get(uid);
@@ -35,13 +33,13 @@ export const useLoginViewModel = (): LoginViewModel => {
       setUser(user);
       navigation.replace('Home');
     })();
-  }, [getKakaoProfile, navigation, setUser, firebaseLogin]);
+  }, [navigation, setUser]);
 
   const kakaoLoginPress = async () => {
     if (loading) return;
 
     setLoading(true);
-    const kakaoProfile = await kakaoLogin();
+    const kakaoProfile = await authService.kakaoLogin();
 
     if (!kakaoProfile) {
       Alert.alert(
@@ -54,11 +52,11 @@ export const useLoginViewModel = (): LoginViewModel => {
 
     // 첫 로그인시 - 가입
     const password = getHashedPassword(email);
-    const uid = await firebaseSignIn(email, password);
+    const uid = await authService.firebaseSignIn(email, password);
 
     if (!uid) {
       // 계정이 존재하는 경우
-      const firebaseUid = await firebaseLogin(email, password);
+      const firebaseUid = await authService.firebaseLogin(email, password);
 
       if (!firebaseUid) {
         Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.');
