@@ -1,11 +1,10 @@
-import { logout } from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import { useUserContext } from '@/contexts';
 import { convertPhone } from '@/helpers';
 import { ProfileStackNavigationProp } from '@/navigation/types';
-import { userService } from '@/services';
+import { authService, userService } from '@/services';
 import { extractNumber } from '@/utils';
 
 export const useProfileMainViewModel = () => {
@@ -45,7 +44,8 @@ export const useProfileMainViewModel = () => {
           onPress: async () => {
             setLoading(true);
             try {
-              await logout();
+              await authService.kakaoLogout();
+              await authService.firebaseSignOut();
               return navigation.navigate('Login');
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
@@ -67,7 +67,11 @@ export const useProfileMainViewModel = () => {
             try {
               setLoading(true);
               const res = await userService.delete(user.id);
-              if (res) return navigation.replace('Login');
+              if (res) {
+                await authService.kakaoLogout();
+                await authService.firebaseDeleteUser();
+                return navigation.replace('Login');
+              }
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
               return setLoading(false);
             } catch (e) {

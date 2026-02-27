@@ -71,7 +71,7 @@ export const useHomeSettingCardViewModel = (
     state: {
       title,
       message,
-      phone,
+      phone: convertPhone(phone),
       animatedStyle,
     },
     actions,

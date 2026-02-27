@@ -2,12 +2,14 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   signInWithEmailAndPassword,
+  signOut,
 } from '@react-native-firebase/auth';
 import {
   getProfile,
   KakaoOAuthToken,
   KakaoProfile,
   login,
+  logout,
 } from '@react-native-seoul/kakao-login';
 
 interface kakaoProfile {
@@ -16,10 +18,13 @@ interface kakaoProfile {
 }
 
 interface AuthService {
-  getKakaoProfile: () => Promise<kakaoProfile | null>;
-  kakaoLogin: () => Promise<kakaoProfile | null>;
   firebaseLogin: (email: string, password: string) => Promise<string | null>;
   firebaseSignIn: (email: string, password: string) => Promise<string | null>;
+  firebaseSignOut: () => Promise<void>;
+  firebaseDeleteUser: () => Promise<void>;
+  kakaoLogin: () => Promise<kakaoProfile | null>;
+  kakaoLogout: () => Promise<void>;
+  getKakaoProfile: () => Promise<kakaoProfile | null>;
 }
 
 export const authService: AuthService = {
@@ -43,6 +48,9 @@ export const authService: AuthService = {
       return null;
     }
   },
+  kakaoLogout: async (): Promise<void> => {
+    await logout();
+  },
   firebaseLogin: async (
     email: string,
     password: string,
@@ -55,7 +63,6 @@ export const authService: AuthService = {
       return null;
     }
   },
-
   firebaseSignIn: async (
     email: string,
     password: string,
@@ -70,5 +77,12 @@ export const authService: AuthService = {
     } catch (e) {
       return null;
     }
+  },
+
+  firebaseSignOut: async (): Promise<void> => {
+    await signOut(getAuth());
+  },
+  firebaseDeleteUser: async () => {
+    await getAuth().currentUser?.delete();
   },
 };
