@@ -12,7 +12,7 @@ import { WEB_URL } from '@/constants';
 export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
   const { selectedCardIdx } = useCardSliderContext();
   const { cardSettingController } = useCardSettingContext();
-  const { user, setCards, cards } = useUserContext();
+  const { user, setCards, cards, setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
 
   const selectedCard = cards[selectedCardIdx];
@@ -43,6 +43,10 @@ export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
 
             setLoading(false);
             setCards(filteredCardList);
+            setUser(prev => ({
+              ...prev,
+              cardIdList: filteredCardList.map(c => c.id),
+            }));
           },
         },
         { text: '취소', style: 'cancel' },
