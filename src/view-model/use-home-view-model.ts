@@ -48,7 +48,6 @@ export const useHomeViewModel = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(bleManagerRef);
       if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
       if (!bleManagerRef) return;
@@ -62,7 +61,6 @@ export const useHomeViewModel = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log(bleManagerRef, startBackgroundScanMemorized);
       if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
       if (!bleManagerRef) return;

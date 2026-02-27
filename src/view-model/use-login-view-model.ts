@@ -6,6 +6,7 @@ import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
 import { userService } from '@/services';
+import { getApp } from '@react-native-firebase/app';
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
@@ -14,6 +15,9 @@ export const useLoginViewModel = (): LoginViewModel => {
   const { setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<LoginStackNavigationProp>();
+  useEffect(() => {
+    console.log(getApp());
+  }, []);
 
   useEffect(() => {
     (async () => {

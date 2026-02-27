@@ -7,3 +7,4 @@ export * from './get-device-id';
 export * from './notify-message';
 export * from './notify-phone-change';
 export * from './start-background-scan';
+export * from './to-db-key';

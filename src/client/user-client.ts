@@ -1,14 +1,14 @@
 import { UserDto } from '@/domain/user';
 import { db } from '@/firebaseApp';
-import { convertId } from '@/utils';
+import { toDbKey } from '@/helpers';
 import { get, ref, remove, set, update } from 'firebase/database';
 
 export const userClient = {
   create: async (dto: UserDto): Promise<boolean> => {
     const { id, nickname, phone, cardIdList } = dto;
-    const convertedId = convertId(id);
+    const key = toDbKey(id);
     try {
-      await set(ref(db, `user/${convertedId}`), {
+      await set(ref(db, `user/${key}`), {
         id,
         nickname,
         phone,
@@ -25,10 +25,10 @@ export const userClient = {
       Pick<UserDto, 'cardIdList' | 'nickname' | 'phone'>
     >,
   ): Promise<boolean> => {
-    const convertedId = convertId(dto.id);
+    const key = toDbKey(dto.id);
 
     try {
-      await update(ref(db, `user/${convertedId}`), {
+      await update(ref(db, `user/${key}`), {
         ...dto,
       });
       return true;
@@ -39,8 +39,8 @@ export const userClient = {
   },
   getById: async (id: string): Promise<UserDto | null> => {
     try {
-      const convertedId = convertId(id);
-      const snapShot = await get(ref(db, `user/${convertedId}`));
+      const key = toDbKey(id);
+      const snapShot = await get(ref(db, `user/${key}`));
       if (!snapShot.exists()) return null;
       const userRaw = snapShot.val();
       if (!userRaw.cardIdList) userRaw.cardIdList = [];
@@ -52,8 +52,8 @@ export const userClient = {
   },
   deleteById: async (id: string): Promise<boolean> => {
     try {
-      const convertedId = convertId(id);
-      await remove(ref(db, `user/${convertedId}`));
+      const key = toDbKey(id);
+      await remove(ref(db, `user/${key}`));
       return true;
     } catch (e) {
       console.log(e);
