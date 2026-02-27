@@ -3,6 +3,8 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import UserNotifications
+import FirebaseCore
+import Firebase
 
 @main
 class AppDelegate:  UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -11,14 +13,13 @@ class AppDelegate:  UIResponder, UIApplicationDelegate, UNUserNotificationCenter
   var reactNativeDelegate: ReactNativeDelegate?
   var reactNativeFactory: RCTReactNativeFactory?
   
-  
-
   func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     // 추가: Kakao SDK 초기화
     RNKakaoLogins.initialize()
+    FirebaseApp.configure()
 
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
