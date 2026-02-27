@@ -4,20 +4,16 @@ import { useNavigation } from '@react-navigation/native';
 import '@react-native-firebase/auth';
 import { UserDto } from '@/domain/user';
 import { useAuthContext, useUserContext } from '@/contexts';
-import cryptoJs from 'crypto-js';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';
 import { userService } from '@/services';
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  signInWithEmailAndPassword,
-} from '@react-native-firebase/auth';
+import { getHashedPassword } from '@/helpers';
 
 const isUserDto = (dto: any): dto is UserDto => dto.id;
 
 export const useLoginViewModel = (): LoginViewModel => {
-  const { kakaoLogin, getKakaoProfile } = useAuthContext();
+  const { kakaoLogin, getKakaoProfile, firebaseLogin, firebaseSignIn } =
+    useAuthContext();
   const { setUser } = useUserContext();
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<LoginStackNavigationProp>();
@@ -29,29 +25,17 @@ export const useLoginViewModel = (): LoginViewModel => {
       const kakaoProfile = await getKakaoProfile();
       if (!kakaoProfile) return setLoading(false);
 
-      try {
-        const password = cryptoJs
-          .SHA256('parke:' + kakaoProfile.email)
-          .toString();
-        console.log(password);
-        const res = await signInWithEmailAndPassword(
-          getAuth(),
-          kakaoProfile.email,
-          password,
-        );
-        const user = await userService.get(res.user.uid);
-        if (!user) return setLoading(false);
+      const password = getHashedPassword(kakaoProfile.email);
+      const uid = await firebaseLogin(kakaoProfile.email, password);
+      if (!uid) return setLoading(false);
 
-        console.log(res.user.uid);
-        setUser(user);
-        navigation.replace('Home');
-      } catch (e: any) {
-        console.log(e.code); // auth/invalid-credential
-        setLoading(false);
-        return;
-      }
+      const user = await userService.get(uid);
+      if (!user) return setLoading(false);
+
+      setUser(user);
+      navigation.replace('Home');
     })();
-  }, [getKakaoProfile, navigation, setUser]);
+  }, [getKakaoProfile, navigation, setUser, firebaseLogin]);
 
   const kakaoLoginPress = async () => {
     if (loading) return;
@@ -67,16 +51,22 @@ export const useLoginViewModel = (): LoginViewModel => {
     }
 
     const { email, nickname } = kakaoProfile;
-    const password = cryptoJs.SHA256('parke:' + email).toString();
-    try {
-      // 첫 로그인시
-      const cred = await createUserWithEmailAndPassword(
-        getAuth(),
-        email,
-        password,
-      );
 
-      const userRes = await userService.create({ id: cred.user.uid, nickname });
+    // 첫 로그인시 - 가입
+    const password = getHashedPassword(email);
+    const uid = await firebaseSignIn(email, password);
+
+    if (!uid) {
+      // 계정이 존재하는 경우
+      const firebaseUid = await firebaseLogin(email, password);
+
+      if (!firebaseUid) {
+        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.');
+        setLoading(false);
+        return;
+      }
+
+      const userRes = await userService.get(firebaseUid);
 
       if (!isUserDto(userRes)) {
         Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.');
@@ -84,30 +74,18 @@ export const useLoginViewModel = (): LoginViewModel => {
       }
 
       setUser(userRes);
-      return navigation.replace('Init');
-    } catch (e: any) {
-      if (e?.code !== 'auth/email-already-in-use') return;
-      // 가입 이력이 있는 경우
-      try {
-        const cred = await signInWithEmailAndPassword(
-          getAuth(),
-          email,
-          password,
-        );
-        const userRes = await userService.get(cred.user.uid);
-
-        if (!isUserDto(userRes)) {
-          Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.');
-          return setLoading(false);
-        }
-        setUser(userRes);
-        navigation.replace('Home');
-      } catch (err) {
-        console.log(err);
-        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.');
-        return;
-      }
+      return navigation.replace('Home');
     }
+
+    const userRes = await userService.create({ id: uid, nickname });
+
+    if (!isUserDto(userRes)) {
+      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.');
+      return setLoading(false);
+    }
+
+    setUser(userRes);
+    return navigation.replace('Init');
   };
 
   return { state: { loading }, actions: { kakaoLoginPress } };

@@ -1,4 +1,9 @@
 import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  signInWithEmailAndPassword,
+} from '@react-native-firebase/auth';
+import {
   getProfile,
   KakaoOAuthToken,
   KakaoProfile,
@@ -14,6 +19,8 @@ interface kakaoProfile {
 interface AuthContext {
   getKakaoProfile: () => Promise<kakaoProfile | null>;
   kakaoLogin: () => Promise<kakaoProfile | null>;
+  firebaseLogin: (email: string, password: string) => Promise<string | null>;
+  firebaseSignIn: (email: string, password: string) => Promise<string | null>;
 }
 
 const authContext = createContext({} as AuthContext);
@@ -39,8 +46,38 @@ export const AuthContextProvider = ({ children }: PropsWithChildren) => {
       return null;
     }
   };
+  const firebaseLogin = async (
+    email: string,
+    password: string,
+  ): Promise<string | null> => {
+    try {
+      const cred = await signInWithEmailAndPassword(getAuth(), email, password);
+      return cred.user.uid;
+    } catch (e) {
+      console.log(e);
+      return null;
+    }
+  };
+
+  const firebaseSignIn = async (
+    email: string,
+    password: string,
+  ): Promise<string | null> => {
+    try {
+      const cred = await createUserWithEmailAndPassword(
+        getAuth(),
+        email,
+        password,
+      );
+      return cred.user.uid;
+    } catch (e) {
+      return null;
+    }
+  };
   return (
-    <authContext.Provider value={{ getKakaoProfile, kakaoLogin }}>
+    <authContext.Provider
+      value={{ getKakaoProfile, kakaoLogin, firebaseLogin, firebaseSignIn }}
+    >
       {children}
     </authContext.Provider>
   );
