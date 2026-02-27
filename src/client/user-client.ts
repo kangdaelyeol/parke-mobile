@@ -1,12 +1,11 @@
 import { get, ref, remove, set, update } from '@react-native-firebase/database';
 import { UserDto } from '@/domain/user';
 import { db } from '@/firebaseApp';
-import { toDbKey } from '@/helpers';
 
 export const userClient = {
   create: async (dto: UserDto): Promise<boolean> => {
     const { id, nickname, phone, cardIdList } = dto;
-    const key = toDbKey(id);
+    const key = id;
     try {
       await set(ref(db, `user/${key}`), {
         id,
@@ -25,7 +24,7 @@ export const userClient = {
       Pick<UserDto, 'cardIdList' | 'nickname' | 'phone'>
     >,
   ): Promise<boolean> => {
-    const key = toDbKey(dto.id);
+    const key = dto.id;
 
     try {
       await update(ref(db, `user/${key}`), {
@@ -39,7 +38,7 @@ export const userClient = {
   },
   getById: async (id: string): Promise<UserDto | null> => {
     try {
-      const key = toDbKey(id);
+      const key = id;
       const snapShot = await get(ref(db, `user/${key}`));
       if (!snapShot.exists()) return null;
       const userRaw = snapShot.val();
@@ -52,7 +51,7 @@ export const userClient = {
   },
   deleteById: async (id: string): Promise<boolean> => {
     try {
-      const key = toDbKey(id);
+      const key = id;
       await remove(ref(db, `user/${key}`));
       return true;
     } catch (e) {
