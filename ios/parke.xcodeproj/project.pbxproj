@@ -11,7 +11,7 @@
 		6CA85E19CA36E26214376185 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		76D2014D57543D11D276DA25 /* Pods_parke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12DE636B1B36E25EDC01E9E5 /* Pods_parke.framework */; };
-		7D0268452F5053E70091FB6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D0268442F5053E70091FB6C /* GoogleService-Info.plist */; };
+		7D0268472F5172C30091FB6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D0268462F5172C30091FB6C /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -24,7 +24,7 @@
 		3B4392A12AC88292D35C810B /* Pods-parke.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-parke.debug.xcconfig"; path = "Target Support Files/Pods-parke/Pods-parke.debug.xcconfig"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-parke.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-parke.release.xcconfig"; path = "Target Support Files/Pods-parke/Pods-parke.release.xcconfig"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = parke/AppDelegate.swift; sourceTree = "<group>"; };
-		7D0268442F5053E70091FB6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		7D0268462F5172C30091FB6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D137F812F3881FE0071F82A /* parke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "parke-Bridging-Header.h"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = parke/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
@@ -74,7 +74,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				7D0268442F5053E70091FB6C /* GoogleService-Info.plist */,
+				7D0268462F5172C30091FB6C /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* parke */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
@@ -166,7 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				7D0268452F5053E70091FB6C /* GoogleService-Info.plist in Resources */,
+				7D0268472F5172C30091FB6C /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				6CA85E19CA36E26214376185 /* PrivacyInfo.xcprivacy in Resources */,
 			);
