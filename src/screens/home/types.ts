@@ -1,16 +1,19 @@
 import { CardDto } from '@/domain/card';
 import { UserDto } from '@/domain/user';
-import { ViewModel } from '@/types/common';
+import { AnimatedViewModel, ViewModel } from '@/types/common';
 import { StyleProp, ViewStyle } from 'react-native';
 import { PanGesture } from 'react-native-gesture-handler';
 
 interface MainState {
-  sliderAnimatedStyle: StyleProp<ViewStyle>;
-  animatedStyle: StyleProp<ViewStyle>;
   selectedCardIdx: number;
   isSetting: boolean;
   cards: CardDto[];
   cardLength: number;
+}
+
+interface MainAnimated {
+  sliderStyle: StyleProp<ViewStyle>;
+  moverStyle: StyleProp<ViewStyle>;
 }
 
 interface MainActions {
@@ -30,8 +33,8 @@ interface CardOptionActions {
   changePhonePress: () => Promise<void>;
 }
 
-interface CardState {
-  animatedStyle: StyleProp<ViewStyle>;
+interface CardAnimated {
+  cardStyle: StyleProp<ViewStyle>;
 }
 
 interface CardActions {
@@ -42,7 +45,10 @@ interface SettingCardState {
   title: string;
   message: string;
   phone: string;
-  animatedStyle: StyleProp<ViewStyle>;
+}
+
+interface SettingCardAnimated {
+  optionStyle: StyleProp<ViewStyle>;
 }
 
 interface SettingCardActions {
@@ -53,15 +59,20 @@ interface SettingCardActions {
   phoneInput: (val: string) => void;
 }
 
-export type MainViewModel = ViewModel<MainState, MainActions>;
+export type MainViewModel = AnimatedViewModel<
+  MainState,
+  MainActions,
+  MainAnimated
+>;
 
 export type CardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
 
-export type CardViewModel = ViewModel<CardState, CardActions>;
+export type CardViewModel = AnimatedViewModel<{}, CardActions, CardAnimated>;
 
-export type SettingCardViewModel = ViewModel<
+export type SettingCardViewModel = AnimatedViewModel<
   SettingCardState,
-  SettingCardActions
+  SettingCardActions,
+  SettingCardAnimated
 >;
 
 export interface CardOptionProps {

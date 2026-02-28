@@ -6,8 +6,8 @@ import {
 import { MainViewModel } from '@home/types';
 
 export const useHomeMainViewModel = (): MainViewModel => {
-  const { panGesture, animatedStyle, selectedCardIdx } = useCardSliderContext();
-  const { sliderAnimatedStyle, settingCard } = useCardSettingContext();
+  const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext();
+  const { sliderStyle, settingCard } = useCardSettingContext();
   const { cards } = useUserContext();
 
   const cardLength = cards?.length ?? 1;
@@ -15,12 +15,14 @@ export const useHomeMainViewModel = (): MainViewModel => {
 
   return {
     state: {
-      sliderAnimatedStyle,
-      animatedStyle,
       selectedCardIdx,
       cardLength,
       isSetting,
       cards,
+    },
+    animated: {
+      sliderStyle,
+      moverStyle,
     },
     actions: { panGesture },
   };

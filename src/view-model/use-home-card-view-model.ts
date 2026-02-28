@@ -1,20 +1,35 @@
-import { Easing, useAnimatedStyle, withTiming } from 'react-native-reanimated';
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
 import { CardViewModel } from '@home/types';
+import { useEffect } from 'react';
 
-export const useHomeCardViewModel = (idx: number): CardViewModel=> {
+export const useHomeCardViewModel = (idx: number): CardViewModel => {
   const { settingCard } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const isSelected = idx === selectedCardIdx;
-  const animatedStyle = useAnimatedStyle(() => {
+
+  const cardOpacity = useSharedValue(isSelected ? 1 : 0);
+  const cardTranslateY = useSharedValue(isSelected ? 1 : 0);
+
+  useEffect(() => {
+    cardOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 200 });
+    cardTranslateY.value = withTiming(isSelected ? 1 : 0, {
+      duration: 150,
+      easing: Easing.out(Easing.cubic),
+    });
+  }, [cardOpacity, cardTranslateY, isSelected]);
+
+  const cardStyle = useAnimatedStyle(() => {
     return {
-      opacity: withTiming(isSelected ? 1 : 0.4, { duration: 200 }),
+      opacity: 0.4 + 0.6 * cardOpacity.value,
       transform: [
         {
-          translateY: withTiming(isSelected ? 0 : 15, {
-            easing: Easing.out(Easing.cubic),
-            duration: 150,
-          }),
+          translateY: (1 - cardTranslateY.value) * 15,
         },
       ],
     };
@@ -27,7 +42,8 @@ export const useHomeCardViewModel = (idx: number): CardViewModel=> {
   };
 
   return {
-    state: { animatedStyle },
+    state: {},
+    animated: { cardStyle },
     actions: { cardPress },
   };
 };

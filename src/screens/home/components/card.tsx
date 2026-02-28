@@ -9,11 +9,11 @@ import { CardProps } from '@home/types';
 import { FONT } from '@/theme/fonts';
 
 export const Card = ({ title, phone, idx, message, autoChange }: CardProps) => {
-  const { state, actions } = useHomeCardViewModel(idx);
+  const { animated, actions } = useHomeCardViewModel(idx);
 
   return (
     <Pressable onPress={actions.cardPress}>
-      <Animated.View style={[styles.container, state.animatedStyle]}>
+      <Animated.View style={[styles.container, animated.cardStyle]}>
         <View style={styles.bottomBackground} />
         <View style={styles.wrapper}>
           <LogoText width={50} height={45} />

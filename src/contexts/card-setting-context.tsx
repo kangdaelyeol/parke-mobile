@@ -8,7 +8,7 @@ import {
 } from 'react-native-reanimated';
 
 interface CardSettingContext {
-  sliderAnimatedStyle: StyleProp<ViewStyle>;
+  sliderStyle: StyleProp<ViewStyle>;
   cardSettingController: {
     showSetting: (_: number) => void;
     hideSetting: () => void;
@@ -39,7 +39,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
     },
   };
 
-  const sliderAnimatedStyle = useAnimatedStyle(() => {
+  const sliderStyle = useAnimatedStyle(() => {
     return {
       marginVertical: withTiming(sliderMarginTop.value, {
         duration: 400,
@@ -54,7 +54,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         cardSettingController,
         settingCard,
         setSettingCard,
-        sliderAnimatedStyle,
+        sliderStyle,
       }}
     >
       {children}

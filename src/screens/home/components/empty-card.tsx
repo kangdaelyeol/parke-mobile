@@ -7,10 +7,10 @@ import { useHomeEmptyCardViewModel } from '@/view-model';
 import { EmptyCardProps } from '@home/types';
 
 export const EmptyCard = ({ idx }: EmptyCardProps) => {
-  const { state, actions } = useHomeEmptyCardViewModel(idx);
+  const { animated, actions } = useHomeEmptyCardViewModel(idx);
 
   return (
-    <Animated.View style={[styles.container, state.animatedStyle]}>
+    <Animated.View style={[styles.container, animated.cardStyle]}>
       <View style={styles.iconContainer}>
         <View style={styles.emptyCardIcon}>
           <FontAwesome6

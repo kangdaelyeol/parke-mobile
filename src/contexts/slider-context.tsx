@@ -26,7 +26,7 @@ interface SliderController {
 
 interface SliderContext {
   panGesture: PanGesture;
-  animatedStyle: StyleProp<ViewStyle>;
+  moverStyle: StyleProp<ViewStyle>;
   sliderController: SliderController;
   selectedCardIdx: number;
 }
@@ -102,7 +102,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
           })
       : Gesture.Pan();
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const moverStyle = useAnimatedStyle(() => ({
     transform: [
       {
         translateX: withTiming(sliderTranslatedX.value, {
@@ -117,7 +117,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         selectedCardIdx,
         panGesture,
-        animatedStyle,
+        moverStyle,
         sliderController,
       }}
     >

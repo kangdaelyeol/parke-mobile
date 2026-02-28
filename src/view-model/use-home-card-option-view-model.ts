@@ -7,7 +7,7 @@ import {
 } from '@/contexts';
 import { cardService } from '@/services';
 import { CardOptionViewModel } from '@home/types';
-import { WEB_URL } from '@/constants';
+import { PARKE_WEB_URL } from '@/constants';
 
 export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
   const { selectedCardIdx } = useCardSliderContext();
@@ -53,7 +53,7 @@ export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
       ]);
     },
     previewPress: async () => {
-      const url = WEB_URL + selectedCard.id;
+      const url = PARKE_WEB_URL + selectedCard.id;
 
       const supported = await Linking.canOpenURL(url);
       if (!supported)

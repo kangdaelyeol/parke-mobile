@@ -69,7 +69,7 @@ const Test = () => {
 };
 
 export const Main = () => {
-  const { state, actions } = useHomeMainViewModel();
+  const { state, actions, animated } = useHomeMainViewModel();
 
   return (
     <View style={styles.main}>
@@ -84,11 +84,11 @@ export const Main = () => {
         )}
         <GestureDetector gesture={actions.panGesture}>
           <Animated.View
-            style={[styles.cardContainer, state.sliderAnimatedStyle]}
+            style={[styles.cardContainer, animated.sliderStyle]}
           >
             <View style={styles.cardSlider}>
               <Animated.View
-                style={[state.animatedStyle, styles.cardSliderMover]}
+                style={[animated.moverStyle, styles.cardSliderMover]}
               >
                 {state.cards &&
                   state.cards.map((card, idx) => (
