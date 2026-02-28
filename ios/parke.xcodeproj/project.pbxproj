@@ -7,12 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01D27916212F4FC087D3E391 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C6989F791007474AA4B30A2C /* Pretendard-Regular.ttf */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		6CA85E19CA36E26214376185 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		6FA4A9AB5ED2442597369A12 /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C01B09B289F84E3686217BD3 /* Pretendard-Bold.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		76D2014D57543D11D276DA25 /* Pods_parke.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 12DE636B1B36E25EDC01E9E5 /* Pods_parke.framework */; };
 		7D0268472F5172C30091FB6C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7D0268462F5172C30091FB6C /* GoogleService-Info.plist */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		85CA8958A53B4E6F89B2D073 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FAB0C710FB3949B3855D4F2B /* Pretendard-Medium.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +30,10 @@
 		7D0268462F5172C30091FB6C /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		7D137F812F3881FE0071F82A /* parke-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "parke-Bridging-Header.h"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = parke/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		C01B09B289F84E3686217BD3 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Bold.ttf"; path = "../assets/fonts/Pretendard-Bold.ttf"; sourceTree = "<group>"; };
+		C6989F791007474AA4B30A2C /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Regular.ttf"; path = "../assets/fonts/Pretendard-Regular.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		FAB0C710FB3949B3855D4F2B /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "Pretendard-Medium.ttf"; path = "../assets/fonts/Pretendard-Medium.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		802AF81AEE38461891BECEC4 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				FAB0C710FB3949B3855D4F2B /* Pretendard-Medium.ttf */,
+				C6989F791007474AA4B30A2C /* Pretendard-Regular.ttf */,
+				C01B09B289F84E3686217BD3 /* Pretendard-Bold.ttf */,
+			);
+			name = Resources;
+			path = "";
+			sourceTree = "<group>";
+		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
@@ -80,6 +97,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				802AF81AEE38461891BECEC4 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -169,6 +187,9 @@
 				7D0268472F5172C30091FB6C /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				6CA85E19CA36E26214376185 /* PrivacyInfo.xcprivacy in Resources */,
+				85CA8958A53B4E6F89B2D073 /* Pretendard-Medium.ttf in Resources */,
+				01D27916212F4FC087D3E391 /* Pretendard-Regular.ttf in Resources */,
+				6FA4A9AB5ED2442597369A12 /* Pretendard-Bold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
