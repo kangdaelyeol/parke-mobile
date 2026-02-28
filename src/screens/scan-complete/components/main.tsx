@@ -1,4 +1,3 @@
-import React from 'react';
 import { View } from 'react-native';
 import { Step1, Step2 } from '@scan-complete/components';
 import { useScanCompleteMainViewModel } from '@/view-model';

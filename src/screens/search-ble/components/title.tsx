@@ -3,20 +3,23 @@ import Animated from 'react-native-reanimated';
 import { useSearchBleContext } from '@/contexts';
 import { useSearchBleTitleViewModel } from '@/view-model';
 import { title, subTitle } from '@search-ble/constants';
+import { FONT } from '@/theme/fonts';
 export const Title = () => {
   const {
     state: { detected },
   } = useSearchBleContext();
-  const { state, actions } = useSearchBleTitleViewModel();
+  const { animated, actions } = useSearchBleTitleViewModel();
 
   return (
     <>
-      <Animated.View style={state.titleAnimatedStyle}>
+      <Animated.View
+        style={[styles.titleContainer, animated.titleAnimatedStyle]}
+      >
         <Text onLayout={actions.titleLayout} style={styles.title}>
           {detected ? title.DETECT : title.SEARCH}
         </Text>
       </Animated.View>
-      <Animated.View style={state.subTitleAnimatedStyle}>
+      <Animated.View style={animated.subTitleAnimatedStyle}>
         <Text style={styles.subTitle}>
           {detected ? subTitle.DETECT : subTitle.SEARCH}
         </Text>
@@ -26,17 +29,20 @@ export const Title = () => {
 };
 
 const styles = StyleSheet.create({
+  titleContainer: {
+    marginTop: 40,
+  },
   title: {
     color: '#fff',
     fontSize: 37,
-    fontWeight: 500,
+    fontFamily: FONT.MEDIUM,
     textAlign: 'center',
   },
-
   subTitle: {
     color: '#eee',
     fontSize: 20,
     textAlign: 'center',
+    fontFamily: FONT.REGULAR,
     marginTop: 15,
   },
 });

@@ -16,12 +16,14 @@ export const Radar = () => {
     state: { detected },
   } = useSearchBleContext();
 
-  const { state } = useSearchBleRaderViewModel();
+  const { animated } = useSearchBleRaderViewModel();
 
   return (
     <View style={styles.container}>
       <View style={styles.rader}>
-        <Animated.View style={state.lineAnimatedStyle}>
+        <Animated.View
+          style={[animated.lineAnimatedStyle, styles.absoluteContainer]}
+        >
           <Svg width={SIZE} height={SIZE}>
             <Line
               x1={CENTER}
@@ -41,7 +43,9 @@ export const Radar = () => {
             />
           </Svg>
         </Animated.View>
-        <Animated.View style={state.circleBigAnimatedStyle}>
+        <Animated.View
+          style={[animated.circleBigAnimatedStyle, styles.absoluteContainer]}
+        >
           <Svg width={SIZE} height={SIZE}>
             <Circle
               cx={CENTER}
@@ -53,7 +57,9 @@ export const Radar = () => {
             />
           </Svg>
         </Animated.View>
-        <Animated.View style={state.circleSmallAnimatedStyle}>
+        <Animated.View
+          style={[animated.circleSmallAnimatedStyle, styles.absoluteContainer]}
+        >
           <Svg width={SIZE} height={SIZE}>
             <Circle
               cx={CENTER}
@@ -65,15 +71,17 @@ export const Radar = () => {
             />
           </Svg>
         </Animated.View>
-        <Animated.View style={state.dotAnimatedStyle}>
+        <Animated.View
+          style={[animated.dotAnimatedStyle, styles.absoluteContainer]}
+        >
           <Animated.View
-            style={[styles.dotContainer, state.dotSpinAnimatedStyle]}
+            style={[styles.dotContainer, animated.dotSpinAnimatedStyle, styles.absoluteContainer]}
           >
             <View style={styles.dot} />
           </Animated.View>
         </Animated.View>
         {detected && (
-          <Animated.View style={state.detectedCircleAnimatedStyle}>
+          <Animated.View style={[animated.detectedCircleAnimatedStyle, styles.absoluteContainer]}>
             <Svg width={SIZE} height={SIZE}>
               <Circle
                 cx={CENTER}
@@ -115,5 +123,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.8,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 0 },
+  },
+  absoluteContainer: {
+    position: 'absolute',
+    top: 0,
   },
 });

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Dimensions, LayoutChangeEvent } from 'react-native';
+import {
+  Dimensions,
+  LayoutChangeEvent,
+} from 'react-native';
 import {
   Easing,
   useAnimatedStyle,
@@ -29,36 +32,32 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
     );
     titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }));
     subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }));
-  }, [titleHeight, titleOpacity, titleTransY, subTitleOpacity]);
+  }, [subTitleOpacity, titleHeight, titleOpacity, titleTransY]);
 
-  const state = {
-    titleAnimatedStyle: useAnimatedStyle(() => {
-      return {
-        marginTop: 40,
-        opacity: titleOpacity.value,
-        transform: [
-          {
-            translateY: withTiming(titleTransY.value, {
-              duration: 300,
-              easing: Easing.bezier(0.33, 1, 0.68, 1),
-            }),
-          },
-        ],
-      };
-    }),
+  const titleLayout = (e: LayoutChangeEvent) => {
+    setTitleHeight(e.nativeEvent.layout.height);
+  };
 
+  const animated = {
+    titleAnimatedStyle: useAnimatedStyle(() => ({
+      
+      opacity: titleOpacity.value,
+      transform: [
+        {
+          translateY: titleTransY.value,
+        },
+      ],
+    })),
     subTitleAnimatedStyle: useAnimatedStyle(() => {
       return {
         opacity: subTitleOpacity.value,
       };
     }),
   };
-  const titleLayout = (e: LayoutChangeEvent) => {
-    setTitleHeight(e.nativeEvent.layout.height);
-  };
 
   return {
-    state,
+    state: {},
+    animated,
     actions: {
       titleLayout,
     },

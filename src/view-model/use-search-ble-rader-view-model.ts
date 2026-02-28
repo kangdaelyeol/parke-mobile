@@ -78,7 +78,7 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
     detectedCircleScale,
   ]);
 
-  const state = {
+  const animated = {
     dotSpinAnimatedStyle: useAnimatedStyle(() => {
       const rotate = `${spinProgress.value * 360}deg`;
       return {
@@ -89,8 +89,7 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
     lineAnimatedStyle: useAnimatedStyle(() => {
       return {
         opacity: lineOpacity.value,
-        position: 'absolute',
-        top: 0,
+
         transform: [{ scale: lineScale.value }],
       };
     }),
@@ -98,40 +97,31 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
     circleBigAnimatedStyle: useAnimatedStyle(() => {
       return {
         opacity: circleBigOpacity.value,
-        position: 'absolute',
-        top: 0,
-        transform: [],
       };
     }),
 
     circleSmallAnimatedStyle: useAnimatedStyle(() => {
       return {
         opacity: circleSmallOpacity.value,
-        position: 'absolute',
-        top: 0,
-        transform: [],
       };
     }),
 
     dotAnimatedStyle: useAnimatedStyle(() => {
       return {
         opacity: dotOpacity.value,
-        position: 'absolute',
-        top: 0,
       };
     }),
 
     detectedCircleAnimatedStyle: useAnimatedStyle(() => {
       return {
-        position: 'absolute',
-        top: 0,
         transform: [{ scale: detectedCircleScale.value }],
         opacity: detectedCircleOpacity.value,
       };
     }),
   };
   return {
-    state,
+    state: {},
+    animated,
     actions: {},
   };
 };
