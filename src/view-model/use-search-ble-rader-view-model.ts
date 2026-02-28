@@ -79,14 +79,14 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
   ]);
 
   const animated = {
-    dotSpinAnimatedStyle: useAnimatedStyle(() => {
+    dotSpinStyle: useAnimatedStyle(() => {
       const rotate = `${spinProgress.value * 360}deg`;
       return {
         transform: [{ rotate }],
       };
     }),
 
-    lineAnimatedStyle: useAnimatedStyle(() => {
+    lineStyle: useAnimatedStyle(() => {
       return {
         opacity: lineOpacity.value,
 
@@ -94,25 +94,25 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
       };
     }),
 
-    circleBigAnimatedStyle: useAnimatedStyle(() => {
+    circleBigStyle: useAnimatedStyle(() => {
       return {
         opacity: circleBigOpacity.value,
       };
     }),
 
-    circleSmallAnimatedStyle: useAnimatedStyle(() => {
+    circleSmallStyle: useAnimatedStyle(() => {
       return {
         opacity: circleSmallOpacity.value,
       };
     }),
 
-    dotAnimatedStyle: useAnimatedStyle(() => {
+    dotStyle: useAnimatedStyle(() => {
       return {
         opacity: dotOpacity.value,
       };
     }),
 
-    detectedCircleAnimatedStyle: useAnimatedStyle(() => {
+    detectedCircleStyle: useAnimatedStyle(() => {
       return {
         transform: [{ scale: detectedCircleScale.value }],
         opacity: detectedCircleOpacity.value,

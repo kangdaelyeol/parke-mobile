@@ -22,7 +22,7 @@ export const Radar = () => {
     <View style={styles.container}>
       <View style={styles.rader}>
         <Animated.View
-          style={[animated.lineAnimatedStyle, styles.absoluteContainer]}
+          style={[animated.lineStyle, styles.absoluteContainer]}
         >
           <Svg width={SIZE} height={SIZE}>
             <Line
@@ -44,7 +44,7 @@ export const Radar = () => {
           </Svg>
         </Animated.View>
         <Animated.View
-          style={[animated.circleBigAnimatedStyle, styles.absoluteContainer]}
+          style={[animated.circleBigStyle, styles.absoluteContainer]}
         >
           <Svg width={SIZE} height={SIZE}>
             <Circle
@@ -58,7 +58,7 @@ export const Radar = () => {
           </Svg>
         </Animated.View>
         <Animated.View
-          style={[animated.circleSmallAnimatedStyle, styles.absoluteContainer]}
+          style={[animated.circleSmallStyle, styles.absoluteContainer]}
         >
           <Svg width={SIZE} height={SIZE}>
             <Circle
@@ -72,16 +72,16 @@ export const Radar = () => {
           </Svg>
         </Animated.View>
         <Animated.View
-          style={[animated.dotAnimatedStyle, styles.absoluteContainer]}
+          style={[animated.dotStyle, styles.absoluteContainer]}
         >
           <Animated.View
-            style={[styles.dotContainer, animated.dotSpinAnimatedStyle, styles.absoluteContainer]}
+            style={[styles.dotContainer, animated.dotSpinStyle, styles.absoluteContainer]}
           >
             <View style={styles.dot} />
           </Animated.View>
         </Animated.View>
         {detected && (
-          <Animated.View style={[animated.detectedCircleAnimatedStyle, styles.absoluteContainer]}>
+          <Animated.View style={[animated.detectedCircleStyle, styles.absoluteContainer]}>
             <Svg width={SIZE} height={SIZE}>
               <Circle
                 cx={CENTER}

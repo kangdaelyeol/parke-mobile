@@ -39,7 +39,7 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
   };
 
   const animated = {
-    titleAnimatedStyle: useAnimatedStyle(() => ({
+    titleStyle: useAnimatedStyle(() => ({
       
       opacity: titleOpacity.value,
       transform: [
@@ -48,7 +48,7 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
         },
       ],
     })),
-    subTitleAnimatedStyle: useAnimatedStyle(() => {
+    subTitleStyle: useAnimatedStyle(() => {
       return {
         opacity: subTitleOpacity.value,
       };

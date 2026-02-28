@@ -12,14 +12,12 @@ export const Title = () => {
 
   return (
     <>
-      <Animated.View
-        style={[styles.titleContainer, animated.titleAnimatedStyle]}
-      >
+      <Animated.View style={[styles.titleContainer, animated.titleStyle]}>
         <Text onLayout={actions.titleLayout} style={styles.title}>
           {detected ? title.DETECT : title.SEARCH}
         </Text>
       </Animated.View>
-      <Animated.View style={animated.subTitleAnimatedStyle}>
+      <Animated.View style={animated.subTitleStyle}>
         <Text style={styles.subTitle}>
           {detected ? subTitle.DETECT : subTitle.SEARCH}
         </Text>

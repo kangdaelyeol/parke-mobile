@@ -6,12 +6,12 @@ interface HeaderActions {
 }
 
 interface RaderAnimated {
-  dotSpinAnimatedStyle: StyleProp<ViewStyle>;
-  lineAnimatedStyle: StyleProp<ViewStyle>;
-  circleBigAnimatedStyle: StyleProp<ViewStyle>;
-  circleSmallAnimatedStyle: StyleProp<ViewStyle>;
-  dotAnimatedStyle: StyleProp<ViewStyle>;
-  detectedCircleAnimatedStyle: StyleProp<ViewStyle>;
+  dotSpinStyle: StyleProp<ViewStyle>;
+  lineStyle: StyleProp<ViewStyle>;
+  circleBigStyle: StyleProp<ViewStyle>;
+  circleSmallStyle: StyleProp<ViewStyle>;
+  dotStyle: StyleProp<ViewStyle>;
+  detectedCircleStyle: StyleProp<ViewStyle>;
 }
 
 interface TitleActions {
@@ -19,8 +19,8 @@ interface TitleActions {
 }
 
 interface TitleAnimated {
-  titleAnimatedStyle: StyleProp<ViewStyle>;
-  subTitleAnimatedStyle: StyleProp<ViewStyle>;
+  titleStyle: StyleProp<ViewStyle>;
+  subTitleStyle: StyleProp<ViewStyle>;
 }
 
 interface ScreenStates {
