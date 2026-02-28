@@ -1,8 +1,9 @@
 {
   "extends": "@react-native/typescript-config",
-  "include": ["**/*.ts", "**/*.tsx", "src/types/**/*.ts"],
-  "exclude": ["**/node_modules", "**/Pods"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "App.tsx"],
+  "exclude": ["node_modules", "ios/Pods"],
   "compilerOptions": {
+    "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
