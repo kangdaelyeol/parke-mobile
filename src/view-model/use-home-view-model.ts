@@ -65,6 +65,13 @@ export const useHomeViewModel = () => {
       if (!user?.id) return;
       if (!bleManagerRef) return;
       if (!startBackgroundScanMemorized) return;
+      if (user.phone.trim() === '') {
+        Alert.alert(
+          '전화번호 등록 필요',
+          '백그라운드 장치 스캔을 위해서는 전화번호 등록이 필요합니다.',
+        );
+        return;
+      }
 
       const nowSession = scanSessionRef.current + 1;
 
@@ -80,7 +87,6 @@ export const useHomeViewModel = () => {
         }
 
         sub = bleManagerRef.current?.onStateChange(state => {
-          console.log(state);
           if (state === 'PoweredOn') {
             startBackgroundScanMemorized();
             sub?.remove();
@@ -93,6 +99,7 @@ export const useHomeViewModel = () => {
       };
     }, [
       user.id,
+      user.phone,
       bleManagerRef,
       startBackgroundScanMemorized,
       scanSessionRef,
