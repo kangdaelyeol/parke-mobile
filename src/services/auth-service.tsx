@@ -1,5 +1,6 @@
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
   getAuth,
   signInWithEmailAndPassword,
   signOut,
@@ -83,6 +84,7 @@ export const authService: AuthService = {
     await signOut(getAuth());
   },
   firebaseDeleteUser: async () => {
-    await getAuth().currentUser?.delete();
+    const user = getAuth().currentUser;
+    if (user) await deleteUser(user);
   },
 };
