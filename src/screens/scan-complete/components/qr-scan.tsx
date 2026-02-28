@@ -8,7 +8,7 @@ import {
 import { LogoIcon } from '@/assets/logo';
 import { PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts';
-import { WEB_URL } from '@/constants';
+import { PARKE_WEB_URL } from '@/constants';
 
 export const QrScan = () => {
   const device = useCameraDevice('back');
@@ -36,7 +36,7 @@ export const QrScan = () => {
         const v = codes?.[0].value;
         if (!v) return;
         const scannedUrl = String(v);
-        if (!scannedUrl.startsWith(WEB_URL)) {
+        if (!scannedUrl.startsWith(PARKE_WEB_URL)) {
           Alert.alert(
             '잘못된 QR코드를 스캔했습니다.\n다시 시도하거나 시리얼 번호를 직접 입력해주세요.',
           );
