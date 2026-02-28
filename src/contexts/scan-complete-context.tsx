@@ -14,33 +14,8 @@ import { convertPhone } from '@/helpers';
 import { extractNumber } from '@/utils';
 import { cardService, userService } from '@/services';
 import { ScanCompleteStackNavigationProp } from '@/navigation/types';
+import { ScanCompleteContextValue } from '@/screens/scan-complete/types';
 
-interface ScanCompleteContextValue {
-  actions: {
-    phoneInput: (v: string) => void;
-    nameInput: (v: string) => void;
-    messageInput: (v: string) => void;
-    serialInput: (v: string) => void;
-    nextPress: () => void;
-    savePress: () => Promise<void>;
-    prevPress: () => void;
-    scanPress: () => void;
-    scanBackPress: () => void;
-    serialInputPress: () => void;
-    serialScan: (v: string) => void;
-    setDeviceId: React.Dispatch<React.SetStateAction<string>>;
-  };
-  state: {
-    phone: string;
-    name: string;
-    message: string;
-    serial: string;
-    currentStep: number;
-    loading: boolean;
-    scanPage: boolean;
-    serialInput: boolean;
-  };
-}
 
 const ScanCompleteContext = createContext({} as ScanCompleteContextValue);
 
