@@ -1,8 +1,8 @@
-import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LogoText } from '@/assets/logo';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
+import { FONT } from '@/theme/fonts';
 
 type CardProps = {
   deviceId: string;
@@ -51,16 +51,16 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 10,
     fontSize: 16,
-    fontWeight: '400',
-    color: '#cccccc',
+    fontFamily: FONT.REGULAR,
+    color: '#d5d5d5',
   },
   phone: {
     position: 'absolute',
     bottom: 10,
     right: 10,
     fontSize: 14,
-    fontWeight: '400',
-    color: '#cccccc',
+    fontFamily: FONT.REGULAR,
+    color: '#d5d5d5',
   },
   bottomBackground: {
     position: 'absolute',
@@ -94,17 +94,17 @@ const styles = StyleSheet.create({
   infoLabel: {
     position: 'absolute',
     left: 10,
-    bottom: 10,
+    bottom: 4,
     // flexDirection: 'row',
   },
   infoTitle: {
     color: '#7b86ff',
     fontSize: 11,
-    fontWeight: 500,
+    fontFamily: FONT.MEDIUM,
   },
   infoText: {
     color: '#000000',
-    fontSize: 10,
-    fontWeight: 500,
+    fontSize: 8,
+    fontFamily: FONT.BOLD,
   },
 });

@@ -22,7 +22,7 @@ export const CardOption = ({ card }: CardOptionProps) => {
           <PressableButton
             pressableStyle={styles.pressable}
             onPress={autoChangePress}
-            title="자동변경 on/off"
+            title="자동변경 On/Off"
             background={['#242431', '#303042']}
           />
         </View>

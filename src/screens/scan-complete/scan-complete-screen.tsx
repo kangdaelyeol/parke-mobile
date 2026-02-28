@@ -68,28 +68,4 @@ const styles = StyleSheet.create({
     maxWidth: 380,
     marginHorizontal: 'auto',
   },
-  subTitle: {
-    color: '#eee',
-    fontSize: 25,
-    fontWeight: 700,
-    textAlign: 'center',
-    marginTop: 30,
-  },
-  keyValue: { color: '#0f0', fontSize: 16, textAlign: 'center' },
-  input: {
-    backgroundColor: '#333',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    color: '#fff',
-    fontSize: 16,
-    marginBottom: 16,
-  },
-  button: {
-    backgroundColor: '#4caf50',
-    borderRadius: 10,
-    paddingVertical: 14,
-    alignItems: 'center',
-  },
-  buttonText: { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

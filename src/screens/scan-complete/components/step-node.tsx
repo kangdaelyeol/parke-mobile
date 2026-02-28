@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Animated, {
   Easing,
@@ -8,6 +8,7 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { FONT } from '@/theme/fonts';
 
 interface StepProps {
   label: string;
@@ -119,6 +120,6 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 10,
     color: '#eeeeee',
-    fontWeight: '700',
+    fontFamily: FONT.REGULAR,
   },
 });

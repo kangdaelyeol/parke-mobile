@@ -3,6 +3,7 @@ import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
 import { useBleContext } from '@/contexts';
+import { FONT } from '@/theme/fonts';
 
 export const Header = () => {
   const { user } = useUserContext();
@@ -13,7 +14,7 @@ export const Header = () => {
         <LogoIcon width={35} height={35} style={styles.icon} />
         <Text style={styles.phone}>
           {convertPhone(user.phone)}
-          {state.bleManagerIsReady ? 'Yes' : 'No'}
+          {state.bleManagerIsReady ? ' Yes' : ' No'}
         </Text>
       </View>
     </View>
@@ -22,7 +23,6 @@ export const Header = () => {
 
 const styles = StyleSheet.create({
   header: {
-    // backgroundColor: 'white',
     width: '100%',
   },
   headerWrapper: {
@@ -44,7 +44,6 @@ const styles = StyleSheet.create({
     right: 10,
     top: 22,
     fontSize: 23,
-    fontWeight: 700,
-    transform: 'scaleY(1.1)',
+    fontFamily: FONT.MEDIUM,
   },
 });

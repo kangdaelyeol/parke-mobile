@@ -1,4 +1,4 @@
-import React from 'react';
+import { FONT } from '@/theme/fonts';
 import {
   ColorValue,
   Pressable,
@@ -16,7 +16,7 @@ interface PressableButtonProps {
   title: string;
   style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
-  pressableStyle?:StyleProp<ViewStyle>
+  pressableStyle?: StyleProp<ViewStyle>;
 }
 
 export const PressableButton = ({
@@ -25,7 +25,7 @@ export const PressableButton = ({
   title,
   style,
   textStyle,
-  pressableStyle
+  pressableStyle,
 }: PressableButtonProps) => {
   return (
     <Pressable onPress={onPress} style={pressableStyle}>
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 20,
     textAlign: 'center',
-    fontWeight: 'bold',
+    fontFamily: FONT.MEDIUM,
     fontSize: 18,
     color: '#d3d3d3',
   },

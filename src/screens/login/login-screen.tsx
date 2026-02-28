@@ -2,6 +2,7 @@ import { View, StyleSheet, Text, Pressable } from 'react-native';
 import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
 import { Loading } from '@/components';
 import { useLoginViewModel } from '@/view-model';
+import { FONT } from '@/theme/fonts';
 
 export default function LoginScreen() {
   const { state, actions } = useLoginViewModel();
@@ -62,7 +63,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   loginBtnText: {
-    fontWeight: 'bold',
+    fontFamily: FONT.BOLD,
     marginLeft: 45,
     color: '#000000ea',
     fontSize: 18,
@@ -75,6 +76,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
   },
   designCreditText: {
+    fontFamily: FONT.MEDIUM,
     color: '#3b3b3b',
   },
 });

@@ -11,6 +11,7 @@ import { cache } from '@/storage';
 import { cardService, userService } from '@/services';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
+import { FONT } from '@/theme/fonts';
 
 const Test = () => {
   const [busy, setBusy] = useState(false);
@@ -24,7 +25,7 @@ const Test = () => {
           if (busy) return;
           setBusy(true);
           try {
-            unlink();
+            await unlink();
             cache.setHasSeenOnBoarding(false);
             navigation.navigate('OnBoarding');
           } catch (e) {
@@ -77,7 +78,7 @@ export const Main = () => {
         {!state.isSetting && state.cards[state.selectedCardIdx] && (
           <>
             <View style={styles.title}>
-              <Text style={styles.titleText}>My parke list</Text>
+              <Text style={styles.titleText}>My parke</Text>
             </View>
           </>
         )}
@@ -141,8 +142,9 @@ const styles = StyleSheet.create({
   titleText: {
     marginHorizontal: 'auto',
     color: '#ffffffd8',
-    fontSize: 40,
-    fontWeight: 'bold',
+    fontSize: 37,
+    fontFamily: FONT.MEDIUM,
+    transform: 'scaleX(1)',
   },
   test: {
     position: 'absolute',

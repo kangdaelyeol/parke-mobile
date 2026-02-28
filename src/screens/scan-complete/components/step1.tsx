@@ -1,6 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { FocusableInput, PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
+import { FONT } from '@/theme/fonts';
 
 export const Step1 = () => {
   const { state, actions } = useScanCompleteContext();
@@ -42,7 +43,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#eee',
     fontSize: 25,
-    fontWeight: 700,
+    fontFamily: FONT.MEDIUM,
     textAlign: 'center',
     marginTop: 30,
   },

@@ -6,6 +6,7 @@ import { convertPhone } from '@/helpers';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useHomeCardViewModel } from '@/view-model';
 import { CardProps } from '@home/types';
+import { FONT } from '@/theme/fonts';
 
 export const Card = ({ title, phone, idx, message, autoChange }: CardProps) => {
   const { state, actions } = useHomeCardViewModel(idx);
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 10,
     fontSize: 16,
-    fontWeight: '400',
+    fontFamily: FONT.REGULAR,
     color: '#cccccc',
   },
   phone: {
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     fontSize: 14,
-    fontWeight: '400',
+    fontFamily: FONT.REGULAR,
     color: '#cccccc',
   },
   bottomBackground: {
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
   },
   autoChangeText: {
     fontSize: 14,
-    fontWeight: 500,
+    fontFamily: FONT.MEDIUM,
   },
   autoChangeTextOn: {
     color: '#4fa75c',

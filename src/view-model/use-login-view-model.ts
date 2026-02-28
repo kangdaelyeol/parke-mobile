@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import '@react-native-firebase/auth';
 import { UserDto } from '@/domain/user';
 import { LoginStackNavigationProp } from '@/navigation/types';
 import { LoginViewModel } from '@/screens/login/types';

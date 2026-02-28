@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
 import { FocusableInput, Loading, PressableButton } from '@/components';

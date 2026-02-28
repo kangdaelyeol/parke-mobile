@@ -26,15 +26,12 @@ export const Footer = () => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: -1,
-    width: '102%',
-    left: '-1%',
+    bottom: 0,
+    width: '100%',
     backgroundColor: '#16181b',
     height: 90,
-    borderTopStartRadius: 35,
-    borderTopEndRadius: 35,
     borderColor: '#2d2d2d',
-    borderWidth: 1,
+    borderTopWidth: 1,
   },
   wrapper: {
     width: '100%',

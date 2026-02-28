@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { FocusableInput, PressableButton } from '@/components';
 import { useScanCompleteContext } from '@/contexts/scan-complete-context';
+import { FONT } from '@/theme/fonts';
 
 export const Step2 = () => {
   const { actions, state } = useScanCompleteContext();
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 30,
     fontSize: 20,
-    fontWeight: 700,
+    fontFamily: FONT.MEDIUM,
   },
   select: {
     marginTop: 20,
@@ -98,7 +99,7 @@ const styles = StyleSheet.create({
   },
   optionText: {
     color: '#eee',
-    fontWeight: 600,
+    fontFamily: FONT.MEDIUM,
     fontSize: 23,
     marginLeft: 15,
   },
