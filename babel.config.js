@@ -16,7 +16,7 @@ module.exports = {
           '@search-ble': './src/screens/search-ble',
           '@scan-complete': './src/screens/scan-complete',
         },
-        extentions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
+        extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
     ],
     'react-native-worklets/plugin',
