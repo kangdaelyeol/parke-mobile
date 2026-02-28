@@ -1,8 +1,9 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { LogoIcon, LogoText } from '@/assets/logo';
-import { FocusableInput, Loading } from '@/components';
+import { FocusableInput, Loading, PressableButton } from '@/components';
 import { useInitViewModel } from '@/view-model';
+import { FONT } from '@/theme/fonts';
 
 export default function InitScreen() {
   const { state, actions } = useInitViewModel();
@@ -32,32 +33,18 @@ export default function InitScreen() {
             />
           </View>
           <View style={styles.buttonSection}>
-            <Pressable onPress={actions.savePress} style={styles.pressable}>
-              {({ pressed }) => (
-                <View
-                  style={[
-                    styles.button,
-                    styles.saveButton,
-                    pressed && styles.saveButtonPressed,
-                  ]}
-                >
-                  <Text style={styles.buttonText}>저장</Text>
-                </View>
-              )}
-            </Pressable>
-            <Pressable onPress={actions.skipPress} style={styles.pressable}>
-              {({ pressed }) => (
-                <View
-                  style={[
-                    styles.button,
-                    styles.laterButton,
-                    pressed && styles.laterButtonPressed,
-                  ]}
-                >
-                  <Text style={styles.buttonText}>건너뛰기</Text>
-                </View>
-              )}
-            </Pressable>
+            <PressableButton
+              title="저장"
+              onPress={actions.savePress}
+              background={['#182a4d', '#223a69']}
+              pressableStyle={styles.pressable}
+            />
+            <PressableButton
+              title="건너뛰기"
+              onPress={actions.skipPress}
+              background={['#161339', '#221d54']}
+              pressableStyle={styles.pressable}
+            />
           </View>
         </View>
       </View>
@@ -86,71 +73,17 @@ const styles = StyleSheet.create({
     color: '#d3d3d3',
     marginTop: 25,
     fontSize: 28,
-    fontWeight: 'bold',
+    fontFamily: FONT.MEDIUM,
     marginHorizontal: 'auto',
   },
   inputSection: {
     marginTop: 30,
     gap: 20,
   },
-  inputContainer: {
-    gap: 10,
-  },
-  inputTitle: {
-    color: '#808080',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
-  nicknameTitleFocused: {
-    color: '#eeeeee',
-  },
-  nicknameInputFocused: {
-    borderColor: '#eeeeee',
-  },
-  phoneTitleFocused: {
-    color: '#eeeeee',
-  },
-  phoneInputFocused: {
-    borderColor: '#eeeeee',
-  },
-  input: {
-    borderRadius: 8,
-    borderWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#606060',
-    paddingHorizontal: 7,
-    fontSize: 17,
-    height: 50,
-    color: '#dddddd',
-    fontWeight: '500',
-    maxWidth: 400,
-  },
   buttonSection: {
     flexDirection: 'row',
     marginTop: 35,
     gap: 35,
   },
-  button: {
-    padding: 18,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  saveButton: {
-    backgroundColor: '#182a4d',
-  },
-  saveButtonPressed: {
-    backgroundColor: '#223a69',
-  },
-  laterButton: {
-    backgroundColor: '#161339',
-  },
-  laterButtonPressed: {
-    backgroundColor: '#221d54',
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 17,
-    color: '#d3d3d3',
-  },
-  pressable: { flex: 1 },
+  pressable: { flex: 1, flexShrink: 1, flexBasis: 0 },
 });
