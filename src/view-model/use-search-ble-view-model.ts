@@ -3,12 +3,16 @@ import { Alert } from 'react-native';
 import { useBleContext, useSearchBleContext } from '@/contexts';
 import { ensurePermissions } from '@/helpers';
 import { SearchBleScreenViewModel } from '@search-ble/types';
+import { useNavigation } from '@react-navigation/native';
+import { SearchBleStackNavigationProp } from '@/navigation/types';
 
 export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
   const { state: searchBleState, actions: searchBleActions } =
     useSearchBleContext();
   const { state: bleState, actions: bleActions } = useBleContext();
   // temp - 디바이스 조회 잘 되나 확인하기 위함
+
+  const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   useEffect(() => {
     let sub: { remove: () => void } | undefined;
@@ -18,7 +22,7 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
       const ok = await ensurePermissions();
       if (!ok) {
         Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
-        return;
+        return navigation.goBack();
       }
 
       sub = bleState.bleManagerRef.current?.onStateChange(state => {
