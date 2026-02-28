@@ -9,13 +9,13 @@ import {
 } from '@on-boarding/components';
 
 export const Slider = () => {
-  const { state, actions } = useOnBoardingSliderViewModel();
+  const { animated, actions } = useOnBoardingSliderViewModel();
 
   return (
     <View style={sliderStyle.container}>
       <GestureDetector gesture={actions.panGesture}>
         <Animated.View
-          style={[sliderStyle.animationContainer, state.animatedStyle]}
+          style={[sliderStyle.animationContainer, animated.sliderStyle]}
         >
           <MainArticle1 />
           <MainArticle2 />

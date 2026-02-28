@@ -61,7 +61,7 @@ export const useOnBoardingSliderViewModel = (): OnBoardingSliderViewModel => {
     })
     .runOnJS(true);
 
-  const animatedStyle = useAnimatedStyle(() => ({
+  const sliderStyle = useAnimatedStyle(() => ({
     transform: [
       {
         translateX: withTiming(sliderTranslateX.value, {
@@ -72,5 +72,5 @@ export const useOnBoardingSliderViewModel = (): OnBoardingSliderViewModel => {
     ],
   }));
 
-  return { actions: { panGesture }, state: { animatedStyle } };
+  return { state: {}, actions: { panGesture }, animated: { sliderStyle } };
 };
