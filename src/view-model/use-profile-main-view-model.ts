@@ -23,8 +23,17 @@ export const useProfileMainViewModel = () => {
     nicknameInput: (val: string) => setNickname(val),
 
     savePress: async () => {
+      if (nickname.trim() === '') return Alert.alert('닉네임을 입력해주세요.');
+
+      if (phone.trim() === '')
+        return Alert.alert('휴대폰 번호를 입력해주세요.');
+
       setLoading(true);
-      const res = userService.updateNicknameAndPhone(user.id, nickname, phone);
+      const res = userService.updateNicknameAndPhone(
+        user.id,
+        nickname.trim(),
+        phone,
+      );
       if (!res) {
         Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
         return setLoading(false);
