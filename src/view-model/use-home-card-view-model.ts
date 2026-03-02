@@ -5,10 +5,10 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import { useCardSettingContext, useCardSliderContext } from '@/contexts';
-import { CardViewModel } from '@home/types';
+import { HomeCardViewModel } from '@home/types';
 import { useEffect } from 'react';
 
-export const useHomeCardViewModel = (idx: number): CardViewModel => {
+export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
   const { settingCard } = useCardSettingContext();
   const { selectedCardIdx, sliderController } = useCardSliderContext();
   const isSelected = idx === selectedCardIdx;

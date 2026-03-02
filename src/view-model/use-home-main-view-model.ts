@@ -3,9 +3,9 @@ import {
   useCardSliderContext,
   useUserContext,
 } from '@/contexts';
-import { MainViewModel } from '@home/types';
+import { HomeMainViewModel } from '@home/types';
 
-export const useHomeMainViewModel = (): MainViewModel => {
+export const useHomeMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext();
   const { sliderStyle, settingCard } = useCardSettingContext();
   const { cards } = useUserContext();

@@ -5,10 +5,10 @@ import { LogoText } from '@/assets/logo';
 import { convertPhone } from '@/helpers';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useHomeCardViewModel } from '@/view-model';
-import { CardProps } from '@home/types';
+import { HomeCardProps } from '@home/types';
 import { FONT } from '@/theme/fonts';
 
-export const Card = ({ title, phone, idx, message, autoChange }: CardProps) => {
+export const Card = ({ title, phone, idx, message, autoChange }: HomeCardProps) => {
   const { animated, actions } = useHomeCardViewModel(idx);
 
   return (

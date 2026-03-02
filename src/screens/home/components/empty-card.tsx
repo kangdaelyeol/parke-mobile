@@ -4,9 +4,9 @@ import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
 import { useHomeEmptyCardViewModel } from '@/view-model';
-import { EmptyCardProps } from '@home/types';
+import { HomeEmptyCardProps } from '@home/types';
 
-export const EmptyCard = ({ idx }: EmptyCardProps) => {
+export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
   const { animated, actions } = useHomeEmptyCardViewModel(idx);
 
   return (

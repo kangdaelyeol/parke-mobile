@@ -59,15 +59,15 @@ interface SettingCardActions {
   phoneInput: (val: string) => void;
 }
 
-export type MainViewModel = AnimatedViewModel<
+export type HomeMainViewModel = AnimatedViewModel<
   MainState,
   MainActions,
   MainAnimated
 >;
 
-export type CardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
+export type HomeCardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
 
-export type CardViewModel = AnimatedViewModel<{}, CardActions, CardAnimated>;
+export type HomeCardViewModel = AnimatedViewModel<{}, CardActions, CardAnimated>;
 
 export type SettingCardViewModel = AnimatedViewModel<
   SettingCardState,
@@ -75,11 +75,11 @@ export type SettingCardViewModel = AnimatedViewModel<
   SettingCardAnimated
 >;
 
-export interface CardOptionProps {
+export interface HomeCardOptionProps {
   card: CardDto;
 }
 
-export interface CardProps {
+export interface HomeCardProps {
   title: string;
   phone: string;
   idx: number;
@@ -87,16 +87,16 @@ export interface CardProps {
   autoChange: boolean;
 }
 
-export interface EmptyCardProps {
+export interface HomeEmptyCardProps {
   idx: number;
 }
 
-export interface FooterProps {
+export interface HomeFooterProps {
   label: string;
   iconName: any;
   onPress: () => void;
 }
 
-export interface SettingCardProps {
+export interface HomeSettingCardProps {
   card: CardDto;
 }

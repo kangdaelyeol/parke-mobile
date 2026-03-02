@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { Loading, PressableButton } from '@/components';
 import { useHomeCardOptionViewModel } from '@/view-model';
-import { CardOptionProps } from '@home/types';
+import { HomeCardOptionProps } from '@home/types';
 
-export const CardOption = ({ card }: CardOptionProps) => {
+export const CardOption = ({ card }: HomeCardOptionProps) => {
   const { state, actions } = useHomeCardOptionViewModel();
 
   const {

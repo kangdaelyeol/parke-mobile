@@ -2,9 +2,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { TextInput } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { useHomeSettingCardViewModel } from '@/view-model';
-import { SettingCardProps } from '@home/types';
+import { HomeSettingCardProps } from '@home/types';
 
-export const SettingCard = ({ card }: SettingCardProps) => {
+export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useHomeSettingCardViewModel(card);
 
   return (

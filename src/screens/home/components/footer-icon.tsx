@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6';
-import { FooterProps } from '@home/types';
+import { HomeFooterProps } from '@home/types';
 import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants';
 import { FONT } from '@/theme/fonts';
 
-export const FooterIcon = ({ label, iconName, onPress }: FooterProps) => {
+export const FooterIcon = ({ label, iconName, onPress }: HomeFooterProps) => {
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (

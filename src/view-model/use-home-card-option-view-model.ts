@@ -6,10 +6,10 @@ import {
   useUserContext,
 } from '@/contexts';
 import { cardService } from '@/services';
-import { CardOptionViewModel } from '@home/types';
+import { HomeCardOptionViewModel } from '@home/types';
 import { PARKE_WEB_URL } from '@/constants';
 
-export const useHomeCardOptionViewModel = (): CardOptionViewModel => {
+export const useHomeCardOptionViewModel = (): HomeCardOptionViewModel => {
   const { selectedCardIdx } = useCardSliderContext();
   const { cardSettingController } = useCardSettingContext();
   const { user, setCards, cards, setUser } = useUserContext();
