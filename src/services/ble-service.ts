@@ -26,6 +26,9 @@ const g = globalThis as any;
 
 let scanSession = 0;
 
+let isBackgroundScanning = false;
+let isSearching = false;
+
 const isCandidate = (dev: Device) =>
   !!dev && (dev.name ?? '').startsWith('Parke');
 
@@ -60,6 +63,8 @@ export const bleService = {
     if (bleService.getSession() !== capturedSession) return;
     console.log('stopScanning');
     await bleManager.stopDeviceScan();
+    isSearching = false;
+    isBackgroundScanning = false;
   },
   startBackgroundScan: async ({
     cards,
@@ -67,6 +72,7 @@ export const bleService = {
     setCards,
   }: StartBackgroundScanProps) => {
     console.log('startBackground');
+    isBackgroundScanning = true;
 
     bleManager.startDeviceScan(
       [SERVICE_UUID],
@@ -158,6 +164,7 @@ export const bleService = {
   }: StartSearchBleProps) => {
     bleService.updateSession();
     console.log('startSearchBle');
+    isSearching = true;
 
     const ok = await ensurePermissions();
     if (!ok) {
@@ -207,5 +214,8 @@ export const bleService = {
         }
       },
     );
+  },
+  getState: () => {
+    return { isBackgroundScanning, isSearching };
   },
 };
