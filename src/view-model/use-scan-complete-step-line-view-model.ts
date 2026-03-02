@@ -7,13 +7,13 @@ import {
   withTiming,
 } from 'react-native-reanimated';
 import {
-  ScanCompleteStepLineProps,
+  ScanCompleteStepLineViewModelProps,
   ScanCompleteStepLineViewModel,
 } from '@scan-complete/types';
 
 export const useScanCompleteStepLineViewModel = ({
   step,
-}: ScanCompleteStepLineProps): ScanCompleteStepLineViewModel => {
+}: ScanCompleteStepLineViewModelProps): ScanCompleteStepLineViewModel => {
   const {
     state: { currentStep },
   } = useScanCompleteContext();

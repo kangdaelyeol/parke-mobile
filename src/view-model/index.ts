@@ -23,3 +23,4 @@ export * from './use-app-view-model';
 export * from './use-scan-complete-main-view-model';
 export * from './use-scan-complete-qr-scan-view-model';
 export * from './use-scan-complete-step-line-view-model';
+export * from './use-scan-complete-step-node-view-model';

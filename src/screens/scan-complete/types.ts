@@ -61,6 +61,29 @@ export type ScanCompleteStepLineViewModel = AnimatedViewModel<
   StepLineAnimated
 >;
 
-export interface ScanCompleteStepLineProps  {
+export interface ScanCompleteStepLineViewModelProps {
   step: number;
-};
+}
+
+export interface StepLineProps {
+  step: number;
+}
+
+interface StepNodeState {
+  currentStep: number;
+}
+
+interface StepNodeAnimated {
+  dotStyle: StyleProp<ViewStyle>;
+  checkIconStyle: StyleProp<ViewStyle>;
+}
+
+export type ScanCompleteStepNodeViewModel = AnimatedViewModel<
+  StepNodeState,
+  {},
+  StepNodeAnimated
+>;
+
+export interface ScanCompleteStepNodeViewModelProps {
+  step: number;
+}

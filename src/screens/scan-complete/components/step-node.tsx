@@ -1,15 +1,8 @@
-import { useEffect } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withDelay,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { FONT } from '@/theme/fonts';
-import { useScanCompleteContext } from '@/contexts';
+import { useScanCompleteStepNodeViewModel } from '@/view-model';
 
 interface StepProps {
   label: string;
@@ -17,73 +10,19 @@ interface StepProps {
 }
 
 export const StepNode = ({ label, step }: StepProps) => {
-  const {
-    state: { currentStep },
-  } = useScanCompleteContext();
-  const dotScale = useSharedValue(0);
-  const checkIconOpacity = useSharedValue(0);
-
-  useEffect(() => {
-    if (step === currentStep) {
-      dotScale.value = withTiming(1, {
-        duration: 300,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      });
-      checkIconOpacity.value = withDelay(
-        500,
-        withTiming(0, {
-          duration: 200,
-          easing: Easing.bezier(0.33, 1, 0.68, 1),
-        }),
-      );
-    }
-
-    if (step < currentStep) {
-      dotScale.value = withTiming(2, {
-        duration: 300,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      });
-      checkIconOpacity.value = withDelay(
-        300,
-        withTiming(1, { duration: 200, easing: Easing.linear }),
-      );
-    }
-
-    if (step > currentStep) {
-      dotScale.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      });
-      checkIconOpacity.value = withDelay(
-        500,
-        withTiming(0, {
-          duration: 200,
-          easing: Easing.bezier(0.33, 1, 0.68, 1),
-        }),
-      );
-    }
-  }, [checkIconOpacity, currentStep, dotScale, step]);
-
-  const dotAnimatedStyle = useAnimatedStyle(() => ({
-    transform: [{ scale: dotScale.value }],
-  }));
-
-  const checkIconAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: checkIconOpacity.value,
-  }));
-
+  const { animated, state } = useScanCompleteStepNodeViewModel({ step });
   return (
     <View style={styles.container}>
       <View style={[styles.dotBox]}>
         <Animated.View
           style={[
             styles.dot,
-            dotAnimatedStyle,
-            step > currentStep ? styles.inactiveDot : styles.activeDot,
+            animated.dotStyle,
+            step > state.currentStep ? styles.inactiveDot : styles.activeDot,
           ]}
         >
-          <Animated.View style={checkIconAnimatedStyle}>
-            {step < currentStep && (
+          <Animated.View style={animated.checkIconStyle}>
+            {step < state.currentStep && (
               <FontAwesome6
                 iconStyle="solid"
                 name="check"

@@ -1,10 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useScanCompleteStepLineViewModel } from '@/view-model';
-
-interface StepLineProps {
-  step: number;
-}
+import { StepLineProps } from '@scan-complete/types';
 
 export const StepLine = ({ step }: StepLineProps) => {
   const { animated } = useScanCompleteStepLineViewModel({ step });
