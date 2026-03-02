@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useState,
-} from 'react';
+import { createContext, PropsWithChildren, useContext, useState } from 'react';
 import {
   clamp,
   Easing,
@@ -34,9 +29,8 @@ interface SliderContext {
 const sliderContext = createContext({} as SliderContext);
 
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
-  const user = useUserContext();
+  const { cards } = useUserContext();
   const { settingCard } = useCardSettingContext();
-  const { cards } = user;
   const CARD_LEN = cards && cards.length;
 
   const prevSliderTranslatedX = useSharedValue(0);

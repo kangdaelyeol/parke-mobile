@@ -1,22 +1,23 @@
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
-import { useBleContext, useSearchBleContext } from '@/contexts';
+import { useSearchBleContext } from '@/contexts';
 import { ensurePermissions } from '@/helpers';
 import { SearchBleScreenViewModel } from '@search-ble/types';
 import { useNavigation } from '@react-navigation/native';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
+import { bleService } from '@/services';
 
 export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
-  const { state: searchBleState, actions: searchBleActions } =
-    useSearchBleContext();
-  const { state: bleState, actions: bleActions } = useBleContext();
-  // temp - 디바이스 조회 잘 되나 확인하기 위함
+  const {
+    state: searchBleState,
+    actions: { setDevices, setRssi },
+  } = useSearchBleContext();
 
   const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   useEffect(() => {
     let sub: { remove: () => void } | undefined;
-    const nowSession = bleState.scanSessionRef.current + 1;
+    const nowSession = bleService.getSession() + 1;
 
     (async () => {
       const ok = await ensurePermissions();
@@ -25,17 +26,21 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
         return navigation.goBack();
       }
 
-      sub = bleState.bleManagerRef.current?.onStateChange(state => {
+      sub = bleService.getManager().onStateChange(state => {
         console.log(state);
         if (state === 'PoweredOn') {
-          searchBleActions.startSearchBle();
+          bleService.startSearchBle({
+            navigation,
+            setDevices,
+            setRssi,
+          });
           sub?.remove();
         }
       }, true);
     })();
     return () => {
       sub?.remove();
-      bleActions.stopBleScan(nowSession);
+      bleService.stopScan(nowSession);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

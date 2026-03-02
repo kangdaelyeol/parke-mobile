@@ -1,22 +1,20 @@
 import { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { GestureDetector } from 'react-native-gesture-handler';
 import Animated from 'react-native-reanimated';
 import { unlink } from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
-import { useUserContext } from '@/contexts';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants';
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components';
 import { cache } from '@/storage';
-import { cardService, userService } from '@/services';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
 import { FONT } from '@/theme/fonts';
+import { authService } from '@/services';
 
 const Test = () => {
   const [busy, setBusy] = useState(false);
   const navigation = useNavigation<HomeStackNavigationProp>();
-  const { user, syncCardList } = useUserContext();
   return (
     <>
       {/* Test Buttons */}
@@ -26,6 +24,7 @@ const Test = () => {
           setBusy(true);
           try {
             await unlink();
+            await authService.firebaseSignOut();
             cache.setHasSeenOnBoarding(false);
             navigation.navigate('OnBoarding');
           } catch (e) {
@@ -37,32 +36,6 @@ const Test = () => {
         style={styles.test}
       >
         RESET
-      </Text>
-      <Text
-        onPress={async () => {
-          const res = await cardService.create({
-            id: String(Date.now()),
-            title: 'test title',
-            message: 'test message',
-            phone: '01012311231',
-            updatedAt: Date.now(),
-            updatedBy: 'test',
-            autoChange: false,
-            deviceId: 'abcd' + Date.now(),
-            ownerList: ['asa47972000@kakao.com'],
-          });
-          if (res === null) Alert.alert('오류가 발생했');
-
-          await userService.updateCardIdList(user.id, [
-            ...user.cardIdList,
-            res?.id ?? '',
-          ]);
-
-          await syncCardList();
-        }}
-        style={styles.test2}
-      >
-        addCard
       </Text>
     </>
   );
@@ -83,9 +56,7 @@ export const Main = () => {
           </>
         )}
         <GestureDetector gesture={actions.panGesture}>
-          <Animated.View
-            style={[styles.cardContainer, animated.sliderStyle]}
-          >
+          <Animated.View style={[styles.cardContainer, animated.sliderStyle]}>
             <View style={styles.cardSlider}>
               <Animated.View
                 style={[animated.moverStyle, styles.cardSliderMover]}

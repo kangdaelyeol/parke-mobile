@@ -1,18 +1,11 @@
 import {
   createContext,
   PropsWithChildren,
-  useCallback,
   useContext,
   useEffect,
   useState,
 } from 'react';
 import useHeptic from '@/hooks/use-heptic';
-import { useBleContext } from '@/contexts';
-import { useNavigation } from '@react-navigation/native';
-import { BLE_DEVICE_NAME, CHAR_UUID, SERVICE_UUID } from '@/constants';
-import { ensurePermissions, generateBase64Id, getDeviceId } from '@/helpers';
-import { SearchBleStackNavigationProp } from '@/navigation/types';
-import { Alert } from 'react-native';
 
 interface SearchBLEContextValue {
   state: {
@@ -21,7 +14,8 @@ interface SearchBLEContextValue {
     detected: boolean;
   };
   actions: {
-    startSearchBle: () => void;
+    setDevices: React.Dispatch<React.SetStateAction<any[]>>;
+    setRssi: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 
@@ -29,12 +23,10 @@ const searchBLEContext = createContext({} as SearchBLEContextValue);
 
 export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   const { setTime, setHepticOption } = useHeptic();
-  const { state: bleState } = useBleContext();
 
   const [detected, setDetected] = useState(false);
   const [devices, setDevices] = useState<any[]>([]);
   const [rssi, setRssi] = useState('');
-  const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   useEffect(() => {
     if (!detected && rssi) {
@@ -44,77 +36,14 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
     }
   }, [detected, rssi, setTime, setHepticOption]);
 
-  const actions = {
-    startSearchBle: useCallback(async () => {
-      bleState.scanSessionRef.current++;
-      const bleManager = bleState.bleManagerRef.current;
-      console.log('startSearchBle1');
-      if (bleState.searchBleRef.current) return;
-      console.log('startSearchBle2');
-      bleState.searchBleRef.current = true;
-      setDevices([]);
-
-      const ok = await ensurePermissions();
-      if (!ok) {
-        Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
-        navigation.goBack();
-      }
-
-      bleManager?.startDeviceScan(
-        null,
-        { allowDuplicates: true },
-        async (error, device) => {
-          if (error || !device) return;
-
-          /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
-
-          setDevices(prev => {
-            const exists = prev.find(d => d.id === device.id);
-            if (exists) return prev;
-            return [...prev, { id: device.id, name: device.name }];
-          });
-
-          if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
-
-          setRssi(String(device.rssi));
-
-          if (!device.rssi || device.rssi < -40) return;
-
-          try {
-            bleManager?.stopDeviceScan();
-            const d = await device.connect();
-            await d.discoverAllServicesAndCharacteristics();
-            const deviceId = await getDeviceId(d);
-            if (deviceId) {
-              navigation.replace('ScanComplete', { value: deviceId });
-            } else {
-              const base64Id = generateBase64Id();
-              await device.writeCharacteristicWithResponseForService(
-                SERVICE_UUID,
-                CHAR_UUID,
-                base64Id,
-              );
-              navigation.replace('ScanComplete', { value: base64Id });
-            }
-            await d.cancelConnection();
-          } catch (e) {
-            console.log(e);
-          }
-        },
-      );
-    }, [
-      bleState.bleManagerRef,
-      bleState.scanSessionRef,
-      bleState.searchBleRef,
-      navigation,
-    ]),
-  };
-
   return (
     <searchBLEContext.Provider
       value={{
         state: { devices, detected, rssi },
-        actions,
+        actions: {
+          setDevices,
+          setRssi,
+        },
       }}
     >
       {children}

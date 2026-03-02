@@ -1,70 +1,29 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
-import { useBleContext, useUserContext } from '@/contexts';
-import { startBackgroundScan, ensurePermissions } from '@/helpers';
-import { settingService } from '@/services';
+import { useUserContext } from '@/contexts';
+import { ensurePermissions } from '@/helpers';
+import { bleService, settingService } from '@/services';
 
 export const useHomeViewModel = () => {
-  const {
-    actions: { stopBleScan },
-    state: bleState,
-  } = useBleContext();
-  const { bleManagerRef, scanSessionRef, bgScanRef } = bleState;
   const { cards, user, syncCardList, setCards } = useUserContext();
   const [loading, setLoading] = useState(false);
 
-  const cardsRef = useRef(cards);
-  const userRef = useRef(user);
-
-  useEffect(() => {
-    cardsRef.current = cards;
-  }, [cards]);
-  useEffect(() => {
-    userRef.current = user;
-  }, [user]);
-
-  const startBackgroundScanMemorized = useCallback(async () => {
-    if (!bleState.bleManagerIsReady) return;
-    if (!bleManagerRef.current) return;
-
-    await startBackgroundScan({
-      scanSessionRef,
-      bgScanRef,
-      cardsRef,
-      setCards,
-      userRef,
-      bleManagerRef,
-    });
-  }, [
-    scanSessionRef,
-    bleManagerRef,
-    bgScanRef,
-    userRef,
-    cardsRef,
-    setCards,
-    bleState.bleManagerIsReady,
-  ]);
-
   useFocusEffect(
     useCallback(() => {
-      if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
-      if (!bleManagerRef) return;
       (async () => {
         setLoading(true);
         await syncCardList();
         setLoading(false);
       })();
-    }, [bleManagerRef, syncCardList, user?.id, bleState.bleManagerIsReady]),
+    }, [syncCardList, user?.id]),
   );
 
   useFocusEffect(
     useCallback(() => {
-      if (!bleState.bleManagerIsReady) return;
       if (!user?.id) return;
-      if (!bleManagerRef) return;
-      if (!startBackgroundScanMemorized) return;
+
       if (user.phone.trim() === '') {
         Alert.alert(
           '전화번호 등록 필요',
@@ -73,7 +32,7 @@ export const useHomeViewModel = () => {
         return;
       }
 
-      const nowSession = scanSessionRef.current + 1;
+      const nowSession = bleService.getSession() + 1;
 
       let sub: { remove: () => void } | undefined;
       (async () => {
@@ -86,27 +45,18 @@ export const useHomeViewModel = () => {
           return;
         }
 
-        sub = bleManagerRef.current?.onStateChange(state => {
+        sub = bleService.getManager().onStateChange(state => {
           if (state === 'PoweredOn') {
-            startBackgroundScanMemorized();
+            bleService.startBackgroundScan({ setCards, cards, user });
             sub?.remove();
           }
         }, true);
       })();
 
       return () => {
-        stopBleScan(nowSession);
+        bleService.stopScan(nowSession);
       };
-    }, [
-      user.id,
-      user.phone,
-      bleManagerRef,
-      startBackgroundScanMemorized,
-      scanSessionRef,
-      cards.length,
-      stopBleScan,
-      bleState.bleManagerIsReady,
-    ]),
+    }, [user, cards, setCards]),
   );
 
   return { state: { loading } };
