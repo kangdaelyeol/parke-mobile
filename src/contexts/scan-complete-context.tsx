@@ -14,8 +14,7 @@ import { convertPhone } from '@/helpers';
 import { extractNumber } from '@/utils';
 import { cardService, userService } from '@/services';
 import { ScanCompleteStackNavigationProp } from '@/navigation/types';
-import { ScanCompleteContextValue } from '@/screens/scan-complete/types';
-
+import { ScanCompleteContextValue } from '@scan-complete/types';
 
 const ScanCompleteContext = createContext({} as ScanCompleteContextValue);
 
@@ -60,7 +59,7 @@ export const ScanCompleteContextProvider = ({
       savePress: async () => {
         if (serial.trim() === '')
           return Alert.alert('시리얼 번호를 입력해주세요.');
-        
+
         setLoading(true);
 
         const cardRes = await cardService.create({

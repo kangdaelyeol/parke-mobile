@@ -6,8 +6,9 @@ import { convertPhone } from '@/helpers';
 import { ProfileStackNavigationProp } from '@/navigation/types';
 import { authService, userService } from '@/services';
 import { extractNumber } from '@/utils';
+import { ProfileMainViewModel } from '@profile/types';
 
-export const useProfileMainViewModel = () => {
+export const useProfileMainViewModel = (): ProfileMainViewModel => {
   const { user, setUser } = useUserContext();
   const [nickname, setNickname] = useState(user.nickname);
   const [phone, setPhone] = useState(user.phone);

@@ -18,6 +18,6 @@ interface HeaderActions {
   backPress: () => void;
 }
 
-export type HeaderViewModel = ViewModel<{}, HeaderActions>;
+export type ProfileHeaderViewModel = ViewModel<{}, HeaderActions>;
 
-export type MainViewModel = ViewModel<MainState, MainActions>;
+export type ProfileMainViewModel = ViewModel<MainState, MainActions>;

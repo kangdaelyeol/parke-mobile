@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import { HeaderViewModel } from '@profile/types';
+import { ProfileHeaderViewModel } from '@profile/types';
 
-export const useProfileHeaderViewModel = (): HeaderViewModel => {
+export const useProfileHeaderViewModel = (): ProfileHeaderViewModel => {
   const navigation = useNavigation();
 
   const actions = {
