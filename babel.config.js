@@ -1,4 +1,4 @@
-/** @type {import('react-native-worklets/plugin').PluginOptions} */
+/** @type {import('react-native-reanimated/plugin').PluginOptions} */
 
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
@@ -19,6 +19,6 @@ module.exports = {
         extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
     ],
-    'react-native-worklets/plugin',
+    'react-native-reanimated/plugin',
   ],
 };
