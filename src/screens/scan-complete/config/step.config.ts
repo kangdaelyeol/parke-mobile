@@ -1,0 +1,1 @@
+export const stepList = [{ label: '기본정보 등록' }, { label: '기기정보 등록' }];

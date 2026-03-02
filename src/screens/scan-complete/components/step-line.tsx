@@ -1,3 +1,4 @@
+import { useScanCompleteContext } from '@/contexts';
 import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, {
@@ -7,35 +8,37 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 
-interface StepBarProps {
+interface StepLineProps {
   step: number;
-  currentStep: number;
 }
 
-export const StepLine = ({ step, currentStep }: StepBarProps) => {
-  const blueLineWidth = useSharedValue(0);
+export const StepLine = ({ step }: StepLineProps) => {
+  const {
+    state: { currentStep },
+  } = useScanCompleteContext();
+  const activeLineWidth = useSharedValue(0);
 
   useEffect(() => {
     if (currentStep > step) {
-      blueLineWidth.value = withTiming(130, {
+      activeLineWidth.value = withTiming(1, {
         duration: 300,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
       });
     } else {
-      blueLineWidth.value = withTiming(0, {
+      activeLineWidth.value = withTiming(0, {
         duration: 300,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
       });
     }
-  }, [step, currentStep, blueLineWidth]);
+  }, [step, currentStep, activeLineWidth]);
 
-  const BlueLineAnimatedStyle = useAnimatedStyle(() => ({
-    width: blueLineWidth.value,
+  const lineAnimatedStyle = useAnimatedStyle(() => ({
+    width: activeLineWidth.value * 130,
   }));
-  
+
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.blueLine, BlueLineAnimatedStyle]} />
+      <Animated.View style={[styles.activeLine, lineAnimatedStyle]} />
     </View>
   );
 };
@@ -48,7 +51,7 @@ const styles = StyleSheet.create({
     width: 130,
     backgroundColor: '#363636',
   },
-  blueLine: {
+  activeLine: {
     height: '100%',
     backgroundColor: '#396cf8',
   },

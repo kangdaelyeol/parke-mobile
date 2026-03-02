@@ -9,21 +9,22 @@ import Animated, {
 } from 'react-native-reanimated';
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
 import { FONT } from '@/theme/fonts';
+import { useScanCompleteContext } from '@/contexts';
 
 interface StepProps {
   label: string;
-  currentStep: number;
   step: number;
 }
 
-export const StepNode = ({ label, step, currentStep }: StepProps) => {
-  const dotBackgroundColor = useSharedValue('#000000');
+export const StepNode = ({ label, step }: StepProps) => {
+  const {
+    state: { currentStep },
+  } = useScanCompleteContext();
   const dotScale = useSharedValue(0);
   const checkIconOpacity = useSharedValue(0);
 
   useEffect(() => {
     if (step === currentStep) {
-      dotBackgroundColor.value = '#396cf8';
       dotScale.value = withTiming(1, {
         duration: 300,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
@@ -38,7 +39,6 @@ export const StepNode = ({ label, step, currentStep }: StepProps) => {
     }
 
     if (step < currentStep) {
-      dotBackgroundColor.value = '#396cf8';
       dotScale.value = withTiming(2, {
         duration: 300,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
@@ -50,7 +50,6 @@ export const StepNode = ({ label, step, currentStep }: StepProps) => {
     }
 
     if (step > currentStep) {
-      dotBackgroundColor.value = '#000000';
       dotScale.value = withTiming(0, {
         duration: 300,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
@@ -63,11 +62,10 @@ export const StepNode = ({ label, step, currentStep }: StepProps) => {
         }),
       );
     }
-  }, [checkIconOpacity, currentStep, dotBackgroundColor, dotScale, step]);
+  }, [checkIconOpacity, currentStep, dotScale, step]);
 
   const dotAnimatedStyle = useAnimatedStyle(() => ({
     transform: [{ scale: dotScale.value }],
-    backgroundColor: dotBackgroundColor.value,
   }));
 
   const checkIconAnimatedStyle = useAnimatedStyle(() => ({
@@ -77,7 +75,13 @@ export const StepNode = ({ label, step, currentStep }: StepProps) => {
   return (
     <View style={styles.container}>
       <View style={[styles.dotBox]}>
-        <Animated.View style={[styles.dot, dotAnimatedStyle]}>
+        <Animated.View
+          style={[
+            styles.dot,
+            dotAnimatedStyle,
+            step > currentStep ? styles.inactiveDot : styles.activeDot,
+          ]}
+        >
           <Animated.View style={checkIconAnimatedStyle}>
             {step < currentStep && (
               <FontAwesome6
@@ -115,6 +119,11 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  inactiveDot: {
+    backgroundColor: '#000000',
+  },
+  activeDot: {
     backgroundColor: '#396cf8',
   },
   label: {

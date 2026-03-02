@@ -1,23 +1,16 @@
 import { StyleSheet, View } from 'react-native';
-import { useScanCompleteContext } from '@/contexts/scan-complete-context';
 import { StepNode, StepLine } from '@scan-complete/components';
-
-const stepConfig = [{ label: '기본정보 등록' }, { label: '기기정보 등록' }];
+import { stepList } from '@scan-complete/config/step.config';
 
 export const ProgressStepper = () => {
-  const {
-    state: { currentStep },
-  } = useScanCompleteContext();
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        {stepConfig.map((v, i) => {
+        {stepList.map((v, i) => {
           return (
             <View key={v.label} style={styles.step}>
-              <StepNode label={v.label} step={i} currentStep={currentStep} />
-              {i < stepConfig.length - 1 && (
-                <StepLine step={i} currentStep={currentStep} />
-              )}
+              <StepNode label={v.label} step={i} />
+              {i < stepList.length - 1 && <StepLine step={i} />}
             </View>
           );
         })}
