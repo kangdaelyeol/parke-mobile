@@ -20,9 +20,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
     try {
       cardService.updatePhone(cardId, extractNumber(newPhone));
       cache.clearPending();
-    } catch (e) {
-      // bground에서는 Alert 안터짐
-    }
+    } catch (e) {}
   } else {
     cache.markLastDenied();
     cache.clearPending();

@@ -1,10 +1,12 @@
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { Header, Radar, Title } from '@search-ble/components';
 import { SearchBleProvider } from '@/contexts';
 import { useSearchBleViewModel } from '@/view-model';
+import { bleService } from '@/services';
 
 const Test = () => {
   const { state } = useSearchBleViewModel();
+  const { isSearching } = bleService.getState();
   return (
     <>
       {/* test */}
@@ -18,20 +20,9 @@ const Test = () => {
           textAlign: 'center',
         }}
       >
-        스캔된 Parke 와의 거리 {state.rssi}
+        {isSearching && 'scan!'} 스캔된 Parke 와의 거리 {state.rssi}
       </Text>
 
-      <ScrollView style={styles.list}>
-        {state.devices.length === 0 ? (
-          <Text style={styles.deviceText}>아직 스캔된 장치가 없습니다.</Text>
-        ) : (
-          state.devices.map(d => (
-            <Text key={d.id} style={styles.deviceText}>
-              • {d.name ?? '(이름 없음)'} ({d.id})
-            </Text>
-          ))
-        )}
-      </ScrollView>
       {/* test */}
     </>
   );
@@ -55,12 +46,4 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#000',
   },
-  list: {
-    position: 'absolute',
-    flex: 1,
-    marginTop: 10,
-    maxHeight: 300,
-    bottom: 0,
-  },
-  deviceText: { color: '#fff', fontSize: 16, marginVertical: 4, opacity: 0.2 },
 });

@@ -9,7 +9,6 @@ import {
   SERVICE_UUID,
 } from '@/constants';
 import {
-  ensurePermissions,
   generateBase64Id,
   getDeviceId,
   nofifyMessage,
@@ -45,8 +44,8 @@ const bleManager = new BleManager({
 
 interface StartSearchBleProps {
   navigation: SearchBleStackNavigationProp;
-  setDevices: React.Dispatch<React.SetStateAction<any[]>>;
   setRssi: React.Dispatch<React.SetStateAction<string>>;
+  cards: CardDto[];
 }
 
 interface StartBackgroundScanProps {
@@ -71,11 +70,12 @@ export const bleService = {
     user,
     setCards,
   }: StartBackgroundScanProps) => {
-    console.log('startBackground');
+    if (isBackgroundScanning) return;
     isBackgroundScanning = true;
+    console.log('startBackground');
 
     bleManager.startDeviceScan(
-      [SERVICE_UUID],
+      null,
       { allowDuplicates: true },
       async (err, dev) => {
         let device: Device | null = null;
@@ -159,32 +159,17 @@ export const bleService = {
   },
   startSearchBle: async ({
     navigation,
-    setDevices,
     setRssi,
+    cards,
   }: StartSearchBleProps) => {
-    bleService.updateSession();
-    console.log('startSearchBle');
+    if (isSearching) return;
     isSearching = true;
-
-    const ok = await ensurePermissions();
-    if (!ok) {
-      Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
-      navigation.goBack();
-    }
-
+    console.log('startSearchBle');
     bleManager.startDeviceScan(
       null,
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return;
-
-        /* temp - 디바이스 조회 잘 되나 확인하기 위함 */
-
-        setDevices(prev => {
-          const exists = prev.find(d => d.id === device.id);
-          if (exists) return prev;
-          return [...prev, { id: device.id, name: device.name }];
-        });
 
         if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
 
@@ -193,11 +178,15 @@ export const bleService = {
         if (!device.rssi || device.rssi < -40) return;
 
         try {
-          bleManager.stopDeviceScan();
+          await bleManager.stopDeviceScan();
           const d = await device.connect();
           await d.discoverAllServicesAndCharacteristics();
           const deviceId = await getDeviceId(d);
           if (deviceId) {
+            if (cards.find(c => c.deviceId === deviceId)) {
+              Alert.alert('이미 등록된 장치입니다.');
+              return navigation.goBack();
+            }
             navigation.replace('ScanComplete', { value: deviceId });
           } else {
             const base64Id = generateBase64Id();

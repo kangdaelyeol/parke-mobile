@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
-import { useSearchBleContext } from '@/contexts';
+import { useSearchBleContext, useUserContext } from '@/contexts';
 import { ensurePermissions } from '@/helpers';
 import { SearchBleScreenViewModel } from '@search-ble/types';
 import { useNavigation } from '@react-navigation/native';
@@ -10,15 +10,16 @@ import { bleService } from '@/services';
 export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
   const {
     state: searchBleState,
-    actions: { setDevices, setRssi },
+    actions: { setRssi },
   } = useSearchBleContext();
+  const { cards } = useUserContext();
 
   const navigation = useNavigation<SearchBleStackNavigationProp>();
 
   useEffect(() => {
     let sub: { remove: () => void } | undefined;
     const nowSession = bleService.getSession() + 1;
-
+    bleService.updateSession();
     (async () => {
       const ok = await ensurePermissions();
       if (!ok) {
@@ -31,8 +32,8 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
         if (state === 'PoweredOn') {
           bleService.startSearchBle({
             navigation,
-            setDevices,
             setRssi,
+            cards,
           });
           sub?.remove();
         }
@@ -43,12 +44,11 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
       bleService.stopScan(nowSession);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [cards]);
 
   return {
     state: {
       rssi: searchBleState.rssi,
-      devices: searchBleState.devices,
     },
     actions: {},
   };

@@ -25,13 +25,16 @@ interface TitleAnimated {
 
 interface ScreenStates {
   rssi: string;
-  devices: any[];
 }
 
 export type SearchBleHeaderViewModel = ViewModel<{}, HeaderActions>;
 
 export type SearchBleRaderViewModel = AnimatedViewModel<{}, {}, RaderAnimated>;
 
-export type SearchBleTitleViewModel = AnimatedViewModel<{}, TitleActions, TitleAnimated>;
+export type SearchBleTitleViewModel = AnimatedViewModel<
+  {},
+  TitleActions,
+  TitleAnimated
+>;
 
 export type SearchBleScreenViewModel = ViewModel<ScreenStates, {}>;
