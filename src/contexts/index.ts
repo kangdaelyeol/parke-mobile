@@ -4,4 +4,3 @@ export * from './slider-context';
 export * from './user-context';
 export * from './scan-complete-context';
 export * from './search-ble-context';
-export * from './ble-context';
