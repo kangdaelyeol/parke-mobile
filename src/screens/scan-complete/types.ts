@@ -1,4 +1,5 @@
-import { ViewModel } from '@/types/common';
+import { AnimatedViewModel, ViewModel } from '@/types/common';
+import { StyleProp, ViewStyle } from 'react-native';
 import { CameraDevice } from 'react-native-vision-camera';
 
 interface ScanCompleteState {
@@ -21,7 +22,7 @@ interface QrScanActions {
   scanBackPress: ScanCompleteContextValue['actions']['scanBackPress'];
 }
 
-export type ScanCompleteQrScanViewModel = ViewModel<QrScanState, QrScanActions>
+export type ScanCompleteQrScanViewModel = ViewModel<QrScanState, QrScanActions>;
 
 export interface ScanCompleteContextValue {
   actions: {
@@ -49,3 +50,17 @@ export interface ScanCompleteContextValue {
     serialInput: boolean;
   };
 }
+
+interface StepLineAnimated {
+  lineStyle: StyleProp<ViewStyle>;
+}
+
+export type ScanCompleteStepLineViewModel = AnimatedViewModel<
+  {},
+  {},
+  StepLineAnimated
+>;
+
+export interface ScanCompleteStepLineProps  {
+  step: number;
+};

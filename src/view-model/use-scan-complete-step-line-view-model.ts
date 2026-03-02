@@ -1,0 +1,45 @@
+import { useEffect } from 'react';
+import { useScanCompleteContext } from '@/contexts';
+import {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import {
+  ScanCompleteStepLineProps,
+  ScanCompleteStepLineViewModel,
+} from '@scan-complete/types';
+
+export const useScanCompleteStepLineViewModel = ({
+  step,
+}: ScanCompleteStepLineProps): ScanCompleteStepLineViewModel => {
+  const {
+    state: { currentStep },
+  } = useScanCompleteContext();
+  const activeLineWidth = useSharedValue(0);
+
+  useEffect(() => {
+    if (currentStep > step) {
+      activeLineWidth.value = withTiming(1, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+    } else {
+      activeLineWidth.value = withTiming(0, {
+        duration: 300,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      });
+    }
+  }, [step, currentStep, activeLineWidth]);
+
+  const lineStyle = useAnimatedStyle(() => ({
+    width: activeLineWidth.value * 130,
+  }));
+
+  return {
+    state: {},
+    actions: {},
+    animated: { lineStyle },
+  };
+};

@@ -1,44 +1,17 @@
-import { useScanCompleteContext } from '@/contexts';
-import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
-import Animated, {
-  Easing,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated';
+import Animated from 'react-native-reanimated';
+import { useScanCompleteStepLineViewModel } from '@/view-model';
 
 interface StepLineProps {
   step: number;
 }
 
 export const StepLine = ({ step }: StepLineProps) => {
-  const {
-    state: { currentStep },
-  } = useScanCompleteContext();
-  const activeLineWidth = useSharedValue(0);
-
-  useEffect(() => {
-    if (currentStep > step) {
-      activeLineWidth.value = withTiming(1, {
-        duration: 300,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      });
-    } else {
-      activeLineWidth.value = withTiming(0, {
-        duration: 300,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      });
-    }
-  }, [step, currentStep, activeLineWidth]);
-
-  const lineAnimatedStyle = useAnimatedStyle(() => ({
-    width: activeLineWidth.value * 130,
-  }));
+  const { animated } = useScanCompleteStepLineViewModel({ step });
 
   return (
     <View style={styles.container}>
-      <Animated.View style={[styles.activeLine, lineAnimatedStyle]} />
+      <Animated.View style={[styles.activeLine, animated.lineStyle]} />
     </View>
   );
 };
