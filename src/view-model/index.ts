@@ -17,7 +17,6 @@ export * from './use-search-ble-rader-view-model';
 export * from './use-search-ble-title-view-model';
 export * from './use-home-view-model';
 export * from './use-profile-view-model';
-export * from './use-setting-view-model';
 export * from './use-search-ble-view-model';
 export * from './use-app-view-model';
 export * from './use-scan-complete-main-view-model';
