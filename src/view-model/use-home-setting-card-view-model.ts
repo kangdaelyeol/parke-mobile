@@ -26,15 +26,16 @@ export const useHomeSettingCardViewModel = (
   const [phone, setPhone] = useState(card.phone);
   const [message, setMessage] = useState(card.message);
   const opacityVal = useSharedValue(0);
-  const animatedStyle = useAnimatedStyle(() => ({
-    opacity: withTiming(opacityVal.value, {
-      duration: 400,
-    }),
-  }));
-
+  
   useEffect(() => {
-    opacityVal.value = 1;
+    opacityVal.value = withTiming(1, {
+      duration: 400,
+    });
   }, [opacityVal]);
+  
+  const optionStyle = useAnimatedStyle(() => ({
+    opacity: opacityVal.value,
+  }));
 
   const actions = {
     savePress: async () => {
@@ -72,8 +73,10 @@ export const useHomeSettingCardViewModel = (
       title,
       message,
       phone: convertPhone(phone),
-      animatedStyle,
     },
     actions,
+    animated: {
+      optionStyle,
+    },
   };
 };

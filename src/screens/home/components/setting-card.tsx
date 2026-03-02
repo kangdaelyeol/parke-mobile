@@ -5,10 +5,10 @@ import { useHomeSettingCardViewModel } from '@/view-model';
 import { SettingCardProps } from '@home/types';
 
 export const SettingCard = ({ card }: SettingCardProps) => {
-  const { state, actions } = useHomeSettingCardViewModel(card);
+  const { state, actions, animated } = useHomeSettingCardViewModel(card);
 
   return (
-    <Animated.View style={[styles.container, state.animatedStyle]}>
+    <Animated.View style={[styles.container, animated.optionStyle]}>
       <View style={styles.wrapper}>
         <View>
           <Text style={styles.text}>Title</Text>
