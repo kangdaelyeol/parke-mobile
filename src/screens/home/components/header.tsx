@@ -3,14 +3,19 @@ import { LogoIcon } from '@/assets/logo';
 import { useUserContext } from '@/contexts/user-context';
 import { convertPhone } from '@/helpers';
 import { FONT } from '@/theme/fonts';
+import { bleService } from '@/services';
 
 export const Header = () => {
   const { user } = useUserContext();
+  const { isBackgroundScanning } = bleService.getState();
   return (
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
-        <Text style={styles.phone}>{convertPhone(user.phone)}</Text>
+        <Text style={styles.phone}>
+          {convertPhone(user.phone)}
+          {isBackgroundScanning && '  Yes!'}
+        </Text>
       </View>
     </View>
   );
