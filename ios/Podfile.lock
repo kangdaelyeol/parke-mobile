@@ -12,9 +12,6 @@ PODS:
   - Firebase/Database (12.9.0):
     - Firebase/CoreOnly
     - FirebaseDatabase (~> 12.9.0)
-  - Firebase/Functions (12.9.0):
-    - Firebase/CoreOnly
-    - FirebaseFunctions (~> 12.9.0)
   - FirebaseAppCheckInterop (12.9.0)
   - FirebaseAuth (12.9.0):
     - FirebaseAppCheckInterop (~> 12.9.0)
@@ -40,15 +37,6 @@ PODS:
     - FirebaseSharedSwift (~> 12.9.0)
     - GoogleUtilities/UserDefaults (~> 8.1)
     - leveldb-library (~> 1.22)
-  - FirebaseFunctions (12.9.0):
-    - FirebaseAppCheckInterop (~> 12.9.0)
-    - FirebaseAuthInterop (~> 12.9.0)
-    - FirebaseCore (~> 12.9.0)
-    - FirebaseCoreExtension (~> 12.9.0)
-    - FirebaseMessagingInterop (~> 12.9.0)
-    - FirebaseSharedSwift (~> 12.9.0)
-    - GTMSessionFetcher/Core (< 6.0, >= 3.4)
-  - FirebaseMessagingInterop (12.9.0)
   - FirebaseSharedSwift (12.9.0)
   - fmt (11.0.2)
   - glog (0.3.5)
@@ -1983,7 +1971,6 @@ PODS:
     - SocketRocket
     - Yoga
   - react-native-vector-icons-fontawesome6 (12.3.1)
-  - react-native-vector-icons-material-icons (12.4.1)
   - React-NativeModulesApple (0.81.4):
     - boost
     - DoubleConversion
@@ -2607,36 +2594,6 @@ PODS:
     - RNFBApp
     - SocketRocket
     - Yoga
-  - RNFBFunctions (23.8.6):
-    - boost
-    - DoubleConversion
-    - fast_float
-    - Firebase/Functions (= 12.9.0)
-    - fmt
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCT-Folly/Fabric
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsi
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-renderercss
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - RNFBApp
-    - SocketRocket
-    - Yoga
   - RNGestureHandler (2.30.0):
     - boost
     - DoubleConversion
@@ -3080,7 +3037,6 @@ DEPENDENCIES:
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-vector-icons-fontawesome6 (from `../node_modules/@react-native-vector-icons/fontawesome6`)"
-  - "react-native-vector-icons-material-icons (from `../node_modules/@react-native-vector-icons/material-icons`)"
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
   - React-oscompat (from `../node_modules/react-native/ReactCommon/oscompat`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -3115,7 +3071,6 @@ DEPENDENCIES:
   - "RNFBApp (from `../node_modules/@react-native-firebase/app`)"
   - "RNFBAuth (from `../node_modules/@react-native-firebase/auth`)"
   - "RNFBDatabase (from `../node_modules/@react-native-firebase/database`)"
-  - "RNFBFunctions (from `../node_modules/@react-native-firebase/functions`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - "RNNotifee (from `../node_modules/@notifee/react-native`)"
   - RNPermissions (from `../node_modules/react-native-permissions`)
@@ -3139,8 +3094,6 @@ SPEC REPOS:
     - FirebaseCoreExtension
     - FirebaseCoreInternal
     - FirebaseDatabase
-    - FirebaseFunctions
-    - FirebaseMessagingInterop
     - FirebaseSharedSwift
     - GoogleUtilities
     - GTMSessionFetcher
@@ -3244,8 +3197,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-vector-icons-fontawesome6:
     :path: "../node_modules/@react-native-vector-icons/fontawesome6"
-  react-native-vector-icons-material-icons:
-    :path: "../node_modules/@react-native-vector-icons/material-icons"
   React-NativeModulesApple:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios"
   React-oscompat:
@@ -3314,8 +3265,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-firebase/auth"
   RNFBDatabase:
     :path: "../node_modules/@react-native-firebase/database"
-  RNFBFunctions:
-    :path: "../node_modules/@react-native-firebase/functions"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
   RNNotifee:
@@ -3351,8 +3300,6 @@ SPEC CHECKSUMS:
   FirebaseCoreExtension: e911052d59cd0da237a45d706fc0f81654f035c1
   FirebaseCoreInternal: b321eafae5362113bc182956fafc9922cfc77b72
   FirebaseDatabase: e6a01d759052888cf02c7cc11f6d5d34f3337cb5
-  FirebaseFunctions: 3312aea81319803c25b65de45343a004e6bb1221
-  FirebaseMessagingInterop: 2aab0b11571c2e9f95e08bafa99facb4367641b1
   FirebaseSharedSwift: 9d2fa84a46676302b89dbd5e6e62bce2fe376909
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
@@ -3402,7 +3349,6 @@ SPEC CHECKSUMS:
   react-native-mmkv: c70c58437c0f5e5fe6992f1de1e350dcdd236332
   react-native-safe-area-context: 7e0ba374906d8f5009aaf96cd19d4866d8de342b
   react-native-vector-icons-fontawesome6: 7464629872b702957385275b62cff2f6c28199cc
-  react-native-vector-icons-material-icons: 2fe75632937d07937bfe8ca953e1b5d06eef3a1d
   React-NativeModulesApple: dcfbe72c5a47baec0699a2935c080b7de0c8657b
   React-oscompat: 93b5535ea7f7dff46aaee4f78309a70979bdde9d
   React-perflogger: a03d913e3205b00aee4128082abe42fd45ce0c98
@@ -3438,7 +3384,6 @@ SPEC CHECKSUMS:
   RNFBApp: d665ce7271e9041cc24a82946be57ef109bbd115
   RNFBAuth: fd16dc6931dea6cab92c221ca966dd5c4b850ea0
   RNFBDatabase: ccbd29497a8ad4bff5078e388455a39df8b679f4
-  RNFBFunctions: 5821a83becd199985305edd5f93cb9d8ba65656f
   RNGestureHandler: c6f6f26fef9654b198c2e91445b7cf9ddfa31c05
   RNNotifee: 4a6ee5c7deaf00e005050052d73ee6315dff7ec9
   RNPermissions: df015932d169304af82179439da3c357ca6cbe2d
