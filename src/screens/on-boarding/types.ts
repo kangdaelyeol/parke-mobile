@@ -24,7 +24,7 @@ interface SliderActions {
   panGesture: PanGesture;
 }
 
-export type ScreenViewModel = ViewModel<ScreenState, {}>;
+export type OnBoardingScreenViewModel = ViewModel<ScreenState, {}>;
 export type OnBoardingFooterViewModel = ViewModel<FooterState, FooterActions>;
 export type OnBoardingSliderViewModel = AnimatedViewModel<
   {},

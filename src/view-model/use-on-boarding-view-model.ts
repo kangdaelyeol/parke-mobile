@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useOnBoardingContext } from '@/contexts';
 import { OnBoardingStackParamList } from '@/navigation/types';
-import { ScreenViewModel } from '@on-boarding/types';
+import { OnBoardingScreenViewModel } from '@on-boarding/types';
 import { cache } from '@/storage';
 
-export const useOnBoardingViewModel = (): ScreenViewModel => {
+export const useOnBoardingViewModel = (): OnBoardingScreenViewModel => {
   const navigation = useNavigation<NavigationProp<OnBoardingStackParamList>>();
   const { loading, setLoading } = useOnBoardingContext();
 
