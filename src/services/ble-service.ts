@@ -9,10 +9,11 @@ import {
   SERVICE_UUID,
 } from '@/constants';
 import {
-  generateBase64Id,
-  getDeviceId,
+  generateSerialNumber,
   nofifyMessage,
   notifyPhoneChange,
+  base64ToUtf,
+  getDeviceId,
 } from '@/helpers';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
 import { cache } from '@/storage';
@@ -78,17 +79,21 @@ export const bleService = {
     await bleManager.stopDeviceScan();
 
     bleManager.startDeviceScan(
-      null,
-      { allowDuplicates: true },
+      ['0000FF00-0000-1000-8000-00805F9B34FB'],
+      { allowDuplicates: false },
       async (err, device) => {
         try {
+          console.log(device);
           if (err || !device) return;
           if (!isCandidate(device)) return;
+
           // 기본 스캔 쿨다운
           if (Date.now() - cache.lastSeenAt() < SCAN_COOLDOWN_MS) return;
           cache.markSeen();
 
-          const deviceId = await getDeviceId(device);
+          const deviceId = getDeviceId(device.manufacturerData as string);
+
+          console.log(deviceId);
 
           const cardState = cards.find(c => c.deviceId === deviceId);
           if (!cardState) return;
@@ -169,7 +174,7 @@ export const bleService = {
     await bleManager.stopDeviceScan();
 
     bleManager.startDeviceScan(
-      null,
+      ['0000FF00-0000-1000-8000-00805F9B34FB'],
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return;
@@ -180,29 +185,47 @@ export const bleService = {
 
         if (!device.rssi || device.rssi < -40) return;
 
+        console.log('progress');
+
         try {
+          console.log('a');
           await bleManager.stopDeviceScan();
+          console.log('b');
 
-          const deviceId = await getDeviceId(device);
+          const deviceId = getDeviceId(device.manufacturerData as string);
 
-          if (deviceId) {
+          if (deviceId !== 'UNSET') {
+            console.log('c');
+            console.log(device);
             if (cards.find(c => c.deviceId === deviceId)) {
               Alert.alert('이미 등록된 장치입니다.');
               return navigation.goBack();
             }
-            navigation.replace('ScanComplete', { value: deviceId });
+            navigation.replace('ScanComplete', {
+              value: deviceId,
+            });
           } else {
-            const base64Id = generateBase64Id();
-            await device.writeCharacteristicWithResponseForService(
+            console.log('d');
+            const base64Id = generateSerialNumber();
+            console.log(base64Id);
+            const d = await device.connect();
+            await d.discoverAllServicesAndCharacteristics();
+            await d.writeCharacteristicWithResponseForService(
               SERVICE_UUID,
               CHAR_UUID,
               base64Id,
             );
-            navigation.replace('ScanComplete', { value: base64Id });
+            await device.cancelConnection();
+            console.log(base64ToUtf(base64Id));
+            navigation.replace('ScanComplete', {
+              value: base64ToUtf(base64Id),
+            });
           }
-          await device.cancelConnection();
         } catch (e) {
           console.log(e);
+          await device.cancelConnection();
+          Alert.alert('통신 중 오류가 발생했습니다. 다시 시도해주세요.');
+          return navigation.goBack();
         }
       },
     );
