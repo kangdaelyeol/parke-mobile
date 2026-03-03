@@ -18,8 +18,8 @@ class AppDelegate:  UIResponder, UIApplicationDelegate, UNUserNotificationCenter
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
     // 추가: Kakao SDK 초기화
-    RNKakaoLogins.initialize()
     FirebaseApp.configure()
+    RNKakaoLogins.initialize()
 
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
