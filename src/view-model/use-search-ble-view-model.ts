@@ -39,6 +39,7 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
         }
       }, true);
     })();
+
     return () => {
       sub?.remove();
       bleService.stopScan(nowSession);
