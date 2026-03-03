@@ -1,12 +1,5 @@
-import { Device } from 'react-native-ble-plx';
-import { CHAR_UUID, SERVICE_UUID } from '@/constants';
+import { Buffer } from 'buffer';
 
-export const getDeviceId = async (device: Device): Promise<string | null> => {
-  const d = await device.connect();
-  await d.discoverAllServicesAndCharacteristics();
-  const ch = await d.readCharacteristicForService(SERVICE_UUID, CHAR_UUID);
-  console.log('raw ch.value=', ch.value);
-  const deviceId = ch.value as string;
-
-  return deviceId;
+export const getDeviceId = (manufacturer: string) => {
+  return Buffer.from(manufacturer, 'base64').toString('utf8').slice(2);
 };
