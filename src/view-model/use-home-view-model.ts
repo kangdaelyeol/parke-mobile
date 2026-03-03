@@ -32,9 +32,10 @@ export const useHomeViewModel = () => {
         return;
       }
 
-      const nowSession = bleService.getSession() + 1;
-
+      bleService.updateSession();
+      const nowSession = bleService.getSession();
       let sub: { remove: () => void } | undefined;
+      let intervalId = 0;
       (async () => {
         const settings = settingService.getSettings();
         if (!settings.active) return;
@@ -48,13 +49,20 @@ export const useHomeViewModel = () => {
         sub = bleService.getManager().onStateChange(state => {
           if (state === 'PoweredOn') {
             bleService.startBackgroundScan({ setCards, cards, user });
+
+            intervalId = setInterval(async () => {
+              await bleService.stopScan(nowSession);
+              bleService.startBackgroundScan({ setCards, cards, user });
+            }, 5000);
             sub?.remove();
           }
         }, true);
       })();
 
       return () => {
+        sub?.remove();
         bleService.stopScan(nowSession);
+        clearInterval(intervalId);
       };
     }, [user, cards, setCards]),
   );
