@@ -20,7 +20,7 @@ export const Card = ({ deviceId }: CardProps) => {
         <LogoText width={50} height={45} />
         <View style={styles.infoLabel}>
           <Text style={styles.infoTitle}>device ID</Text>
-          <Text style={styles.infoText}>{deviceId}1923091203120931</Text>
+          <Text style={styles.infoText}>{deviceId}</Text>
           <Text style={styles.infoTitle}>serial</Text>
           <Text style={styles.infoText}>{serial}</Text>
         </View>
