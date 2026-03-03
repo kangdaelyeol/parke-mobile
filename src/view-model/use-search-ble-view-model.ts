@@ -18,8 +18,8 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
 
   useEffect(() => {
     let sub: { remove: () => void } | undefined;
-    const nowSession = bleService.getSession() + 1;
     bleService.updateSession();
+    const nowSession = bleService.getSession();
     (async () => {
       const ok = await ensurePermissions();
       if (!ok) {
