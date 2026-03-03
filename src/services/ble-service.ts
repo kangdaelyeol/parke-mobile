@@ -29,7 +29,7 @@ let isBackgroundScanning = false;
 let isSearching = false;
 
 const isCandidate = (dev: Device) =>
-  !!dev && (dev.name ?? '').startsWith('Parke');
+  !!dev && (dev.name ?? '').startsWith(BLE_DEVICE_NAME);
 
 const bleManager = new BleManager({
   restoreStateIdentifier: 'com.app.ble',
@@ -70,25 +70,26 @@ export const bleService = {
     user,
     setCards,
   }: StartBackgroundScanProps) => {
+    console.log('try background scan');
     if (isBackgroundScanning) return;
     isBackgroundScanning = true;
     console.log('startBackground');
 
+    await bleManager.stopDeviceScan();
+
     bleManager.startDeviceScan(
       null,
       { allowDuplicates: true },
-      async (err, dev) => {
-        let device: Device | null = null;
+      async (err, device) => {
         try {
-          if (err || !dev) return;
-          if (!isCandidate(dev)) return;
+          if (err || !device) return;
+          if (!isCandidate(device)) return;
           // 기본 스캔 쿨다운
           if (Date.now() - cache.lastSeenAt() < SCAN_COOLDOWN_MS) return;
           cache.markSeen();
 
-          device = await dev.connect();
-          await device.discoverAllServicesAndCharacteristics();
           const deviceId = await getDeviceId(device);
+
           const cardState = cards.find(c => c.deviceId === deviceId);
           if (!cardState) return;
 
@@ -99,19 +100,15 @@ export const bleService = {
 
           // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
           if (String(user.phone) === String(card.phone)) {
-            // updatedAt값 갱신
             await cardService.updateUpdatedAt(card.id);
             return;
           }
 
           // 업데이트 이후 일정 시간동안 db갱신이 안되어 있으면 운전중이 아니므로 다른 번호로 업데이트 진행.
           // 그렇지 않으면 운전중이기 때문에 updatedAt값 갱신을 함. 따라서 다른 번호로 업데이트를 진행하지 않음.
-          console.log(Number(card.updatedAt) + RENEW_INTERVAL_MS, Date.now());
           if (Date.now() < Number(card.updatedAt) + RENEW_INTERVAL_MS) return;
 
           const settings = settingService.getSettings();
-
-          console.log('settings: ', settings);
 
           // 자동변경 설정이 아닐시 알림
           if (!settings.autoSet || !card.autoChange) {
@@ -121,7 +118,9 @@ export const bleService = {
             // 백그라운드로부터 포그라운드 알림 저장(pending...)
             cache.setPending({ cardId: card.id, phone: user.phone });
 
-            notifyPhoneChange(card.phone, user.phone, card.deviceId);
+            if (settings.notice)
+              // 알림 설정이 되어 있어야 백그라운드에서 알림
+              notifyPhoneChange(card.phone, user.phone, card.deviceId);
 
             // 앱이 실행중이면 앱 스크린에서 알림
             notifyChangePhoneOnScreen(card.id, user.phone, setCards);
@@ -135,6 +134,7 @@ export const bleService = {
               Alert.alert('정보 업데이트 중 네트워크에 문제가 발생했습니다.');
               return;
             }
+
             setCards(prev => {
               const newCards = [...prev];
               const index = newCards.findIndex(c => c.id === card.id);
@@ -142,10 +142,9 @@ export const bleService = {
               newCards[index].phone = user.phone;
               return newCards;
             });
+
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
-            if (settings.notice) {
-              nofifyMessage(user.phone);
-            }
+            if (settings.notice) nofifyMessage(user.phone);
           }
         } catch (e) {
           Alert.alert(`[BLE] scan handler error: ${e}`);
@@ -162,16 +161,20 @@ export const bleService = {
     setRssi,
     cards,
   }: StartSearchBleProps) => {
+    console.log('try search ble');
     if (isSearching) return;
     isSearching = true;
     console.log('startSearchBle');
+
+    await bleManager.stopDeviceScan();
+
     bleManager.startDeviceScan(
       null,
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return;
 
-        if ((device.name ?? '').startsWith(BLE_DEVICE_NAME) === false) return;
+        if (!isCandidate(device)) return;
 
         setRssi(String(device.rssi));
 
@@ -179,9 +182,9 @@ export const bleService = {
 
         try {
           await bleManager.stopDeviceScan();
-          const d = await device.connect();
-          await d.discoverAllServicesAndCharacteristics();
-          const deviceId = await getDeviceId(d);
+
+          const deviceId = await getDeviceId(device);
+
           if (deviceId) {
             if (cards.find(c => c.deviceId === deviceId)) {
               Alert.alert('이미 등록된 장치입니다.');
@@ -197,7 +200,7 @@ export const bleService = {
             );
             navigation.replace('ScanComplete', { value: base64Id });
           }
-          await d.cancelConnection();
+          await device.cancelConnection();
         } catch (e) {
           console.log(e);
         }
