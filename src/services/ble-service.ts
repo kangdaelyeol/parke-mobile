@@ -6,7 +6,8 @@ import {
   NOTIFY_COOLDOWN_MS,
   RENEW_INTERVAL_MS,
   SCAN_COOLDOWN_MS,
-  SERVICE_UUID,
+  GATT_SERVICE_UUID,
+  ADV_SERVICE_UUID,
 } from '@/constants';
 import {
   generateSerialNumber,
@@ -79,7 +80,7 @@ export const bleService = {
     await bleManager.stopDeviceScan();
 
     bleManager.startDeviceScan(
-      ['0000FF00-0000-1000-8000-00805F9B34FB'],
+      [ADV_SERVICE_UUID],
       { allowDuplicates: false },
       async (err, device) => {
         try {
@@ -175,7 +176,7 @@ export const bleService = {
     await bleManager.stopDeviceScan();
 
     bleManager.startDeviceScan(
-      ['0000FF00-0000-1000-8000-00805F9B34FB'],
+      [ADV_SERVICE_UUID],
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return;
@@ -212,7 +213,7 @@ export const bleService = {
             const d = await device.connect();
             await d.discoverAllServicesAndCharacteristics();
             await d.writeCharacteristicWithResponseForService(
-              SERVICE_UUID,
+              GATT_SERVICE_UUID,
               CHAR_UUID,
               base64Id,
             );
