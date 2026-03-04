@@ -60,7 +60,7 @@ export const useHomeCardOptionViewModel = (): HomeCardOptionViewModel => {
         return Alert.alert('웹 사이트를 열 수 없습니다. 확인해주세요');
       await Linking.openURL(url);
     },
-    scanPress: async () => {
+    scanChangePress: async () => {
       setLoading(true);
       const res = await cardService.updateScan(
         selectedCard.id,

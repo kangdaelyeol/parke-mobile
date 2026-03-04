@@ -95,13 +95,14 @@ export const bleService = {
             SCAN_COOLDOWN_MS
           )
             return;
-            
+
           bleCacheService.markDeviceSeenAt(deviceId);
 
           console.log('deviceId:', deviceId);
 
           const cardState = cards.find(c => c.deviceId === deviceId);
-          if (!cardState) return;
+          if (!cardState || !cardState.scan) return;
+
 
           const card = await cardService.get(cardState.id);
           if (!card) return;
@@ -121,7 +122,7 @@ export const bleService = {
           const settings = settingService.getSettings();
 
           // 자동변경 설정이 아닐시 알림
-          if (!settings.autoSet || !card.autoChange) {
+          if (!settings.autoSet) {
             // 이전에 변경 거부가 있었는지 확인
             if (
               Date.now() <
