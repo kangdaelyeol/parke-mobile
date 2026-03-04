@@ -1,10 +1,6 @@
 import { MMKV } from 'react-native-mmkv';
+import { AlertPending } from '@/client';
 export const kv = new MMKV();
-
-export type AlertPending = null | {
-  phone: string;
-  cardId: string;
-};
 
 export const cacheClient = {
   // global
