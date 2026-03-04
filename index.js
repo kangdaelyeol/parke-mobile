@@ -6,8 +6,7 @@ import { AppRegistry } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
-import { cardService } from '@/services';
-import { cacheClient } from '@/client';
+import { bleCacheService, cardService } from '@/services';
 import { extractNumber } from '@/utils';
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
@@ -17,14 +16,11 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   const { newPhone, cardId } = detail.notification?.data || {};
 
   if (actionId === 'confirm' && cardId && newPhone) {
-    try {
-      cardService.updatePhone(cardId, extractNumber(newPhone));
-      cacheClient.clearPending();
-    } catch (e) {}
+    await cardService.updatePhone(cardId, extractNumber(newPhone));
   } else {
-    cacheClient.markLastDenied();
-    cacheClient.clearPending();
+    bleCacheService.markAlertLastDeniedAt();
   }
+  bleCacheService.deleteAlertPending(cardId);
 });
 
 AppRegistry.registerComponent(appName, () => App);

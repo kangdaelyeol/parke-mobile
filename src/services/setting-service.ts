@@ -1,16 +1,7 @@
 import { cacheClient } from '@/client';
 
-const ensureInitialized = () => {
-  if (cacheClient.getNotice() === null) {
-    cacheClient.setNotice(true);
-    cacheClient.setAutoSet(true);
-    cacheClient.setActive(true);
-  }
-};
-
 export const settingService = {
   getSettings: () => {
-    ensureInitialized();
     const notice = cacheClient.getNotice();
     const autoSet = cacheClient.getAutoSet();
     const active = cacheClient.getActive();

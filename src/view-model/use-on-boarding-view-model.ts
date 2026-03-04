@@ -3,14 +3,14 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import { useOnBoardingContext } from '@/contexts';
 import { OnBoardingStackParamList } from '@/navigation/types';
 import { OnBoardingScreenViewModel } from '@on-boarding/types';
-import { cacheClient } from '@/client';
+import { cacheService } from '@/services';
 
 export const useOnBoardingViewModel = (): OnBoardingScreenViewModel => {
   const navigation = useNavigation<NavigationProp<OnBoardingStackParamList>>();
   const { loading, setLoading } = useOnBoardingContext();
 
   useEffect(() => {
-    const hasSeen = cacheClient.getHasSeenOnBoarding();
+    const hasSeen = cacheService.getHasSeenOnBoarding();
     if (hasSeen) navigation.navigate('Login');
     setLoading(false);
   }, [navigation, setLoading]);
