@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { settingService } from '@/services';
-import { cacheClient } from '@/client';
 import { SettingMainViewModel } from '@setting/types';
 
 export const useSettingMainViewModel = (): SettingMainViewModel => {
@@ -10,11 +9,10 @@ export const useSettingMainViewModel = (): SettingMainViewModel => {
 
   // init settings value on UI
   useEffect(() => {
-    cacheClient.clearDeniedAt();
     const settings = settingService.getSettings();
-    setAutoSet(settings.autoSet as boolean);
-    setNotice(settings.notice as boolean);
-    setActive(settings.active as boolean);
+    setAutoSet(settings.autoSet);
+    setNotice(settings.notice);
+    setActive(settings.active);
   }, []);
 
   const noticeDisabled = active === false || autoSet === false ? true : false;
