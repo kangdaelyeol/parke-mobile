@@ -1,5 +1,5 @@
 import { Alert } from 'react-native';
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 import { cardService } from '@/services';
 import { CardDto } from '@/domain/card';
 import { convertPhone } from '@/helpers';
@@ -14,8 +14,8 @@ export const notifyChangePhoneOnScreen = (
       text: '취소',
       style: 'cancel',
       onPress: () => {
-        cache.clearPending();
-        cache.markLastDenied();
+        cacheClient.clearPending();
+        cacheClient.markLastDenied();
       },
     },
     {
@@ -29,8 +29,8 @@ export const notifyChangePhoneOnScreen = (
           newCards[index].phone = phone;
           return newCards;
         });
-        cache.clearPending();
-        cache.clearDeniedAt();
+        cacheClient.clearPending();
+        cacheClient.clearDeniedAt();
       },
     },
   ]);

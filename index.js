@@ -7,7 +7,7 @@ import notifee, { EventType } from '@notifee/react-native';
 import App from './App';
 import { name as appName } from './app.json';
 import { cardService } from '@/services';
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 import { extractNumber } from '@/utils';
 
 notifee.onBackgroundEvent(async ({ type, detail }) => {
@@ -19,11 +19,11 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
   if (actionId === 'confirm' && cardId && newPhone) {
     try {
       cardService.updatePhone(cardId, extractNumber(newPhone));
-      cache.clearPending();
+      cacheClient.clearPending();
     } catch (e) {}
   } else {
-    cache.markLastDenied();
-    cache.clearPending();
+    cacheClient.markLastDenied();
+    cacheClient.clearPending();
   }
 });
 

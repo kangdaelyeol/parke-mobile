@@ -1,7 +1,7 @@
 import { MMKV } from 'react-native-mmkv';
 export const kv = new MMKV();
 
-export const cache = {
+export const cacheClient = {
   lastSeenAt: () => kv.getNumber(`ble:lastSeen`) ?? 0,
   markSeen: () => kv.set(`ble:lastSeen`, Date.now()),
   lastDeniedAt: () => kv.getNumber('ble:lastDenied') ?? 0,

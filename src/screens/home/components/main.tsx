@@ -6,7 +6,7 @@ import { unlink } from '@react-native-seoul/kakao-login';
 import { useNavigation } from '@react-navigation/native';
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants';
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components';
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 import { HomeStackNavigationProp } from '@/navigation/types';
 import { useHomeMainViewModel } from '@/view-model';
 import { FONT } from '@/theme/fonts';
@@ -25,7 +25,7 @@ const Test = () => {
           try {
             await unlink();
             await authService.firebaseSignOut();
-            cache.setHasSeenOnBoarding(false);
+            cacheClient.setHasSeenOnBoarding(false);
             navigation.navigate('OnBoarding');
           } catch (e) {
             console.log('login err', e);

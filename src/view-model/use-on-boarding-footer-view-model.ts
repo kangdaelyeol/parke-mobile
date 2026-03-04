@@ -1,6 +1,6 @@
 import { Dimensions } from 'react-native';
 import { useOnBoardingContext } from '@/contexts';
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 import { useNavigation } from '@react-navigation/native';
 import { OnBoardingStackNavigationProp } from '@/navigation/types';
 import { OnBoardingFooterViewModel } from '@on-boarding/types';
@@ -22,7 +22,7 @@ export const useOnBoardingFooterViewModel = (): OnBoardingFooterViewModel => {
     },
     startPress: () => {
       navigation.navigate('Login');
-      cache.setHasSeenOnBoarding(true);
+      cacheClient.setHasSeenOnBoarding(true);
     },
   };
 

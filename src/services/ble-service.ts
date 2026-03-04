@@ -16,7 +16,7 @@ import {
   getDeviceId,
 } from '@/helpers';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 import { cardService, settingService } from '@/services';
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils';
 import { CardDto } from '@/domain/card';
@@ -88,8 +88,8 @@ export const bleService = {
           if (!isCandidate(device)) return;
 
           // 기본 스캔 쿨다운
-          if (Date.now() - cache.lastSeenAt() < SCAN_COOLDOWN_MS) return;
-          cache.markSeen();
+          if (Date.now() - cacheClient.lastSeenAt() < SCAN_COOLDOWN_MS) return;
+          cacheClient.markSeen();
 
           const deviceId = getDeviceId(device.manufacturerData as string);
 
@@ -118,10 +118,11 @@ export const bleService = {
           // 자동변경 설정이 아닐시 알림
           if (!settings.autoSet || !card.autoChange) {
             // 이전에 변경 거부가 있었는지 확인
-            if (Date.now() < cache.lastDeniedAt() + NOTIFY_COOLDOWN_MS) return;
+            if (Date.now() < cacheClient.lastDeniedAt() + NOTIFY_COOLDOWN_MS)
+              return;
 
             // 백그라운드로부터 포그라운드 알림 저장(pending...)
-            cache.setPending({ cardId: card.id, phone: user.phone });
+            cacheClient.setPending({ cardId: card.id, phone: user.phone });
 
             if (settings.notice)
               // 알림 설정이 되어 있어야 백그라운드에서 알림

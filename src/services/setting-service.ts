@@ -1,31 +1,31 @@
-import { cache } from '@/storage';
+import { cacheClient } from '@/client';
 
 const ensureInitialized = () => {
-  if (cache.getNotice() === null) {
-    cache.setNotice(true);
-    cache.setAutoSet(true);
-    cache.setActive(true);
+  if (cacheClient.getNotice() === null) {
+    cacheClient.setNotice(true);
+    cacheClient.setAutoSet(true);
+    cacheClient.setActive(true);
   }
 };
 
 export const settingService = {
   getSettings: () => {
     ensureInitialized();
-    const notice = cache.getNotice();
-    const autoSet = cache.getAutoSet();
-    const active = cache.getActive();
+    const notice = cacheClient.getNotice();
+    const autoSet = cacheClient.getAutoSet();
+    const active = cacheClient.getActive();
 
     return { notice, autoSet, active };
   },
 
   setNotice: (val: boolean) => {
-    cache.setNotice(val);
+    cacheClient.setNotice(val);
   },
   setAutoSet: (val: boolean) => {
-    cache.setAutoSet(val);
+    cacheClient.setAutoSet(val);
   },
 
   setActive: (val: boolean) => {
-    cache.setActive(val);
+    cacheClient.setActive(val);
   },
 };
