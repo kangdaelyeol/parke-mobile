@@ -1,6 +1,6 @@
+import { serverTimestamp } from 'firebase/database';
 import { cardClient, userClient } from '@/client';
 import { Card, CardDto } from '@/domain/card';
-import { serverTimestamp } from 'firebase/database';
 
 export const cardService = {
   get: async (id: string): Promise<CardDto | null> => {

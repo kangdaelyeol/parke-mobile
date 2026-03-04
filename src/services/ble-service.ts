@@ -17,8 +17,7 @@ import {
   getDeviceId,
 } from '@/helpers';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
-import { cacheClient } from '@/client';
-import { cardService, settingService } from '@/services';
+import { bleCacheService, cardService, settingService } from '@/services';
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils';
 import { CardDto } from '@/domain/card';
 import { UserDto } from '@/domain/user';
@@ -88,13 +87,18 @@ export const bleService = {
           if (err || !device) return;
           if (!isCandidate(device)) return;
 
-          // 기본 스캔 쿨다운
-          if (Date.now() - cacheClient.lastSeenAt() < SCAN_COOLDOWN_MS) return;
-          cacheClient.markSeen();
-
           const deviceId = getDeviceId(device.manufacturerData as string);
 
-          console.log(deviceId);
+          // 기본 스캔 쿨다운
+          if (
+            Date.now() - bleCacheService.getDeviceSeenAt(deviceId) <
+            SCAN_COOLDOWN_MS
+          )
+            return;
+            
+          bleCacheService.markDeviceSeenAt(deviceId);
+
+          console.log('deviceId:', deviceId);
 
           const cardState = cards.find(c => c.deviceId === deviceId);
           if (!cardState) return;
@@ -102,7 +106,7 @@ export const bleService = {
           const card = await cardService.get(cardState.id);
           if (!card) return;
 
-          console.log('find: ', card);
+          console.log('find:', card);
 
           // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
           if (String(user.phone) === String(card.phone)) {
@@ -119,18 +123,30 @@ export const bleService = {
           // 자동변경 설정이 아닐시 알림
           if (!settings.autoSet || !card.autoChange) {
             // 이전에 변경 거부가 있었는지 확인
-            if (Date.now() < cacheClient.lastDeniedAt() + NOTIFY_COOLDOWN_MS)
+            if (
+              Date.now() <
+              bleCacheService.getAlertLastDeniedAt() + NOTIFY_COOLDOWN_MS
+            )
               return;
 
             // 백그라운드로부터 포그라운드 알림 저장(pending...)
-            cacheClient.setPending({ cardId: card.id, phone: user.phone });
+            bleCacheService.pushAlertPending({
+              cardId: card.id,
+              phone: user.phone,
+              cardName: card.title,
+            });
 
             if (settings.notice)
               // 알림 설정이 되어 있어야 백그라운드에서 알림
               notifyPhoneChange(card.phone, user.phone, card.deviceId);
 
             // 앱이 실행중이면 앱 스크린에서 알림
-            notifyChangePhoneOnScreen(card.id, user.phone, setCards);
+            notifyChangePhoneOnScreen(
+              card.title,
+              card.id,
+              user.phone,
+              setCards,
+            );
           } else {
             // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
             const res = await cardService.updatePhone(
