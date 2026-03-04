@@ -1,4 +1,3 @@
-import { generateBase64Id } from '@/helpers';
 import { CardDto } from './card-dto';
 import { serverTimestamp } from 'firebase/database';
 
@@ -8,7 +7,7 @@ export class Card {
     private title: string,
     private phone: string,
     private message: string,
-    private autoChange: boolean,
+    private scan: boolean,
     private updatedAt: object,
     private updatedBy: string,
     private deviceId: string,
@@ -16,12 +15,12 @@ export class Card {
   ) {}
 
   static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
-    const id = props.id ?? generateBase64Id();
+    const id = props.id ?? '';
     const title = props.title.trim();
 
     const phone = props.phone ?? '';
     const message = props.message ?? '';
-    const autoChange = !!props.autoChange;
+    const scan = !!props.scan;
     const updatedAt = props.updatedAt ?? serverTimestamp();
     const updatedBy = props.updatedBy ?? '';
     const deviceId = props.deviceId ?? '';
@@ -32,7 +31,7 @@ export class Card {
       title,
       phone,
       message,
-      autoChange,
+      scan,
       updatedAt,
       updatedBy,
       deviceId,
@@ -50,7 +49,7 @@ export class Card {
       title: this.title,
       phone: this.phone,
       message: this.message,
-      autoChange: this.autoChange,
+      scan: this.scan,
       updatedAt: this.updatedAt,
       updatedBy: this.updatedBy,
       deviceId: this.deviceId,

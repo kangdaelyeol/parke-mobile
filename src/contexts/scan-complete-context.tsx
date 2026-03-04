@@ -69,7 +69,7 @@ export const ScanCompleteContextProvider = ({
           title: name,
           updatedBy: user.nickname,
           updatedAt: serverTimestamp(),
-          autoChange: true,
+          scan: true,
           deviceId,
           ownerList: [user.id],
         });

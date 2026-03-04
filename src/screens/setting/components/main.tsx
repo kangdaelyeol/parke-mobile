@@ -8,7 +8,7 @@ export const Main = () => {
     <View style={styles.main}>
       <View style={styles.list}>
         <View style={styles.line}>
-          <Text style={styles.lineText}>자동바꿈</Text>
+          <Text style={styles.lineText}>자동변경</Text>
           <View>
             <Switch
               disabled={state.autoSetDisabled}

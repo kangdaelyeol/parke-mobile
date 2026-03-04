@@ -60,11 +60,11 @@ export const useHomeCardOptionViewModel = (): HomeCardOptionViewModel => {
         return Alert.alert('웹 사이트를 열 수 없습니다. 확인해주세요');
       await Linking.openURL(url);
     },
-    autoChangePress: async () => {
+    scanPress: async () => {
       setLoading(true);
-      const res = await cardService.updateAutoChange(
+      const res = await cardService.updateScan(
         selectedCard.id,
-        !selectedCard.autoChange,
+        !selectedCard.scan,
       );
       if (!res) {
         Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
@@ -75,7 +75,7 @@ export const useHomeCardOptionViewModel = (): HomeCardOptionViewModel => {
         prev.map(card =>
           card.id !== selectedCard.id
             ? { ...card }
-            : { ...card, autoChange: !card.autoChange },
+            : { ...card, scan: !card.scan },
         ),
       );
     },

@@ -57,11 +57,8 @@ export const cardService = {
     if (newOwnerList.length === 0) return await cardClient.deleteById(cardId);
     return cardClient.update({ ...card, ownerList: newOwnerList });
   },
-  updateAutoChange: async (
-    id: string,
-    autoChange: boolean,
-  ): Promise<boolean> => {
-    return await cardClient.update({ id, autoChange });
+  updateScan: async (id: string, scan: boolean): Promise<boolean> => {
+    return await cardClient.update({ id, scan });
   },
   updatePhone: async (id: string, phone: string): Promise<Boolean> => {
     return await cardClient.update({ id, phone });

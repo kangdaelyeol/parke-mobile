@@ -8,7 +8,7 @@ import { useHomeCardViewModel } from '@/view-model';
 import { HomeCardProps } from '@home/types';
 import { FONT } from '@/theme/fonts';
 
-export const Card = ({ title, phone, idx, message, autoChange }: HomeCardProps) => {
+export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
   const { animated, actions } = useHomeCardViewModel(idx);
 
   return (
@@ -27,18 +27,18 @@ export const Card = ({ title, phone, idx, message, autoChange }: HomeCardProps) 
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
         </View>
-        {autoChange ? (
-          <View style={styles.autoChange}>
+        {scan ? (
+          <View style={styles.scan}>
             <View style={[styles.onIcon, styles.icon]} />
-            <Text style={[styles.autoChangeTextOn, styles.autoChangeText]}>
-              자동변경 On
+            <Text style={[styles.scanTextOn, styles.scanText]}>
+              자동감지 On
             </Text>
           </View>
         ) : (
-          <View style={styles.autoChange}>
+          <View style={styles.scan}>
             <View style={[styles.offIcon, styles.icon]} />
-            <Text style={[styles.autoChangeTextOff, styles.autoChangeText]}>
-              자동변경 Off
+            <Text style={[styles.scanTextOff, styles.scanText]}>
+              자동감지 Off
             </Text>
           </View>
         )}
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     bottom: 65,
     fontSize: 15,
   },
-  autoChange: {
+  scan: {
     position: 'absolute',
     left: 14,
     bottom: 10,
@@ -114,14 +114,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#ed3a3a',
     boxShadow: '0px 0px 5px 2px #fa4c31',
   },
-  autoChangeText: {
+  scanText: {
     fontSize: 14,
     fontFamily: FONT.MEDIUM,
   },
-  autoChangeTextOn: {
+  scanTextOn: {
     color: '#4fa75c',
   },
-  autoChangeTextOff: {
+  scanTextOff: {
     color: '#c02b2b',
   },
 });

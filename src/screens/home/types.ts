@@ -29,7 +29,7 @@ interface CardOptionActions {
   editPress: () => void;
   deletePress: () => void;
   previewPress: () => Promise<void>;
-  autoChangePress: () => Promise<void>;
+  scanChangePress: () => Promise<void>;
   changePhonePress: () => Promise<void>;
 }
 
@@ -65,9 +65,16 @@ export type HomeMainViewModel = AnimatedViewModel<
   MainAnimated
 >;
 
-export type HomeCardOptionViewModel = ViewModel<CardOptionState, CardOptionActions>;
+export type HomeCardOptionViewModel = ViewModel<
+  CardOptionState,
+  CardOptionActions
+>;
 
-export type HomeCardViewModel = AnimatedViewModel<{}, CardActions, CardAnimated>;
+export type HomeCardViewModel = AnimatedViewModel<
+  {},
+  CardActions,
+  CardAnimated
+>;
 
 export type SettingCardViewModel = AnimatedViewModel<
   SettingCardState,
@@ -84,7 +91,7 @@ export interface HomeCardProps {
   phone: string;
   idx: number;
   message: string;
-  autoChange: boolean;
+  scan: boolean;
 }
 
 export interface HomeEmptyCardProps {

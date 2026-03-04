@@ -6,13 +6,8 @@ import { HomeCardOptionProps } from '@home/types';
 export const CardOption = ({ card }: HomeCardOptionProps) => {
   const { state, actions } = useHomeCardOptionViewModel();
 
-  const {
-    editPress,
-    deletePress,
-    previewPress,
-    autoChangePress,
-    changePhonePress,
-  } = actions;
+  const { editPress, deletePress, previewPress, scanChangePress, changePhonePress } =
+    actions;
 
   return (
     <View style={styles.container}>
@@ -21,8 +16,8 @@ export const CardOption = ({ card }: HomeCardOptionProps) => {
         <View style={styles.row}>
           <PressableButton
             pressableStyle={styles.pressable}
-            onPress={autoChangePress}
-            title="자동변경 On/Off"
+            onPress={scanChangePress}
+            title="자동감지 On/Off"
             background={['#242431', '#303042']}
           />
         </View>
