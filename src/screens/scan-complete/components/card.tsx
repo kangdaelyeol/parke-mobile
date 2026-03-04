@@ -78,14 +78,6 @@ const styles = StyleSheet.create({
     bottom: 65,
     fontSize: 15,
   },
-  autoChange: {
-    position: 'absolute',
-    left: 14,
-    bottom: 10,
-    flexDirection: 'row',
-    gap: 10,
-    alignItems: 'center',
-  },
   icon: {
     width: 10,
     height: 10,
