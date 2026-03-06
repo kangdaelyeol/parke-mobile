@@ -10,6 +10,7 @@ import {
 } from '@/screens';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from './types';
+import PermissionScreen from '@/screens/permission/permission-screen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -18,6 +19,7 @@ export default function RootNavigator() {
     <Stack.Navigator
       screenOptions={{ headerShown: false, gestureEnabled: false }}
     >
+      <Stack.Screen name="Permission" component={PermissionScreen} />
       <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Init" component={InitScreen} />

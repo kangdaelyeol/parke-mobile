@@ -9,6 +9,7 @@ export type RootStackParamList = {
   ScanComplete: { value: string };
   Setting: undefined;
   Profile: undefined;
+  Permission: undefined;
 };
 
 export type LoginStackParamList = {

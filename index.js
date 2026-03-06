@@ -25,6 +25,7 @@ notifee.onBackgroundEvent(async ({ type, detail }) => {
 
 AppRegistry.registerComponent(appName, () => App);
 
+
 // ✅ 여기는 백그라운드. REST 권장(또는 SDK가 확실히 초기화되어 있어야 함)
 
 // const res = await fetch(
