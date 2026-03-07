@@ -1,13 +1,14 @@
 import { serverTimestamp } from 'firebase/database';
 import { cardClient, userClient } from '@/client';
 import { Card, CardDto } from '@/domain/card';
+import { CardService } from './types';
 
-export const cardService = {
-  get: async (id: string): Promise<CardDto | null> => {
+export const cardService: CardService = {
+  get: async (id) => {
     const res = await cardClient.getById(id);
     return res;
   },
-  getList: async (idList: string[]): Promise<CardDto[] | null> => {
+  getList: async (idList) => {
     const res = await Promise.allSettled(idList.map(cardClient.getById));
     if (!res) return null;
     return res
@@ -17,7 +18,7 @@ export const cardService = {
       )
       .map(r => r.value);
   },
-  update: async (card: CardDto): Promise<CardDto | null> => {
+  update: async (card) => {
     const cardEntity = Card.fromDto(card);
 
     try {
@@ -31,7 +32,7 @@ export const cardService = {
       return null;
     }
   },
-  create: async (card: CardDto): Promise<CardDto | null> => {
+  create: async (card) => {
     const cardEntity = Card.create(card);
     try {
       const res = await cardClient.create(cardEntity.toDto());
@@ -42,7 +43,7 @@ export const cardService = {
       return null;
     }
   },
-  delete: async (cardId: string, userId: string): Promise<boolean> => {
+  delete: async (cardId, userId) => {
     const card = await cardClient.getById(cardId);
     const user = await userClient.getById(userId);
     if (!user || !card) return false;
@@ -57,13 +58,13 @@ export const cardService = {
     if (newOwnerList.length === 0) return await cardClient.deleteById(cardId);
     return cardClient.update({ ...card, ownerList: newOwnerList });
   },
-  updateScan: async (id: string, scan: boolean): Promise<boolean> => {
+  updateScan: async (id, scan) => {
     return await cardClient.update({ id, scan });
   },
-  updatePhone: async (id: string, phone: string): Promise<Boolean> => {
+  updatePhone: async (id, phone) => {
     return await cardClient.update({ id, phone });
   },
-  updateUpdatedAt: async (id: string): Promise<boolean> => {
+  updateUpdatedAt: async (id) => {
     return await cardClient.update({ id, updatedAt: serverTimestamp() });
   },
 };

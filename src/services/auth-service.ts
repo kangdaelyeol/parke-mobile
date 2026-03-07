@@ -12,24 +12,10 @@ import {
   login,
   logout,
 } from '@react-native-seoul/kakao-login';
-
-interface kakaoProfile {
-  email: string;
-  nickname: string;
-}
-
-interface AuthService {
-  firebaseLogin: (email: string, password: string) => Promise<string | null>;
-  firebaseSignIn: (email: string, password: string) => Promise<string | null>;
-  firebaseSignOut: () => Promise<void>;
-  firebaseDeleteUser: () => Promise<void>;
-  kakaoLogin: () => Promise<kakaoProfile | null>;
-  kakaoLogout: () => Promise<void>;
-  getKakaoProfile: () => Promise<kakaoProfile | null>;
-}
+import { AuthService } from './types';
 
 export const authService: AuthService = {
-  getKakaoProfile: async (): Promise<kakaoProfile | null> => {
+  getKakaoProfile: async () => {
     try {
       const profile: KakaoProfile = await getProfile();
       return { email: profile.email, nickname: profile.nickname };
@@ -37,7 +23,7 @@ export const authService: AuthService = {
       return null;
     }
   },
-  kakaoLogin: async (): Promise<kakaoProfile | null> => {
+  kakaoLogin: async () => {
     try {
       const res: KakaoOAuthToken = await login();
       if (res) {
@@ -49,13 +35,10 @@ export const authService: AuthService = {
       return null;
     }
   },
-  kakaoLogout: async (): Promise<void> => {
+  kakaoLogout: async () => {
     await logout();
   },
-  firebaseLogin: async (
-    email: string,
-    password: string,
-  ): Promise<string | null> => {
+  firebaseLogin: async (email, password) => {
     try {
       const cred = await signInWithEmailAndPassword(getAuth(), email, password);
       return cred.user.uid;
@@ -64,10 +47,7 @@ export const authService: AuthService = {
       return null;
     }
   },
-  firebaseSignIn: async (
-    email: string,
-    password: string,
-  ): Promise<string | null> => {
+  firebaseSignIn: async (email, password) => {
     try {
       const cred = await createUserWithEmailAndPassword(
         getAuth(),
@@ -80,7 +60,7 @@ export const authService: AuthService = {
     }
   },
 
-  firebaseSignOut: async (): Promise<void> => {
+  firebaseSignOut: async () => {
     await signOut(getAuth());
   },
   firebaseDeleteUser: async () => {

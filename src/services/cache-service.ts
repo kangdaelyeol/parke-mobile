@@ -1,6 +1,7 @@
 import { cacheClient } from '@/client';
+import { CacheService } from './types';
 
-export const cacheService = {
+export const cacheService: CacheService = {
   ensureInitialized: () => {
     const hasInitializedCache = cacheClient.getHasInitializedCache();
     if (hasInitializedCache) return;
@@ -13,10 +14,10 @@ export const cacheService = {
     cacheClient.setAlertDeniedAt(0);
     cacheClient.setHasInitializedCache(true);
   },
-  setHasSeenOnBoarding: (value: boolean) => {
+  setHasSeenOnBoarding: value => {
     cacheClient.setHasSeenOnBoarding(value);
   },
-  getHasSeenOnBoarding: (): boolean => {
+  getHasSeenOnBoarding: () => {
     return cacheClient.getHasSeenOnBoarding();
   },
 };

@@ -1,27 +1,22 @@
-import { AlertPending, cacheClient } from '@/client';
+import { cacheClient } from '@/client';
+import { BleCacheService } from './types';
 
-type pushAlertPendingProp = {
-  phone: string;
-  cardId: string;
-  cardName: string;
-};
-
-export const bleCacheService = {
-  markDeviceSeenAt: (deviceId: string) => {
+export const bleCacheService: BleCacheService = {
+  markDeviceSeenAt: deviceId => {
     cacheClient.setDeviceSeenAt(deviceId, Date.now());
   },
-  getDeviceSeenAt: (deviceId: string): number => {
+  getDeviceSeenAt: deviceId => {
     return cacheClient.getDeviceSeenAt(deviceId);
   },
-  getAlertPendingList: (): AlertPending[] => {
+  getAlertPendingList: () => {
     return cacheClient.getAlertPendingList();
   },
-  pushAlertPending: ({ phone, cardId, cardName }: pushAlertPendingProp) => {
+  pushAlertPending: ({ phone, cardId, cardName }) => {
     const pendingList = cacheClient.getAlertPendingList();
     pendingList.push({ phone, cardId, cardName });
     cacheClient.setAlertPending(pendingList);
   },
-  deleteAlertPending: (cardId: string) => {
+  deleteAlertPending: cardId => {
     const pendingList = cacheClient.getAlertPendingList();
     const newPendingList = pendingList.filter(
       pending => pending?.cardId !== cardId,
@@ -37,7 +32,7 @@ export const bleCacheService = {
   clearAlertLastDeniedAt: () => {
     cacheClient.setAlertDeniedAt(0);
   },
-  getAlertLastDeniedAt: (): number => {
+  getAlertLastDeniedAt: () => {
     return cacheClient.getAlertDeniedAt();
   },
 };

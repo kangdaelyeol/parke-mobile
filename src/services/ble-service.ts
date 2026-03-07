@@ -16,23 +16,9 @@ import {
   base64ToUtf,
   getDeviceId,
 } from '@/helpers';
-import { SearchBleStackNavigationProp } from '@/navigation/types';
 import { bleCacheService, cardService, settingService } from '@/services';
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils';
-import { CardDto } from '@/domain/card';
-import { UserDto } from '@/domain/user';
-
-interface StartSearchBleProps {
-  navigation: SearchBleStackNavigationProp;
-  setRssi: React.Dispatch<React.SetStateAction<string>>;
-  cards: CardDto[];
-}
-
-interface StartBackgroundScanProps {
-  cards: CardDto[];
-  user: UserDto;
-  setCards: React.Dispatch<React.SetStateAction<CardDto[]>>;
-}
+import { BleService } from './types';
 
 const g = globalThis as any;
 
@@ -50,9 +36,7 @@ const isBleManager = (manager: any): manager is BleManager => {
 
 let bleManager: null | BleManager = null;
 
-console.log('ble');
-
-export const bleService = {
+export const bleService: BleService = {
   initManager: () => {
     bleManager = new BleManager({
       restoreStateIdentifier: 'com.app.ble',
@@ -80,11 +64,7 @@ export const bleService = {
     isSearching = false;
     isBackgroundScanning = false;
   },
-  startBackgroundScan: async ({
-    cards,
-    user,
-    setCards,
-  }: StartBackgroundScanProps) => {
+  startBackgroundScan: async ({ cards, user, setCards }) => {
     if (!bleManager) bleService.initManager();
     if (!isBleManager(bleManager)) return;
     console.log('try background scan');
@@ -195,11 +175,7 @@ export const bleService = {
       },
     );
   },
-  startSearchBle: async ({
-    navigation,
-    setRssi,
-    cards,
-  }: StartSearchBleProps) => {
+  startSearchBle: async ({ navigation, setRssi, cards }) => {
     if (!bleManager) bleService.initManager();
     if (!isBleManager(bleManager)) return;
     console.log('try search ble');
@@ -225,7 +201,7 @@ export const bleService = {
 
         try {
           console.log('a');
-          
+
           await bleManager.stopDeviceScan();
           console.log('b');
 

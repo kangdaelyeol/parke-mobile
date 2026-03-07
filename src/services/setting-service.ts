@@ -1,6 +1,7 @@
 import { cacheClient } from '@/client';
+import { SettingService } from './types';
 
-export const settingService = {
+export const settingService: SettingService = {
   getSettings: () => {
     const notice = cacheClient.getNotice();
     const autoSet = cacheClient.getAutoSet();
@@ -9,14 +10,14 @@ export const settingService = {
     return { notice, autoSet, active };
   },
 
-  setNotice: (val: boolean) => {
+  setNotice: val => {
     cacheClient.setNotice(val);
   },
-  setAutoSet: (val: boolean) => {
+  setAutoSet: val => {
     cacheClient.setAutoSet(val);
   },
 
-  setActive: (val: boolean) => {
+  setActive: val => {
     cacheClient.setActive(val);
   },
 };

@@ -4,8 +4,9 @@ import notifee, {
 } from '@notifee/react-native';
 import { PermissionsAndroid, Platform } from 'react-native';
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
+import { PermissionService } from './types';
 
-export const permissionService = {
+export const permissionService: PermissionService = {
   setupNotifications: async () => {
     await notifee.setNotificationCategories([
       {
@@ -25,7 +26,7 @@ export const permissionService = {
       importance: AndroidImportance.HIGH,
     });
   },
-  ensureBluetoothPermission: async (): Promise<Boolean> => {
+  ensureBluetoothPermission: async () => {
     if (Platform.OS === 'android') {
       if (Platform.Version >= 31) {
         const res = await PermissionsAndroid.requestMultiple([
@@ -46,7 +47,7 @@ export const permissionService = {
       return res === RESULTS.GRANTED;
     }
   },
-  ensureCameraPermission: async (): Promise<boolean> => {
+  ensureCameraPermission: async () => {
     const permission =
       Platform.OS === 'ios'
         ? PERMISSIONS.IOS.CAMERA
@@ -55,7 +56,7 @@ export const permissionService = {
     const res = await request(permission);
     return res === RESULTS.GRANTED;
   },
-  ensureNotificationPermission: async (): Promise<boolean> => {
+  ensureNotificationPermission: async () => {
     return (
       (await notifee.requestPermission()).authorizationStatus ===
       AuthorizationStatus.AUTHORIZED
