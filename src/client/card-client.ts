@@ -72,6 +72,7 @@ export const cardClient = {
     try {
       await update(ref(db, `card/${id}`), {
         ...dto,
+        updatedAt: serverTimestamp(),
       });
       return true;
     } catch (e) {
