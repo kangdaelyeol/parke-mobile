@@ -1,15 +1,20 @@
 import { useEffect } from 'react';
 import { Alert, AppState } from 'react-native';
 import notifee, { EventType } from '@notifee/react-native';
-import { setupNotifications } from '@/helpers';
-import { cardService, cacheService, bleCacheService } from '@/services';
+import {
+  cardService,
+  cacheService,
+  bleCacheService,
+  permissionService,
+} from '@/services';
 import { notifyChangePhoneOnScreen } from '@/utils';
 import { useUserContext } from '@/contexts';
+
 export const useAppViewModel = () => {
   const { setCards } = useUserContext();
 
   useEffect(() => {
-    setupNotifications();
+    permissionService.setupNotifications();
     cacheService.ensureInitialized();
 
     const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
@@ -40,7 +45,12 @@ export const useAppViewModel = () => {
       const pendingList = bleCacheService.getAlertPendingList();
       pendingList.forEach(pending => {
         if (pending)
-          notifyChangePhoneOnScreen(pending.cardName, pending.cardId, pending.phone, setCards);
+          notifyChangePhoneOnScreen(
+            pending.cardName,
+            pending.cardId,
+            pending.phone,
+            setCards,
+          );
       });
 
       bleCacheService.clearAlertPending();

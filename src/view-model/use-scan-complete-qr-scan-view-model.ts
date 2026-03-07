@@ -1,30 +1,28 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
-import {
-  useCameraDevice,
-  useCameraPermission,
-} from 'react-native-vision-camera';
+import { useCameraDevice } from 'react-native-vision-camera';
 import { useScanCompleteContext } from '@/contexts';
 import { PARKE_WEB_URL } from '@/constants';
 import { ScanCompleteQrScanViewModel } from '@scan-complete/types';
+import { permissionService } from '@/services';
 
 export const useScanCompleteQrScanViewModel =
   (): ScanCompleteQrScanViewModel => {
     const device = useCameraDevice('back');
-    const { hasPermission, requestPermission } = useCameraPermission();
     const [scanned, setScanned] = useState(false);
 
     const { actions: scanCompleteActions } = useScanCompleteContext();
 
     useEffect(() => {
       (async () => {
-        if (!hasPermission) {
-          const res = await requestPermission();
-          if (!res) Alert.alert('카메라 권한이 필요합니다.');
+        const cameraPermission =
+          await permissionService.ensureCameraPermission();
+        if (!cameraPermission) {
+          Alert.alert('카메라 권한이 필요합니다.');
           scanCompleteActions.scanBackPress();
         }
       })();
-    }, [hasPermission, requestPermission, scanCompleteActions]);
+    }, [scanCompleteActions]);
 
     const codeScanner = useMemo(
       () => ({
@@ -49,7 +47,7 @@ export const useScanCompleteQrScanViewModel =
     );
 
     return {
-      state: { device, hasPermission, scanned },
+      state: { device, scanned },
       actions: {
         codeScanner,
         scanBackPress: scanCompleteActions.scanBackPress,

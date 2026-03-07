@@ -19,19 +19,6 @@ export const QrScan = () => {
       </View>
     );
 
-  if (!state.hasPermission)
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>카메라 권한이 필요합니다</Text>
-        <PressableButton
-          pressableStyle={styles.button}
-          background={['#202020', '#414141']}
-          title="돌아가기"
-          onPress={actions.scanBackPress}
-        />
-      </View>
-    );
-
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>

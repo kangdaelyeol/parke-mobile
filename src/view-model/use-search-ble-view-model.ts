@@ -1,7 +1,7 @@
+import { permissionService } from '@/services';
 import { useEffect } from 'react';
 import { Alert } from 'react-native';
 import { useSearchBleContext, useUserContext } from '@/contexts';
-import { ensureBluetoothPermissions } from '@/helpers';
 import { SearchBleScreenViewModel } from '@search-ble/types';
 import { useNavigation } from '@react-navigation/native';
 import { SearchBleStackNavigationProp } from '@/navigation/types';
@@ -21,9 +21,13 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
     bleService.updateSession();
     const nowSession = bleService.getSession();
     (async () => {
-      const ok = await ensureBluetoothPermissions();
-      if (!ok) {
-        Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
+      const bluetoothPermission =
+        await permissionService.ensureBluetoothPermission();
+      if (!bluetoothPermission) {
+        Alert.alert(
+          'Bluetooth 권한 필요',
+          'Parke 스캔을 위해 설정에서 블루투스 권한을 허용해주세요',
+        );
         return navigation.goBack();
       }
 

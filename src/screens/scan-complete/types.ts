@@ -10,7 +10,6 @@ export type ScanCompleteViewModel = ViewModel<ScanCompleteState, {}>;
 
 interface QrScanState {
   device: CameraDevice | undefined;
-  hasPermission: boolean;
   scanned: boolean;
 }
 

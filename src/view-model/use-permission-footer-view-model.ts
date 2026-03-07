@@ -1,26 +1,21 @@
-import notifee from '@notifee/react-native';
-import { useCameraPermission } from 'react-native-vision-camera';
-import { ensureBluetoothPermissions } from '@/helpers';
 import { useNavigation } from '@react-navigation/native';
 import { PermissionStackNavigationProp } from '@/navigation/types';
 import { PermissionFooterViewModel } from '@/screens/permission/types';
+import { permissionService } from '@/services';
 
 export const usePermissionFooterViewModel = (): PermissionFooterViewModel => {
   const {
-    hasPermission: hasCameraPermission,
-    requestPermission: requestCameraPermission,
-  } = useCameraPermission();
+    ensureBluetoothPermission,
+    ensureCameraPermission,
+    ensureNotificationPermission,
+  } = permissionService;
 
   const navigation = useNavigation<PermissionStackNavigationProp>();
 
   const onConfirmPress = async () => {
-    console.log(hasCameraPermission);
-    if (!hasCameraPermission) {
-      await requestCameraPermission();
-    }
-    await notifee.requestPermission();
-
-    await ensureBluetoothPermissions();
+    await ensureBluetoothPermission();
+    await ensureCameraPermission();
+    await ensureNotificationPermission();
     navigation.replace('Login');
   };
 

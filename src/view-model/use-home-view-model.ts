@@ -2,8 +2,7 @@ import { useCallback, useState } from 'react';
 import { Alert } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { useUserContext } from '@/contexts';
-import { ensureBluetoothPermissions } from '@/helpers';
-import { bleService, settingService } from '@/services';
+import { bleService, settingService, permissionService } from '@/services';
 
 export const useHomeViewModel = () => {
   const { cards, user, syncCardList, setCards } = useUserContext();
@@ -40,9 +39,15 @@ export const useHomeViewModel = () => {
         const settings = settingService.getSettings();
         if (!settings.active) return;
         if (cards.length === 0) return;
-        const ok = await ensureBluetoothPermissions();
-        if (!ok) {
-          Alert.alert('권한 필요', 'BLE 권한을 허용해주세요');
+
+        const bluetoothPermission =
+          await permissionService.ensureBluetoothPermission();
+
+        if (!bluetoothPermission) {
+          Alert.alert(
+            'Bluetooth 권한 필요',
+            'Parke 백그라운드 스캔을 위해 설정에서 블루투스 권한을 허용해주세요',
+          );
           return;
         }
 
