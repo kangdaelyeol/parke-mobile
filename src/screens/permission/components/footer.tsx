@@ -1,7 +1,9 @@
-import { FONT } from '@/theme/fonts';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { FONT } from '@/theme/fonts';
+import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model';
 
-export const Footer = () => {
+export const Footer = ()=> {
+  const { actions } = usePermissionFooterViewModel();
   return (
     <View style={styles.container}>
       <Text style={styles.description} lineBreakStrategyIOS="hangul-word">
@@ -9,7 +11,7 @@ export const Footer = () => {
         비허용시에도 해당 기능 외 서비스 이용이 가능합니다. 허용 상태는 휴대폰
         {'\u200B'} 설정{'\u200B'} 메뉴에서 변경할 수 있습니다.{'\n'}
       </Text>
-      <Pressable>
+      <Pressable onPress={actions.onConfirmPress}>
         {({ pressed }) => (
           <Text style={[styles.confirm, pressed && styles.confirmPressed]}>
             확인

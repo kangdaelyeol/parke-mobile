@@ -47,6 +47,7 @@ export type InitStackNavigationProp = NativeStackNavigationProp<
 >;
 
 export type OnBoardingStackParamList = {
+  Permission: undefined;
   OnBoarding: undefined;
   Login: undefined;
 };
@@ -95,3 +96,13 @@ export type SettingStackParamList = {
 
 export type SettingStackNavigationProp =
   NativeStackNavigationProp<SettingStackParamList>;
+
+  export type PermissionStackParamList = {
+  Permission: undefined;
+  Login: undefined;
+};
+
+export type PermissionStackNavigationProp = NativeStackNavigationProp<
+  PermissionStackParamList,
+  'Permission'
+>;

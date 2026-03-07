@@ -21,7 +21,7 @@ export const useOnBoardingFooterViewModel = (): OnBoardingFooterViewModel => {
       setPageIdx(idx + 1);
     },
     startPress: () => {
-      navigation.navigate('Login');
+      navigation.navigate('Permission');
       cacheService.setHasSeenOnBoarding(true);
     },
   };

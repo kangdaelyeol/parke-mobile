@@ -8,7 +8,7 @@ import {
 } from 'react';
 import { CardDto } from '@/domain/card/card-dto';
 import { UserDto } from '@/domain/user/user-dto';
-import { cardService} from '@/services';
+import { cardService } from '@/services';
 import { userClient } from '@/client';
 
 const isCardList = (v: any): v is CardDto[] => {
