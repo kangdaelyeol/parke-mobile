@@ -5,3 +5,4 @@ export * from './auth-service';
 export * from './ble-service';
 export * from './cache-service';
 export * from './ble-cache-service';
+export * from './permission-service';
