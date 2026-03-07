@@ -1,5 +1,5 @@
 import notifee from '@notifee/react-native';
-import { convertPhone } from './convertPhone';
+import { convertPhone } from './convert-phone';
 
 // 알림 띄우기
 export const notifyPhoneChange = (
