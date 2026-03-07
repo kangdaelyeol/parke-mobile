@@ -7,3 +7,4 @@ export * from './notify-message';
 export * from './notify-phone-change';
 export * from './get-hashed-password';
 export * from './get-device-id';
+export * from './setup-notifications';
