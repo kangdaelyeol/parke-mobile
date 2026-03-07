@@ -1,5 +1,4 @@
 export * from './base64-to-utf';
-export * from './ble-scan-for-android';
 export * from './convert-phone';
 export * from './generate-serial-number';
 export * from './notify-message';
