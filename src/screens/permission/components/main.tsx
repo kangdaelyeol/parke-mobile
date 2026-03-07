@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   none: {
-    paddingVertical: 20,
-    marginLeft: 20,
+    paddingVertical: 17,
+    marginLeft: 18,
   },
   noneText: {
     color: '#c1c1c1',
