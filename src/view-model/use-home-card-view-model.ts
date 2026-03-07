@@ -3,26 +3,26 @@ import {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
-import { useCardSettingContext, useCardSliderContext } from '@/contexts';
-import { HomeCardViewModel } from '@home/types';
-import { useEffect } from 'react';
+} from 'react-native-reanimated'
+import { useCardSettingContext, useCardSliderContext } from '@/contexts'
+import { HomeCardViewModel } from '@home/types'
+import { useEffect } from 'react'
 
 export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
-  const { settingCard } = useCardSettingContext();
-  const { selectedCardIdx, sliderController } = useCardSliderContext();
-  const isSelected = idx === selectedCardIdx;
+  const { settingCard } = useCardSettingContext()
+  const { selectedCardIdx, sliderController } = useCardSliderContext()
+  const isSelected = idx === selectedCardIdx
 
-  const cardOpacity = useSharedValue(isSelected ? 1 : 0);
-  const cardTranslateY = useSharedValue(isSelected ? 1 : 0);
+  const cardOpacity = useSharedValue(isSelected ? 1 : 0)
+  const cardTranslateY = useSharedValue(isSelected ? 1 : 0)
 
   useEffect(() => {
-    cardOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 200 });
+    cardOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 200 })
     cardTranslateY.value = withTiming(isSelected ? 1 : 0, {
       duration: 150,
       easing: Easing.out(Easing.cubic),
-    });
-  }, [cardOpacity, cardTranslateY, isSelected]);
+    })
+  }, [cardOpacity, cardTranslateY, isSelected])
 
   const cardStyle = useAnimatedStyle(() => {
     return {
@@ -32,18 +32,18 @@ export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
           translateY: (1 - cardTranslateY.value) * 15,
         },
       ],
-    };
-  });
+    }
+  })
 
   const cardPress = () => {
-    if (settingCard !== -1) return;
+    if (settingCard !== -1) return
 
-    if (!isSelected) sliderController.goToIdx(idx);
-  };
+    if (!isSelected) sliderController.goToIdx(idx)
+  }
 
   return {
     state: {},
     animated: { cardStyle },
     actions: { cardPress },
-  };
-};
+  }
+}

@@ -1,72 +1,72 @@
-import { convertPhone } from '@/helpers';
-import { extractNumber } from '@/utils';
-import { useEffect, useState } from 'react';
+import { convertPhone } from '@/helpers'
+import { extractNumber } from '@/utils'
+import { useEffect, useState } from 'react'
 import {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
-} from 'react-native-reanimated';
+} from 'react-native-reanimated'
 import {
   useCardSettingContext,
   useCardSliderContext,
   useUserContext,
-} from '@/contexts';
-import { cardService } from '@/services';
-import { CardDto } from '@/domain/card';
-import { SettingCardViewModel } from '@home/types';
+} from '@/contexts'
+import { cardService } from '@/services'
+import { CardDto } from '@/domain/card'
+import { SettingCardViewModel } from '@home/types'
 
 export const useHomeSettingCardViewModel = (
   card: CardDto,
 ): SettingCardViewModel => {
-  const { cardSettingController } = useCardSettingContext();
-  const { selectedCardIdx } = useCardSliderContext();
-  const { cards, setCards } = useUserContext();
+  const { cardSettingController } = useCardSettingContext()
+  const { selectedCardIdx } = useCardSliderContext()
+  const { cards, setCards } = useUserContext()
 
-  const [title, setTitle] = useState(card.title);
-  const [phone, setPhone] = useState(card.phone);
-  const [message, setMessage] = useState(card.message);
-  const opacityVal = useSharedValue(0);
-  
+  const [title, setTitle] = useState(card.title)
+  const [phone, setPhone] = useState(card.phone)
+  const [message, setMessage] = useState(card.message)
+  const opacityVal = useSharedValue(0)
+
   useEffect(() => {
     opacityVal.value = withTiming(1, {
       duration: 400,
-    });
-  }, [opacityVal]);
-  
+    })
+  }, [opacityVal])
+
   const optionStyle = useAnimatedStyle(() => ({
     opacity: opacityVal.value,
-  }));
+  }))
 
   const actions = {
     savePress: async () => {
-      cardSettingController.hideSetting();
+      cardSettingController.hideSetting()
       const res = await cardService.update({
         ...cards[selectedCardIdx],
         title,
         phone: extractNumber(phone),
         message,
-      });
+      })
 
       if (res) {
         setCards(prev => {
           const index = cards.findIndex(
             cd => cd.id === cards[selectedCardIdx].id,
-          );
-          const newCards = [...prev];
-          newCards[index] = res;
-          return newCards;
-        });
+          )
+          const newCards = [...prev]
+          newCards[index] = res
+          return newCards
+        })
       } else {
         // Display Error
       }
     },
     cancelPress: () => {
-      cardSettingController.hideSetting();
+      cardSettingController.hideSetting()
     },
     titleInput: (val: string) => setTitle(val),
     messageInput: (val: string) => setMessage(val),
     phoneInput: (val: string) => setPhone(convertPhone(val)),
-  };
+  }
 
   return {
     state: {
@@ -78,5 +78,5 @@ export const useHomeSettingCardViewModel = (
     animated: {
       optionStyle,
     },
-  };
-};
+  }
+}

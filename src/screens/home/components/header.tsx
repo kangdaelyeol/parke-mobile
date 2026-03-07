@@ -1,13 +1,13 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { LogoIcon } from '@/assets/logo';
-import { useUserContext } from '@/contexts/user-context';
-import { convertPhone } from '@/helpers';
-import { FONT } from '@/theme/fonts';
-import { bleService } from '@/services';
+import { StyleSheet, Text, View } from 'react-native'
+import { LogoIcon } from '@/assets/logo'
+import { useUserContext } from '@/contexts/user-context'
+import { convertPhone } from '@/helpers'
+import { FONT } from '@/theme/fonts'
+import { bleService } from '@/services'
 
 export const Header = () => {
-  const { user } = useUserContext();
-  const { isBackgroundScanning } = bleService.getState();
+  const { user } = useUserContext()
+  const { isBackgroundScanning } = bleService.getState()
   return (
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
@@ -18,8 +18,8 @@ export const Header = () => {
         </Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     fontSize: 23,
     fontFamily: FONT.MEDIUM,
   },
-});
+})

@@ -1,89 +1,89 @@
-import { useEffect, useState } from 'react';
-import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { UserDto } from '@/domain/user';
-import { LoginStackNavigationProp } from '@/navigation/types';
-import { LoginViewModel } from '@/screens/login/types';
-import { userService, authService } from '@/services';
-import { getHashedPassword } from '@/helpers';
-import { useUserContext } from '@/contexts';
+import { useEffect, useState } from 'react'
+import { Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { UserDto } from '@/domain/user'
+import { LoginStackNavigationProp } from '@/navigation/types'
+import { LoginViewModel } from '@/screens/login/types'
+import { userService, authService } from '@/services'
+import { getHashedPassword } from '@/helpers'
+import { useUserContext } from '@/contexts'
 
-const isUserDto = (dto: any): dto is UserDto => dto.id;
+const isUserDto = (dto: any): dto is UserDto => dto.id
 
 export const useLoginViewModel = (): LoginViewModel => {
-  const { setUser } = useUserContext();
-  const [loading, setLoading] = useState(false);
-  const navigation = useNavigation<LoginStackNavigationProp>();
+  const { setUser } = useUserContext()
+  const [loading, setLoading] = useState(false)
+  const navigation = useNavigation<LoginStackNavigationProp>()
 
   useEffect(() => {
-    (async () => {
-      if (!navigation) return;
-      setLoading(true);
-      const kakaoProfile = await authService.getKakaoProfile();
-      if (!kakaoProfile) return setLoading(false);
+    ;(async () => {
+      if (!navigation) return
+      setLoading(true)
+      const kakaoProfile = await authService.getKakaoProfile()
+      if (!kakaoProfile) return setLoading(false)
 
-      const password = getHashedPassword(kakaoProfile.email);
-      const uid = await authService.firebaseLogin(kakaoProfile.email, password);
-      if (!uid) return setLoading(false);
+      const password = getHashedPassword(kakaoProfile.email)
+      const uid = await authService.firebaseLogin(kakaoProfile.email, password)
+      if (!uid) return setLoading(false)
 
-      const user = await userService.get(uid);
-      if (!user) return setLoading(false);
+      const user = await userService.get(uid)
+      if (!user) return setLoading(false)
 
-      setUser(user);
-      navigation.replace('Home');
-    })();
-  }, [navigation, setUser]);
+      setUser(user)
+      navigation.replace('Home')
+    })()
+  }, [navigation, setUser])
 
   const kakaoLoginPress = async () => {
-    if (loading) return;
+    if (loading) return
 
-    setLoading(true);
-    const kakaoProfile = await authService.kakaoLogin();
+    setLoading(true)
+    const kakaoProfile = await authService.kakaoLogin()
 
     if (!kakaoProfile) {
       Alert.alert(
         '카카오 정보를 불러오는데 실패했습니다. 잠시 후 다시 시도해주세요.',
-      );
-      return setLoading(false);
+      )
+      return setLoading(false)
     }
 
-    const { email, nickname } = kakaoProfile;
+    const { email, nickname } = kakaoProfile
 
     // 첫 로그인시 - 가입
-    const password = getHashedPassword(email);
-    const uid = await authService.firebaseSignIn(email, password);
+    const password = getHashedPassword(email)
+    const uid = await authService.firebaseSignIn(email, password)
 
     if (!uid) {
       // 계정이 존재하는 경우
-      const firebaseUid = await authService.firebaseLogin(email, password);
+      const firebaseUid = await authService.firebaseLogin(email, password)
 
       if (!firebaseUid) {
-        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.');
-        setLoading(false);
-        return;
+        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.')
+        setLoading(false)
+        return
       }
 
-      const userRes = await userService.get(firebaseUid);
+      const userRes = await userService.get(firebaseUid)
 
       if (!isUserDto(userRes)) {
-        Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.');
-        return setLoading(false);
+        Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+        return setLoading(false)
       }
 
-      setUser(userRes);
-      return navigation.replace('Home');
+      setUser(userRes)
+      return navigation.replace('Home')
     }
 
-    const userRes = await userService.create({ id: uid, nickname });
+    const userRes = await userService.create({ id: uid, nickname })
 
     if (!isUserDto(userRes)) {
-      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.');
-      return setLoading(false);
+      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+      return setLoading(false)
     }
 
-    setUser(userRes);
-    return navigation.replace('Init');
-  };
+    setUser(userRes)
+    return navigation.replace('Init')
+  }
 
-  return { state: { loading }, actions: { kakaoLoginPress } };
-};
+  return { state: { loading }, actions: { kakaoLoginPress } }
+}

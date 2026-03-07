@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { OnBoardingIcon2 } from '@/assets/illustrations';
+import { StyleSheet, Text, View } from 'react-native'
+import { OnBoardingIcon2 } from '@/assets/illustrations'
 
 export const MainArticle2 = () => {
   return (
@@ -13,8 +13,8 @@ export const MainArticle2 = () => {
         BLE 기반으로 운전자를 자동 인식하여{'\n'}실시간으로 연락처를 변경합니다
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', width: '100%' },
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
     marginTop: 30,
     lineHeight: 25,
   },
-});
+})

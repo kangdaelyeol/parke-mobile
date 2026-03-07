@@ -1,4 +1,4 @@
-import cryptoJs from 'crypto-js';
+import cryptoJs from 'crypto-js'
 export const getHashedPassword = (v: string): string => {
-  return cryptoJs.SHA256('parke:' + v).toString();
-};
+  return cryptoJs.SHA256('parke:' + v).toString()
+}

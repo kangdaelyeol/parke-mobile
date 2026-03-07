@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Camera } from 'react-native-vision-camera';
-import { LogoIcon } from '@/assets/logo';
-import { PressableButton } from '@/components';
-import { useScanCompleteQrScanViewModel } from '@/view-model';
+import { StyleSheet, Text, View } from 'react-native'
+import { Camera } from 'react-native-vision-camera'
+import { LogoIcon } from '@/assets/logo'
+import { PressableButton } from '@/components'
+import { useScanCompleteQrScanViewModel } from '@/view-model'
 
 export const QrScan = () => {
-  const { state, actions } = useScanCompleteQrScanViewModel();
+  const { state, actions } = useScanCompleteQrScanViewModel()
   if (!state.device)
     return (
       <View style={styles.container}>
@@ -17,7 +17,7 @@ export const QrScan = () => {
           onPress={actions.scanBackPress}
         />
       </View>
-    );
+    )
 
   return (
     <View style={styles.container}>
@@ -38,8 +38,8 @@ export const QrScan = () => {
         />
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -76,4 +76,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginHorizontal: 'auto',
   },
-});
+})

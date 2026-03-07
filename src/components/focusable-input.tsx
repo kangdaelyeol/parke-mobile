@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { FONT } from '@/theme/fonts';
+import { useState } from 'react'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { FONT } from '@/theme/fonts'
 
 interface FocusableInputProps {
-  title: string;
-  value: string;
-  onChangeText: (v: string) => void;
-  placeholder: string;
+  title: string
+  value: string
+  onChangeText: (v: string) => void
+  placeholder: string
 }
 
 export const FocusableInput = ({
@@ -15,9 +15,9 @@ export const FocusableInput = ({
   onChangeText,
   placeholder,
 }: FocusableInputProps) => {
-  const [focus, setFocus] = useState(false);
-  const onFocus = () => setFocus(true);
-  const offFocus = () => setFocus(false);
+  const [focus, setFocus] = useState(false)
+  const onFocus = () => setFocus(true)
+  const offFocus = () => setFocus(false)
   return (
     <View style={styles.container}>
       <Text style={[styles.title, focus && styles.titleFocused]}>{title}</Text>
@@ -30,8 +30,8 @@ export const FocusableInput = ({
         placeholder={placeholder}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -60,4 +60,4 @@ const styles = StyleSheet.create({
   inputFocused: {
     borderColor: '#eeeeee',
   },
-});
+})

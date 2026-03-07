@@ -1,11 +1,11 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { LogoIcon, LogoText } from '@/assets/logo';
-import { FocusableInput, Loading, PressableButton } from '@/components';
-import { useInitViewModel } from '@/view-model';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Text, View } from 'react-native'
+import { LogoIcon, LogoText } from '@/assets/logo'
+import { FocusableInput, Loading, PressableButton } from '@/components'
+import { useInitViewModel } from '@/view-model'
+import { FONT } from '@/theme/fonts'
 
 export default function InitScreen() {
-  const { state, actions } = useInitViewModel();
+  const { state, actions } = useInitViewModel()
 
   return (
     <View style={styles.container}>
@@ -48,7 +48,7 @@ export default function InitScreen() {
         </View>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -85,4 +85,4 @@ const styles = StyleSheet.create({
     gap: 35,
   },
   pressable: { flex: 1, flexShrink: 1, flexBasis: 0 },
-});
+})

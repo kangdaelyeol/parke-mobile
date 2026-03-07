@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { OnBoardingIcon1_1 } from '@/assets/illustrations';
+import { StyleSheet, Text, View } from 'react-native'
+import { OnBoardingIcon1_1 } from '@/assets/illustrations'
 
 export const MainArticle1 = () => {
   return (
@@ -12,8 +12,8 @@ export const MainArticle1 = () => {
         </Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -37,4 +37,4 @@ const styles = StyleSheet.create({
     marginTop: 130,
     marginHorizontal: 'auto',
   },
-});
+})

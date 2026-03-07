@@ -1,11 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import { CardSettingProvider, SliderContextProvider } from '@/contexts';
-import { Header, Footer, Main } from '@home/components';
-import { useHomeViewModel } from '@/view-model';
-import { Loading } from '@/components';
+import { StyleSheet, View } from 'react-native'
+import { CardSettingProvider, SliderContextProvider } from '@/contexts'
+import { Header, Footer, Main } from '@home/components'
+import { useHomeViewModel } from '@/view-model'
+import { Loading } from '@/components'
 
 export default function HomeScreen() {
-  const { state } = useHomeViewModel();
+  const { state } = useHomeViewModel()
 
   return (
     <CardSettingProvider>
@@ -18,7 +18,7 @@ export default function HomeScreen() {
         </View>
       </SliderContextProvider>
     </CardSettingProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
-});
+})

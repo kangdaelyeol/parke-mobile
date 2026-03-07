@@ -1,12 +1,12 @@
-import { StyleSheet, View, Text } from 'react-native';
-import { Header, Radar, Title } from '@search-ble/components';
-import { SearchBleProvider } from '@/contexts';
-import { useSearchBleViewModel } from '@/view-model';
-import { bleService } from '@/services';
+import { StyleSheet, View, Text } from 'react-native'
+import { Header, Radar, Title } from '@search-ble/components'
+import { SearchBleProvider } from '@/contexts'
+import { useSearchBleViewModel } from '@/view-model'
+import { bleService } from '@/services'
 
 const Test = () => {
-  const { state } = useSearchBleViewModel();
-  const { isSearching } = bleService.getState();
+  const { state } = useSearchBleViewModel()
+  const { isSearching } = bleService.getState()
   return (
     <>
       {/* test */}
@@ -25,8 +25,8 @@ const Test = () => {
 
       {/* test */}
     </>
-  );
-};
+  )
+}
 
 export default function SearchBleScreen() {
   return (
@@ -38,7 +38,7 @@ export default function SearchBleScreen() {
         <Radar />
       </View>
     </SearchBleProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#000',
   },
-});
+})

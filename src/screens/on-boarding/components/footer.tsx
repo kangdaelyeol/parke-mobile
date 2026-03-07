@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { useOnBoardingFooterViewModel } from '@/view-model';
-import { PAGE_COUNT } from '@on-boarding/constants';
-import { PressableButton } from '@/components';
+import { StyleSheet, Text, View } from 'react-native'
+import { useOnBoardingFooterViewModel } from '@/view-model'
+import { PAGE_COUNT } from '@on-boarding/constants'
+import { PressableButton } from '@/components'
 
 export const Footer = () => {
-  const { state, actions } = useOnBoardingFooterViewModel();
+  const { state, actions } = useOnBoardingFooterViewModel()
 
   return (
     <View style={styles.container}>
@@ -45,8 +45,8 @@ export const Footer = () => {
         )}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
   startBtnText: {
     color: 'white',
   },
-});
+})

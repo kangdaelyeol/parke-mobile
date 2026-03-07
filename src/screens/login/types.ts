@@ -1,11 +1,11 @@
-import { ViewModel } from '@/types/common';
+import { ViewModel } from '@/types/common'
 
 interface LoginActions {
-  kakaoLoginPress: () => Promise<void>;
+  kakaoLoginPress: () => Promise<void>
 }
 
 interface LoginState {
-  loading: boolean;
+  loading: boolean
 }
 
-export type LoginViewModel = ViewModel<LoginState, LoginActions>;
+export type LoginViewModel = ViewModel<LoginState, LoginActions>

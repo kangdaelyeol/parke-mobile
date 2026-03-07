@@ -1,15 +1,15 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { LogoText } from '@/assets/logo';
-import { convertPhone } from '@/helpers';
-import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
-import { useHomeCardViewModel } from '@/view-model';
-import { HomeCardProps } from '@home/types';
-import { FONT } from '@/theme/fonts';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { LogoText } from '@/assets/logo'
+import { convertPhone } from '@/helpers'
+import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import { useHomeCardViewModel } from '@/view-model'
+import { HomeCardProps } from '@home/types'
+import { FONT } from '@/theme/fonts'
 
 export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
-  const { animated, actions } = useHomeCardViewModel(idx);
+  const { animated, actions } = useHomeCardViewModel(idx)
 
   return (
     <Pressable onPress={actions.cardPress}>
@@ -44,8 +44,8 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
         )}
       </Animated.View>
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   scanTextOff: {
     color: '#c02b2b',
   },
-});
+})

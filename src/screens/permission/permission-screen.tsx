@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native';
-import { Footer, Header, Main } from '@permission/components';
+import { StyleSheet, View } from 'react-native'
+import { Footer, Header, Main } from '@permission/components'
 
 export default function PermissionScreen() {
   return (
@@ -8,7 +8,7 @@ export default function PermissionScreen() {
       <Main />
       <Footer />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -16,4 +16,4 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#000000',
   },
-});
+})

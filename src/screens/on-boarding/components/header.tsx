@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native';
-import { LogoIcon, LogoText } from '@/assets/logo';
+import { StyleSheet, View } from 'react-native'
+import { LogoIcon, LogoText } from '@/assets/logo'
 
 export const Header = () => {
   return (
@@ -9,8 +9,8 @@ export const Header = () => {
         <LogoText style={styles.logoText} width={120} height={50} />
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   header: {
@@ -28,4 +28,4 @@ const styles = StyleSheet.create({
     marginTop: 5,
     marginLeft: 10,
   },
-});
+})

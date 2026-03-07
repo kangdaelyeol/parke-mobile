@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { FONT } from '@/theme/fonts';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
+import { StyleSheet, Text, View } from 'react-native'
+import { FONT } from '@/theme/fonts'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 
 interface props {
-  icon: any;
-  title: string;
-  description: string;
-  iconStyle: any;
+  icon: any
+  title: string
+  description: string
+  iconStyle: any
 }
 
 export const Item = ({ icon, title, description, iconStyle }: props) => {
@@ -29,8 +29,8 @@ export const Item = ({ icon, title, description, iconStyle }: props) => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -61,4 +61,4 @@ const styles = StyleSheet.create({
   titleText: { color: '#cccccc', fontFamily: FONT.MEDIUM, fontSize: 14 },
   description: {},
   descriptionText: { color: '#a0a0a0', fontFamily: FONT.REGULAR, fontSize: 12 },
-});
+})

@@ -1,6 +1,6 @@
-import { StyleSheet, View } from 'react-native';
-import { StepNode, StepLine } from '@scan-complete/components';
-import { stepList } from '@scan-complete/config/step.config';
+import { StyleSheet, View } from 'react-native'
+import { StepNode, StepLine } from '@scan-complete/components'
+import { stepList } from '@scan-complete/config/step.config'
 
 export const ProgressStepper = () => {
   return (
@@ -12,12 +12,12 @@ export const ProgressStepper = () => {
               <StepNode label={v.label} step={i} />
               {i < stepList.length - 1 && <StepLine step={i} />}
             </View>
-          );
+          )
         })}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
     color: '#eeeeee',
     fontWeight: '700',
   },
-});
+})

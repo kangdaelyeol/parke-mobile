@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
-import Animated from 'react-native-reanimated';
-import { useHomeSettingCardViewModel } from '@/view-model';
-import { HomeSettingCardProps } from '@home/types';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { TextInput } from 'react-native-gesture-handler'
+import Animated from 'react-native-reanimated'
+import { useHomeSettingCardViewModel } from '@/view-model'
+import { HomeSettingCardProps } from '@home/types'
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
-  const { state, actions, animated } = useHomeSettingCardViewModel(card);
+  const { state, actions, animated } = useHomeSettingCardViewModel(card)
 
   return (
     <Animated.View style={[styles.container, animated.optionStyle]}>
@@ -67,8 +67,8 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
         </View>
       </View>
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
   cancelBtnPressed: {
     backgroundColor: '#4e4f53',
   },
-});
+})

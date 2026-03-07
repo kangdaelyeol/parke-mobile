@@ -1,16 +1,16 @@
-import { useNavigation } from '@react-navigation/native';
-import { ProfileHeaderViewModel } from '@profile/types';
+import { useNavigation } from '@react-navigation/native'
+import { ProfileHeaderViewModel } from '@profile/types'
 
 export const useProfileHeaderViewModel = (): ProfileHeaderViewModel => {
-  const navigation = useNavigation();
+  const navigation = useNavigation()
 
   const actions = {
     backPress: () => {
-      navigation.goBack();
+      navigation.goBack()
     },
-  };
+  }
   return {
     state: {},
     actions,
-  };
-};
+  }
+}

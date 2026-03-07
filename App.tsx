@@ -1,14 +1,14 @@
-import { StatusBar, StyleSheet, useColorScheme } from 'react-native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { NavigationContainer } from '@react-navigation/native';
-import { UserContextProvider } from '@/contexts';
-import { useAppViewModel } from '@/view-model';
-import RootNavigator from '@/navigation/root-navigator';
+import { StatusBar, StyleSheet, useColorScheme } from 'react-native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { NavigationContainer } from '@react-navigation/native'
+import { UserContextProvider } from '@/contexts'
+import { useAppViewModel } from '@/view-model'
+import RootNavigator from '@/navigation/root-navigator'
 
 function App() {
-  useAppViewModel();
-  const isDarkMode = useColorScheme() === 'dark';
+  useAppViewModel()
+  const isDarkMode = useColorScheme() === 'dark'
 
   return (
     <GestureHandlerRootView style={styles.handlerView}>
@@ -23,13 +23,13 @@ function App() {
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   handlerView: {
     flex: 1,
   },
-});
+})
 
-export default App;
+export default App

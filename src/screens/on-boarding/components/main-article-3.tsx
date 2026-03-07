@@ -1,5 +1,5 @@
-import { Image, StyleSheet, Text, View } from 'react-native';
-import { OnBoardingIcon3 } from '@/assets/illustrations';
+import { Image, StyleSheet, Text, View } from 'react-native'
+import { OnBoardingIcon3 } from '@/assets/illustrations'
 
 export const MainArticle3 = () => {
   return (
@@ -15,8 +15,8 @@ export const MainArticle3 = () => {
         height={225}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: { alignItems: 'center', width: '100%' },
@@ -40,4 +40,4 @@ const styles = StyleSheet.create({
   image: {
     marginVertical: 'auto',
   },
-});
+})

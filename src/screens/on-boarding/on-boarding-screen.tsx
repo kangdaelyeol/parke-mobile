@@ -1,11 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import { Footer, Header, Slider } from '@on-boarding/components';
-import { OnBoardingContextProvider } from '@/contexts';
-import { useOnBoardingViewModel } from '@/view-model';
-import { Loading } from '@/components';
+import { StyleSheet, View } from 'react-native'
+import { Footer, Header, Slider } from '@on-boarding/components'
+import { OnBoardingContextProvider } from '@/contexts'
+import { useOnBoardingViewModel } from '@/view-model'
+import { Loading } from '@/components'
 
 const OnBoardingContent = () => {
-  const { state } = useOnBoardingViewModel();
+  const { state } = useOnBoardingViewModel()
 
   return (
     <View style={styles.container}>
@@ -14,15 +14,15 @@ const OnBoardingContent = () => {
       <Slider />
       <Footer />
     </View>
-  );
-};
+  )
+}
 
 export default function OnBoardingScreen() {
   return (
     <OnBoardingContextProvider>
       <OnBoardingContent />
     </OnBoardingContextProvider>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
   },
-});
+})

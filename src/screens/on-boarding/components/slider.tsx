@@ -1,15 +1,15 @@
-import { StyleSheet, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { GestureDetector } from 'react-native-gesture-handler';
-import { useOnBoardingSliderViewModel } from '@/view-model';
+import { StyleSheet, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { GestureDetector } from 'react-native-gesture-handler'
+import { useOnBoardingSliderViewModel } from '@/view-model'
 import {
   MainArticle1,
   MainArticle2,
   MainArticle3,
-} from '@on-boarding/components';
+} from '@on-boarding/components'
 
 export const Slider = () => {
-  const { animated, actions } = useOnBoardingSliderViewModel();
+  const { animated, actions } = useOnBoardingSliderViewModel()
 
   return (
     <View style={sliderStyle.container}>
@@ -23,8 +23,8 @@ export const Slider = () => {
         </Animated.View>
       </GestureDetector>
     </View>
-  );
-};
+  )
+}
 
 const sliderStyle = StyleSheet.create({
   animationContainer: {
@@ -33,4 +33,4 @@ const sliderStyle = StyleSheet.create({
   container: {
     flex: 1,
   },
-});
+})

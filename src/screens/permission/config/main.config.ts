@@ -17,4 +17,4 @@ export const selectablePermissionItemList = [
     title: '블루투스 (선택)',
     description: 'Parke 장치 탐색시 사용',
   },
-];
+]

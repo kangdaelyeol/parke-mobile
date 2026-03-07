@@ -1,17 +1,17 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { LogoText } from '@/assets/logo';
-import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
-import { useScanCompleteContext } from '@/contexts/scan-complete-context';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Text, View } from 'react-native'
+import { LogoText } from '@/assets/logo'
+import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import { useScanCompleteContext } from '@/contexts/scan-complete-context'
+import { FONT } from '@/theme/fonts'
 
 type CardProps = {
-  deviceId: string;
-};
+  deviceId: string
+}
 
 export const Card = ({ deviceId }: CardProps) => {
   const {
     state: { name, phone, message, serial },
-  } = useScanCompleteContext();
+  } = useScanCompleteContext()
 
   return (
     <View style={styles.container}>
@@ -29,8 +29,8 @@ export const Card = ({ deviceId }: CardProps) => {
         <Text style={styles.phone}>{phone}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -99,4 +99,4 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontFamily: FONT.BOLD,
   },
-});
+})

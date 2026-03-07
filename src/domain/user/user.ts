@@ -1,5 +1,4 @@
-import { generateBase64Id } from '@/helpers';
-import { UserDto } from './user-dto';
+import { UserDto } from './user-dto'
 
 export class User {
   private constructor(
@@ -10,16 +9,16 @@ export class User {
   ) {}
 
   static create(props: Partial<UserDto>): User {
-    const id = props.id ?? generateBase64Id();
-    const phone = props.phone?.trim() ?? '';
-    const nickname = props.nickname ?? '';
-    const cardIdList = props.cardIdList ?? [];
+    const id = props.id ?? ''
+    const phone = props.phone?.trim() ?? ''
+    const nickname = props.nickname ?? ''
+    const cardIdList = props.cardIdList ?? []
 
-    return new User(id, nickname, phone, cardIdList);
+    return new User(id, nickname, phone, cardIdList)
   }
 
   static fromDto(dto: UserDto) {
-    return User.create(dto);
+    return User.create(dto)
   }
 
   toDto(): UserDto {
@@ -28,6 +27,6 @@ export class User {
       phone: this.phone,
       nickname: this.nickname,
       cardIdList: this.cardIdList,
-    };
+    }
   }
 }

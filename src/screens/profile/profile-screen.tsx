@@ -1,5 +1,5 @@
-import { StyleSheet, View } from 'react-native';
-import { Main, Header } from '@profile/components';
+import { StyleSheet, View } from 'react-native'
+import { Main, Header } from '@profile/components'
 
 export default function ProfileScreen() {
   return (
@@ -7,7 +7,7 @@ export default function ProfileScreen() {
       <Header />
       <Main />
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -15,4 +15,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
     flex: 1,
   },
-});
+})

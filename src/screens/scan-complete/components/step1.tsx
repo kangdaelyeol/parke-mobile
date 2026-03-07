@@ -1,10 +1,10 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { FocusableInput, PressableButton } from '@/components';
-import { useScanCompleteContext } from '@/contexts/scan-complete-context';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Text, View } from 'react-native'
+import { FocusableInput, PressableButton } from '@/components'
+import { useScanCompleteContext } from '@/contexts/scan-complete-context'
+import { FONT } from '@/theme/fonts'
 
 export const Step1 = () => {
-  const { state, actions } = useScanCompleteContext();
+  const { state, actions } = useScanCompleteContext()
   return (
     <View style={styles.container}>
       <Text style={styles.title}>기본정보를 입력해주세요!</Text>
@@ -33,8 +33,8 @@ export const Step1 = () => {
         background={['#222', '#444']}
       />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
   btn: {
     marginTop: 10,
   },
-});
+})

@@ -1,19 +1,19 @@
-import { useEffect } from 'react';
-import { ScanCompleteViewModel } from '@scan-complete/types';
-import { useScanCompleteContext } from '@/contexts';
+import { useEffect } from 'react'
+import { ScanCompleteViewModel } from '@scan-complete/types'
+import { useScanCompleteContext } from '@/contexts'
 
 interface ScanCompleteViewModelProps {
-  deviceId: string;
+  deviceId: string
 }
 export const useScanCompleteMainViewModel = ({
   deviceId,
 }: ScanCompleteViewModelProps): ScanCompleteViewModel => {
-  const { actions, state } = useScanCompleteContext();
+  const { actions, state } = useScanCompleteContext()
   useEffect(() => {
-    actions.setDeviceId(deviceId);
-  }, [actions, deviceId]);
+    actions.setDeviceId(deviceId)
+  }, [actions, deviceId])
   return {
     state: { currentStep: state.currentStep },
     actions: {},
-  };
-};
+  }
+}

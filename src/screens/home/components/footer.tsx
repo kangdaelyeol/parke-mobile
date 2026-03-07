@@ -1,11 +1,11 @@
-import { StyleSheet, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { FooterIcon } from '@home/components';
-import { HomeStackNavigationProp } from '@/navigation/types';
-import { footerIconList } from '@home/config/footer.config';
+import { StyleSheet, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { FooterIcon } from '@home/components'
+import { HomeStackNavigationProp } from '@/navigation/types'
+import { footerIconList } from '@home/config/footer.config'
 
 export const Footer = () => {
-  const navigation = useNavigation<HomeStackNavigationProp>();
+  const navigation = useNavigation<HomeStackNavigationProp>()
 
   return (
     <View style={styles.container}>
@@ -20,8 +20,8 @@ export const Footer = () => {
         ))}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -42,4 +42,4 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-});
+})

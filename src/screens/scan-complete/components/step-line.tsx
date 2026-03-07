@@ -1,17 +1,17 @@
-import { StyleSheet, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { useScanCompleteStepLineViewModel } from '@/view-model';
-import { StepLineProps } from '@scan-complete/types';
+import { StyleSheet, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { useScanCompleteStepLineViewModel } from '@/view-model'
+import { StepLineProps } from '@scan-complete/types'
 
 export const StepLine = ({ step }: StepLineProps) => {
-  const { animated } = useScanCompleteStepLineViewModel({ step });
+  const { animated } = useScanCompleteStepLineViewModel({ step })
 
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.activeLine, animated.lineStyle]} />
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -25,4 +25,4 @@ const styles = StyleSheet.create({
     height: '100%',
     backgroundColor: '#396cf8',
   },
-});
+})

@@ -1,29 +1,27 @@
-import { View, StyleSheet, Dimensions } from 'react-native';
-import Animated from 'react-native-reanimated';
-import Svg, { Circle, Line } from 'react-native-svg';
-import { useSearchBleContext } from '@/contexts';
-import { size } from '@search-ble/constants';
-import { useSearchBleRaderViewModel } from '@/view-model';
+import { View, StyleSheet, Dimensions } from 'react-native'
+import Animated from 'react-native-reanimated'
+import Svg, { Circle, Line } from 'react-native-svg'
+import { useSearchBleContext } from '@/contexts'
+import { size } from '@search-ble/constants'
+import { useSearchBleRaderViewModel } from '@/view-model'
 
-const { width } = Dimensions.get('window');
-const SIZE = width * size.WIDTH_RATIO;
-const CENTER = SIZE / 2;
-const RADIUS_OUTER = CENTER - 4;
-const RADIUS_INNER = CENTER / 2;
+const { width } = Dimensions.get('window')
+const SIZE = width * size.WIDTH_RATIO
+const CENTER = SIZE / 2
+const RADIUS_OUTER = CENTER - 4
+const RADIUS_INNER = CENTER / 2
 
 export const Radar = () => {
   const {
     state: { detected },
-  } = useSearchBleContext();
+  } = useSearchBleContext()
 
-  const { animated } = useSearchBleRaderViewModel();
+  const { animated } = useSearchBleRaderViewModel()
 
   return (
     <View style={styles.container}>
       <View style={styles.rader}>
-        <Animated.View
-          style={[animated.lineStyle, styles.absoluteContainer]}
-        >
+        <Animated.View style={[animated.lineStyle, styles.absoluteContainer]}>
           <Svg width={SIZE} height={SIZE}>
             <Line
               x1={CENTER}
@@ -71,17 +69,21 @@ export const Radar = () => {
             />
           </Svg>
         </Animated.View>
-        <Animated.View
-          style={[animated.dotStyle, styles.absoluteContainer]}
-        >
+        <Animated.View style={[animated.dotStyle, styles.absoluteContainer]}>
           <Animated.View
-            style={[styles.dotContainer, animated.dotSpinStyle, styles.absoluteContainer]}
+            style={[
+              styles.dotContainer,
+              animated.dotSpinStyle,
+              styles.absoluteContainer,
+            ]}
           >
             <View style={styles.dot} />
           </Animated.View>
         </Animated.View>
         {detected && (
-          <Animated.View style={[animated.detectedCircleStyle, styles.absoluteContainer]}>
+          <Animated.View
+            style={[animated.detectedCircleStyle, styles.absoluteContainer]}
+          >
             <Svg width={SIZE} height={SIZE}>
               <Circle
                 cx={CENTER}
@@ -96,8 +98,8 @@ export const Radar = () => {
         )}
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -128,4 +130,4 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
   },
-});
+})

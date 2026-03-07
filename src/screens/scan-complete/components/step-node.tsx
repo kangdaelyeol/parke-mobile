@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { FONT } from '@/theme/fonts';
-import { useScanCompleteStepNodeViewModel } from '@/view-model';
+import { StyleSheet, Text, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { FONT } from '@/theme/fonts'
+import { useScanCompleteStepNodeViewModel } from '@/view-model'
 
 interface StepProps {
-  label: string;
-  step: number;
+  label: string
+  step: number
 }
 
 export const StepNode = ({ label, step }: StepProps) => {
-  const { animated, state } = useScanCompleteStepNodeViewModel({ step });
+  const { animated, state } = useScanCompleteStepNodeViewModel({ step })
   return (
     <View style={styles.container}>
       <View style={[styles.dotBox]}>
@@ -35,8 +35,8 @@ export const StepNode = ({ label, step }: StepProps) => {
       </View>
       <Text style={styles.label}>{label}</Text>
     </View>
-  );
-};
+  )
+}
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     color: '#eeeeee',
     fontFamily: FONT.REGULAR,
   },
-});
+})

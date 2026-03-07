@@ -1,13 +1,18 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Loading, PressableButton } from '@/components';
-import { useHomeCardOptionViewModel } from '@/view-model';
-import { HomeCardOptionProps } from '@home/types';
+import { StyleSheet, Text, View } from 'react-native'
+import { Loading, PressableButton } from '@/components'
+import { useHomeCardOptionViewModel } from '@/view-model'
+import { HomeCardOptionProps } from '@home/types'
 
 export const CardOption = ({ card }: HomeCardOptionProps) => {
-  const { state, actions } = useHomeCardOptionViewModel();
+  const { state, actions } = useHomeCardOptionViewModel()
 
-  const { editPress, deletePress, previewPress, scanChangePress, changePhonePress } =
-    actions;
+  const {
+    editPress,
+    deletePress,
+    previewPress,
+    scanChangePress,
+    changePhonePress,
+  } = actions
 
   return (
     <View style={styles.container}>
@@ -61,8 +66,8 @@ export const CardOption = ({ card }: HomeCardOptionProps) => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -99,4 +104,4 @@ const styles = StyleSheet.create({
     flexShrink: 1,
     flexBasis: 0,
   },
-});
+})

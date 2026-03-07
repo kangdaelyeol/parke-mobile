@@ -1,11 +1,11 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native';
-import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo';
-import { Loading } from '@/components';
-import { useLoginViewModel } from '@/view-model';
-import { FONT } from '@/theme/fonts';
+import { View, StyleSheet, Text, Pressable } from 'react-native'
+import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo'
+import { Loading } from '@/components'
+import { useLoginViewModel } from '@/view-model'
+import { FONT } from '@/theme/fonts'
 
 export default function LoginScreen() {
-  const { state, actions } = useLoginViewModel();
+  const { state, actions } = useLoginViewModel()
 
   return (
     <View style={styles.container}>
@@ -28,7 +28,7 @@ export default function LoginScreen() {
         <Text style={styles.designCreditText}>Designed by Originals</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
     fontFamily: FONT.MEDIUM,
     color: '#3b3b3b',
   },
-});
+})

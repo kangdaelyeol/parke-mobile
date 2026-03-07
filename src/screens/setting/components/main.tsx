@@ -1,9 +1,9 @@
-import { StyleSheet, Switch, View, Text } from 'react-native';
-import { useSettingMainViewModel } from '@/view-model';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Switch, View, Text } from 'react-native'
+import { useSettingMainViewModel } from '@/view-model'
+import { FONT } from '@/theme/fonts'
 
 export const Main = () => {
-  const { state, actions } = useSettingMainViewModel();
+  const { state, actions } = useSettingMainViewModel()
   return (
     <View style={styles.main}>
       <View style={styles.list}>
@@ -38,8 +38,8 @@ export const Main = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   title: {
@@ -95,4 +95,4 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     paddingBottom: 15,
   },
-});
+})

@@ -1,48 +1,48 @@
-import { useEffect } from 'react';
-import { Alert, AppState } from 'react-native';
-import notifee, { EventType } from '@notifee/react-native';
+import { useEffect } from 'react'
+import { Alert, AppState } from 'react-native'
+import notifee, { EventType } from '@notifee/react-native'
 import {
   cardService,
   cacheService,
   bleCacheService,
   permissionService,
-} from '@/services';
-import { notifyChangePhoneOnScreen } from '@/utils';
-import { useUserContext } from '@/contexts';
+} from '@/services'
+import { notifyChangePhoneOnScreen } from '@/utils'
+import { useUserContext } from '@/contexts'
 
 export const useAppViewModel = () => {
-  const { setCards } = useUserContext();
+  const { setCards } = useUserContext()
 
   useEffect(() => {
-    permissionService.setupNotifications();
-    cacheService.ensureInitialized();
+    permissionService.setupNotifications()
+    cacheService.ensureInitialized()
 
     const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
-      if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return;
+      if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return
 
-      const actionId = detail.pressAction?.id;
-      const { cardId, newPhone } = detail.notification?.data || {};
+      const actionId = detail.pressAction?.id
+      const { cardId, newPhone } = detail.notification?.data || {}
 
-      if (actionId !== 'confirm' || !newPhone || !cardId) return;
+      if (actionId !== 'confirm' || !newPhone || !cardId) return
 
       try {
-        await cardService.updatePhone(String(cardId), String(newPhone));
+        await cardService.updatePhone(String(cardId), String(newPhone))
       } catch (e) {
-        Alert.alert('오류', '전화번호 변경에 실패했습니다.');
+        Alert.alert('오류', '전화번호 변경에 실패했습니다.')
       }
-      bleCacheService.markAlertLastDeniedAt();
-      bleCacheService.clearAlertPending();
-    });
+      bleCacheService.markAlertLastDeniedAt()
+      bleCacheService.clearAlertPending()
+    })
 
-    return () => unsub();
-  }, []);
+    return () => unsub()
+  }, [])
 
   // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
   useEffect(() => {
     const sub = AppState.addEventListener('change', async state => {
-      if (state !== 'active') return;
+      if (state !== 'active') return
 
-      const pendingList = bleCacheService.getAlertPendingList();
+      const pendingList = bleCacheService.getAlertPendingList()
       pendingList.forEach(pending => {
         if (pending)
           notifyChangePhoneOnScreen(
@@ -50,12 +50,12 @@ export const useAppViewModel = () => {
             pending.cardId,
             pending.phone,
             setCards,
-          );
-      });
+          )
+      })
 
-      bleCacheService.clearAlertPending();
-    });
+      bleCacheService.clearAlertPending()
+    })
 
-    return () => sub.remove();
-  }, [setCards]);
-};
+    return () => sub.remove()
+  }, [setCards])
+}

@@ -4,34 +4,34 @@ import {
   useContext,
   useEffect,
   useState,
-} from 'react';
-import useHeptic from '@/hooks/use-heptic';
+} from 'react'
+import useHeptic from '@/hooks/use-heptic'
 
 interface SearchBLEContextValue {
   state: {
-    rssi: string;
-    detected: boolean;
-  };
+    rssi: string
+    detected: boolean
+  }
   actions: {
-    setRssi: React.Dispatch<React.SetStateAction<string>>;
-  };
+    setRssi: React.Dispatch<React.SetStateAction<string>>
+  }
 }
 
-const searchBLEContext = createContext({} as SearchBLEContextValue);
+const searchBLEContext = createContext({} as SearchBLEContextValue)
 
 export const SearchBleProvider = ({ children }: PropsWithChildren) => {
-  const { setTime, setHepticOption } = useHeptic();
+  const { setTime, setHepticOption } = useHeptic()
 
-  const [detected, setDetected] = useState(false);
-  const [rssi, setRssi] = useState('');
+  const [detected, setDetected] = useState(false)
+  const [rssi, setRssi] = useState('')
 
   useEffect(() => {
     if (!detected && rssi) {
-      setDetected(true);
-      setTime(200);
-      setHepticOption('impactMedium');
+      setDetected(true)
+      setTime(200)
+      setHepticOption('impactMedium')
     }
-  }, [detected, rssi, setTime, setHepticOption]);
+  }, [detected, rssi, setTime, setHepticOption])
 
   return (
     <searchBLEContext.Provider
@@ -44,7 +44,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
     >
       {children}
     </searchBLEContext.Provider>
-  );
-};
+  )
+}
 
-export const useSearchBleContext = () => useContext(searchBLEContext);
+export const useSearchBleContext = () => useContext(searchBLEContext)

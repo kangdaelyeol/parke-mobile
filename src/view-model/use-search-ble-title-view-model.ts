@@ -1,46 +1,42 @@
-import { useEffect, useState } from 'react';
-import {
-  Dimensions,
-  LayoutChangeEvent,
-} from 'react-native';
+import { useEffect, useState } from 'react'
+import { Dimensions, LayoutChangeEvent } from 'react-native'
 import {
   Easing,
   useAnimatedStyle,
   useSharedValue,
   withDelay,
   withTiming,
-} from 'react-native-reanimated';
-import { SearchBleTitleViewModel } from '@search-ble/types';
+} from 'react-native-reanimated'
+import { SearchBleTitleViewModel } from '@search-ble/types'
 
 export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
-  const [titleHeight, setTitleHeight] = useState(0);
-  const titleTransY = useSharedValue(0);
-  const titleOpacity = useSharedValue(0);
-  const subTitleOpacity = useSharedValue(0);
+  const [titleHeight, setTitleHeight] = useState(0)
+  const titleTransY = useSharedValue(0)
+  const titleOpacity = useSharedValue(0)
+  const subTitleOpacity = useSharedValue(0)
 
   useEffect(() => {
-    if (!titleHeight) return;
+    if (!titleHeight) return
 
-    const deviceHeight = Dimensions.get('window').height;
-    titleTransY.value = deviceHeight / 2 - titleHeight * 3.5;
+    const deviceHeight = Dimensions.get('window').height
+    titleTransY.value = deviceHeight / 2 - titleHeight * 3.5
     titleTransY.value = withDelay(
       1500,
       withTiming(0, {
         duration: 1000,
         easing: Easing.bezier(0.33, 1, 0.68, 1),
       }),
-    );
-    titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }));
-    subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }));
-  }, [subTitleOpacity, titleHeight, titleOpacity, titleTransY]);
+    )
+    titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }))
+    subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }))
+  }, [subTitleOpacity, titleHeight, titleOpacity, titleTransY])
 
   const titleLayout = (e: LayoutChangeEvent) => {
-    setTitleHeight(e.nativeEvent.layout.height);
-  };
+    setTitleHeight(e.nativeEvent.layout.height)
+  }
 
   const animated = {
     titleStyle: useAnimatedStyle(() => ({
-      
       opacity: titleOpacity.value,
       transform: [
         {
@@ -51,9 +47,9 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
     subTitleStyle: useAnimatedStyle(() => {
       return {
         opacity: subTitleOpacity.value,
-      };
+      }
     }),
-  };
+  }
 
   return {
     state: {},
@@ -61,5 +57,5 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
     actions: {
       titleLayout,
     },
-  };
-};
+  }
+}

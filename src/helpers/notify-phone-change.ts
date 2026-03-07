@@ -1,5 +1,5 @@
-import notifee from '@notifee/react-native';
-import { convertPhone } from './convert-phone';
+import notifee from '@notifee/react-native'
+import { convertPhone } from './convert-phone'
 
 // 알림 띄우기
 export const notifyPhoneChange = (
@@ -25,5 +25,5 @@ export const notifyPhoneChange = (
         { title: '취소', pressAction: { id: 'cancel' } },
       ],
     },
-  });
-};
+  })
+}

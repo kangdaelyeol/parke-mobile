@@ -14,4 +14,4 @@ export const footerIconList = [
     label: '설정',
     iconName: 'gear',
   },
-] as const;
+] as const

@@ -5,26 +5,23 @@ import {
   ScrollView,
   StyleSheet,
   View,
-} from 'react-native';
-import { RouteProp } from '@react-navigation/native';
-import { ScanCompleteStackParamList } from '@/navigation/types';
-import {
-  ScanCompleteContextProvider,
-  useScanCompleteContext,
-} from '@/contexts';
-import { Main, ProgressStepper, Card, QrScan } from '@scan-complete/components';
-import { Loading } from '@/components';
+} from 'react-native'
+import { RouteProp } from '@react-navigation/native'
+import { ScanCompleteStackParamList } from '@/navigation/types'
+import { ScanCompleteContextProvider, useScanCompleteContext } from '@/contexts'
+import { Main, ProgressStepper, Card, QrScan } from '@scan-complete/components'
+import { Loading } from '@/components'
 
 type ScanCompleteProps = {
-  route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>;
-};
+  route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>
+}
 
 type ScanCompleteContentProps = {
-  deviceId: string;
-};
+  deviceId: string
+}
 
 const ScanCompleteContent = ({ deviceId }: ScanCompleteContentProps) => {
-  const { state } = useScanCompleteContext();
+  const { state } = useScanCompleteContext()
 
   return (
     <>
@@ -36,11 +33,11 @@ const ScanCompleteContent = ({ deviceId }: ScanCompleteContentProps) => {
         <Main deviceId={deviceId} />
       </View>
     </>
-  );
-};
+  )
+}
 
 export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
-  const deviceId = route?.params?.value ?? 'abc';
+  const deviceId = route?.params?.value ?? 'abc'
 
   return (
     <KeyboardAvoidingView
@@ -53,7 +50,7 @@ export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
         </ScanCompleteContextProvider>
       </ScrollView>
     </KeyboardAvoidingView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -68,4 +65,4 @@ const styles = StyleSheet.create({
     maxWidth: 380,
     marginHorizontal: 'auto',
   },
-});
+})

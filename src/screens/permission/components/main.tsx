@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Item } from '@permission/components';
-import { selectablePermissionItemList } from '@permission/config/main.config';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Text, View } from 'react-native'
+import { Item } from '@permission/components'
+import { selectablePermissionItemList } from '@permission/config/main.config'
+import { FONT } from '@/theme/fonts'
 
 export const Main = () => {
   return (
@@ -27,8 +27,8 @@ export const Main = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     gap: 15,
     marginTop: 20,
   },
-});
+})

@@ -1,23 +1,23 @@
-import { ViewModel } from '@/types/common';
+import { ViewModel } from '@/types/common'
 
 interface MainActions {
-  nicknameInput: (v: string) => void;
-  phoneInput: (v: string) => void;
-  savePress: () => Promise<void>;
-  logoutPress: () => Promise<void>;
-  deletePress: () => Promise<void>;
+  nicknameInput: (v: string) => void
+  phoneInput: (v: string) => void
+  savePress: () => Promise<void>
+  logoutPress: () => Promise<void>
+  deletePress: () => Promise<void>
 }
 
 interface MainState {
-  loading: boolean;
-  nickname: string;
-  phone: string;
+  loading: boolean
+  nickname: string
+  phone: string
 }
 
 interface HeaderActions {
-  backPress: () => void;
+  backPress: () => void
 }
 
-export type ProfileHeaderViewModel = ViewModel<{}, HeaderActions>;
+export type ProfileHeaderViewModel = ViewModel<{}, HeaderActions>
 
-export type ProfileMainViewModel = ViewModel<MainState, MainActions>;
+export type ProfileMainViewModel = ViewModel<MainState, MainActions>

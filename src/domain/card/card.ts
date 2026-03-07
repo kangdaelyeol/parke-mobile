@@ -1,5 +1,5 @@
-import { CardDto } from './card-dto';
-import { serverTimestamp } from 'firebase/database';
+import { CardDto } from './card-dto'
+import { serverTimestamp } from 'firebase/database'
 
 export class Card {
   private constructor(
@@ -15,16 +15,16 @@ export class Card {
   ) {}
 
   static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
-    const id = props.id ?? '';
-    const title = props.title.trim();
+    const id = props.id ?? ''
+    const title = props.title.trim()
 
-    const phone = props.phone ?? '';
-    const message = props.message ?? '';
-    const scan = !!props.scan;
-    const updatedAt = props.updatedAt ?? serverTimestamp();
-    const updatedBy = props.updatedBy ?? '';
-    const deviceId = props.deviceId ?? '';
-    const ownerList = props.ownerList ?? [];
+    const phone = props.phone ?? ''
+    const message = props.message ?? ''
+    const scan = !!props.scan
+    const updatedAt = props.updatedAt ?? serverTimestamp()
+    const updatedBy = props.updatedBy ?? ''
+    const deviceId = props.deviceId ?? ''
+    const ownerList = props.ownerList ?? []
 
     return new Card(
       id,
@@ -36,11 +36,11 @@ export class Card {
       updatedBy,
       deviceId,
       ownerList,
-    );
+    )
   }
 
   static fromDto(dto: CardDto): Card {
-    return Card.create(dto);
+    return Card.create(dto)
   }
 
   toDto(): CardDto {
@@ -54,6 +54,6 @@ export class Card {
       updatedBy: this.updatedBy,
       deviceId: this.deviceId,
       ownerList: this.ownerList,
-    };
+    }
   }
 }

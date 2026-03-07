@@ -1,10 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useProfileHeaderViewModel } from '@/view-model';
-import { FONT } from '@/theme/fonts';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { useProfileHeaderViewModel } from '@/view-model'
+import { FONT } from '@/theme/fonts'
 
 export const Header = () => {
-  const { actions } = useProfileHeaderViewModel();
+  const { actions } = useProfileHeaderViewModel()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -21,8 +21,8 @@ export const Header = () => {
         <Text style={styles.title}>Profile</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
   btnPressed: {
     color: '#666',
   },
-});
+})

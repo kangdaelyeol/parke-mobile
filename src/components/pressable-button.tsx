@@ -1,4 +1,4 @@
-import { FONT } from '@/theme/fonts';
+import { FONT } from '@/theme/fonts'
 import {
   ColorValue,
   Pressable,
@@ -8,15 +8,15 @@ import {
   TextStyle,
   View,
   ViewStyle,
-} from 'react-native';
+} from 'react-native'
 
 interface PressableButtonProps {
-  onPress: () => void;
-  background: ColorValue[];
-  title: string;
-  style?: StyleProp<ViewStyle>;
-  textStyle?: StyleProp<TextStyle>;
-  pressableStyle?: StyleProp<ViewStyle>;
+  onPress: () => void
+  background: ColorValue[]
+  title: string
+  style?: StyleProp<ViewStyle>
+  textStyle?: StyleProp<TextStyle>
+  pressableStyle?: StyleProp<ViewStyle>
 }
 
 export const PressableButton = ({
@@ -42,8 +42,8 @@ export const PressableButton = ({
         </View>
       )}
     </Pressable>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   button: {
@@ -56,4 +56,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: '#d3d3d3',
   },
-});
+})

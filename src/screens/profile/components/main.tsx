@@ -1,9 +1,9 @@
-import { StyleSheet, View } from 'react-native';
-import { FocusableInput, Loading, PressableButton } from '@/components';
-import { useProfileMainViewModel } from '@/view-model';
+import { StyleSheet, View } from 'react-native'
+import { FocusableInput, Loading, PressableButton } from '@/components'
+import { useProfileMainViewModel } from '@/view-model'
 
 export const Main = () => {
-  const { state, actions } = useProfileMainViewModel();
+  const { state, actions } = useProfileMainViewModel()
   return (
     <View>
       <View style={styles.wrapper}>
@@ -41,8 +41,8 @@ export const Main = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -62,4 +62,4 @@ const styles = StyleSheet.create({
     marginTop: 35,
     gap: 15,
   },
-});
+})

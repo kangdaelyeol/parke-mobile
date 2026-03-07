@@ -1,9 +1,9 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { FONT } from '@/theme/fonts';
-import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { FONT } from '@/theme/fonts'
+import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model'
 
-export const Footer = ()=> {
-  const { actions } = usePermissionFooterViewModel();
+export const Footer = () => {
+  const { actions } = usePermissionFooterViewModel()
   return (
     <View style={styles.container}>
       <Text style={styles.description} lineBreakStrategyIOS="hangul-word">
@@ -19,8 +19,8 @@ export const Footer = ()=> {
         )}
       </Pressable>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -50,4 +50,4 @@ const styles = StyleSheet.create({
     fontFamily: FONT.REGULAR,
     lineHeight: 14,
   },
-});
+})

@@ -1,11 +1,11 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { FocusableInput, PressableButton } from '@/components';
-import { useScanCompleteContext } from '@/contexts/scan-complete-context';
-import { FONT } from '@/theme/fonts';
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { FocusableInput, PressableButton } from '@/components'
+import { useScanCompleteContext } from '@/contexts/scan-complete-context'
+import { FONT } from '@/theme/fonts'
 
 export const Step2 = () => {
-  const { actions, state } = useScanCompleteContext();
+  const { actions, state } = useScanCompleteContext()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -63,8 +63,8 @@ export const Step2 = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {},
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
   button: {
     flex: 1,
   },
-});
+})

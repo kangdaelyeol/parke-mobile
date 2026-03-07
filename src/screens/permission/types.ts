@@ -1,7 +1,7 @@
-import { ViewModel } from '@/types/common';
+import { ViewModel } from '@/types/common'
 
 interface FooterActions {
-  onConfirmPress: () => Promise<void>;
+  onConfirmPress: () => Promise<void>
 }
 
-export type PermissionFooterViewModel = ViewModel<{}, FooterActions>;
+export type PermissionFooterViewModel = ViewModel<{}, FooterActions>

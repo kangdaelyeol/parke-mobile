@@ -1,13 +1,13 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import Animated from 'react-native-reanimated';
-import ReactNativeHapticFeedback from 'react-native-haptic-feedback';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants';
-import { useHomeEmptyCardViewModel } from '@/view-model';
-import { HomeEmptyCardProps } from '@home/types';
+import { Pressable, StyleSheet, View } from 'react-native'
+import Animated from 'react-native-reanimated'
+import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import { useHomeEmptyCardViewModel } from '@/view-model'
+import { HomeEmptyCardProps } from '@home/types'
 
 export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
-  const { animated, actions } = useHomeEmptyCardViewModel(idx);
+  const { animated, actions } = useHomeEmptyCardViewModel(idx)
 
   return (
     <Animated.View style={[styles.container, animated.cardStyle]}>
@@ -23,15 +23,15 @@ export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
       </View>
       <Pressable onPress={actions.cardPress}>
         {({ pressed }) => {
-          pressed && ReactNativeHapticFeedback.trigger('selection');
+          pressed && ReactNativeHapticFeedback.trigger('selection')
           return (
             <View style={[styles.emptyCard, pressed && styles.cardPressed]} />
-          );
+          )
         }}
       </Pressable>
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -70,4 +70,4 @@ const styles = StyleSheet.create({
     margin: 'auto',
   },
   cardPressed: { opacity: 0.4 },
-});
+})

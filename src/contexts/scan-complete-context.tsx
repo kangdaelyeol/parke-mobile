@@ -5,62 +5,62 @@ import {
   useEffect,
   useMemo,
   useState,
-} from 'react';
-import { serverTimestamp } from 'firebase/database';
-import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useUserContext } from '@/contexts';
-import { convertPhone } from '@/helpers';
-import { extractNumber } from '@/utils';
-import { cardService, userService } from '@/services';
-import { ScanCompleteStackNavigationProp } from '@/navigation/types';
-import { ScanCompleteContextValue } from '@scan-complete/types';
+} from 'react'
+import { serverTimestamp } from 'firebase/database'
+import { Alert } from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { useUserContext } from '@/contexts'
+import { convertPhone } from '@/helpers'
+import { extractNumber } from '@/utils'
+import { cardService, userService } from '@/services'
+import { ScanCompleteStackNavigationProp } from '@/navigation/types'
+import { ScanCompleteContextValue } from '@scan-complete/types'
 
-const ScanCompleteContext = createContext({} as ScanCompleteContextValue);
+const ScanCompleteContext = createContext({} as ScanCompleteContextValue)
 
 export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
-  const { user, setUser } = useUserContext();
+  const { user, setUser } = useUserContext()
 
-  const [phone, setPhone] = useState('');
-  const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`);
-  const [message, setMessage] = useState('');
-  const [serial, setSerial] = useState('');
-  const [currentStep, setCurrentStep] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [scanPage, setScanPage] = useState(false);
-  const [serialInput, setSerialInput] = useState(false);
-  const [serialScanned, setSerialScanned] = useState(false);
-  const [deviceId, setDeviceId] = useState('');
+  const [phone, setPhone] = useState('')
+  const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`)
+  const [message, setMessage] = useState('')
+  const [serial, setSerial] = useState('')
+  const [currentStep, setCurrentStep] = useState(0)
+  const [loading, setLoading] = useState(false)
+  const [scanPage, setScanPage] = useState(false)
+  const [serialInput, setSerialInput] = useState(false)
+  const [serialScanned, setSerialScanned] = useState(false)
+  const [deviceId, setDeviceId] = useState('')
 
-  const navigation = useNavigation<ScanCompleteStackNavigationProp>();
+  const navigation = useNavigation<ScanCompleteStackNavigationProp>()
 
   const actions = useMemo(
     () => ({
       phoneInput: (v: string) => {
-        setPhone(extractNumber(v));
+        setPhone(extractNumber(v))
       },
       nameInput: (v: string) => {
-        setName(v);
+        setName(v)
       },
       messageInput: (v: string) => {
-        setMessage(v);
+        setMessage(v)
       },
       serialInput: (v: string) => {
-        setSerial(v);
+        setSerial(v)
       },
       nextPress: () => {
-        setCurrentStep(prev => prev + 1);
+        setCurrentStep(prev => prev + 1)
       },
       prevPress: () => {
-        setCurrentStep(prev => prev - 1);
+        setCurrentStep(prev => prev - 1)
       },
       savePress: async () => {
         if (serial.trim() === '')
-          return Alert.alert('시리얼 번호를 입력해주세요.');
+          return Alert.alert('시리얼 번호를 입력해주세요.')
 
-        setLoading(true);
+        setLoading(true)
 
         const cardRes = await cardService.create({
           id: serial,
@@ -72,43 +72,43 @@ export const ScanCompleteContextProvider = ({
           scan: true,
           deviceId,
           ownerList: [user.id],
-        });
+        })
 
         if (!cardRes) {
-          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-          return setLoading(false);
+          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+          return setLoading(false)
         }
 
-        const newCardIdList = [...user.cardIdList, serial];
+        const newCardIdList = [...user.cardIdList, serial]
 
         const userRes = await userService.updateCardIdList(
           user.id,
           newCardIdList,
-        );
+        )
 
         if (!userRes) {
-          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
-          return setLoading(false);
+          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+          return setLoading(false)
         }
 
-        setUser(prev => ({ ...prev, cardIdList: newCardIdList }));
+        setUser(prev => ({ ...prev, cardIdList: newCardIdList }))
 
-        Alert.alert('저장 성공!');
-        navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+        Alert.alert('저장 성공!')
+        navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
       },
       scanPress: () => {
-        setScanPage(true);
+        setScanPage(true)
       },
       scanBackPress: () => {
-        setScanPage(false);
+        setScanPage(false)
       },
       serialInputPress: () => {
-        setSerialInput(true);
+        setSerialInput(true)
       },
       serialScan: (serialNum: string) => {
-        setSerial(serialNum);
-        setScanPage(false);
-        setSerialScanned(true);
+        setSerial(serialNum)
+        setScanPage(false)
+        setSerialScanned(true)
       },
       setDeviceId,
     }),
@@ -124,12 +124,12 @@ export const ScanCompleteContextProvider = ({
       user.nickname,
       deviceId,
     ],
-  );
+  )
 
   useEffect(() => {
-    if (!serialScanned) return;
-    actions.savePress();
-  }, [actions, serialScanned]);
+    if (!serialScanned) return
+    actions.savePress()
+  }, [actions, serialScanned])
 
   const state = {
     phone: convertPhone(phone),
@@ -140,17 +140,17 @@ export const ScanCompleteContextProvider = ({
     loading,
     scanPage,
     serialInput,
-  };
+  }
 
   useEffect(() => {
-    setPhone(user.phone);
-  }, [user.phone, setPhone]);
+    setPhone(user.phone)
+  }, [user.phone, setPhone])
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>
       {children}
     </ScanCompleteContext.Provider>
-  );
-};
+  )
+}
 
-export const useScanCompleteContext = () => useContext(ScanCompleteContext);
+export const useScanCompleteContext = () => useContext(ScanCompleteContext)

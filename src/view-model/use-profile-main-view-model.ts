@@ -1,50 +1,49 @@
-import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
-import { Alert } from 'react-native';
-import { useUserContext } from '@/contexts';
-import { convertPhone } from '@/helpers';
-import { ProfileStackNavigationProp } from '@/navigation/types';
-import { authService, userService } from '@/services';
-import { extractNumber } from '@/utils';
-import { ProfileMainViewModel } from '@profile/types';
+import { useNavigation } from '@react-navigation/native'
+import { useState } from 'react'
+import { Alert } from 'react-native'
+import { useUserContext } from '@/contexts'
+import { convertPhone } from '@/helpers'
+import { ProfileStackNavigationProp } from '@/navigation/types'
+import { authService, userService } from '@/services'
+import { extractNumber } from '@/utils'
+import { ProfileMainViewModel } from '@profile/types'
 
 export const useProfileMainViewModel = (): ProfileMainViewModel => {
-  const { user, setUser } = useUserContext();
-  const [nickname, setNickname] = useState(user.nickname);
-  const [phone, setPhone] = useState(user.phone);
-  const [loading, setLoading] = useState(false);
+  const { user, setUser } = useUserContext()
+  const [nickname, setNickname] = useState(user.nickname)
+  const [phone, setPhone] = useState(user.phone)
+  const [loading, setLoading] = useState(false)
 
-  const navigation = useNavigation<ProfileStackNavigationProp>();
+  const navigation = useNavigation<ProfileStackNavigationProp>()
 
   const actions = {
     phoneInput: (val: string) => {
-      setPhone(extractNumber(val));
+      setPhone(extractNumber(val))
     },
 
     nicknameInput: (val: string) => setNickname(val),
 
     savePress: async () => {
-      if (nickname.trim() === '') return Alert.alert('닉네임을 입력해주세요.');
+      if (nickname.trim() === '') return Alert.alert('닉네임을 입력해주세요.')
 
-      if (phone.trim() === '')
-        return Alert.alert('휴대폰 번호를 입력해주세요.');
+      if (phone.trim() === '') return Alert.alert('휴대폰 번호를 입력해주세요.')
 
-      setLoading(true);
+      setLoading(true)
       const res = userService.updateNicknameAndPhone(
         user.id,
         nickname.trim(),
         phone,
-      );
+      )
       if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
-        return setLoading(false);
+        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+        return setLoading(false)
       }
       setUser(prev => ({
         ...prev,
         nickname,
         phone,
-      }));
-      navigation.goBack();
+      }))
+      navigation.goBack()
     },
 
     logoutPress: async () => {
@@ -52,14 +51,14 @@ export const useProfileMainViewModel = (): ProfileMainViewModel => {
         {
           text: '예',
           onPress: async () => {
-            setLoading(true);
+            setLoading(true)
             try {
-              await authService.kakaoLogout();
-              await authService.firebaseSignOut();
-              return navigation.navigate('Login');
+              await authService.kakaoLogout()
+              await authService.firebaseSignOut()
+              return navigation.navigate('Login')
             } catch (e) {
-              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
-              return setLoading(false);
+              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+              return setLoading(false)
             }
           },
         },
@@ -67,7 +66,7 @@ export const useProfileMainViewModel = (): ProfileMainViewModel => {
           text: '아니오',
           style: 'cancel',
         },
-      ]);
+      ])
     },
     deletePress: async () => {
       Alert.alert('Delete User', '회원탈퇴 하시겠습니까?', [
@@ -75,25 +74,25 @@ export const useProfileMainViewModel = (): ProfileMainViewModel => {
           text: '예',
           onPress: async () => {
             try {
-              setLoading(true);
-              const res = await userService.delete(user.id);
+              setLoading(true)
+              const res = await userService.delete(user.id)
               if (res) {
-                await authService.kakaoLogout();
-                await authService.firebaseDeleteUser();
-                return navigation.replace('Login');
+                await authService.kakaoLogout()
+                await authService.firebaseDeleteUser()
+                return navigation.replace('Login')
               }
-              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
-              return setLoading(false);
+              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+              return setLoading(false)
             } catch (e) {
-              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.');
-              return setLoading(false);
+              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+              return setLoading(false)
             }
           },
         },
         { text: '아니오', style: 'cancel' },
-      ]);
+      ])
     },
-  };
+  }
 
   return {
     state: {
@@ -102,5 +101,5 @@ export const useProfileMainViewModel = (): ProfileMainViewModel => {
       phone: convertPhone(phone),
     },
     actions: actions,
-  };
-};
+  }
+}

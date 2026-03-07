@@ -1,9 +1,9 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6';
-import { useSearchBleHeaderViewModel } from '@/view-model';
+import { Pressable, StyleSheet, View } from 'react-native'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { useSearchBleHeaderViewModel } from '@/view-model'
 
 export const Header = () => {
-  const { actions } = useSearchBleHeaderViewModel();
+  const { actions } = useSearchBleHeaderViewModel()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
@@ -19,8 +19,8 @@ export const Header = () => {
         </Pressable>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -45,4 +45,4 @@ const styles = StyleSheet.create({
   btnPressed: {
     color: '#666',
   },
-});
+})

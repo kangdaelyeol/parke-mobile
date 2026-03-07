@@ -1,14 +1,14 @@
-import { StyleSheet, Text } from 'react-native';
-import Animated from 'react-native-reanimated';
-import { useSearchBleContext } from '@/contexts';
-import { useSearchBleTitleViewModel } from '@/view-model';
-import { title, subTitle } from '@search-ble/constants';
-import { FONT } from '@/theme/fonts';
+import { StyleSheet, Text } from 'react-native'
+import Animated from 'react-native-reanimated'
+import { useSearchBleContext } from '@/contexts'
+import { useSearchBleTitleViewModel } from '@/view-model'
+import { title, subTitle } from '@search-ble/constants'
+import { FONT } from '@/theme/fonts'
 export const Title = () => {
   const {
     state: { detected },
-  } = useSearchBleContext();
-  const { animated, actions } = useSearchBleTitleViewModel();
+  } = useSearchBleContext()
+  const { animated, actions } = useSearchBleTitleViewModel()
 
   return (
     <>
@@ -23,8 +23,8 @@ export const Title = () => {
         </Text>
       </Animated.View>
     </>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   titleContainer: {
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
     fontFamily: FONT.REGULAR,
     marginTop: 15,
   },
-});
+})

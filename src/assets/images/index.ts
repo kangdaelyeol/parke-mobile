@@ -1,1 +1,1 @@
-export { default as KakaoLogin } from './kakao_login_medium_wide.png';
+export { default as KakaoLogin } from './kakao_login_medium_wide.png'

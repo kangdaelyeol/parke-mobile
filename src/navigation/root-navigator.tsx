@@ -8,11 +8,11 @@ import {
   SearchBLEScreen,
   ScanCompleteScreen,
   PermissionScreen,
-} from '@/screens';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { RootStackParamList } from './types';
+} from '@/screens'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import { RootStackParamList } from './types'
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 export default function RootNavigator() {
   return (
@@ -29,5 +29,5 @@ export default function RootNavigator() {
       <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />
     </Stack.Navigator>
-  );
+  )
 }
