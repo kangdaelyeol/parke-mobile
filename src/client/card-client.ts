@@ -1,4 +1,5 @@
-import { db } from '@/firebaseApp';
+import { convertPhone } from '@/helpers'
+import { db } from '@/firebaseApp'
 import {
   get,
   ref,
@@ -6,14 +7,15 @@ import {
   serverTimestamp,
   set,
   update,
-} from '@react-native-firebase/database';
-import { Card, CardDto } from '@/domain/card';
+} from '@react-native-firebase/database'
+import { Card, CardDto } from '@/domain/card'
+import { CardClient } from './types'
 
-export const cardClient = {
-  create: async (dto: CardDto): Promise<CardDto | null> => {
-    const entity = Card.fromDto(dto);
+export const cardClient: CardClient = {
+  create: async dto => {
+    const entity = Card.fromDto(dto)
     const { id, title, phone, message, scan, updatedBy, deviceId, ownerList } =
-      entity.toDto();
+      entity.toDto()
     try {
       await set(ref(db, `card/${id}`), {
         id,
@@ -25,59 +27,46 @@ export const cardClient = {
         updatedBy,
         deviceId,
         ownerList,
-      });
+      })
     } catch (e) {
-      console.log(e);
-      return null;
+      console.log(e)
+      return null
     }
-    return dto;
+    return dto
   },
-  getById: async (id: string): Promise<CardDto | null> => {
+  getById: async id => {
     try {
-      const snapShot = await get(ref(db, `/card/${id}`));
-      if (!snapShot.exists()) return null;
+      const snapShot = await get(ref(db, `/card/${id}`))
+      if (!snapShot.exists()) return null
 
-      const card = snapShot.val() as CardDto;
-      return { ...card, phone: String(card.phone) };
+      const card = snapShot.val() as CardDto
+      return { ...card, phone: convertPhone(card.phone) }
     } catch (e) {
-      console.log(e);
-      return null;
+      console.log(e)
+      return null
     }
   },
-  deleteById: async (id: string): Promise<boolean> => {
+  deleteById: async id => {
     try {
-      await remove(ref(db, `card/${id}`));
+      await remove(ref(db, `card/${id}`))
     } catch (e) {
-      console.log(e);
-      return false;
+      console.log(e)
+      return false
     }
-    return true;
+    return true
   },
-  update: async (
-    dto: { id: string } & Partial<
-      Pick<
-        CardDto,
-        | 'scan'
-        | 'message'
-        | 'phone'
-        | 'title'
-        | 'updatedAt'
-        | 'updatedBy'
-        | 'ownerList'
-      >
-    >,
-  ): Promise<boolean> => {
-    const { id } = dto;
+  update: async dto => {
+    const { id } = dto
 
     try {
       await update(ref(db, `card/${id}`), {
         ...dto,
         updatedAt: serverTimestamp(),
-      });
-      return true;
+      })
+      return true
     } catch (e) {
-      console.log(e);
-      return false;
+      console.log(e)
+      return false
     }
   },
-};
+}
