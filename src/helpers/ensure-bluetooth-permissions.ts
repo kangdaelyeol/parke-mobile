@@ -1,6 +1,7 @@
 import { PermissionsAndroid, Platform } from 'react-native';
+import { PERMISSIONS, request, RESULTS } from 'react-native-permissions';
 
-export const ensurePermissions = async (): Promise<Boolean> => {
+export const ensureBluetoothPermissions = async (): Promise<Boolean> => {
   if (Platform.OS === 'android') {
     if (Platform.Version >= 31) {
       const res = await PermissionsAndroid.requestMultiple([
@@ -16,7 +17,8 @@ export const ensurePermissions = async (): Promise<Boolean> => {
       );
       return res === PermissionsAndroid.RESULTS.GRANTED;
     }
+  } else {
+    const res = await request(PERMISSIONS.IOS.BLUETOOTH);
+    return res === RESULTS.GRANTED;
   }
-
-  return true;
 };

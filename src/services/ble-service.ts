@@ -22,27 +22,6 @@ import { extractNumber, notifyChangePhoneOnScreen } from '@/utils';
 import { CardDto } from '@/domain/card';
 import { UserDto } from '@/domain/user';
 
-const g = globalThis as any;
-
-let scanSession = 0;
-
-let isBackgroundScanning = false;
-let isSearching = false;
-
-const isCandidate = (dev: Device) =>
-  !!dev && (dev.name ?? '').startsWith(BLE_DEVICE_NAME);
-
-const bleManager = new BleManager({
-  restoreStateIdentifier: 'com.app.ble',
-  restoreStateFunction: async _restored => {
-    try {
-      g.__BLE_SHOULD_START_SCAN__ = true;
-    } catch (err) {
-      console.warn('Restore callback before JS ready:', err);
-    }
-  },
-});
-
 interface StartSearchBleProps {
   navigation: SearchBleStackNavigationProp;
   setRssi: React.Dispatch<React.SetStateAction<string>>;
@@ -55,13 +34,48 @@ interface StartBackgroundScanProps {
   setCards: React.Dispatch<React.SetStateAction<CardDto[]>>;
 }
 
+const g = globalThis as any;
+
+let scanSession = 0;
+
+let isBackgroundScanning = false;
+let isSearching = false;
+
+const isCandidate = (dev: Device) =>
+  !!dev && (dev.name ?? '').startsWith(BLE_DEVICE_NAME);
+
+const isBleManager = (manager: any): manager is BleManager => {
+  return manager instanceof BleManager;
+};
+
+let bleManager: null | BleManager = null;
+
+console.log('ble');
+
 export const bleService = {
-  getManager: () => bleManager,
+  initManager: () => {
+    bleManager = new BleManager({
+      restoreStateIdentifier: 'com.app.ble',
+      restoreStateFunction: async _restored => {
+        try {
+          g.__BLE_SHOULD_START_SCAN__ = true;
+        } catch (err) {
+          console.warn('Restore callback before JS ready:', err);
+        }
+      },
+    });
+  },
+  getManager: () => {
+    if (!bleManager) bleService.initManager();
+    return bleManager;
+  },
   getSession: () => scanSession,
   updateSession: () => scanSession++,
   stopScan: async (capturedSession: number) => {
     if (bleService.getSession() !== capturedSession) return;
     console.log('stopScanning');
+    if (!bleManager) bleService.initManager();
+    if (!isBleManager(bleManager)) return;
     await bleManager.stopDeviceScan();
     isSearching = false;
     isBackgroundScanning = false;
@@ -71,6 +85,8 @@ export const bleService = {
     user,
     setCards,
   }: StartBackgroundScanProps) => {
+    if (!bleManager) bleService.initManager();
+    if (!isBleManager(bleManager)) return;
     console.log('try background scan');
     if (isBackgroundScanning) return;
     isBackgroundScanning = true;
@@ -184,6 +200,8 @@ export const bleService = {
     setRssi,
     cards,
   }: StartSearchBleProps) => {
+    if (!bleManager) bleService.initManager();
+    if (!isBleManager(bleManager)) return;
     console.log('try search ble');
     if (isSearching) return;
     isSearching = true;
@@ -196,8 +214,8 @@ export const bleService = {
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return;
-
         if (!isCandidate(device)) return;
+        if (!isBleManager(bleManager)) return;
 
         setRssi(String(device.rssi));
 
@@ -207,6 +225,7 @@ export const bleService = {
 
         try {
           console.log('a');
+          
           await bleManager.stopDeviceScan();
           console.log('b');
 
@@ -249,6 +268,7 @@ export const bleService = {
     );
   },
   getState: () => {
+    if (!bleManager) bleService.initManager();
     return { isBackgroundScanning, isSearching };
   },
 };
