@@ -95,11 +95,17 @@ export interface HomeEmptyCardProps {
 }
 
 export interface HomeFooterProps {
+  iconSize: number
   label: string
-  iconName: any
+  iconName: 'user' | 'qrcode' | 'gear'
   onPress: () => void
 }
 
 export interface HomeSettingCardProps {
   card: CardDto
+}
+
+export interface IllustrationSizeProps {
+  width?: number
+  height?: number
 }

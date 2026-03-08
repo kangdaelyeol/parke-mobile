@@ -12,6 +12,7 @@ export const Footer = () => {
       <View style={styles.wrapper}>
         {footerIconList.map(icon => (
           <FooterIcon
+            iconSize={27}
             key={icon.key}
             iconName={icon.iconName}
             label={icon.label}

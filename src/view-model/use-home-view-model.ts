@@ -39,8 +39,7 @@ export const useHomeViewModel = () => {
       let intervalId = 0
       ;(async () => {
         const settings = settingService.getSettings()
-        if (!settings.active) return
-        if (cards.length === 0) return
+        if (!settings.active || cards.length === 0) return setScanning(false)
 
         const bluetoothPermission =
           await permissionService.ensureBluetoothPermission()

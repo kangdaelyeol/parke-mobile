@@ -11,5 +11,5 @@ export const DM_SANS = {
 export const DM_MONO = {
   REGULAR: 'DMMono-Regular',
   MEDIUM: 'DMMono-Medium',
-  BOLD: 'DMMono-Bold',
+  LIGHT: 'DMMono-Light',
 }

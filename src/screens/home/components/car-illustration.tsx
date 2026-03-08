@@ -1,12 +1,10 @@
 import Svg, { Rect, Path, Circle } from 'react-native-svg'
-interface CarIllustrationProps {
-  width?: number
-  height?: number
-}
+import { IllustrationSizeProps } from '@home/types'
+
 export const CarIllustration = ({
   width = 120,
   height = 120,
-}: CarIllustrationProps) => {
+}: IllustrationSizeProps) => {
   return (
     <Svg width={width} height={height} viewBox="0 0 120 120" fill="none">
       {/* Car silhouette */}
