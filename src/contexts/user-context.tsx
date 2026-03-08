@@ -15,7 +15,7 @@ const isCardList = (v: any): v is CardDto[] => {
   return v !== null
 }
 
-interface UserContextValueType {
+interface UserContextValue {
   cards: CardDto[]
   user: UserDto
   setUser: React.Dispatch<React.SetStateAction<UserDto>>
@@ -23,7 +23,7 @@ interface UserContextValueType {
   syncCardList: () => Promise<void>
 }
 
-const userContext = createContext({} as UserContextValueType)
+const userContext = createContext({} as UserContextValue)
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   // temp data

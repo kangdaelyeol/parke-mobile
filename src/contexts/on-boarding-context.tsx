@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 import { SharedValue, useSharedValue } from 'react-native-reanimated'
 
-export interface OnBoardingContextProps {
+export interface OnBoardingContextValue {
   pageIdx: number
   setPageIdx: React.Dispatch<React.SetStateAction<number>>
   sliderTranslateX: SharedValue<number>
@@ -16,8 +16,8 @@ export interface OnBoardingContextProps {
   setHasSeenOnBoarding: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const onBoardingContext = createContext<OnBoardingContextProps>(
-  {} as OnBoardingContextProps,
+const onBoardingContext = createContext<OnBoardingContextValue>(
+  {} as OnBoardingContextValue,
 )
 
 export const OnBoardingContextProvider = ({ children }: PropsWithChildren) => {

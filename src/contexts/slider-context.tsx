@@ -19,14 +19,14 @@ interface SliderController {
   goToIdx: (idx: number) => void
 }
 
-interface SliderContext {
+interface SliderContextValue {
   panGesture: PanGesture
   moverStyle: StyleProp<ViewStyle>
   sliderController: SliderController
   selectedCardIdx: number
 }
 
-const sliderContext = createContext({} as SliderContext)
+const sliderContext = createContext({} as SliderContextValue)
 
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const { cards } = useUserContext()

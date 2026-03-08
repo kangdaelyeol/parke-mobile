@@ -195,15 +195,11 @@ export const bleService: BleService = {
         console.log('progress')
 
         try {
-          console.log('a')
-
           await bleManager.stopDeviceScan()
-          console.log('b')
 
           const deviceId = getDeviceId(device.manufacturerData as string)
 
           if (deviceId !== 'UNSET') {
-            console.log('c')
             console.log(device)
             if (cards.find(c => c.deviceId === deviceId)) {
               Alert.alert('이미 등록된 장치입니다.')

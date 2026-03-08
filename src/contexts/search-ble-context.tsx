@@ -7,7 +7,7 @@ import {
 } from 'react'
 import useHeptic from '@/hooks/use-heptic'
 
-interface SearchBLEContextValue {
+interface SearchBleContextValue {
   state: {
     rssi: string
     detected: boolean
@@ -17,7 +17,7 @@ interface SearchBLEContextValue {
   }
 }
 
-const searchBLEContext = createContext({} as SearchBLEContextValue)
+const SearchBleContext = createContext({} as SearchBleContextValue)
 
 export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   const { setTime, setHepticOption } = useHeptic()
@@ -34,7 +34,7 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
   }, [detected, rssi, setTime, setHepticOption])
 
   return (
-    <searchBLEContext.Provider
+    <SearchBleContext.Provider
       value={{
         state: { detected, rssi },
         actions: {
@@ -43,8 +43,8 @@ export const SearchBleProvider = ({ children }: PropsWithChildren) => {
       }}
     >
       {children}
-    </searchBLEContext.Provider>
+    </SearchBleContext.Provider>
   )
 }
 
-export const useSearchBleContext = () => useContext(searchBLEContext)
+export const useSearchBleContext = () => useContext(SearchBleContext)
