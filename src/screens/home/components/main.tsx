@@ -1,57 +1,21 @@
-import { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
-import { unlink } from '@react-native-seoul/kakao-login'
-import { useNavigation } from '@react-navigation/native'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components'
-import { cacheClient } from '@/client'
-import { HomeStackNavigationProp } from '@/navigation/types'
 import { useHomeMainViewModel } from '@/view-model'
 import { FONT } from '@/theme/fonts'
-import { authService } from '@/services'
-
-const Test = () => {
-  const [busy, setBusy] = useState(false)
-  const navigation = useNavigation<HomeStackNavigationProp>()
-  return (
-    <>
-      {/* Test Buttons */}
-      <Text
-        onPress={async () => {
-          if (busy) return
-          setBusy(true)
-          try {
-            await unlink()
-            await authService.firebaseSignOut()
-            cacheClient.setHasSeenOnBoarding(false)
-            navigation.navigate('OnBoarding')
-          } catch (e) {
-            console.log('login err', e)
-          } finally {
-            setBusy(false)
-          }
-        }}
-        style={styles.test}
-      >
-        RESET
-      </Text>
-    </>
-  )
-}
 
 export const Main = () => {
   const { state, actions, animated } = useHomeMainViewModel()
 
   return (
     <View style={styles.main}>
-      <Test />
       <View style={styles.mainWrapper}>
-        {!state.isSetting && state.cards[state.selectedCardIdx] && (
+        {!state.isSetting && (
           <>
             <View style={styles.title}>
-              <Text style={styles.titleText}>My parke</Text>
+              {/* <Text style={styles.titleText}>My parke</Text> */}
             </View>
           </>
         )}
