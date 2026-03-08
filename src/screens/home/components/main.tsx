@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   mainWrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: 480,
     marginHorizontal: 'auto',
     paddingBottom: 200,
     flex: 1,

@@ -5,7 +5,7 @@ import { convertPhone } from '@/helpers'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useHomeCardViewModel } from '@/view-model'
 import { HomeCardProps } from '@home/types'
-import { PRETENDARD } from '@/theme/fonts'
+import { DM_MONO, PRETENDARD } from '@/theme/fonts'
 
 export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
   const { animated, actions } = useHomeCardViewModel(idx)
@@ -26,21 +26,17 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
         </View>
-        {scan ? (
-          <View style={styles.scan}>
-            <View style={[styles.onIcon, styles.icon]} />
-            <Text style={[styles.scanTextOn, styles.scanText]}>
-              자동감지 On
-            </Text>
-          </View>
-        ) : (
-          <View style={styles.scan}>
-            <View style={[styles.offIcon, styles.icon]} />
-            <Text style={[styles.scanTextOff, styles.scanText]}>
-              자동감지 Off
-            </Text>
-          </View>
-        )}
+        <View style={styles.scan}>
+          <View style={[scan ? styles.onIcon : styles.offIcon, styles.icon]} />
+          <Text
+            style={[
+              scan ? styles.scanTextOn : styles.scanTextOff,
+              styles.scanText,
+            ]}
+          >
+            {scan ? '자동감지 On' : '자동감지 Off'}
+          </Text>
+        </View>
       </Animated.View>
     </Pressable>
   )
@@ -65,7 +61,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 10,
     fontSize: 16,
-    fontFamily: PRETENDARD.REGULAR,
+    fontFamily: DM_MONO.MEDIUM,
     color: '#cccccc',
   },
   phone: {
@@ -73,7 +69,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     fontSize: 14,
-    fontFamily: PRETENDARD.REGULAR,
+    fontFamily: DM_MONO.REGULAR,
     color: '#cccccc',
   },
   bottomBackground: {
@@ -95,7 +91,7 @@ const styles = StyleSheet.create({
   scan: {
     position: 'absolute',
     left: 14,
-    bottom: 10,
+    bottom: 12,
     flexDirection: 'row',
     gap: 10,
     alignItems: 'center',
