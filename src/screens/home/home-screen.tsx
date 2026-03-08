@@ -3,21 +3,30 @@ import { CardSettingProvider, SliderContextProvider } from '@/contexts'
 import { Header, Footer, Main } from '@home/components'
 import { useHomeViewModel } from '@/view-model'
 import { Loading } from '@/components'
+import { HomeProvider } from '@/contexts/home-context'
 
-export default function HomeScreen() {
+const HomeScreenContent = () => {
   const { state } = useHomeViewModel()
 
   return (
-    <CardSettingProvider>
-      <SliderContextProvider>
-        <View style={styles.container}>
-          {state.loading && <Loading />}
-          <Header />
-          <Main />
-          <Footer />
-        </View>
-      </SliderContextProvider>
-    </CardSettingProvider>
+    <View style={styles.container}>
+      {state.loading && <Loading />}
+      <Header />
+      <Main />
+      <Footer />
+    </View>
+  )
+}
+
+export default function HomeScreen() {
+  return (
+    <HomeProvider>
+      <CardSettingProvider>
+        <SliderContextProvider>
+          <HomeScreenContent />
+        </SliderContextProvider>
+      </CardSettingProvider>
+    </HomeProvider>
   )
 }
 
