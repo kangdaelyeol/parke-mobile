@@ -2,12 +2,36 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "assets/fonts/DMSans-Regular.ttf",
+      "sha1": "76c500a4e46a2ef4252e909109926e08272ac849"
+    },
+    {
+      "path": "assets/fonts/DMSans-Medium.ttf",
+      "sha1": "dad2637623defedd4720447c5bbaa3d96b1594ee"
+    },
+    {
+      "path": "assets/fonts/DMSans-Bold.ttf",
+      "sha1": "10e061ac7f01fd542e0c1956e89b12a272607f5d"
+    },
+    {
       "path": "assets/fonts/Pretendard-Medium.ttf",
       "sha1": "68efbed10e1229e9c9ed49d8c620a8fef87cda07"
     },
     {
       "path": "assets/fonts/Pretendard-Regular.ttf",
       "sha1": "f5e25d12ff08ff058acd8a64d5f9b5f9c92b9d17"
+    },
+    {
+      "path": "assets/fonts/DMMono-Light.ttf",
+      "sha1": "36a0a9374381080054402099a5e44d17e657baa1"
+    },
+    {
+      "path": "assets/fonts/DMMono-Medium.ttf",
+      "sha1": "69a27aa68c80e6beccab9bc1bb74d5df5b9ce2b8"
+    },
+    {
+      "path": "assets/fonts/DMMono-Regular.ttf",
+      "sha1": "52e6531f1f989a9f7db3bd863663c67654f4f9f7"
     },
     {
       "path": "assets/fonts/Pretendard-Bold.ttf",
