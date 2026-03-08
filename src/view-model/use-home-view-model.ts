@@ -3,10 +3,12 @@ import { Alert } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
+import { useHomeContext } from '@/contexts/home-context'
 
 export const useHomeViewModel = () => {
   const { cards, user, syncCardList, setCards } = useUserContext()
   const [loading, setLoading] = useState(false)
+  const { setScanning } = useHomeContext()
 
   useFocusEffect(
     useCallback(() => {
@@ -46,14 +48,15 @@ export const useHomeViewModel = () => {
         if (!bluetoothPermission) {
           Alert.alert(
             'Bluetooth 권한 필요',
-            'Parke 백그라운드 스캔을 위해 설정에서 블루투스 권한을 허용해주세요',
+            'Parke 백그라운드 스캔을 위해 블루투스 권한을 허용해주세요',
           )
-          return
+          return setScanning(false)
         }
 
         sub = bleService.getManager()?.onStateChange(state => {
           if (state === 'PoweredOn') {
             bleService.startBackgroundScan({ setCards, cards, user })
+            setScanning(true)
 
             intervalId = setInterval(async () => {
               await bleService.stopScan(nowSession)
@@ -68,8 +71,9 @@ export const useHomeViewModel = () => {
         sub?.remove()
         bleService.stopScan(nowSession)
         clearInterval(intervalId)
+        setScanning(false)
       }
-    }, [user, cards, setCards]),
+    }, [user, cards, setCards, setScanning]),
   )
 
   return { state: { loading } }

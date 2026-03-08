@@ -1,21 +1,35 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
-import { useUserContext } from '@/contexts/user-context'
-import { convertPhone } from '@/helpers'
 import { FONT } from '@/theme/fonts'
-import { bleService } from '@/services'
+import { useHomeContext, useUserContext } from '@/contexts'
+import { convertPhone } from '@/helpers'
 
 export const Header = () => {
+  const { scanning } = useHomeContext()
   const { user } = useUserContext()
-  const { isBackgroundScanning } = bleService.getState()
   return (
     <View style={styles.header}>
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
-        <Text style={styles.phone}>
-          {convertPhone(user.phone)}
-          {isBackgroundScanning && '  Yes!'}
-        </Text>
+        <View style={styles.textSection}>
+          <Text style={styles.phone}>{convertPhone(user.phone)}</Text>
+          <View style={styles.scan}>
+            <View
+              style={[
+                styles.dot,
+                scanning ? styles.scanOnDot : styles.scanOffDot,
+              ]}
+            />
+            <Text
+              style={[
+                styles.scanText,
+                scanning ? styles.scanOnText : styles.scanOffText,
+              ]}
+            >
+              Background Scan {scanning ? 'on' : 'off'}
+            </Text>
+          </View>
+        </View>
       </View>
     </View>
   )
@@ -38,12 +52,44 @@ const styles = StyleSheet.create({
     top: 15,
     left: 12,
   },
-  phone: {
-    position: 'absolute',
-    color: '#eeeeee',
+  textSection: {
     right: 10,
-    top: 22,
-    fontSize: 23,
+    top: 15,
+    position: 'absolute',
+  },
+  phone: {
+    color: '#636bdd',
+    textAlign: 'right',
+    fontSize: 18,
     fontFamily: FONT.MEDIUM,
+  },
+  scan: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  scanText: {
+    marginLeft: 5,
+    textAlign: 'right',
+    fontSize: 14,
+    fontFamily: FONT.MEDIUM,
+  },
+  scanOnText: {
+    color: '#57e080',
+  },
+  scanOffText: {
+    color: '#e05757',
+  },
+  dot: {
+    width: 10,
+    height: 10,
+    borderRadius: '50%',
+  },
+  scanOnDot: {
+    backgroundColor: '#57e080',
+    boxShadow: '0px 0px 5px 2px #57e080',
+  },
+  scanOffDot: {
+    backgroundColor: '#e05757',
+    boxShadow: '0px 0px 5px 2px #e05757',
   },
 })

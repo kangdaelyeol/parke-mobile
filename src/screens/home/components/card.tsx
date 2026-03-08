@@ -1,6 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { LogoText } from '@/assets/logo'
 import { convertPhone } from '@/helpers'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
@@ -17,12 +16,12 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
         <View style={styles.bottomBackground} />
         <View style={styles.wrapper}>
           <LogoText width={50} height={45} />
-          <FontAwesome6
+          {/* <FontAwesome6
             name="ellipsis"
             iconStyle="solid"
             size={17}
             style={styles.ellipsis}
-          />
+          /> */}
           <Text style={styles.message}>{message}</Text>
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
