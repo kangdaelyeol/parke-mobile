@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
 import { HomeFooterProps } from '@home/types'
 import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const FooterIcon = ({ label, iconName, onPress }: HomeFooterProps) => {
   return (
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 12,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     textAlign: 'center',
     marginTop: 6,
   },

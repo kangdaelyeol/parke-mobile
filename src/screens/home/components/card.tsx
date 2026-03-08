@@ -5,7 +5,7 @@ import { convertPhone } from '@/helpers'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useHomeCardViewModel } from '@/view-model'
 import { HomeCardProps } from '@home/types'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
   const { animated, actions } = useHomeCardViewModel(idx)
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 10,
     fontSize: 16,
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     color: '#cccccc',
   },
   phone: {
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     fontSize: 14,
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     color: '#cccccc',
   },
   bottomBackground: {
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
   scanText: {
     fontSize: 14,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
   },
   scanTextOn: {
     color: '#4fa75c',

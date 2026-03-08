@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
-import { FONT } from '@/theme/fonts'
+import {  PRETENDARD } from '@/theme/fonts'
 
 interface FocusableInputProps {
   title: string
@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
     height: 50,
     color: '#dddddd',
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     maxWidth: 400,
   },
   title: {
     color: '#808080',
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     fontSize: 16,
   },
   titleFocused: {

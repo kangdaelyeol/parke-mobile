@@ -1,4 +1,4 @@
-import { FONT } from '@/theme/fonts'
+import {  PRETENDARD } from '@/theme/fonts'
 import {
   ColorValue,
   Pressable,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 20,
     textAlign: 'center',
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     fontSize: 18,
     color: '#d3d3d3',
   },
