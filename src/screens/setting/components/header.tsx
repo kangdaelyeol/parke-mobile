@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
 import { useSettingHeaderViewModel } from '@/view-model'
-import { FONT } from '@/theme/fonts'
+import {  PRETENDARD } from '@/theme/fonts'
 
 export const Header = () => {
   const { actions } = useSettingHeaderViewModel()
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     color: '#eeeeee',
     fontSize: 30,
     marginTop: 50,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     textAlign: 'center',
   },
   backBtn: {

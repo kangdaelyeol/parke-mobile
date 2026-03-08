@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Item } from '@permission/components'
 import { selectablePermissionItemList } from '@permission/config/main.config'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Main = () => {
   return (
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   title: {},
   titleText: {
     color: '#ffffff',
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     fontSize: 20,
   },
   none: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   noneText: {
     color: '#c1c1c1',
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     fontSize: 14,
   },
   list: {

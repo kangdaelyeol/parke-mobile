@@ -1,4 +1,4 @@
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 import { StyleSheet, Text, View } from 'react-native'
 
 export const Header = () => {
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     color: '#ffffff',
-    fontFamily: FONT.BOLD,
+    fontFamily: PRETENDARD.BOLD,
     textAlign: 'center',
     fontSize: 25,
   },
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     color: '#b7b7b7',
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     textAlign: 'center',
     fontSize: 14,
   },

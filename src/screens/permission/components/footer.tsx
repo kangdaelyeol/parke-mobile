@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model'
 
 export const Footer = () => {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingTop: 20,
     paddingBottom: 40,
-    fontFamily: FONT.BOLD,
+    fontFamily: PRETENDARD.BOLD,
     fontSize: 17,
   },
   confirmPressed: {
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     color: '#888888',
     fontSize: 11,
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     lineHeight: 14,
   },
 })

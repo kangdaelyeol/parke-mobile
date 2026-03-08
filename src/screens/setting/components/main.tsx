@@ -1,6 +1,6 @@
 import { StyleSheet, Switch, View, Text } from 'react-native'
 import { useSettingMainViewModel } from '@/view-model'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Main = () => {
   const { state, actions } = useSettingMainViewModel()
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   lineText: {
     color: 'white',
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     fontSize: 16,
   },
   backBtn: {

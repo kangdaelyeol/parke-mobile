@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { FocusableInput, PressableButton } from '@/components'
 import { useScanCompleteContext } from '@/contexts/scan-complete-context'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Step1 = () => {
   const { state, actions } = useScanCompleteContext()
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   title: {
     color: '#eee',
     fontSize: 25,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     textAlign: 'center',
     marginTop: 30,
   },

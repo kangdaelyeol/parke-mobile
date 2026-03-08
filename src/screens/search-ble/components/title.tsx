@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated'
 import { useSearchBleContext } from '@/contexts'
 import { useSearchBleTitleViewModel } from '@/view-model'
 import { title, subTitle } from '@search-ble/constants'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 export const Title = () => {
   const {
     state: { detected },
@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
   title: {
     color: '#fff',
     fontSize: 37,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     textAlign: 'center',
   },
   subTitle: {
     color: '#eee',
     fontSize: 20,
     textAlign: 'center',
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     marginTop: 15,
   },
 })

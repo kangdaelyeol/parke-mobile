@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 import { useHomeContext, useUserContext } from '@/contexts'
 import { convertPhone } from '@/helpers'
 
@@ -26,7 +26,7 @@ export const Header = () => {
                 scanning ? styles.scanOnText : styles.scanOffText,
               ]}
             >
-              Background Scan {scanning ? 'on' : 'off'}
+              {scanning ? '스캔 꺼짐' : '스캔 켜짐'}
             </Text>
           </View>
         </View>
@@ -58,12 +58,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   phone: {
-    color: '#636bdd',
+    color: '#ebebeb',
     textAlign: 'right',
     fontSize: 18,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
   },
   scan: {
+    marginTop: 5,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -71,13 +72,13 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     textAlign: 'right',
     fontSize: 14,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
   },
   scanOnText: {
-    color: '#57e080',
+    color: '#ffffff',
   },
   scanOffText: {
-    color: '#e05757',
+    color: '#8b8b8b',
   },
   dot: {
     width: 10,

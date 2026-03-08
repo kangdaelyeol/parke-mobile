@@ -4,7 +4,7 @@ import Animated from 'react-native-reanimated'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
 import { EmptyCard, SettingCard, CardOption, Card } from '@home/components'
 import { useHomeMainViewModel } from '@/view-model'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Main = () => {
   const { state, actions, animated } = useHomeMainViewModel()
@@ -15,7 +15,7 @@ export const Main = () => {
         {!state.isSetting && (
           <>
             <View style={styles.title}>
-              {/* <Text style={styles.titleText}>My parke</Text> */}
+              <Text style={styles.titleText}>Parke list</Text>
             </View>
           </>
         )}
@@ -76,10 +76,9 @@ const styles = StyleSheet.create({
   },
   titleText: {
     marginHorizontal: 'auto',
-    color: '#ffffffd8',
-    fontSize: 37,
-    fontFamily: FONT.MEDIUM,
-    transform: 'scaleX(1)',
+    color: '#d0d0d0',
+    fontSize: 20,
+    fontFamily: PRETENDARD.MEDIUM,
   },
   test: {
     position: 'absolute',

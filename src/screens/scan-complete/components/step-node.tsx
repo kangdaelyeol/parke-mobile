@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 import { useScanCompleteStepNodeViewModel } from '@/view-model'
 
 interface StepProps {
@@ -68,6 +68,6 @@ const styles = StyleSheet.create({
   label: {
     marginTop: 10,
     color: '#eeeeee',
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
   },
 })

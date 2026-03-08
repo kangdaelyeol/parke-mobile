@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { LogoText } from '@/assets/logo'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useScanCompleteContext } from '@/contexts/scan-complete-context'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 type CardProps = {
   deviceId: string
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     bottom: 30,
     right: 10,
     fontSize: 16,
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     color: '#d5d5d5',
   },
   phone: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     bottom: 10,
     right: 10,
     fontSize: 14,
-    fontFamily: FONT.REGULAR,
+    fontFamily: PRETENDARD.REGULAR,
     color: '#d5d5d5',
   },
   bottomBackground: {
@@ -92,11 +92,11 @@ const styles = StyleSheet.create({
   infoTitle: {
     color: '#7b86ff',
     fontSize: 11,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
   },
   infoText: {
     color: '#000000',
     fontSize: 8,
-    fontFamily: FONT.BOLD,
+    fontFamily: PRETENDARD.BOLD,
   },
 })

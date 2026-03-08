@@ -16,8 +16,8 @@ export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
           <FontAwesome6
             name="plus"
             iconStyle="solid"
-            size={20}
-            color={'gray'}
+            size={30}
+            color={'#282b39'}
           />
         </View>
       </View>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     height: CARD_HEIGHT,
     borderRadius: 20,
     backgroundColor: 'gray',
-    opacity: 0.2,
+    opacity: 0.15,
     borderWidth: 1,
     borderColor: 'white',
     borderStyle: 'dashed',
@@ -62,8 +62,7 @@ const styles = StyleSheet.create({
   emptyCardIcon: {
     width: 30,
     height: 30,
-    opacity: 0.6,
-    backgroundColor: 'white',
+    opacity: 0.9,
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '50%',

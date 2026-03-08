@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { LogoIcon, LogoText } from '@/assets/logo'
 import { FocusableInput, Loading, PressableButton } from '@/components'
 import { useInitViewModel } from '@/view-model'
-import { FONT } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export default function InitScreen() {
   const { state, actions } = useInitViewModel()
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     color: '#d3d3d3',
     marginTop: 25,
     fontSize: 28,
-    fontFamily: FONT.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
     marginHorizontal: 'auto',
   },
   inputSection: {
