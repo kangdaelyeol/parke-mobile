@@ -1,0 +1,73 @@
+import Svg, { Rect } from 'react-native-svg'
+import { IllustrationSizeProps } from '@home/types'
+
+export const QrIllustration = ({ width, height }: IllustrationSizeProps) => {
+  return (
+    <Svg width={width} height={height} viewBox="0 0 24 24" fill="none">
+      <Rect
+        x={3}
+        y={3}
+        width={7}
+        height={7}
+        stroke={'#ffffff'}
+        strokeWidth={1.5}
+      />
+      <Rect
+        x={14}
+        y={3}
+        width={7}
+        height={7}
+        stroke={'#ffffff'}
+        strokeWidth={1.5}
+      />
+      <Rect
+        x={3}
+        y={14}
+        width={7}
+        height={7}
+        stroke={'#ffffff'}
+        strokeWidth={1.5}
+      />
+      <Rect
+        x={13}
+        y={13}
+        width={2.5}
+        height={2.5}
+        stroke={'#ffffff'}
+        fill={'#ffffff'}
+      />
+      <Rect
+        x={19}
+        y={13}
+        width={2.5}
+        height={2.5}
+        stroke={'#ffffff'}
+        fill={'#ffffff'}
+      />
+      <Rect
+        x={13}
+        y={19}
+        width={2.5}
+        height={2.5}
+        stroke={'#ffffff'}
+        fill={'#ffffff'}
+      />
+      <Rect
+        x={19}
+        y={19}
+        width={2.5}
+        height={2.5}
+        stroke={'#ffffff'}
+        fill={'#ffffff'}
+      />
+      <Rect
+        x={16}
+        y={16}
+        width={2.5}
+        height={2.5}
+        stroke={'#ffffff'}
+        fill={'#ffffff'}
+      />
+    </Svg>
+  )
+}
