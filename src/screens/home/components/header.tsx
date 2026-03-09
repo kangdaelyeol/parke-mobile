@@ -31,7 +31,6 @@ export const Header = () => {
           </View>
         </View>
       </View>
-      
     </View>
   )
 }
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     textAlign: 'right',
     fontSize: 12,
-    fontFamily: DM_SANS.MEDIUM,
+    fontFamily: DM_SANS.BOLD,
   },
   scanOnText: {
     color: '#ffffff',
@@ -83,17 +82,16 @@ const styles = StyleSheet.create({
     color: '#8b8b8b',
   },
   dot: {
-    width: 10,
-    height: 10,
+    width: 8,
+    height: 8,
     borderRadius: '50%',
   },
   scanOnDot: {
-    backgroundColor: '#57e080',
-    boxShadow: '0px 0px 5px 2px #57e080',
+    backgroundColor: '#44ff88',
+    boxShadow: '0px 0px 6px #44ff88',
   },
   scanOffDot: {
     backgroundColor: '#e05757',
-    boxShadow: '0px 0px 5px 2px #e05757',
+    boxShadow: '0px 0px 6px #e05757',
   },
-  
 })
