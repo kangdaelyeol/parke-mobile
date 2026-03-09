@@ -23,11 +23,11 @@ export const Main = () => {
         ) : (
           <GestureDetector gesture={actions.panGesture}>
             <Animated.View style={[styles.cardContainer, animated.sliderStyle]}>
-              {!state.isSetting && (
+              <Animated.View style={animated.cardTitleStyle}>
                 <View style={styles.title}>
                   <Text style={styles.titleText}>내 기기</Text>
                 </View>
-              )}
+              </Animated.View>
               <View style={styles.cardSlider}>
                 <Animated.View
                   style={[animated.moverStyle, styles.cardSliderMover]}

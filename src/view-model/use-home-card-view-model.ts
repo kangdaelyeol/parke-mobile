@@ -2,6 +2,7 @@ import {
   Easing,
   useAnimatedStyle,
   useSharedValue,
+  withRepeat,
   withTiming,
 } from 'react-native-reanimated'
 import {
@@ -26,6 +27,20 @@ export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
 
   const cardOpacity = useSharedValue(isSelected ? 1 : 0)
   const cardTranslateY = useSharedValue(isSelected ? 1 : 0)
+
+  const scanOnDotOpacity = useSharedValue(1)
+
+  useEffect(() => {
+    scanOnDotOpacity.value = withRepeat(
+      withTiming(0, { duration: 1000, easing: Easing.out(Easing.ease) }),
+      -1,
+      true,
+    )
+  }, [scanOnDotOpacity])
+
+  const scanOnDotStyle = useAnimatedStyle(() => ({
+    opacity: scanOnDotOpacity.value * 0.6 + 0.4,
+  }))
 
   useEffect(() => {
     cardOpacity.value = withTiming(isSelected ? 1 : 0, { duration: 200 })
@@ -135,7 +150,7 @@ export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
       loading,
       settingCard,
     },
-    animated: { cardStyle },
+    animated: { cardStyle, scanOnDotStyle },
     actions,
   }
 }

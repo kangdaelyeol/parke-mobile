@@ -37,7 +37,14 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
             <Text style={styles.message}>{message}</Text>
             <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
             <View style={styles.scan}>
-              <View style={[scan ? styles.dotOn : styles.dotOff, styles.dot]} />
+              {scan ? (
+                <Animated.View
+                  style={[animated.scanOnDotStyle, styles.dot, styles.dotOn]}
+                />
+              ) : (
+                <View style={[styles.dotOff, styles.dot]} />
+              )}
+
               <Text
                 style={[
                   scan ? styles.scanTextOn : styles.scanTextOff,

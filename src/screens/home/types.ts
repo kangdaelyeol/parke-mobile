@@ -13,6 +13,7 @@ interface MainState {
 interface MainAnimated {
   sliderStyle: StyleProp<ViewStyle>
   moverStyle: StyleProp<ViewStyle>
+  cardTitleStyle: StyleProp<ViewStyle>
 }
 
 interface MainActions {
@@ -26,6 +27,7 @@ interface CardState {
 
 interface CardAnimated {
   cardStyle: StyleProp<ViewStyle>
+  scanOnDotStyle: StyleProp<ViewStyle>
 }
 
 interface CardActions {
