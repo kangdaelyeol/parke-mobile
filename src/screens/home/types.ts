@@ -1,6 +1,5 @@
 import { CardDto } from '@/domain/card'
-import { UserDto } from '@/domain/user'
-import { AnimatedViewModel, ViewModel } from '@/types/common'
+import { AnimatedViewModel } from '@/types/common'
 import { StyleProp, ViewStyle } from 'react-native'
 import { PanGesture } from 'react-native-gesture-handler'
 
@@ -20,17 +19,9 @@ interface MainActions {
   panGesture: PanGesture
 }
 
-interface CardOptionState {
-  user: UserDto
+interface CardState {
   loading: boolean
-}
-
-interface CardOptionActions {
-  editPress: () => void
-  deletePress: () => void
-  previewPress: () => Promise<void>
-  scanChangePress: () => Promise<void>
-  changePhonePress: () => Promise<void>
+  settingCard: number
 }
 
 interface CardAnimated {
@@ -39,6 +30,11 @@ interface CardAnimated {
 
 interface CardActions {
   cardPress: () => void
+  editPress: () => void
+  deletePress: () => void
+  previewPress: () => Promise<void>
+  scanChangePress: () => Promise<void>
+  changePhonePress: () => Promise<void>
 }
 
 interface SettingCardState {
@@ -65,12 +61,11 @@ export type HomeMainViewModel = AnimatedViewModel<
   MainAnimated
 >
 
-export type HomeCardOptionViewModel = ViewModel<
-  CardOptionState,
-  CardOptionActions
+export type HomeCardViewModel = AnimatedViewModel<
+  CardState,
+  CardActions,
+  CardAnimated
 >
-
-export type HomeCardViewModel = AnimatedViewModel<{}, CardActions, CardAnimated>
 
 export type SettingCardViewModel = AnimatedViewModel<
   SettingCardState,

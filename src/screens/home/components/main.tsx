@@ -2,13 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
-import {
-  EmptyCard,
-  SettingCard,
-  CardOption,
-  Card,
-  EmptyView,
-} from '@home/components'
+import { EmptyCard, SettingCard, Card, EmptyView } from '@home/components'
 import { useHomeMainViewModel } from '@/view-model'
 import { DM_SANS } from '@/theme/fonts'
 
@@ -43,10 +37,6 @@ export const Main = () => {
               </View>
             </Animated.View>
           </GestureDetector>
-        )}
-
-        {!state.isSetting && state.cards[state.selectedCardIdx] && (
-          <CardOption card={state.cards[state.selectedCardIdx]} />
         )}
         {state.isSetting && (
           <SettingCard card={state.cards[state.selectedCardIdx]} />
@@ -90,21 +80,5 @@ const styles = StyleSheet.create({
     color: '#666',
     fontSize: 16,
     fontFamily: DM_SANS.BOLD,
-  },
-  test: {
-    position: 'absolute',
-    top: 30,
-    left: 30,
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#1234d9',
-  },
-  test2: {
-    position: 'absolute',
-    top: 30,
-    left: 120,
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#1234d9',
   },
 })

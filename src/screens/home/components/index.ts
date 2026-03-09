@@ -1,5 +1,4 @@
 export * from './card'
-export * from './card-option'
 export * from './empty-card'
 export * from './footer'
 export * from './footer-icon'
