@@ -1,4 +1,4 @@
-import {  PRETENDARD } from '@/theme/fonts'
+import { DM_SANS } from '@/theme/fonts'
 import {
   ColorValue,
   Pressable,
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
   buttonText: {
     padding: 20,
     textAlign: 'center',
-    fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 18,
+    fontFamily: DM_SANS.BOLD,
+    fontSize: 16,
     color: '#d3d3d3',
   },
 })
