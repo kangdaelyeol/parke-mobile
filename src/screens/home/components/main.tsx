@@ -2,7 +2,13 @@ import { StyleSheet, Text, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
-import { EmptyCard, SettingCard, Card, EmptyView } from '@home/components'
+import {
+  EmptyCard,
+  SettingCard,
+  Card,
+  EmptyView,
+  PaginationDots,
+} from '@home/components'
 import { useHomeMainViewModel } from '@/view-model'
 import { DM_SANS } from '@/theme/fonts'
 
@@ -12,18 +18,16 @@ export const Main = () => {
   return (
     <View style={styles.main}>
       <View style={styles.mainWrapper}>
-        {!state.isSetting && (
-          <>
-            <View style={styles.title}>
-              <Text style={styles.titleText}>내 기기</Text>
-            </View>
-          </>
-        )}
         {state.cardLength === 0 ? (
           <EmptyView />
         ) : (
           <GestureDetector gesture={actions.panGesture}>
             <Animated.View style={[styles.cardContainer, animated.sliderStyle]}>
+              {!state.isSetting && (
+                <View style={styles.title}>
+                  <Text style={styles.titleText}>내 기기</Text>
+                </View>
+              )}
               <View style={styles.cardSlider}>
                 <Animated.View
                   style={[animated.moverStyle, styles.cardSliderMover]}
@@ -35,6 +39,7 @@ export const Main = () => {
                   <EmptyCard idx={state.cardLength} />
                 </Animated.View>
               </View>
+              {!state.isSetting && <PaginationDots />}
             </Animated.View>
           </GestureDetector>
         )}
@@ -72,13 +77,13 @@ const styles = StyleSheet.create({
   },
   title: {
     position: 'absolute',
-    top: 10,
-    left: 20,
+    top: -40,
+    left: -10,
   },
   titleText: {
     // marginHorizontal: 'auto',
     color: '#666',
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: DM_SANS.BOLD,
   },
 })
