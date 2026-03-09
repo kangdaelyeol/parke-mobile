@@ -6,7 +6,7 @@ import {
   MyIllustration,
   QrIllustration,
   SettingIllustration,
-} from '@home/components'
+} from './illustrations'
 
 interface GetIconProps {
   iconName: 'user' | 'qrcode' | 'gear'
