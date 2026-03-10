@@ -1,5 +1,6 @@
 import { CardDto } from '@/domain/card'
 import { AnimatedViewModel } from '@/types/common'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { StyleProp, ViewStyle } from 'react-native'
 import { PanGesture } from 'react-native-gesture-handler'
 
@@ -23,6 +24,7 @@ interface MainActions {
 interface CardState {
   loading: boolean
   settingCard: number
+  bottomSheetModalRef: React.RefObject<BottomSheetModal | null>
 }
 
 interface CardAnimated {
@@ -37,6 +39,7 @@ interface CardActions {
   previewPress: () => Promise<void>
   scanChangePress: () => Promise<void>
   changePhonePress: () => Promise<void>
+  morePress: () => void
 }
 
 interface SettingCardState {

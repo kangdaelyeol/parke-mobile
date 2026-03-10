@@ -11,16 +11,18 @@ import {
   useUserContext,
 } from '@/contexts'
 import { HomeCardViewModel } from '@home/types'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Alert, Linking } from 'react-native'
 import { cardService } from '@/services'
 import { PARKE_WEB_URL } from '@/constants'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
   const { settingCard, cardSettingController } = useCardSettingContext()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
   const { user, setCards, cards, setUser } = useUserContext()
   const [loading, setLoading] = useState(false)
+  const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const selectedCard = cards[selectedCardIdx]
   const isSelected = idx === selectedCardIdx
@@ -143,12 +145,16 @@ export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
         ),
       )
     },
+    morePress: () => {
+      bottomSheetModalRef.current?.present()
+    },
   }
 
   return {
     state: {
       loading,
       settingCard,
+      bottomSheetModalRef,
     },
     animated: { cardStyle, scanOnDotStyle },
     actions,

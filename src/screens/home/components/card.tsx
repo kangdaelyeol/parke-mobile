@@ -4,17 +4,21 @@ import { convertPhone } from '@/helpers'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useHomeCardViewModel } from '@/view-model'
 import { HomeCardProps } from '@home/types'
-import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { Loading } from '@/components'
+import { CardBottomSheet } from '@home/components'
+import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
+import {
+  GRAY,
+  WHITE,
+  DARK,
+  DARK_LIGHT,
+  GREEN,
+  RED,
+  RED_LIGHT,
+} from '@/theme/color'
 
 const BOTTOM_HEIGHT = 60
 const TOP_HEIGHT = CARD_HEIGHT - BOTTOM_HEIGHT
-
-const BUTTON_BACKGROUND = '#1c1c1c'
-const BORDER_COLOR = '#2a2a2a'
-const BORDER_COLOR_PRESSED = '#666'
-const FONT_COLOR = '#666'
-const FONT_COLOR_PRESSED = '#f0f0f0'
 
 export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
   const { animated, actions, state } = useHomeCardViewModel(idx)
@@ -26,7 +30,7 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
         <View style={styles.wrapper}>
           <View style={styles.topSection}>
             <Text style={styles.brand}>Parké</Text>
-            <Pressable>
+            <Pressable onPress={actions.morePress}>
               {({ pressed }) => (
                 <View style={[styles.more, pressed && styles.optionBtnPressed]}>
                   <Text style={styles.moreText}>...</Text>
@@ -105,6 +109,13 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
           )}
         </View>
       </Animated.View>
+      <CardBottomSheet
+        modalRef={state.bottomSheetModalRef}
+        title={title}
+        phone={phone}
+        scan={scan}
+        idx={idx}
+      />
     </Pressable>
   )
 }
@@ -117,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#141414',
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: BORDER_COLOR,
+    borderColor: DARK_LIGHT,
     overflow: 'hidden',
   },
   wrapper: {
@@ -135,7 +146,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 15,
     left: 15,
-    color: FONT_COLOR,
+    color: GRAY,
     fontFamily: DM_SANS.BOLD,
     textTransform: 'uppercase',
     letterSpacing: 1.5,
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
     left: 17,
     fontSize: 22,
     fontFamily: DM_MONO.MEDIUM,
-    color: '#f0f0f0',
+    color: WHITE,
   },
   message: {
     position: 'absolute',
@@ -155,7 +166,7 @@ const styles = StyleSheet.create({
     right: 18,
     fontSize: 12,
     fontFamily: DM_MONO.MEDIUM,
-    color: FONT_COLOR,
+    color: GRAY,
   },
   phone: {
     position: 'absolute',
@@ -163,14 +174,14 @@ const styles = StyleSheet.create({
     right: 15,
     fontSize: 14,
     fontFamily: DM_MONO.MEDIUM,
-    color: FONT_COLOR,
+    color: GRAY,
   },
-  ellipsis: { color: FONT_COLOR },
+  ellipsis: { color: GRAY },
   divider: {
     position: 'absolute',
     width: '100%',
     height: 1,
-    backgroundColor: BORDER_COLOR,
+    backgroundColor: DARK_LIGHT,
     bottom: BOTTOM_HEIGHT,
   },
   scan: {
@@ -182,7 +193,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   more: {
-    backgroundColor: BUTTON_BACKGROUND,
+    backgroundColor: DARK,
     position: 'absolute',
     top: 13,
     right: 18,
@@ -192,10 +203,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: '50%',
     borderWidth: 1,
-    borderColor: BORDER_COLOR,
+    borderColor: DARK_LIGHT,
   },
   moreText: {
-    color: FONT_COLOR,
+    color: GRAY,
     fontFamily: DM_MONO.MEDIUM,
     letterSpacing: -3,
     bottom: 3.5,
@@ -206,22 +217,22 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
   },
   dotOn: {
-    backgroundColor: '#44ff88',
-    boxShadow: '0px 0px 6px #44ff88',
+    backgroundColor: GREEN,
+    boxShadow: `0px 0px 6px ${GREEN}`,
   },
   dotOff: {
-    backgroundColor: '#ed3a3a',
-    boxShadow: '0px 0px 6px #fa4c31',
+    backgroundColor: RED,
+    boxShadow: `0px 0px 6px ${RED}`,
   },
   scanText: {
     fontSize: 12,
     fontFamily: PRETENDARD.BOLD,
   },
   scanTextOn: {
-    color: '#44ff88',
+    color: GREEN,
   },
   scanTextOff: {
-    color: '#c02b2b',
+    color: RED,
   },
   bottomSection: {
     position: 'absolute',
@@ -244,17 +255,17 @@ const styles = StyleSheet.create({
     height: 35,
     marginVertical: 'auto',
     fontFamily: DM_SANS.BOLD,
-    backgroundColor: BUTTON_BACKGROUND,
+    backgroundColor: DARK,
   },
   optionBtn: {
-    color: FONT_COLOR,
+    color: GRAY,
     borderWidth: 1,
-    borderColor: BORDER_COLOR,
+    borderColor: DARK_LIGHT,
     paddingHorizontal: 15,
   },
   optionBtnPressed: {
-    color: FONT_COLOR_PRESSED,
-    borderColor: BORDER_COLOR_PRESSED,
+    color: WHITE,
+    borderColor: GRAY,
   },
   bottomRight: {
     flexDirection: 'row',
@@ -262,14 +273,14 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   deleteBtn: {
-    color: '#e05555',
+    color: RED_LIGHT,
     right: 15,
     paddingHorizontal: 20,
     borderWidth: 1,
-    borderColor: BUTTON_BACKGROUND,
+    borderColor: DARK,
   },
   deleteBtnPressed: {
-    borderColor: '#e05555',
+    borderColor: RED_LIGHT,
     backgroundColor: 'rgba(224,85,85,0.1)',
   },
 })

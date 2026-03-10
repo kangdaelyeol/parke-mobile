@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native'
 import { UserContextProvider } from '@/contexts'
 import { useAppViewModel } from '@/view-model'
 import RootNavigator from '@/navigation/root-navigator'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 
 function App() {
   useAppViewModel()
@@ -14,12 +15,14 @@ function App() {
     <GestureHandlerRootView style={styles.handlerView}>
       <SafeAreaProvider>
         <NavigationContainer>
-          <UserContextProvider>
-            <StatusBar
-              barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-            />
-            <RootNavigator />
-          </UserContextProvider>
+          <BottomSheetModalProvider>
+            <UserContextProvider>
+              <StatusBar
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+              />
+              <RootNavigator />
+            </UserContextProvider>
+          </BottomSheetModalProvider>
         </NavigationContainer>
       </SafeAreaProvider>
     </GestureHandlerRootView>
