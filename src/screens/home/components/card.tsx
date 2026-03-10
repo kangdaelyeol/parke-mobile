@@ -48,7 +48,6 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
               ) : (
                 <View style={[styles.dotOff, styles.dot]} />
               )}
-
               <Text
                 style={[
                   scan ? styles.scanTextOn : styles.scanTextOff,

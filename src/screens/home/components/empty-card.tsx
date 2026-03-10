@@ -5,6 +5,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useHomeEmptyCardViewModel } from '@/view-model'
 import { HomeEmptyCardProps } from '@home/types'
+import { GRAY } from '@/theme/color'
 
 export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
   const { animated, actions } = useHomeEmptyCardViewModel(idx)
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     borderRadius: 20,
-    backgroundColor: 'gray',
+    backgroundColor: GRAY,
     opacity: 0.15,
     borderWidth: 1,
     borderColor: 'white',

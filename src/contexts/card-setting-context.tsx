@@ -21,7 +21,7 @@ const cardSettingContext = createContext<CardSettingContext>(
   {} as CardSettingContext,
 )
 const SLIDER_MARGIN_TOP_ACTIVE = 10
-const SLIDER_MARGIN_TOP_INACTIVE = 220
+const SLIDER_MARGIN_TOP_INACTIVE = 300
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const sliderMarginTop = useSharedValue(SLIDER_MARGIN_TOP_INACTIVE)

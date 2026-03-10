@@ -1,4 +1,5 @@
 import { useCardSliderContext, useUserContext } from '@/contexts'
+import { DARK_LIGHT, GRAY } from '@/theme/color'
 import { StyleSheet, View } from 'react-native'
 
 interface DotProps {
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
     width: 5,
     height: 5,
     borderRadius: '50%',
-    backgroundColor: '#2a2a2a',
+    backgroundColor: DARK_LIGHT,
   },
   dotSelected: {
-    backgroundColor: '#666',
+    backgroundColor: GRAY,
   },
 })

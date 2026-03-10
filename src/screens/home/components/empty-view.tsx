@@ -3,6 +3,7 @@ import { CarIllustration } from './illustrations'
 import { DM_SANS } from '@/theme/fonts'
 import { useNavigation } from '@react-navigation/native'
 import { HomeStackNavigationProp } from '@/navigation/types'
+import { GRAY, WHITE } from '@/theme/color'
 
 export const EmptyView = () => {
   const navigation = useNavigation<HomeStackNavigationProp>()
@@ -34,13 +35,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   title: {
-    color: '#eeeeee',
+    color: WHITE,
     fontFamily: DM_SANS.BOLD,
     fontSize: 18,
     marginTop: 20,
   },
   description: {
-    color: '#666',
+    color: GRAY,
     textAlign: 'center',
     fontFamily: DM_SANS.MEDIUM,
     marginTop: 18,
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 30,
     backgroundColor: '#1a28a1',
-    color: '#ffffff',
+    color: WHITE,
     fontFamily: DM_SANS.MEDIUM,
     borderRadius: 300,
     marginTop: 20,

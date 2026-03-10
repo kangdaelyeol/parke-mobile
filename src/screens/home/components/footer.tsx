@@ -3,6 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { FooterIcon } from '@home/components'
 import { HomeStackNavigationProp } from '@/navigation/types'
 import { footerIconList } from '@home/config/footer.config'
+import { DARK } from '@/theme/color'
 
 export const Footer = () => {
   const navigation = useNavigation<HomeStackNavigationProp>()
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: '#16181b',
+    backgroundColor: DARK,
     height: 90,
     borderColor: '#2d2d2d',
     borderTopWidth: 1,

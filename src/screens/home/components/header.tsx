@@ -3,6 +3,7 @@ import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { useHomeContext, useUserContext } from '@/contexts'
 import { convertPhone } from '@/helpers'
+import { GRAY, GREEN, RED, WHITE } from '@/theme/color'
 
 export const Header = () => {
   const { scanning } = useHomeContext()
@@ -76,10 +77,10 @@ const styles = StyleSheet.create({
     fontFamily: DM_SANS.BOLD,
   },
   scanOnText: {
-    color: '#ffffff',
+    color: WHITE,
   },
   scanOffText: {
-    color: '#8b8b8b',
+    color: GRAY,
   },
   dot: {
     width: 8,
@@ -87,11 +88,11 @@ const styles = StyleSheet.create({
     borderRadius: '50%',
   },
   scanOnDot: {
-    backgroundColor: '#44ff88',
-    boxShadow: '0px 0px 6px #44ff88',
+    backgroundColor: GREEN,
+    boxShadow: `0px 0px 6px ${GREEN}`,
   },
   scanOffDot: {
-    backgroundColor: '#e05757',
-    boxShadow: '0px 0px 6px #e05757',
+    backgroundColor: RED,
+    boxShadow: `0px 0px 6px ${RED}`,
   },
 })
