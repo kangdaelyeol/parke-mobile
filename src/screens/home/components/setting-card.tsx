@@ -73,7 +73,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 200,
+    top: 240,
     left: 0,
     right: 0,
     marginHorizontal: 'auto',
