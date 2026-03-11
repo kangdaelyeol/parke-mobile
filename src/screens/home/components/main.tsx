@@ -8,9 +8,11 @@ import {
   Card,
   EmptyView,
   PaginationDots,
+  TodaySummary,
 } from '@home/components'
 import { useHomeMainViewModel } from '@/view-model'
 import { DM_SANS } from '@/theme/fonts'
+import { GRAY } from '@/theme/color'
 
 export const Main = () => {
   const { state, actions, animated } = useHomeMainViewModel()
@@ -21,27 +23,32 @@ export const Main = () => {
         {state.cardLength === 0 ? (
           <EmptyView />
         ) : (
-          <GestureDetector gesture={actions.panGesture}>
-            <Animated.View style={[styles.cardContainer, animated.sliderStyle]}>
-              <Animated.View style={animated.cardTitleStyle}>
-                <View style={styles.title}>
-                  <Text style={styles.titleText}>내 기기</Text>
-                </View>
-              </Animated.View>
-              <View style={styles.cardSlider}>
-                <Animated.View
-                  style={[animated.moverStyle, styles.cardSliderMover]}
-                >
-                  {state.cards &&
-                    state.cards.map((card, idx) => (
-                      <Card key={idx} {...card} idx={idx} />
-                    ))}
-                  <EmptyCard idx={state.cardLength} />
+          <>
+            {!state.isSetting && <TodaySummary />}
+            <GestureDetector gesture={actions.panGesture}>
+              <Animated.View
+                style={[styles.cardContainer, animated.sliderStyle]}
+              >
+                <Animated.View style={animated.cardTitleStyle}>
+                  <View style={styles.title}>
+                    <Text style={styles.titleText}>내 기기</Text>
+                  </View>
                 </Animated.View>
-              </View>
-              {!state.isSetting && <PaginationDots />}
-            </Animated.View>
-          </GestureDetector>
+                <View style={styles.cardSlider}>
+                  <Animated.View
+                    style={[animated.moverStyle, styles.cardSliderMover]}
+                  >
+                    {state.cards &&
+                      state.cards.map((card, idx) => (
+                        <Card key={idx} {...card} idx={idx} />
+                      ))}
+                    <EmptyCard idx={state.cardLength} />
+                  </Animated.View>
+                </View>
+                {!state.isSetting && <PaginationDots />}
+              </Animated.View>
+            </GestureDetector>
+          </>
         )}
         {state.isSetting && (
           <SettingCard card={state.cards[state.selectedCardIdx]} />
@@ -58,7 +65,7 @@ const styles = StyleSheet.create({
   },
   mainWrapper: {
     width: '100%',
-    maxWidth: 480,
+    maxWidth: 400,
     marginHorizontal: 'auto',
     paddingBottom: 200,
     flex: 1,
@@ -81,8 +88,7 @@ const styles = StyleSheet.create({
     left: -10,
   },
   titleText: {
-    // marginHorizontal: 'auto',
-    color: '#666',
+    color: GRAY,
     fontSize: 15,
     fontFamily: DM_SANS.BOLD,
   },
