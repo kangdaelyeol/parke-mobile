@@ -37,7 +37,7 @@ export const useAppViewModel = () => {
     return () => unsub()
   }, [])
 
-  // 알림창을 통해 앱에 들어가는 경우 -> Alert를 통해 변경 여부 묻기
+  // 외부에서 포그라운드로 다시 들어가는 경우
   useEffect(() => {
     const sub = AppState.addEventListener('change', async state => {
       if (state !== 'active') return

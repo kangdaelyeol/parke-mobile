@@ -7,8 +7,9 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { useEffect } from 'react'
+import { HomeTodaySummaryViewModel } from '@/screens/home/types'
 
-export const useTodaySummaryViewModel = () => {
+export const useTodaySummaryViewModel = (): HomeTodaySummaryViewModel => {
   const [deviceName, setDeviceName] = useState('test1')
   const [bleScanCount, setBleScanCount] = useState(0)
   const [phoneChangeCount, setPhoneChangeCount] = useState(0)
@@ -38,5 +39,6 @@ export const useTodaySummaryViewModel = () => {
     animated: {
       containerStyle,
     },
+    actions: {},
   }
 }

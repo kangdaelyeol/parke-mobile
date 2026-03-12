@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { HomeFooterProps } from '@home/types'
+import { HomeFooterIconProps } from '@home/types'
 import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants'
 import { DM_SANS } from '@/theme/fonts'
 import {
@@ -8,12 +8,12 @@ import {
   SettingIllustration,
 } from './illustrations'
 
-interface GetIconProps {
+interface IconProps {
   iconName: 'user' | 'qrcode' | 'gear'
   iconSize: number
 }
 
-const Icon = ({ iconName, iconSize }: GetIconProps) => {
+const Icon = ({ iconName, iconSize }: IconProps) => {
   switch (iconName) {
     case 'user':
       return <MyIllustration width={iconSize} height={iconSize} />
@@ -29,7 +29,7 @@ export const FooterIcon = ({
   iconName,
   onPress,
   iconSize,
-}: HomeFooterProps) => {
+}: HomeFooterIconProps) => {
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (

@@ -72,6 +72,11 @@ export interface CacheService {
   ensureInitialized: () => void
   setHasSeenOnBoarding: (value: boolean) => void
   getHasSeenOnBoarding: () => boolean
+  getAndSetTodayDashBoard: () => void
+  increasePhoneChangeCount: () => void
+  increaseBleScanCount: () => void
+  getBatteryLevel: () => string
+  setBatteryLevel: (level: string) => void
 }
 
 export interface CardService {

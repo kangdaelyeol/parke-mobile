@@ -13,11 +13,11 @@ import {
 } from '@/contexts'
 import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
-import { SettingCardViewModel } from '@home/types'
+import { HomeSettingCardViewModel } from '@home/types'
 
 export const useSettingCardViewModel = (
   card: CardDto,
-): SettingCardViewModel => {
+): HomeSettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()
   const { selectedCardIdx } = useCardSliderContext()
   const { cards, setCards } = useUserContext()
