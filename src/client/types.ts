@@ -55,4 +55,12 @@ export interface CacheClient {
   getNotice(): boolean
   setAutoSet(setting: boolean): void
   getAutoSet(): boolean
+  getToday: () => string
+  setToday: (date: string) => void
+  getBleScanCount: () => number
+  setBleScanCount: (count: number) => void
+  getPhoneChangeCount: () => number
+  setPhoneChangeCount: (count: number) => void
+  getBatteryLevel: () => string
+  setBatteryLevel: (level: string) => void
 }

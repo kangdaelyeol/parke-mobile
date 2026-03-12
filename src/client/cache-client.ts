@@ -30,4 +30,15 @@ export const cacheClient: CacheClient = {
   getNotice: () => kv.getBoolean('setting:notice') ?? false,
   setAutoSet: setting => kv.set('setting:autoSet', setting),
   getAutoSet: () => kv.getBoolean('setting:autoSet') ?? false,
+
+  // today dashboard
+  getToday: () =>
+    kv.getString('today') ?? new Date().toISOString().slice(0, 10),
+  setToday: (date: string) => kv.set('today', date),
+  getBleScanCount: () => kv.getNumber('bleScanCount') ?? 0,
+  setBleScanCount: (count: number) => kv.set('bleScanCount', count),
+  getPhoneChangeCount: () => kv.getNumber('phoneChangeCount') ?? 0,
+  setPhoneChangeCount: (count: number) => kv.set('phoneChangeCount', count),
+  getBatteryLevel: () => kv.getString('battery') ?? '0',
+  setBatteryLevel: (level: string) => kv.set('battery', level),
 }
