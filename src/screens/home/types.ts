@@ -42,6 +42,14 @@ interface CardActions {
   morePress: () => void
 }
 
+interface EmptyCardAnimated {
+  cardStyle: StyleProp<ViewStyle>
+}
+
+interface EmptyCardActions {
+  cardPress: () => void
+}
+
 interface SettingCardState {
   title: string
   message: string
@@ -60,6 +68,18 @@ interface SettingCardActions {
   phoneInput: (val: string) => void
 }
 
+interface TodaySummaryState {
+  deviceName: string
+  bleScanCount: number
+  phoneChangeCount: number
+  batteryLevel: number
+  lastScanTime: number
+}
+
+interface TodaySummaryAnimated {
+  containerStyle: StyleProp<ViewStyle>
+}
+
 export type HomeMainViewModel = AnimatedViewModel<
   MainState,
   MainActions,
@@ -72,10 +92,22 @@ export type HomeCardViewModel = AnimatedViewModel<
   CardAnimated
 >
 
-export type SettingCardViewModel = AnimatedViewModel<
+export type HomeEmptyCardViewModel = AnimatedViewModel<
+  {},
+  EmptyCardActions,
+  EmptyCardAnimated
+>
+
+export type HomeSettingCardViewModel = AnimatedViewModel<
   SettingCardState,
   SettingCardActions,
   SettingCardAnimated
+>
+
+export type HomeTodaySummaryViewModel = AnimatedViewModel<
+  TodaySummaryState,
+  {},
+  TodaySummaryAnimated
 >
 
 export interface HomeCardOptionProps {
@@ -94,7 +126,7 @@ export interface HomeEmptyCardProps {
   idx: number
 }
 
-export interface HomeFooterProps {
+export interface HomeFooterIconProps {
   iconSize: number
   label: string
   iconName: 'user' | 'qrcode' | 'gear'

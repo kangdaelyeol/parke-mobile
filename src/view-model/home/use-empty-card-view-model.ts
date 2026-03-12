@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -6,10 +7,9 @@ import {
 import { useNavigation } from '@react-navigation/native'
 import { HomeStackNavigationProp } from '@/navigation/types'
 import { useCardSettingContext, useCardSliderContext } from '@/contexts'
-import { HomeCardViewModel } from '@home/types'
-import { useEffect } from 'react'
+import { HomeEmptyCardViewModel } from '@home/types'
 
-export const useEmptyCardViewModel = (idx: number): HomeCardViewModel => {
+export const useEmptyCardViewModel = (idx: number): HomeEmptyCardViewModel => {
   const navigation = useNavigation<HomeStackNavigationProp>()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
   const { settingCard } = useCardSettingContext()
