@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { convertPhone } from '@/helpers'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
-import { useHomeCardViewModel } from '@/view-model'
+import { useCardViewModel } from '@/view-model/home'
 import { HomeCardProps } from '@home/types'
 import { Loading } from '@/components'
 import { CardBottomSheet } from '@home/components'
@@ -21,7 +21,7 @@ const BOTTOM_HEIGHT = 60
 const TOP_HEIGHT = CARD_HEIGHT - BOTTOM_HEIGHT
 
 export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
-  const { animated, actions, state } = useHomeCardViewModel(idx)
+  const { animated, actions, state } = useCardViewModel(idx)
 
   return (
     <Pressable onPress={actions.cardPress}>

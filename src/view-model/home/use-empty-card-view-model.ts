@@ -9,7 +9,7 @@ import { useCardSettingContext, useCardSliderContext } from '@/contexts'
 import { HomeCardViewModel } from '@home/types'
 import { useEffect } from 'react'
 
-export const useHomeEmptyCardViewModel = (idx: number): HomeCardViewModel => {
+export const useEmptyCardViewModel = (idx: number): HomeCardViewModel => {
   const navigation = useNavigation<HomeStackNavigationProp>()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
   const { settingCard } = useCardSettingContext()

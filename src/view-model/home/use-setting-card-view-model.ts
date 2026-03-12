@@ -15,7 +15,7 @@ import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
 import { SettingCardViewModel } from '@home/types'
 
-export const useHomeSettingCardViewModel = (
+export const useSettingCardViewModel = (
   card: CardDto,
 ): SettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()

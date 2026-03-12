@@ -17,7 +17,7 @@ import { cardService } from '@/services'
 import { PARKE_WEB_URL } from '@/constants'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
-export const useHomeCardViewModel = (idx: number): HomeCardViewModel => {
+export const useCardViewModel = (idx: number): HomeCardViewModel => {
   const { settingCard, cardSettingController } = useCardSettingContext()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
   const { user, setCards, cards, setUser } = useUserContext()

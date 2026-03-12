@@ -13,7 +13,7 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 
-export const useHomeMainViewModel = (): HomeMainViewModel => {
+export const useMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext()
   const { sliderStyle, settingCard } = useCardSettingContext()
   const { cards } = useUserContext()

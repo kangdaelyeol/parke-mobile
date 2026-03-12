@@ -3,12 +3,12 @@ import Animated from 'react-native-reanimated'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
-import { useHomeEmptyCardViewModel } from '@/view-model'
+import { useEmptyCardViewModel } from '@/view-model/home'
 import { HomeEmptyCardProps } from '@home/types'
 import { GRAY } from '@/theme/color'
 
 export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
-  const { animated, actions } = useHomeEmptyCardViewModel(idx)
+  const { animated, actions } = useEmptyCardViewModel(idx)
 
   return (
     <Animated.View style={[styles.container, animated.cardStyle]}>

@@ -6,10 +6,9 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
-
 import { Toggle } from '@home/components'
 import { BluetoothIllustration, PhoneIllustration } from './illustrations'
-import { useHomeCardViewModel } from '@/view-model'
+import { useCardViewModel } from '@/view-model/home'
 import { Loading } from '@/components'
 import { convertPhone } from '@/helpers'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
@@ -44,7 +43,7 @@ export const CardBottomSheet = ({
   scan,
   modalRef,
 }: BottomSheetProps) => {
-  const { actions, state } = useHomeCardViewModel(idx)
+  const { actions, state } = useCardViewModel(idx)
 
   return (
     <BottomSheetModal

@@ -10,12 +10,12 @@ import {
   PaginationDots,
   TodaySummary,
 } from '@home/components'
-import { useHomeMainViewModel } from '@/view-model'
+import { useMainViewModel } from '@/view-model/home'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 
 export const Main = () => {
-  const { state, actions, animated } = useHomeMainViewModel()
+  const { state, actions, animated } = useMainViewModel()
 
   return (
     <View style={styles.main}>
