@@ -63,4 +63,8 @@ export interface CacheClient {
   setPhoneChangeCount: (count: number) => void
   getBatteryLevel: () => string
   setBatteryLevel: (level: string) => void
+  getLastScanDeviceName: () => string
+  setLastScanDeviceName: (deviceName: string) => void
+  getLastScanTime: () => number
+  markLastScanTime: () => void
 }

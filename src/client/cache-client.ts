@@ -10,17 +10,15 @@ export const cacheClient: CacheClient = {
   setHasSeenOnBoarding: v => kv.set('hasSeenOnBoarding', v),
 
   // ble device
-  getDeviceSeenAt: (deviceId: string): number =>
-    kv.getNumber(`ble:lastSeen-${deviceId}`) ?? 0,
-  setDeviceSeenAt: (deviceId: string, time: number) =>
-    kv.set(`ble:lastSeen-${deviceId}`, time),
-  getAlertDeniedAt: (): number => kv.getNumber('ble:lastDenied') ?? 0,
-  setAlertDeniedAt: (time: number) => kv.set('ble:lastDenied', time),
-  getAlertPendingList: (): AlertPending[] => {
+  getDeviceSeenAt: deviceId => kv.getNumber(`ble:lastSeen-${deviceId}`) ?? 0,
+  setDeviceSeenAt: (deviceId, time) => kv.set(`ble:lastSeen-${deviceId}`, time),
+  getAlertDeniedAt: () => kv.getNumber('ble:lastDenied') ?? 0,
+  setAlertDeniedAt: time => kv.set('ble:lastDenied', time),
+  getAlertPendingList: () => {
     const pending = kv.getString('ble:pending')
-    return pending ? JSON.parse(pending) : []
+    return pending ? JSON.parse(pending) : ([] as AlertPending[])
   },
-  setAlertPending: (pendingList: AlertPending[]) =>
+  setAlertPending: pendingList =>
     kv.set('ble:pending', JSON.stringify(pendingList)),
 
   // setting
@@ -34,11 +32,15 @@ export const cacheClient: CacheClient = {
   // today dashboard
   getToday: () =>
     kv.getString('today') ?? new Date().toISOString().slice(0, 10),
-  setToday: (date: string) => kv.set('today', date),
+  setToday: date => kv.set('today', date),
   getBleScanCount: () => kv.getNumber('bleScanCount') ?? 0,
-  setBleScanCount: (count: number) => kv.set('bleScanCount', count),
+  setBleScanCount: count => kv.set('bleScanCount', count),
   getPhoneChangeCount: () => kv.getNumber('phoneChangeCount') ?? 0,
-  setPhoneChangeCount: (count: number) => kv.set('phoneChangeCount', count),
+  setPhoneChangeCount: count => kv.set('phoneChangeCount', count),
   getBatteryLevel: () => kv.getString('battery') ?? '0',
-  setBatteryLevel: (level: string) => kv.set('battery', level),
+  setBatteryLevel: level => kv.set('battery', level),
+  getLastScanDeviceName: () => kv.getString('bleLastScan') ?? '',
+  setLastScanDeviceName: deviceName => kv.set('bleLastScan', deviceName),
+  getLastScanTime: () => kv.getNumber('bleLastScanTime') ?? Date.now(),
+  markLastScanTime: () => kv.set('bleLastScanTime', Date.now()),
 }
