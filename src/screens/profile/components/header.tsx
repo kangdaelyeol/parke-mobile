@@ -13,32 +13,29 @@ export const Header = () => {
             <FontAwesome6
               name="angle-left"
               iconStyle="solid"
-              size={30}
+              size={20}
               style={[styles.btn, pressed && styles.btnPressed]}
             />
           )}
         </Pressable>
-        <Text style={styles.title}>Profile</Text>
+        <Text style={styles.title}>프로필</Text>
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderBottomWidth: 1,
-    borderColor: '#444444',
-  },
+  container: {},
   title: {
     color: '#eeeeee',
-    fontSize: 30,
-    marginTop: 50,
-    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 20,
+    marginTop: 60,
+    fontFamily: PRETENDARD.BOLD,
     textAlign: 'center',
   },
   backBtn: {
     position: 'absolute',
-    top: 55,
+    top: 62,
     left: 0,
     zIndex: 3,
   },

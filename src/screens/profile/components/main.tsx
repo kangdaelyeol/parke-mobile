@@ -1,6 +1,15 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput, Loading, PressableButton } from '@/components'
 import { useProfileMainViewModel } from '@/view-model'
+import {
+  DARK,
+  DARK_LIGHT,
+  GRAY,
+  GRAY_LIGHT,
+  RED,
+  RED_LIGHT,
+  WHITE,
+} from '@/theme/color'
 
 export const Main = () => {
   const { state, actions } = useProfileMainViewModel()
@@ -14,29 +23,35 @@ export const Main = () => {
             placeholder="닉네임"
             onChangeText={actions.nicknameInput}
             value={state.nickname}
+            iconName="my"
           />
           <FocusableInput
             title="연락처"
             placeholder="연락처"
             onChangeText={actions.phoneInput}
             value={state.phone}
+            iconName="phone"
           />
         </View>
+        <View style={styles.divider} />
         <View style={styles.buttonSection}>
           <PressableButton
             title="저장"
             onPress={actions.savePress}
-            background={['#262e83', '#29457e']}
+            background={['#3B3BF9', '#4b4bff']}
           />
           <PressableButton
             title="로그아웃"
             onPress={actions.logoutPress}
-            background={['#2d2d2d', '#525252']}
+            background={[DARK, DARK]}
+            text={[GRAY_LIGHT, WHITE]}
+            border={[DARK_LIGHT, GRAY]}
           />
           <PressableButton
             title="회원탈퇴"
             onPress={actions.deletePress}
-            background={['#9d2f2f', '#b23535']}
+            border={[RED, RED_LIGHT]}
+            text={[RED, RED_LIGHT]}
           />
         </View>
       </View>
@@ -56,10 +71,15 @@ const styles = StyleSheet.create({
   },
   inputSection: {
     marginTop: 20,
-    gap: 20,
+    gap: 15,
   },
   buttonSection: {
-    marginTop: 35,
     gap: 15,
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: DARK,
+    marginVertical: 40,
   },
 })
