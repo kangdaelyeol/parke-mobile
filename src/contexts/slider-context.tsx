@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import { StyleProp, ViewStyle } from 'react-native'
 import {
   clamp,
   Easing,
@@ -8,10 +9,8 @@ import {
 } from 'react-native-reanimated'
 import { Gesture, PanGesture } from 'react-native-gesture-handler'
 import { runOnJS } from 'react-native-worklets'
-import { useCardSettingContext } from '@/contexts/card-setting-context'
-import { CARD_WIDTH, SLIDER_GAP } from '@/screens/home/constants'
-import { useUserContext } from '@/contexts'
-import { StyleProp, ViewStyle } from 'react-native'
+import { CARD_WIDTH, SLIDER_GAP } from '@home/constants'
+import { useUserContext, useCardSettingContext } from '@/contexts'
 
 interface SliderController {
   goToNext: () => void

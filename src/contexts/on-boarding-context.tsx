@@ -1,9 +1,4 @@
-import React, {
-  createContext,
-  PropsWithChildren,
-  useContext,
-  useState,
-} from 'react'
+import { createContext, PropsWithChildren, useContext, useState } from 'react'
 import { SharedValue, useSharedValue } from 'react-native-reanimated'
 
 export interface OnBoardingContextValue {
