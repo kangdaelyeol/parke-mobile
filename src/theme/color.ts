@@ -1,6 +1,7 @@
 export const DARK = '#1c1c1c'
 export const DARK_LIGHT = '#2a2a2a'
 export const GRAY = '#666'
+export const GRAY_LIGHT = '#888'
 export const WHITE = '#f0f0f0'
 export const GREEN = '#44ff88'
 export const RED = '#ed3a3a'

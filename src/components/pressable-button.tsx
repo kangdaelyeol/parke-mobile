@@ -9,10 +9,13 @@ import {
   ViewStyle,
 } from 'react-native'
 import { DM_SANS } from '@/theme/fonts'
+import { WHITE } from '@/theme/color'
 
 interface PressableButtonProps {
   onPress: () => void
-  background: ColorValue[]
+  background?: ColorValue[]
+  text?: ColorValue[]
+  border?: ColorValue[]
   title: string
   style?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
@@ -26,6 +29,8 @@ export const PressableButton = ({
   style,
   textStyle,
   pressableStyle,
+  text,
+  border,
 }: PressableButtonProps) => {
   return (
     <Pressable onPress={onPress} style={pressableStyle}>
@@ -33,12 +38,24 @@ export const PressableButton = ({
         <View
           style={[
             styles.button,
-            { backgroundColor: background[0] },
-            pressed && { backgroundColor: background[1] },
+            background && { backgroundColor: background[0] },
+            background && pressed && { backgroundColor: background[1] },
             style,
+            border && styles.border,
+            border && { borderColor: border[0] },
+            border && pressed && { borderColor: border[1] },
           ]}
         >
-          <Text style={[styles.buttonText, textStyle]}>{title}</Text>
+          <Text
+            style={[
+              styles.buttonText,
+              textStyle,
+              text && { color: text[0] },
+              text && pressed && { color: text[1] },
+            ]}
+          >
+            {title}
+          </Text>
         </View>
       )}
     </Pressable>
@@ -47,13 +64,14 @@ export const PressableButton = ({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 10,
+    borderRadius: 14,
   },
   buttonText: {
     padding: 20,
     textAlign: 'center',
     fontFamily: DM_SANS.BOLD,
     fontSize: 16,
-    color: '#d3d3d3',
+    color: WHITE,
   },
+  border: { borderWidth: 1 },
 })
