@@ -16,6 +16,7 @@ export const useAppViewModel = () => {
   useEffect(() => {
     permissionService.setupNotifications()
     cacheService.ensureInitialized()
+    cacheService.ensureTodayDashBoardCache()
 
     const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
       if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return
@@ -41,6 +42,7 @@ export const useAppViewModel = () => {
   useEffect(() => {
     const sub = AppState.addEventListener('change', async state => {
       if (state !== 'active') return
+      cacheService.ensureTodayDashBoardCache()
 
       const pendingList = bleCacheService.getAlertPendingList()
       pendingList.forEach(pending => {

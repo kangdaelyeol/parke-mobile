@@ -76,7 +76,7 @@ export interface CacheService {
   ensureInitialized: () => void
   setHasSeenOnBoarding: (value: boolean) => void
   getHasSeenOnBoarding: () => boolean
-  getAndSetTodayDashBoard: () => void
+  ensureTodayDashBoardCache: () => void
   getTodayDashBoard: () => {
     batteryLevel: string
     bleScanCount: number

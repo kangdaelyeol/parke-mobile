@@ -23,7 +23,7 @@ export const cacheService: CacheService = {
   getHasSeenOnBoarding: () => {
     return cacheClient.getHasSeenOnBoarding()
   },
-  getAndSetTodayDashBoard: () => {
+  ensureTodayDashBoardCache: () => {
     const cacheToday = cacheClient.getToday()
     const nowToday = new Date().toISOString().slice(0, 10)
 
