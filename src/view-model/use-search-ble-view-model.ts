@@ -32,7 +32,6 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
       }
 
       sub = bleService.getManager()?.onStateChange(state => {
-        console.log(state)
         if (state === 'PoweredOn') {
           bleService.startSearchBle({
             navigation,

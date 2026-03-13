@@ -85,7 +85,6 @@ export const bleService: BleService = {
       { allowDuplicates: true },
       async (err, device) => {
         try {
-          console.log(device)
           if (err || !device) return
           if (!isCandidate(device)) return
 
@@ -174,7 +173,6 @@ export const bleService: BleService = {
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
             if (settings.notice) nofifyMessage(user.phone)
-            console.log(settings.notice)
 
             refreshStateSession()
           }
@@ -210,8 +208,6 @@ export const bleService: BleService = {
 
         if (!device.rssi || device.rssi < -55) return
 
-        console.log('progress')
-
         try {
           await bleManager.stopDeviceScan()
 
@@ -227,7 +223,6 @@ export const bleService: BleService = {
               value: deviceId,
             })
           } else {
-            console.log('d')
             const base64Id = generateSerialNumber()
             console.log(base64Id)
             const d = await device.connect()
@@ -238,7 +233,6 @@ export const bleService: BleService = {
               base64Id,
             )
             await device.cancelConnection()
-            console.log(base64ToUtf(base64Id))
             navigation.replace('ScanComplete', {
               value: base64ToUtf(base64Id),
             })
