@@ -6,9 +6,9 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { serverTimestamp } from 'firebase/database'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import { serverTimestamp } from 'firebase/database'
 import { useUserContext } from '@/contexts'
 import { convertPhone } from '@/helpers'
 import { extractNumber } from '@/utils'

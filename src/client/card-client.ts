@@ -1,4 +1,3 @@
-import { convertPhone } from '@/helpers'
 import { db } from '@/firebaseApp'
 import {
   get,
@@ -9,6 +8,7 @@ import {
   update,
 } from '@react-native-firebase/database'
 import { Card, CardDto } from '@/domain/card'
+import { convertPhone } from '@/helpers'
 import { CardClient } from './types'
 
 export const cardClient: CardClient = {

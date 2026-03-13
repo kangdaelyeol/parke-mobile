@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from 'react'
-import useHeptic from '@/hooks/use-heptic'
+import { useHeptic } from '@/hooks'
 
 interface SearchBleContextValue {
   state: {

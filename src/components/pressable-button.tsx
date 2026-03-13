@@ -1,4 +1,3 @@
-import { DM_SANS } from '@/theme/fonts'
 import {
   ColorValue,
   Pressable,
@@ -9,6 +8,7 @@ import {
   View,
   ViewStyle,
 } from 'react-native'
+import { DM_SANS } from '@/theme/fonts'
 
 interface PressableButtonProps {
   onPress: () => void

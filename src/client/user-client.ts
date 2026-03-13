@@ -1,6 +1,6 @@
 import { get, ref, remove, set, update } from '@react-native-firebase/database'
-import { UserDto } from '@/domain/user'
 import { db } from '@/firebaseApp'
+import { UserDto } from '@/domain/user'
 import { UserClient } from './types'
 
 export const userClient: UserClient = {

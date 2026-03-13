@@ -5,10 +5,10 @@ import ReactNativeHapticFeedback, {
 
 type hepticType = keyof typeof HapticFeedbackTypes
 
-export default function useHeptic(
+export const useHeptic = (
   initialTime: number = 500,
   initialHepticOption: hepticType = HapticFeedbackTypes.selection,
-) {
+) => {
   const [time, setTime] = useState(initialTime)
   const [hepticOption, setHepticOption] =
     useState<hepticType>(initialHepticOption)
