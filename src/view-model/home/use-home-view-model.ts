@@ -1,12 +1,12 @@
 import { useCallback, useState } from 'react'
 import { Alert } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
-import { useUserContext } from '@/contexts'
+import { useUserContext, useHomeContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
-import { useHomeContext } from '@/contexts/home-context'
 
 export const useHomeViewModel = () => {
-  const { cards, user, syncCardList, setCards } = useUserContext()
+  const { cards, user, syncCardList, setCards, refreshStateSession } =
+    useUserContext()
   const [loading, setLoading] = useState(false)
   const { setScanning } = useHomeContext()
 
@@ -36,7 +36,6 @@ export const useHomeViewModel = () => {
       bleService.updateSession()
       const nowSession = bleService.getSession()
       let sub: { remove: () => void } | undefined
-      let intervalId = 0
       ;(async () => {
         const settings = settingService.getSettings()
         if (!settings.active || cards.length === 0) return setScanning(false)
@@ -54,13 +53,14 @@ export const useHomeViewModel = () => {
 
         sub = bleService.getManager()?.onStateChange(state => {
           if (state === 'PoweredOn') {
-            bleService.startBackgroundScan({ setCards, cards, user })
+            bleService.startBackgroundScan({
+              setCards,
+              cards,
+              user,
+              refreshStateSession,
+            })
             setScanning(true)
 
-            intervalId = setInterval(async () => {
-              await bleService.stopScan(nowSession)
-              bleService.startBackgroundScan({ setCards, cards, user })
-            }, 5000)
             sub?.remove()
           }
         }, true)
@@ -69,10 +69,9 @@ export const useHomeViewModel = () => {
       return () => {
         sub?.remove()
         bleService.stopScan(nowSession)
-        clearInterval(intervalId)
         setScanning(false)
       }
-    }, [user, cards, setCards, setScanning]),
+    }, [user, cards, setCards, setScanning, refreshStateSession]),
   )
 
   return { state: { loading } }

@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { CardSettingProvider, SliderContextProvider } from '@/contexts'
 import { Header, Footer, Main } from '@home/components'
-import { useHomeViewModel } from '@/view-model'
+import { useHomeViewModel } from '@/view-model/home'
 import { Loading } from '@/components'
 import { HomeProvider } from '@/contexts/home-context'
 

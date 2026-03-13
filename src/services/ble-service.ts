@@ -81,7 +81,7 @@ export const bleService: BleService = {
 
     bleManager.startDeviceScan(
       [ADV_SERVICE_UUID],
-      { allowDuplicates: false },
+      { allowDuplicates: true },
       async (err, device) => {
         try {
           console.log(device)
