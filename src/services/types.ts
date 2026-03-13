@@ -35,6 +35,8 @@ export interface BleCacheService {
   markAlertLastDeniedAt: () => void
   clearAlertLastDeniedAt: () => void
   getAlertLastDeniedAt: () => number
+  markBleScan: (deviceName: string, batteryLevel: string) => void
+  increasePhoneChangeCount: () => void
 }
 
 interface StartSearchBleProps {
@@ -47,6 +49,7 @@ interface StartBackgroundScanProps {
   readonly cards: CardDto[]
   readonly user: UserDto
   setCards: React.Dispatch<React.SetStateAction<CardDto[]>>
+  refreshStateSession: () => void
 }
 
 export interface BleService {
@@ -60,6 +63,7 @@ export interface BleService {
     cards,
     user,
     setCards,
+    refreshStateSession,
   }: StartBackgroundScanProps) => Promise<void>
   startSearchBle: ({
     navigation,
@@ -73,10 +77,13 @@ export interface CacheService {
   setHasSeenOnBoarding: (value: boolean) => void
   getHasSeenOnBoarding: () => boolean
   getAndSetTodayDashBoard: () => void
-  increasePhoneChangeCount: () => void
-  increaseBleScanCount: () => void
-  getBatteryLevel: () => string
-  setBatteryLevel: (level: string) => void
+  getTodayDashBoard: () => {
+    batteryLevel: string
+    bleScanCount: number
+    phoneChangeCount: number
+    lastScanDeviceName: string
+    lastScanTime: number
+  }
 }
 
 export interface CardService {

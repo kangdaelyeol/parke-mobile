@@ -64,7 +64,12 @@ export const bleService: BleService = {
     isSearching = false
     isBackgroundScanning = false
   },
-  startBackgroundScan: async ({ cards, user, setCards }) => {
+  startBackgroundScan: async ({
+    cards,
+    user,
+    setCards,
+    refreshStateSession,
+  }) => {
     if (!bleManager) bleService.initManager()
     if (!isBleManager(bleManager)) return
     console.log('try background scan')
@@ -103,6 +108,7 @@ export const bleService: BleService = {
           if (!card) return
 
           console.log('find:', card)
+          refreshStateSession()
 
           // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
           if (String(user.phone) === String(card.phone)) {
@@ -138,6 +144,7 @@ export const bleService: BleService = {
 
             // 앱이 실행중이면 앱 스크린에서 알림
             notifyChangePhoneOnScreen(card.title, card.id, user.phone, setCards)
+            refreshStateSession()
           } else {
             // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
             const res = await cardService.updatePhone(
@@ -159,6 +166,7 @@ export const bleService: BleService = {
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
             if (settings.notice) nofifyMessage(user.phone)
+            refreshStateSession()
           }
         } catch (e) {
           Alert.alert(`[BLE] scan handler error: ${e}`)

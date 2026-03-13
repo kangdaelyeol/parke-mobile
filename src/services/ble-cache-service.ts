@@ -35,4 +35,15 @@ export const bleCacheService: BleCacheService = {
   getAlertLastDeniedAt: () => {
     return cacheClient.getAlertDeniedAt()
   },
+  markBleScan: (deviceName, batteryLevel) => {
+    const bleScanCount = cacheClient.getBleScanCount()
+    cacheClient.setBleScanCount(bleScanCount + 1)
+    cacheClient.setBatteryLevel(batteryLevel)
+    cacheClient.setLastScanDeviceName(deviceName)
+    cacheClient.markLastScanTime()
+  },
+  increasePhoneChangeCount: () => {
+    const phoneChangeCount = cacheClient.getPhoneChangeCount()
+    cacheClient.setPhoneChangeCount(phoneChangeCount + 1)
+  },
 }

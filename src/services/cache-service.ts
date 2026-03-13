@@ -33,18 +33,18 @@ export const cacheService: CacheService = {
       cacheClient.setToday(nowToday)
     }
   },
-  increasePhoneChangeCount: () => {
-    const phoneChangeCount = cacheClient.getPhoneChangeCount()
-    cacheClient.setPhoneChangeCount(phoneChangeCount + 1)
-  },
-  increaseBleScanCount: () => {
+  getTodayDashBoard: () => {
+    const batteryLevel = cacheClient.getBatteryLevel()
     const bleScanCount = cacheClient.getBleScanCount()
-    cacheClient.setBleScanCount(bleScanCount + 1)
-  },
-  getBatteryLevel: () => {
-    return cacheClient.getBatteryLevel()
-  },
-  setBatteryLevel: (level: string) => {
-    cacheClient.setBatteryLevel(level)
+    const phoneChangeCount = cacheClient.getPhoneChangeCount()
+    const lastScanDeviceName = cacheClient.getLastScanDeviceName()
+    const lastScanTime = cacheClient.getLastScanTime()
+    return {
+      batteryLevel,
+      bleScanCount,
+      phoneChangeCount,
+      lastScanDeviceName,
+      lastScanTime,
+    }
   },
 }
