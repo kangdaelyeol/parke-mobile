@@ -25,7 +25,9 @@ export const useTodaySummaryViewModel = (): HomeTodaySummaryViewModel => {
     setBleScanCount(cacheState.bleScanCount)
     setPhoneChangeCount(cacheState.phoneChangeCount)
     setBatteryLevel(cacheState.batteryLevel)
-    setLastScanTime(Math.floor((Date.now() - cacheState.lastScanTime) / 1000))
+    setLastScanTime(
+      Math.floor((Date.now() - cacheState.lastScanTime) / (1000 * 60)),
+    )
   }, [stateSession])
 
   const containerStyle = useAnimatedStyle(() => ({

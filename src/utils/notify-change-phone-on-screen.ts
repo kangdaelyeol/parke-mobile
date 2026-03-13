@@ -39,6 +39,7 @@ export const notifyChangePhoneOnScreen = (
             return newCards
           })
           Alert.alert('전화번호가 변경되었습니다!')
+          bleCacheService.increasePhoneChangeCount()
           bleCacheService.clearAlertPending()
           bleCacheService.clearAlertLastDeniedAt()
         },

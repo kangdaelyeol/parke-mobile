@@ -15,6 +15,7 @@ import {
   notifyPhoneChange,
   base64ToUtf,
   getDeviceId,
+  getBatteryLevel,
 } from '@/helpers'
 import { bleCacheService, cardService, settingService } from '@/services'
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils'
@@ -108,6 +109,11 @@ export const bleService: BleService = {
           if (!card) return
 
           console.log('find:', card)
+          const batteryLevel = getBatteryLevel(
+            device.manufacturerData as string,
+          )
+
+          bleCacheService.markBleScan(card.title, batteryLevel)
           refreshStateSession()
 
           // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
@@ -156,6 +162,8 @@ export const bleService: BleService = {
               return
             }
 
+            bleCacheService.increasePhoneChangeCount()
+
             setCards(prev => {
               const newCards = [...prev]
               const index = newCards.findIndex(c => c.id === card.id)
@@ -166,6 +174,8 @@ export const bleService: BleService = {
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
             if (settings.notice) nofifyMessage(user.phone)
+            console.log(settings.notice)
+
             refreshStateSession()
           }
         } catch (e) {
@@ -198,7 +208,7 @@ export const bleService: BleService = {
 
         setRssi(String(device.rssi))
 
-        if (!device.rssi || device.rssi < -40) return
+        if (!device.rssi || device.rssi < -55) return
 
         console.log('progress')
 
@@ -207,7 +217,7 @@ export const bleService: BleService = {
 
           const deviceId = getDeviceId(device.manufacturerData as string)
 
-          if (deviceId !== 'UNSET') {
+          if (deviceId.slice(0, 5) !== 'UNSET') {
             console.log(device)
             if (cards.find(c => c.deviceId === deviceId)) {
               Alert.alert('이미 등록된 장치입니다.')
