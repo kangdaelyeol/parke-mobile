@@ -72,7 +72,7 @@ interface TodaySummaryState {
   deviceName: string
   bleScanCount: number
   phoneChangeCount: number
-  batteryLevel: number
+  batteryLevel: string
   lastScanTime: number
 }
 

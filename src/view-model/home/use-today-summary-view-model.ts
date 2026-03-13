@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -6,16 +6,27 @@ import {
   Easing,
   withTiming,
 } from 'react-native-reanimated'
-import { useEffect } from 'react'
-import { HomeTodaySummaryViewModel } from '@/screens/home/types'
+import { HomeTodaySummaryViewModel } from '@home/types'
+import { useUserContext } from '@/contexts'
+import { cacheService } from '@/services'
 
 export const useTodaySummaryViewModel = (): HomeTodaySummaryViewModel => {
+  const { stateSession } = useUserContext()
   const [deviceName, setDeviceName] = useState('test1')
   const [bleScanCount, setBleScanCount] = useState(0)
   const [phoneChangeCount, setPhoneChangeCount] = useState(0)
-  const [batteryLevel, setBatteryLevel] = useState(50)
+  const [batteryLevel, setBatteryLevel] = useState('50')
   const [lastScanTime, setLastScanTime] = useState(0)
   const containerOpacity = useSharedValue(0)
+
+  useEffect(() => {
+    const cacheState = cacheService.getTodayDashBoard()
+    setDeviceName(cacheState.lastScanDeviceName)
+    setBleScanCount(cacheState.bleScanCount)
+    setPhoneChangeCount(cacheState.phoneChangeCount)
+    setBatteryLevel(cacheState.batteryLevel)
+    setLastScanTime(Math.floor((Date.now() - cacheState.lastScanTime) / 1000))
+  }, [stateSession])
 
   const containerStyle = useAnimatedStyle(() => ({
     opacity: containerOpacity.value,

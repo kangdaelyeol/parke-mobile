@@ -21,12 +21,13 @@ interface UserContextValue {
   setUser: React.Dispatch<React.SetStateAction<UserDto>>
   setCards: React.Dispatch<React.SetStateAction<CardDto[]>>
   syncCardList: () => Promise<void>
+  refreshStateSession: () => void
+  stateSession: number
 }
 
 const userContext = createContext({} as UserContextValue)
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
-  // temp data
   const [user, setUser] = useState<UserDto>({
     id: 'uss',
     nickname: 'rkdeofuf',
@@ -34,8 +35,9 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     cardIdList: [],
   })
 
-  // temp data
   const [cards, setCards] = useState<CardDto[]>([])
+  const [stateSession, setStateSession] = useState(0)
+  const refreshStateSession = () => setStateSession(prev => prev + 1)
 
   const syncCardList = useCallback(async () => {
     const userNow = await userClient.getById(user.id)
@@ -48,9 +50,18 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     setCards(cardList)
     setUser(userNow)
   }, [user.id])
+  
   return (
     <userContext.Provider
-      value={{ cards, user, setCards, setUser, syncCardList }}
+      value={{
+        stateSession,
+        refreshStateSession,
+        cards,
+        user,
+        setCards,
+        setUser,
+        syncCardList,
+      }}
     >
       {children}
     </userContext.Provider>
