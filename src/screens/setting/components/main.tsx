@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text } from 'react-native'
-import { useSettingMainViewModel } from '@/view-model'
+import { useSettingMainViewModel } from '@/view-model/setting'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY } from '@/theme/color'
 import { Item } from '@setting/components'

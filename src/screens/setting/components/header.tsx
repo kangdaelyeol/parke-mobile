@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
-import { useSettingHeaderViewModel } from '@/view-model'
+import { useSettingHeaderViewModel } from '@/view-model/setting'
 import { PRETENDARD } from '@/theme/fonts'
 
 export const Header = () => {
