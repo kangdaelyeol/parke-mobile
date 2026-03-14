@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { JSX, useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
@@ -14,17 +14,9 @@ interface FocusableInputProps {
   iconName: IconName
 }
 
-interface InputIconProps {
-  iconName: IconName
-}
-
-const InputIcon = ({ iconName }: InputIconProps) => {
-  switch (iconName) {
-    case 'my':
-      return <MyIllustration />
-    case 'phone':
-      return <PhoneIllustration />
-  }
+const ICONS: Record<IconName, () => JSX.Element> = {
+  my: MyIllustration,
+  phone: PhoneIllustration,
 }
 
 export const FocusableInput = ({
@@ -37,6 +29,7 @@ export const FocusableInput = ({
   const [focus, setFocus] = useState(false)
   const onFocus = () => setFocus(true)
   const offFocus = () => setFocus(false)
+  const Icon = ICONS[iconName]
   return (
     <View style={styles.container}>
       <Text style={[styles.title, focus && styles.titleFocused]}>{title}</Text>
@@ -50,7 +43,7 @@ export const FocusableInput = ({
           placeholder={placeholder}
         />
         <View style={styles.icon}>
-          <InputIcon iconName={iconName} />
+          <Icon />
         </View>
       </View>
     </View>

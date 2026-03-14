@@ -23,12 +23,14 @@ export default function InitScreen() {
               value={state.nickname}
               onChangeText={actions.nicknameInput}
               placeholder="닉네임"
+              iconName="my"
             />
             <FocusableInput
               title="연락처"
               placeholder="연락처"
               value={state.phone}
               onChangeText={actions.phoneInput}
+              iconName="phone"
             />
           </View>
           <View style={styles.buttonSection}>
