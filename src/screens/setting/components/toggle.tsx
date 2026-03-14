@@ -1,58 +1,20 @@
-import { useEffect } from 'react'
 import { StyleSheet, View, Pressable } from 'react-native'
-import Animated, {
-  Easing,
-  interpolateColor,
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
-
-interface ToggleProps {
-  value: boolean
-  disabled?: boolean
-  onValueChange: (val: boolean) => void
-}
+import Animated from 'react-native-reanimated'
+import { useToggleViewModel } from '@/view-model/setting'
+import { ToggleProps } from '@setting/types'
 
 export const Toggle = ({ value, disabled, onValueChange }: ToggleProps) => {
-  const toggleProgress = useSharedValue(0)
-
-  const dotStyle = useAnimatedStyle(() => ({
-    transform: [{ translateX: 28 - toggleProgress.value * 28 }],
-  }))
-
-  const backgroundStyle = useAnimatedStyle(() => ({
-    backgroundColor: interpolateColor(
-      toggleProgress.value,
-      [0, 1],
-      ['#3b3bf9', '#2a2a2a'],
-    ),
-  }))
-
-  const handleTogglePress = () => {
-    if (disabled) return
-    onValueChange(!value)
-  }
-
-  useEffect(() => {
-    if (value === true) {
-      toggleProgress.value = withTiming(0, {
-        duration: 550,
-        easing: Easing.bezier(0.22, 1, 0.36, 1),
-      })
-    } else {
-      toggleProgress.value = withTiming(1, {
-        duration: 550,
-        easing: Easing.bezier(0.22, 1, 0.36, 1),
-      })
-    }
-  }, [value, toggleProgress])
+  const { actions, animated } = useToggleViewModel({
+    value,
+    disabled,
+    onValueChange,
+  })
 
   return (
-    <Pressable onPress={handleTogglePress}>
-      <Animated.View style={[styles.container, backgroundStyle]}>
+    <Pressable onPress={actions.handleTogglePress}>
+      <Animated.View style={[styles.container, animated.backgroundStyle]}>
         {disabled && <View style={[disabled && styles.disabledContainer]} />}
-        <Animated.View style={[styles.dot, dotStyle]} />
+        <Animated.View style={[styles.dot, animated.dotStyle]} />
       </Animated.View>
     </Pressable>
   )
