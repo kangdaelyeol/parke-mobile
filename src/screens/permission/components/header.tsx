@@ -8,7 +8,7 @@ export const Header = () => {
       <View style={styles.wrapper}>
         <Text style={styles.title}>앱 접근권한 안내</Text>
         <Text style={styles.description}>
-          Parke의 원활한 서비스 이용을 위해{'\n'}
+          Parké의 원활한 서비스 이용을 위해{'\n'}
           다음과 같은 기능이 필요합니다.
         </Text>
       </View>

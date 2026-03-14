@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model'
+import { BLUE_PRIMARY, DARK, GRAY_LIGHT, WHITE } from '@/theme/color'
 
 export const Footer = () => {
   const { actions } = usePermissionFooterViewModel()
@@ -30,8 +31,8 @@ const styles = StyleSheet.create({
     right: 0,
   },
   confirm: {
-    color: '#eeeeee',
-    backgroundColor: '#2860d8',
+    color: WHITE,
+    backgroundColor: BLUE_PRIMARY,
     textAlign: 'center',
     paddingTop: 20,
     paddingBottom: 40,
@@ -39,13 +40,12 @@ const styles = StyleSheet.create({
     fontSize: 17,
   },
   confirmPressed: {
-    backgroundColor: '#2150b5',
+    backgroundColor: '#1f66ff',
   },
   description: {
-    backgroundColor: '#121212',
-    paddingHorizontal: 15,
-    paddingVertical: 15,
-    color: '#888888',
+    backgroundColor: DARK,
+    padding: 15,
+    color: GRAY_LIGHT,
     fontSize: 11,
     fontFamily: PRETENDARD.REGULAR,
     lineHeight: 14,
