@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { LogoIcon1024 } from '@/assets/logo'
-import { DM_SANS } from '@/theme/fonts'
+import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { BLUE_PRIMARY, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
 export const Main = () => {
   return (
@@ -73,7 +73,8 @@ const styles = StyleSheet.create({
   },
   subTitle: {
     color: GRAY,
-    fontFamily: DM_SANS.MEDIUM,
+    fontFamily: PRETENDARD.MEDIUM,
+    letterSpacing: 1,
     fontSize: 17,
     marginTop: 20,
   },
