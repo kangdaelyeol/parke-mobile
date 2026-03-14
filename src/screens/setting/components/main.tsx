@@ -1,40 +1,46 @@
-import { StyleSheet, Switch, View, Text } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { useSettingMainViewModel } from '@/view-model'
 import { PRETENDARD } from '@/theme/fonts'
+import { DARK, DARK_LIGHT, GRAY } from '@/theme/color'
+import { Item } from '@setting/components'
 
 export const Main = () => {
   const { state, actions } = useSettingMainViewModel()
   return (
-    <View style={styles.main}>
-      <View style={styles.list}>
-        <View style={styles.line}>
-          <Text style={styles.lineText}>자동변경</Text>
-          <View>
-            <Switch
-              disabled={state.autoSetDisabled}
-              value={state.autoSet}
-              onValueChange={actions.autoSetChange}
-            />
-          </View>
-        </View>
-        <View style={styles.underLine} />
-        <View style={styles.line}>
-          <Text style={styles.lineText}>알림</Text>
-          <View>
-            <Switch
-              disabled={state.noticeDisabled}
-              value={state.notice}
-              onValueChange={actions.noticeChange}
-            />
-          </View>
+    <View style={styles.container}>
+      <View style={styles.section}>
+        <Text style={styles.title}>일반</Text>
+        <View style={styles.list}>
+          <Item
+            title="자동변경"
+            subTitle="장치 감지시 자동 업데이트"
+            option="autoChange"
+            disabled={state.autoSetDisabled}
+            value={state.autoSet}
+            onValueChange={actions.autoSetChange}
+          />
+          <View style={styles.divider} />
+          <Item
+            title="알림"
+            subTitle="푸시 알림 수신"
+            option="notify"
+            disabled={state.noticeDisabled}
+            value={state.notice}
+            onValueChange={actions.noticeChange}
+          />
         </View>
       </View>
-      <View style={styles.list}>
-        <View style={styles.line}>
-          <Text style={styles.lineText}>활성화</Text>
-          <View>
-            <Switch value={state.active} onValueChange={actions.activeChange} />
-          </View>
+
+      <View style={styles.section}>
+        <Text style={styles.title}>서비스</Text>
+        <View style={styles.list}>
+          <Item
+            title="활성화"
+            subTitle="서비스 활성화 상태"
+            option="active"
+            value={state.active}
+            onValueChange={actions.activeChange}
+          />
         </View>
       </View>
     </View>
@@ -42,57 +48,32 @@ export const Main = () => {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    color: '#eeeeee',
-    fontSize: 30,
-    marginTop: 50,
-    fontWeight: 500,
-    textAlign: 'center',
-  },
-  main: {
+  container: {
     width: '100%',
     maxWidth: 400,
     paddingHorizontal: 10,
     marginHorizontal: 'auto',
   },
+  section: {
+    marginTop: 40,
+  },
+  title: {
+    color: GRAY,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 15,
+  },
   list: {
     justifyContent: 'center',
-    backgroundColor: '#222222',
-    borderRadius: 20,
-    marginTop: 10,
+    backgroundColor: DARK,
+    borderRadius: 15,
+    marginTop: 15,
+    borderWidth: 1.5,
+    borderColor: DARK_LIGHT,
   },
-  line: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    height: 50,
-  },
-  underLine: {
-    width: '90%',
-    alignSelf: 'center',
-    backgroundColor: 'white',
-    height: 0.5,
-  },
-  lineText: {
-    color: 'white',
-    fontFamily: PRETENDARD.REGULAR,
-    fontSize: 16,
-  },
-  backBtn: {
-    position: 'absolute',
-    top: 55,
-    left: 0,
-    zIndex: 3,
-  },
-  header: {
-    borderBottomColor: '#444444',
-    borderBottomWidth: 1,
-  },
-  headerWrapper: {
+  divider: {
     width: '100%',
-    maxWidth: 360,
-    marginHorizontal: 'auto',
-    paddingBottom: 15,
+    alignSelf: 'center',
+    backgroundColor: DARK_LIGHT,
+    height: 1.5,
   },
 })

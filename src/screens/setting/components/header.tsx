@@ -25,10 +25,7 @@ export const Header = () => {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    borderBottomColor: '#444444',
-    borderBottomWidth: 1,
-  },
+  container: {},
   wrapper: {
     width: '100%',
     maxWidth: 360,
