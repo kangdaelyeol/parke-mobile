@@ -2,7 +2,7 @@ import { View, StyleSheet, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { LogoIcon1024 } from '@/assets/logo'
 import { DM_SANS } from '@/theme/fonts'
-import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { BLUE_PRIMARY, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
 export const Main = () => {
   return (
     <View style={styles.container}>
@@ -21,7 +21,7 @@ export const Main = () => {
             <Text style={styles.iconText}>PARK</Text>
             <Text style={[styles.iconText, styles.accent]}>É</Text>
           </View>
-          <Text style={styles.subTitle}>Smark Parking Solution</Text>
+          <Text style={styles.subTitle}>Smart Parking Solution</Text>
         </View>
       </View>
     </View>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   accent: {
-    color: '#383bf9',
+    color: BLUE_PRIMARY,
   },
   subTitle: {
     color: GRAY,
