@@ -1,5 +1,5 @@
 import { JSX } from 'react'
-import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK_LIGHT, GRAY } from '@/theme/color'
 import { Toggle } from '@setting/components'
@@ -20,29 +20,16 @@ interface ItemProps {
   disabled?: boolean
 }
 
-interface GetIconUIValue {
-  Icon: () => JSX.Element
-  backgroundStyle: StyleProp<ViewStyle>
+const ICONS: Record<ItemOption, () => JSX.Element> = {
+  autoChange: BluetoothIllustration,
+  notify: BellIllustration,
+  active: ActiveIllustration,
 }
 
-const getIconUI = (option: ItemOption): GetIconUIValue => {
-  switch (option) {
-    case 'autoChange':
-      return {
-        Icon: BluetoothIllustration,
-        backgroundStyle: styles.bluetoothBackground,
-      }
-    case 'notify':
-      return {
-        Icon: BellIllustration,
-        backgroundStyle: styles.alertBackground,
-      }
-    case 'active':
-      return {
-        Icon: ActiveIllustration,
-        backgroundStyle: styles.activeBackground,
-      }
-  }
+const ICON_BG_COLORS: Record<ItemOption, string> = {
+  autoChange: '#1a1a3a',
+  notify: '#1a2a1a',
+  active: '#2a1a1a',
 }
 
 export const Item = ({
@@ -53,12 +40,13 @@ export const Item = ({
   onValueChange,
   disabled,
 }: ItemProps) => {
-  const { Icon, backgroundStyle } = getIconUI(option)
+  const Icon = ICONS[option]
+  const backgroundColor = ICON_BG_COLORS[option]
   return (
     <View style={styles.container}>
       <View style={styles.left}>
         <View style={styles.iconContainer}>
-          <View style={backgroundStyle} />
+          <View style={[styles.iconBackground, { backgroundColor }]} />
           <Icon />
         </View>
         <View style={styles.descSection}>
@@ -66,13 +54,7 @@ export const Item = ({
           <Text style={styles.subTitle}>{subTitle}</Text>
         </View>
       </View>
-      <View>
-        <Toggle
-          disabled={disabled}
-          value={value}
-          onValueChange={onValueChange}
-        />
-      </View>
+      <Toggle disabled={disabled} value={value} onValueChange={onValueChange} />
     </View>
   )
 }
@@ -93,23 +75,12 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderRadius: 9,
+    overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  alertBackground: {
+  iconBackground: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 9,
-    backgroundColor: '#1a2a1a',
-  },
-  activeBackground: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 9,
-    backgroundColor: '#2a1a1a',
-  },
-  bluetoothBackground: {
-    ...StyleSheet.absoluteFillObject,
-    borderRadius: 9,
-    backgroundColor: '#1a1a3a',
   },
   descSection: {
     marginLeft: 13,
