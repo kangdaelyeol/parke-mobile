@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
 import { useSettingHeaderViewModel } from '@/view-model'
-import {  PRETENDARD } from '@/theme/fonts'
+import { PRETENDARD } from '@/theme/fonts'
 
 export const Header = () => {
   const { actions } = useSettingHeaderViewModel()
@@ -13,12 +13,12 @@ export const Header = () => {
             <FontAwesome6
               name="angle-left"
               iconStyle="solid"
-              size={30}
+              size={20}
               style={[styles.btn, pressed && styles.btnPressed]}
             />
           )}
         </Pressable>
-        <Text style={styles.title}>Settings</Text>
+        <Text style={styles.title}>설정</Text>
       </View>
     </View>
   )
@@ -37,14 +37,14 @@ const styles = StyleSheet.create({
   },
   title: {
     color: '#eeeeee',
-    fontSize: 30,
-    marginTop: 50,
-    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 20,
+    marginTop: 60,
+    fontFamily: PRETENDARD.BOLD,
     textAlign: 'center',
   },
   backBtn: {
     position: 'absolute',
-    top: 55,
+    top: 62,
     left: 0,
     zIndex: 3,
   },
