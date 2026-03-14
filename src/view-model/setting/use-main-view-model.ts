@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { settingService } from '@/services'
 import { SettingMainViewModel } from '@setting/types'
 
-export const useSettingMainViewModel = (): SettingMainViewModel => {
+export const useMainViewModel = (): SettingMainViewModel => {
   const [autoSet, setAutoSet] = useState(false)
   const [notice, setNotice] = useState(false)
   const [active, setActive] = useState(true)

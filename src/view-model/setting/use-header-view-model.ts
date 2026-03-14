@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { SettingHeaderViewModel } from '@setting/types'
 import { SettingStackNavigationProp } from '@/navigation/types'
 
-export const useSettingHeaderViewModel = (): SettingHeaderViewModel => {
+export const useHeaderViewModel = (): SettingHeaderViewModel => {
   const navigation = useNavigation<SettingStackNavigationProp>()
 
   const actions = {
