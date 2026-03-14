@@ -1,0 +1,80 @@
+import { View, StyleSheet, Text } from 'react-native'
+import LinearGradient from 'react-native-linear-gradient'
+import { LogoIcon1024 } from '@/assets/logo'
+import { DM_SANS } from '@/theme/fonts'
+import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+export const Main = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <View style={styles.introSection}>
+          <View style={styles.appIcon}>
+            <LinearGradient
+              colors={['rgba(59, 59, 249, 0.3)', 'transparent']}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={styles.gradient}
+            />
+            <LogoIcon1024 style={styles.iconImage} width={80} height={80} />
+          </View>
+          <View style={styles.titleSection}>
+            <Text style={styles.iconText}>PARK</Text>
+            <Text style={[styles.iconText, styles.accent]}>É</Text>
+          </View>
+          <Text style={styles.subTitle}>Smark Parking Solution</Text>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  wrapper: {
+    width: '100%',
+    maxWidth: 400,
+    marginHorizontal: 'auto',
+    flex: 1,
+    justifyContent: 'center',
+  },
+  introSection: {
+    marginHorizontal: 'auto',
+    alignItems: 'center',
+  },
+  appIcon: {
+    width: 100,
+    height: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: GRAY_DEEP,
+    overflow: 'hidden',
+  },
+  gradient: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  iconImage: {},
+  titleSection: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  iconText: {
+    color: WHITE,
+    fontSize: 40,
+    fontFamily: DM_SANS.REGULAR,
+    letterSpacing: 11,
+    textAlign: 'center',
+  },
+  accent: {
+    color: '#383bf9',
+  },
+  subTitle: {
+    color: GRAY,
+    fontFamily: DM_SANS.MEDIUM,
+    fontSize: 17,
+    marginTop: 20,
+  },
+})

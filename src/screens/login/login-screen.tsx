@@ -1,32 +1,16 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native'
-import { KakaoLogo, LogoIcon, LogoText } from '@/assets/logo'
+import { View, StyleSheet } from 'react-native'
 import { Loading } from '@/components'
 import { useLoginViewModel } from '@/view-model'
-import { PRETENDARD } from '@/theme/fonts'
+import { Footer, Main } from './components'
 
 export default function LoginScreen() {
-  const { state, actions } = useLoginViewModel()
+  const { state } = useLoginViewModel()
 
   return (
     <View style={styles.container}>
       {state.loading && <Loading />}
-      <View style={styles.wrapper}>
-        <View style={styles.logoSet}>
-          <LogoIcon style={styles.icon} width={170} height={200} />
-          <LogoText style={styles.text} width={300} height={100} />
-        </View>
-      </View>
-      <View style={styles.loginBtn}>
-        <Pressable onPress={actions.kakaoLoginPress}>
-          <View style={styles.kakaoLogin}>
-            <KakaoLogo style={styles.kakaoSymbol} width={30} height={30} />
-            <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
-          </View>
-        </Pressable>
-      </View>
-      <View style={styles.designCredit}>
-        <Text style={styles.designCreditText}>Designed by Originals</Text>
-      </View>
+      <Main />
+      <Footer />
     </View>
   )
 }
@@ -35,48 +19,5 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000000',
     flex: 1,
-  },
-  wrapper: {
-    maxWidth: 400,
-    flex: 1,
-  },
-  logoSet: {
-    marginTop: 250,
-    marginHorizontal: 'auto',
-    alignItems: 'center',
-  },
-  icon: { marginLeft: 25 },
-  text: {
-    marginTop: 50,
-  },
-  loginBtn: {
-    bottom: 100,
-    marginHorizontal: 'auto',
-    marginTop: 100,
-  },
-  kakaoLogin: {
-    width: 300,
-    height: 60,
-    backgroundColor: '#fee500',
-    borderRadius: 8,
-    alignItems: 'center',
-    flexDirection: 'row',
-  },
-  loginBtnText: {
-    fontFamily: PRETENDARD.BOLD,
-    marginLeft: 45,
-    color: '#000000ea',
-    fontSize: 18,
-  },
-  kakaoSymbol: {
-    marginLeft: 20,
-  },
-  designCredit: {
-    bottom: 50,
-    marginHorizontal: 'auto',
-  },
-  designCreditText: {
-    fontFamily: PRETENDARD.MEDIUM,
-    color: '#3b3b3b',
   },
 })
