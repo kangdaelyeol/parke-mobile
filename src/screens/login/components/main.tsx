@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
     color: BLUE_PRIMARY,
   },
   subTitle: {
-    color: GRAY,
+    color: GRAY_DEEP,
     fontFamily: PRETENDARD.MEDIUM,
     letterSpacing: 1,
-    fontSize: 17,
+    fontSize: 16,
     marginTop: 20,
   },
 })
