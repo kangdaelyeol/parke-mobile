@@ -1,2 +1,6 @@
 export * from './my-illustration'
 export * from './phone-illustration'
+export * from './bell-illustration'
+export * from './active-illustration'
+export * from './bluetooth-illustration'
+export * from './camera-illustration'

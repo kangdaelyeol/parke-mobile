@@ -1,35 +1,39 @@
 import { JSX } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK_LIGHT, GRAY } from '@/theme/color'
+import { GRAY } from '@/theme/color'
 import { Toggle } from '@setting/components'
 import {
   ActiveIllustration,
   BellIllustration,
   BluetoothIllustration,
+  CameraIllustration,
 } from './illustrations'
 
-type ItemOption = 'autoChange' | 'notify' | 'active'
+type ItemOption = 'bluetooth' | 'notify' | 'active' | 'camera'
 
 interface ItemProps {
   title: string
   subTitle: string
-  value: boolean
-  onValueChange: (val: boolean) => void
   option: ItemOption
+  value?: boolean
+  onValueChange?: (val: boolean) => void
   disabled?: boolean
+  Right?: () => JSX.Element
 }
 
 const ICONS: Record<ItemOption, () => JSX.Element> = {
-  autoChange: BluetoothIllustration,
+  bluetooth: BluetoothIllustration,
   notify: BellIllustration,
   active: ActiveIllustration,
+  camera: CameraIllustration,
 }
 
 const ICON_BG_COLORS: Record<ItemOption, string> = {
-  autoChange: '#1a1a3a',
+  bluetooth: '#1a1a3a',
   notify: '#1a2a1a',
   active: '#2a1a1a',
+  camera: '#19192a',
 }
 
 export const Item = ({
@@ -39,6 +43,7 @@ export const Item = ({
   value,
   onValueChange,
   disabled,
+  Right,
 }: ItemProps) => {
   const Icon = ICONS[option]
   const backgroundColor = ICON_BG_COLORS[option]
@@ -54,7 +59,18 @@ export const Item = ({
           <Text style={styles.subTitle}>{subTitle}</Text>
         </View>
       </View>
-      <Toggle disabled={disabled} value={value} onValueChange={onValueChange} />
+      {onValueChange && value && (
+        <Toggle
+          disabled={disabled}
+          value={value}
+          onValueChange={onValueChange}
+        />
+      )}
+      {Right && (
+        <View style={styles.right}>
+          <Right />
+        </View>
+      )}
     </View>
   )
 }
@@ -96,10 +112,5 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },
-  listDivider: {
-    width: '100%',
-    alignSelf: 'center',
-    backgroundColor: DARK_LIGHT,
-    height: 1.5,
-  },
+  right: { justifyContent: 'center' },
 })

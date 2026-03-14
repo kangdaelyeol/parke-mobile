@@ -2,7 +2,7 @@ import { StyleSheet, View, Text } from 'react-native'
 import { useMainViewModel } from '@/view-model/setting'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY } from '@/theme/color'
-import { Item } from '@setting/components'
+import { Item, ItemDivider, ItemList } from '@/components'
 
 export const Main = () => {
   const { state, actions } = useMainViewModel()
@@ -10,16 +10,16 @@ export const Main = () => {
     <View style={styles.container}>
       <View style={styles.section}>
         <Text style={styles.title}>일반</Text>
-        <View style={styles.list}>
+        <ItemList>
           <Item
             title="자동변경"
             subTitle="장치 감지시 자동 업데이트"
-            option="autoChange"
+            option="bluetooth"
             disabled={state.autoSetDisabled}
             value={state.autoSet}
             onValueChange={actions.autoSetChange}
           />
-          <View style={styles.divider} />
+          <ItemDivider />
           <Item
             title="알림"
             subTitle="푸시 알림 수신"
@@ -28,12 +28,11 @@ export const Main = () => {
             value={state.notice}
             onValueChange={actions.noticeChange}
           />
-        </View>
+        </ItemList>
       </View>
-
       <View style={styles.section}>
         <Text style={styles.title}>서비스</Text>
-        <View style={styles.list}>
+        <ItemList>
           <Item
             title="활성화"
             subTitle="서비스 활성화 상태"
@@ -41,7 +40,7 @@ export const Main = () => {
             value={state.active}
             onValueChange={actions.activeChange}
           />
-        </View>
+        </ItemList>
       </View>
     </View>
   )
