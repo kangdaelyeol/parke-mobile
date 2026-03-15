@@ -6,7 +6,7 @@ import {
   LoginScreen,
   ProfileScreen,
   SettingScreen,
-  SearchBLEScreen,
+  SearchBleScreen,
   ScanCompleteScreen,
   PermissionScreen,
 } from '@/screens'
@@ -26,7 +26,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="SearchBLE" component={SearchBLEScreen} />
+      <Stack.Screen name="SearchBLE" component={SearchBleScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />
     </Stack.Navigator>
   )
