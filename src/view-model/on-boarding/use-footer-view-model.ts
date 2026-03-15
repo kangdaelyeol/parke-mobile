@@ -5,7 +5,7 @@ import { OnBoardingStackNavigationProp } from '@/navigation/types'
 import { OnBoardingFooterViewModel } from '@on-boarding/types'
 import { cacheService } from '@/services'
 
-export const useOnBoardingFooterViewModel = (): OnBoardingFooterViewModel => {
+export const useFooterViewModel = (): OnBoardingFooterViewModel => {
   const navigation = useNavigation<OnBoardingStackNavigationProp>()
   const DEVICE_WIDTH = Dimensions.get('window').width
 

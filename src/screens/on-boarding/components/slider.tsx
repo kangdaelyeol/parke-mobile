@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { GestureDetector } from 'react-native-gesture-handler'
-import { useOnBoardingSliderViewModel } from '@/view-model'
+import { useSliderViewModel } from '@/view-model/on-boarding'
 import {
   MainArticle1,
   MainArticle2,
@@ -9,7 +9,7 @@ import {
 } from '@on-boarding/components'
 
 export const Slider = () => {
-  const { animated, actions } = useOnBoardingSliderViewModel()
+  const { animated, actions } = useSliderViewModel()
 
   return (
     <View style={sliderStyle.container}>

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { useOnBoardingFooterViewModel } from '@/view-model'
+import { useFooterViewModel } from '@/view-model/on-boarding'
 import { PAGE_COUNT } from '@on-boarding/constants'
 import { PressableButton } from '@/components'
 import { BLUE_PRIMARY, GRAY, WHITE } from '@/theme/color'
 
 export const Footer = () => {
-  const { state, actions } = useOnBoardingFooterViewModel()
+  const { state, actions } = useFooterViewModel()
 
   return (
     <View style={styles.container}>

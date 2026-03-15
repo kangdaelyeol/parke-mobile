@@ -9,7 +9,7 @@ import {
 import { useOnBoardingContext } from '@/contexts'
 import { OnBoardingSliderViewModel } from '@on-boarding/types'
 
-export const useOnBoardingSliderViewModel = (): OnBoardingSliderViewModel => {
+export const useSliderViewModel = (): OnBoardingSliderViewModel => {
   const { sliderTranslateX, setPageIdx } = useOnBoardingContext()
   const DEVICE_WIDTH = Dimensions.get('window').width
 
