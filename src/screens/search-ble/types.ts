@@ -24,9 +24,7 @@ interface TitleAnimated {
   scanContainerStyle: StyleProp<ViewStyle>
 }
 
-interface ScreenStates {
-  rssi: string
-}
+
 
 export type SearchBleHeaderViewModel = ViewModel<{}, HeaderActions>
 
@@ -38,4 +36,3 @@ export type SearchBleTitleViewModel = AnimatedViewModel<
   TitleAnimated
 >
 
-export type SearchBleScreenViewModel = ViewModel<ScreenStates, {}>

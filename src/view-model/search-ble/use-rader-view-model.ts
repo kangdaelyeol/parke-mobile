@@ -10,7 +10,7 @@ import {
 import { delay, duration, repeat } from '@search-ble/constants'
 import { SearchBleRaderViewModel } from '@search-ble/types'
 
-export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
+export const useRaderViewModel = (): SearchBleRaderViewModel => {
   const lineOpacity = useSharedValue(0)
   const lineScale = useSharedValue(0)
   const circleSmallOpacity = useSharedValue(0)

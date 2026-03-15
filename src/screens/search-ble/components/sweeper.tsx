@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { View } from 'react-native'
 import Svg, { Defs, LinearGradient, Stop, Path } from 'react-native-svg'
 import Animated, {
   useSharedValue,
@@ -7,8 +9,6 @@ import Animated, {
   Easing,
   withDelay,
 } from 'react-native-reanimated'
-import { useEffect } from 'react'
-import { View } from 'react-native'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 

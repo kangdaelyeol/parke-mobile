@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated'
 import Svg, { Circle, Line } from 'react-native-svg'
 import { useSearchBleContext } from '@/contexts'
 import { size } from '@search-ble/constants'
-import { useSearchBleRaderViewModel } from '@/view-model'
+import { useRaderViewModel } from '@/view-model/search-ble'
 import { Sweeper } from './sweeper'
 import { BLUE_PRIMARY, DARK } from '@/theme/color'
 
@@ -18,7 +18,7 @@ export const Radar = () => {
     state: { detected },
   } = useSearchBleContext()
 
-  const { animated } = useSearchBleRaderViewModel()
+  const { animated } = useRaderViewModel()
 
   return (
     <View style={styles.container}>

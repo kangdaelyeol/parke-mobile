@@ -10,7 +10,7 @@ import {
 } from 'react-native-reanimated'
 import { SearchBleTitleViewModel } from '@search-ble/types'
 
-export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
+export const useTitleViewModel = (): SearchBleTitleViewModel => {
   const [titleHeight, setTitleHeight] = useState(0)
   const titleTransY = useSharedValue(0)
   const titleOpacity = useSharedValue(0)

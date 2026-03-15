@@ -1,8 +1,10 @@
 import { StyleSheet, View } from 'react-native'
 import { Footer, Header, Radar, Title } from '@search-ble/components'
 import { SearchBleProvider } from '@/contexts'
+import { useSearchBleViewModel } from '@/view-model/search-ble'
 
 export default function SearchBleScreen() {
+  useSearchBleViewModel()
   return (
     <SearchBleProvider>
       <View style={styles.container}>

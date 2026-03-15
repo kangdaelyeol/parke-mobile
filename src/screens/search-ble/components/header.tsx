@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { useSearchBleHeaderViewModel } from '@/view-model'
+import { useHeaderViewModel } from '@/view-model/search-ble'
 
 export const Header = () => {
-  const { actions } = useSearchBleHeaderViewModel()
+  const { actions } = useHeaderViewModel()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>

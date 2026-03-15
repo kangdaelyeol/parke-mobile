@@ -2,14 +2,12 @@ import { permissionService } from '@/services'
 import { useEffect } from 'react'
 import { Alert } from 'react-native'
 import { useSearchBleContext, useUserContext } from '@/contexts'
-import { SearchBleScreenViewModel } from '@search-ble/types'
 import { useNavigation } from '@react-navigation/native'
 import { SearchBleStackNavigationProp } from '@/navigation/types'
 import { bleService } from '@/services'
 
-export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
+export const useSearchBleViewModel = () => {
   const {
-    state: searchBleState,
     actions: { setRssi },
   } = useSearchBleContext()
   const { cards } = useUserContext()
@@ -49,11 +47,4 @@ export const useSearchBleViewModel = (): SearchBleScreenViewModel => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards])
-
-  return {
-    state: {
-      rssi: searchBleState.rssi,
-    },
-    actions: {},
-  }
 }
