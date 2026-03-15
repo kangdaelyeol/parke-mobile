@@ -6,7 +6,7 @@ import { PARKE_WEB_URL } from '@/constants'
 import { ScanCompleteQrScanViewModel } from '@scan-complete/types'
 import { permissionService } from '@/services'
 
-export const useScanCompleteQrScanViewModel =
+export const useQrScanViewModel =
   (): ScanCompleteQrScanViewModel => {
     const device = useCameraDevice('back')
     const [scanned, setScanned] = useState(false)

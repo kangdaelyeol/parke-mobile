@@ -11,7 +11,7 @@ import {
 } from '@scan-complete/types'
 import { useScanCompleteContext } from '@/contexts'
 
-export const useScanCompleteStepLineViewModel = ({
+export const useStepLineViewModel = ({
   step,
 }: ScanCompleteStepLineViewModelProps): ScanCompleteStepLineViewModel => {
   const {

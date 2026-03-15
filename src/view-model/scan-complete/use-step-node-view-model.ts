@@ -12,7 +12,7 @@ import {
   ScanCompleteStepNodeViewModel,
 } from '@scan-complete/types'
 
-export const useScanCompleteStepNodeViewModel = ({
+export const useStepNodeViewModel = ({
   step,
 }: ScanCompleteStepNodeViewModelProps): ScanCompleteStepNodeViewModel => {
   const {

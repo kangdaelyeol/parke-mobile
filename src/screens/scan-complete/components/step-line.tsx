@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useScanCompleteStepLineViewModel } from '@/view-model'
+import { useStepLineViewModel } from '@/view-model/scan-complete'
 import { StepLineProps } from '@scan-complete/types'
 import { BLUE_PRIMARY } from '@/theme/color'
 
 export const StepLine = ({ step }: StepLineProps) => {
-  const { animated } = useScanCompleteStepLineViewModel({ step })
+  const { animated } = useStepLineViewModel({ step })
 
   return (
     <View style={styles.container}>

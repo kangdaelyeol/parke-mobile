@@ -1,12 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Camera } from 'react-native-vision-camera'
 import { LogoText, PressableButton } from '@/components'
-import { useScanCompleteQrScanViewModel } from '@/view-model'
+import { useQrScanViewModel } from '@/view-model/scan-complete'
 import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 
 export const QrScan = () => {
-  const { state, actions } = useScanCompleteQrScanViewModel()
+  const { state, actions } = useQrScanViewModel()
   if (!state.device)
     return (
       <View style={styles.container}>

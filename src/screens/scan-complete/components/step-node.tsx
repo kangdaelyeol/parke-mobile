@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { DM_SANS } from '@/theme/fonts'
-import { useScanCompleteStepNodeViewModel } from '@/view-model'
+import { useStepNodeViewModel } from '@/view-model/scan-complete'
 import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 
 interface StepProps {
@@ -11,7 +11,7 @@ interface StepProps {
 }
 
 export const StepNode = ({ label, step }: StepProps) => {
-  const { animated, state } = useScanCompleteStepNodeViewModel({ step })
+  const { animated, state } = useStepNodeViewModel({ step })
   return (
     <View style={styles.container}>
       <View style={[styles.dotBox]}>
