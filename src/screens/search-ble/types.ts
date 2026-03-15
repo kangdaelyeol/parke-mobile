@@ -6,7 +6,6 @@ interface HeaderActions {
 }
 
 interface RaderAnimated {
-  dotSpinStyle: StyleProp<ViewStyle>
   lineStyle: StyleProp<ViewStyle>
   circleBigStyle: StyleProp<ViewStyle>
   circleSmallStyle: StyleProp<ViewStyle>
@@ -21,6 +20,8 @@ interface TitleActions {
 interface TitleAnimated {
   titleStyle: StyleProp<ViewStyle>
   subTitleStyle: StyleProp<ViewStyle>
+  dotStyle: StyleProp<ViewStyle>
+  scanContainerStyle: StyleProp<ViewStyle>
 }
 
 interface ScreenStates {

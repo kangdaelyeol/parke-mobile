@@ -5,6 +5,7 @@ import {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
+  withRepeat,
   withTiming,
 } from 'react-native-reanimated'
 import { SearchBleTitleViewModel } from '@search-ble/types'
@@ -14,12 +15,14 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
   const titleTransY = useSharedValue(0)
   const titleOpacity = useSharedValue(0)
   const subTitleOpacity = useSharedValue(0)
+  const dotOpacity = useSharedValue(1)
+  const scanContainerOpacity = useSharedValue(0)
 
   useEffect(() => {
     if (!titleHeight) return
 
     const deviceHeight = Dimensions.get('window').height
-    titleTransY.value = deviceHeight / 2 - titleHeight * 3.5
+    titleTransY.value = deviceHeight / 2 - titleHeight * 5.3
     titleTransY.value = withDelay(
       1500,
       withTiming(0, {
@@ -29,7 +32,29 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
     )
     titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }))
     subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }))
-  }, [subTitleOpacity, titleHeight, titleOpacity, titleTransY])
+    dotOpacity.value = withRepeat(
+      withTiming(0.3, {
+        duration: 1000,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      }),
+      -1,
+      true,
+    )
+    scanContainerOpacity.value = withDelay(
+      1500,
+      withTiming(1, {
+        duration: 1000,
+        easing: Easing.bezier(0.33, 1, 0.68, 1),
+      }),
+    )
+  }, [
+    subTitleOpacity,
+    titleHeight,
+    titleOpacity,
+    titleTransY,
+    dotOpacity,
+    scanContainerOpacity,
+  ])
 
   const titleLayout = (e: LayoutChangeEvent) => {
     setTitleHeight(e.nativeEvent.layout.height)
@@ -44,11 +69,15 @@ export const useSearchBleTitleViewModel = (): SearchBleTitleViewModel => {
         },
       ],
     })),
-    subTitleStyle: useAnimatedStyle(() => {
-      return {
-        opacity: subTitleOpacity.value,
-      }
-    }),
+    subTitleStyle: useAnimatedStyle(() => ({
+      opacity: subTitleOpacity.value,
+    })),
+    dotStyle: useAnimatedStyle(() => ({
+      opacity: dotOpacity.value,
+    })),
+    scanContainerStyle: useAnimatedStyle(() => ({
+      opacity: scanContainerOpacity.value,
+    })),
   }
 
   return {

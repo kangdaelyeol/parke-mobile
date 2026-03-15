@@ -79,13 +79,6 @@ export const useSearchBleRaderViewModel = (): SearchBleRaderViewModel => {
   ])
 
   const animated = {
-    dotSpinStyle: useAnimatedStyle(() => {
-      const rotate = `${spinProgress.value * 360}deg`
-      return {
-        transform: [{ rotate }],
-      }
-    }),
-
     lineStyle: useAnimatedStyle(() => {
       return {
         opacity: lineOpacity.value,

@@ -12,7 +12,7 @@ export const Header = () => {
             <FontAwesome6
               name="angle-left"
               iconStyle="solid"
-              size={30}
+              size={20}
               style={[styles.btn, pressed && styles.btnPressed]}
             />
           )}
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
 
   backBtn: {
     position: 'absolute',
-    top: 55,
-    left: 0,
+    top: 60,
+    left: 4,
     zIndex: 3,
   },
   wrapper: {

@@ -26,6 +26,6 @@ export const title = {
 }
 
 export const subTitle = {
-  SEARCH: '장치를 스캔중입니다',
+  SEARCH: '주변의 Parké 장치를 찾고 있습니다',
   DETECT: '장치를 디바이스에 더 가까이 인식시켜주세요',
 }
