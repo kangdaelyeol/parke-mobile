@@ -2,21 +2,28 @@ import { JSX, useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
-import { MyIllustration, PhoneIllustration } from './illustrations'
+import {
+  CardIllustration,
+  MessageIllustration,
+  MyIllustration,
+  PhoneIllustration,
+} from '@/components/illustrations/focusable-input'
 
-type IconName = 'my' | 'phone'
+type IconName = 'my' | 'phone' | 'card' | 'message'
 
 interface FocusableInputProps {
   title: string
   value: string
-  onChangeText: (v: string) => void
   placeholder: string
   iconName: IconName
+  onChangeText: (v: string) => void
 }
 
 const ICONS: Record<IconName, () => JSX.Element> = {
   my: MyIllustration,
   phone: PhoneIllustration,
+  card: CardIllustration,
+  message: MessageIllustration,
 }
 
 export const FocusableInput = ({
@@ -30,6 +37,7 @@ export const FocusableInput = ({
   const onFocus = () => setFocus(true)
   const offFocus = () => setFocus(false)
   const Icon = ICONS[iconName]
+
   return (
     <View style={styles.container}>
       <Text style={[styles.title, focus && styles.titleFocused]}>{title}</Text>
