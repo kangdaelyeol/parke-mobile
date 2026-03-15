@@ -8,7 +8,7 @@ import { authService, userService } from '@/services'
 import { extractNumber } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
-export const useProfileMainViewModel = (): ProfileMainViewModel => {
+export const useMainViewModel = (): ProfileMainViewModel => {
   const { user, setUser } = useUserContext()
   const [nickname, setNickname] = useState(user.nickname)
   const [phone, setPhone] = useState(user.phone)

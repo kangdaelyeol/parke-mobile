@@ -1,10 +1,10 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { useProfileHeaderViewModel } from '@/view-model'
+import { useHeaderViewModel } from '@/view-model/profile'
 import { PRETENDARD } from '@/theme/fonts'
 
 export const Header = () => {
-  const { actions } = useProfileHeaderViewModel()
+  const { actions } = useHeaderViewModel()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>

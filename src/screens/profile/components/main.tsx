@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput, Loading, PressableButton } from '@/components'
-import { useProfileMainViewModel } from '@/view-model'
+import { useMainViewModel } from '@/view-model/profile'
 import {
   DARK,
   DARK_LIGHT,
@@ -12,7 +12,7 @@ import {
 } from '@/theme/color'
 
 export const Main = () => {
-  const { state, actions } = useProfileMainViewModel()
+  const { state, actions } = useMainViewModel()
   return (
     <View>
       <View style={styles.wrapper}>
