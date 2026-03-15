@@ -57,30 +57,28 @@ export const Item = ({
   const backgroundColor = ICON_BG_COLORS[option]
   return (
     <Pressable onPress={onPress} style={styles.container}>
-      <View style={styles.wrapper}>
-        <View style={styles.left}>
-          <View style={styles.iconContainer}>
-            <View style={[styles.iconBackground, { backgroundColor }]} />
-            <Icon />
-          </View>
-          <View style={styles.descSection}>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.subTitle}>{subTitle}</Text>
-          </View>
+      <View style={styles.left}>
+        <View style={styles.iconContainer}>
+          <View style={[styles.iconBackground, { backgroundColor }]} />
+          <Icon />
         </View>
-        {onValueChange && value && (
-          <Toggle
-            disabled={disabled}
-            value={value}
-            onValueChange={onValueChange}
-          />
-        )}
-        {Right && (
-          <View style={styles.right}>
-            <Right />
-          </View>
-        )}
+        <View style={styles.descSection}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subTitle}>{subTitle}</Text>
+        </View>
       </View>
+      {onValueChange && value !== undefined && (
+        <Toggle
+          disabled={disabled}
+          value={value}
+          onValueChange={onValueChange}
+        />
+      )}
+      {Right && (
+        <View style={styles.right}>
+          <Right />
+        </View>
+      )}
     </Pressable>
   )
 }
@@ -93,7 +91,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 18,
   },
-  wrapper: {},
   left: {
     flexDirection: 'row',
     alignItems: 'center',
