@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useScanCompleteStepLineViewModel } from '@/view-model'
 import { StepLineProps } from '@scan-complete/types'
+import { BLUE_PRIMARY } from '@/theme/color'
 
 export const StepLine = ({ step }: StepLineProps) => {
   const { animated } = useScanCompleteStepLineViewModel({ step })
@@ -18,11 +19,11 @@ const styles = StyleSheet.create({
     height: 3,
     top: 16,
     marginHorizontal: -22,
-    width: 130,
+    width: 190,
     backgroundColor: '#363636',
   },
   activeLine: {
     height: '100%',
-    backgroundColor: '#396cf8',
+    backgroundColor: BLUE_PRIMARY,
   },
 })

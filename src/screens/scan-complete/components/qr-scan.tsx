@@ -1,15 +1,16 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Camera } from 'react-native-vision-camera'
-import { LogoIcon } from '@/assets/logo'
-import { PressableButton } from '@/components'
+import { LogoText, PressableButton } from '@/components'
 import { useScanCompleteQrScanViewModel } from '@/view-model'
+import { BLUE_PRIMARY, WHITE } from '@/theme/color'
+import { DM_SANS } from '@/theme/fonts'
 
 export const QrScan = () => {
   const { state, actions } = useScanCompleteQrScanViewModel()
   if (!state.device)
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>카메라를 찾는 중</Text>
+        <Text style={styles.waiting}>카메라를 찾는 중</Text>
         <PressableButton
           pressableStyle={styles.button}
           background={['#202020', '#414141']}
@@ -22,7 +23,9 @@ export const QrScan = () => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <LogoIcon width={50} height={50} style={styles.logo} />
+        <View style={styles.logoContainer}>
+          <LogoText fontSize={24} letterSpacing={4.5} />
+        </View>
         <Text style={styles.title}>Parke에 각인된 QR 코드를 스캔해주세요</Text>
         <Camera
           codeScanner={actions.codeScanner as any}
@@ -32,7 +35,7 @@ export const QrScan = () => {
         />
         <PressableButton
           pressableStyle={styles.button}
-          background={['#202020', '#414141']}
+          background={[BLUE_PRIMARY, '#1820ff']}
           title="돌아가기"
           onPress={actions.scanBackPress}
         />
@@ -53,27 +56,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     maxWidth: 360,
   },
-  text: {
-    color: 'white',
-    fontSize: 20,
+  title: {
+    color: WHITE,
+    marginTop: 19,
+    fontSize: 17,
+    fontFamily: DM_SANS.BOLD,
+    textAlign: 'center',
   },
   camera: {
-    marginTop: 30,
+    marginTop: 50,
     height: 300,
     borderRadius: 10,
     overflow: 'hidden',
   },
-  title: {
-    marginTop: 25,
-    fontSize: 20,
-    color: '#eee',
-    textAlign: 'center',
-  },
   button: {
-    marginTop: 20,
+    marginTop: 40,
   },
-  logo: {
-    marginTop: 10,
+  logoContainer: {
+    marginTop: 80,
     marginHorizontal: 'auto',
+  },
+  waiting: {
+    fontSize: 30,
+    color: WHITE,
+    marginTop: 60,
   },
 })

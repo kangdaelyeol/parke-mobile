@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-import { useScanCompleteContext } from '@/contexts'
 import {
   Easing,
   useAnimatedStyle,
@@ -10,6 +9,7 @@ import {
   ScanCompleteStepLineViewModelProps,
   ScanCompleteStepLineViewModel,
 } from '@scan-complete/types'
+import { useScanCompleteContext } from '@/contexts'
 
 export const useScanCompleteStepLineViewModel = ({
   step,
@@ -34,7 +34,7 @@ export const useScanCompleteStepLineViewModel = ({
   }, [step, currentStep, activeLineWidth])
 
   const lineStyle = useAnimatedStyle(() => ({
-    width: activeLineWidth.value * 130,
+    width: activeLineWidth.value * 190,
   }))
 
   return {

@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { FocusableInput, PressableButton } from '@/components'
-import { useScanCompleteContext } from '@/contexts/scan-complete-context'
-import { PRETENDARD } from '@/theme/fonts'
+import { FocusableInput } from '@/components'
+import { useScanCompleteContext } from '@/contexts'
+import { DM_SANS } from '@/theme/fonts'
+import { WHITE } from '@/theme/color'
 
 export const Step1 = () => {
   const { state, actions } = useScanCompleteContext()
@@ -13,24 +14,21 @@ export const Step1 = () => {
         placeholder="Parke 이름"
         value={state.name}
         onChangeText={actions.nameInput}
+        iconName="card"
       />
       <FocusableInput
         title="전화번호"
         placeholder="전화번호"
         value={state.phone}
         onChangeText={actions.phoneInput}
+        iconName="phone"
       />
       <FocusableInput
         title="메시지"
         placeholder="메시지"
         value={state.message}
         onChangeText={actions.messageInput}
-      />
-      <PressableButton
-        pressableStyle={styles.btn}
-        onPress={actions.nextPress}
-        title="다음"
-        background={['#222', '#444']}
+        iconName="message"
       />
     </View>
   )
@@ -38,16 +36,12 @@ export const Step1 = () => {
 
 const styles = StyleSheet.create({
   container: {
-    gap: 10,
+    gap: 15,
   },
   title: {
-    color: '#eee',
+    color: WHITE,
+    fontFamily: DM_SANS.BOLD,
     fontSize: 25,
-    fontFamily: PRETENDARD.MEDIUM,
-    textAlign: 'center',
     marginTop: 30,
-  },
-  btn: {
-    marginTop: 10,
   },
 })

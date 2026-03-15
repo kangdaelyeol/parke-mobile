@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { PRETENDARD } from '@/theme/fonts'
+import { DM_SANS } from '@/theme/fonts'
 import { useScanCompleteStepNodeViewModel } from '@/view-model'
+import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 
 interface StepProps {
   label: string
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     width: 35,
     height: 35,
     borderWidth: 2,
-    borderColor: '#396cf8',
+    borderColor: BLUE_PRIMARY,
     borderRadius: '50%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -63,11 +64,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#000000',
   },
   activeDot: {
-    backgroundColor: '#396cf8',
+    backgroundColor: BLUE_PRIMARY,
   },
   label: {
     marginTop: 10,
-    color: '#eeeeee',
-    fontFamily: PRETENDARD.REGULAR,
+    color: WHITE,
+    fontFamily: DM_SANS.BOLD,
   },
 })

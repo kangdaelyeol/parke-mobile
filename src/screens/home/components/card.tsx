@@ -175,7 +175,6 @@ const styles = StyleSheet.create({
     fontFamily: DM_MONO.MEDIUM,
     color: GRAY,
   },
-  ellipsis: { color: GRAY },
   divider: {
     position: 'absolute',
     width: '100%',

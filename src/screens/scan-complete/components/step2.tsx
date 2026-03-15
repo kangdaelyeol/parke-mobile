@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { FocusableInput, PressableButton } from '@/components'
+import { StyleSheet, Text, View } from 'react-native'
+import { FocusableInput, Item, ItemList } from '@/components'
 import { useScanCompleteContext } from '@/contexts/scan-complete-context'
-import { PRETENDARD } from '@/theme/fonts'
+import { DM_SANS } from '@/theme/fonts'
+import { WHITE } from '@/theme/color'
 
 export const Step2 = () => {
   const { actions, state } = useScanCompleteContext()
@@ -10,56 +10,36 @@ export const Step2 = () => {
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <Text style={styles.title}>
-          Parke의 QR코드를 스캔하거나{'\n'} 제품의 시리얼 번호를 입력해주세요!
+          Parké의 QR코드를 스캔하거나{'\n'} 제품의 시리얼 번호를 입력해주세요
         </Text>
-        <View style={styles.select}>
-          <Pressable onPress={actions.scanPress}>
-            {({ pressed }) => (
-              <View style={[styles.option, pressed && styles.optionPressed]}>
-                <FontAwesome6
-                  name="qrcode"
-                  iconStyle="solid"
-                  style={styles.optionIcon}
-                />
-                <Text style={styles.optionText}>QR코드 스캔하기</Text>
-              </View>
-            )}
-          </Pressable>
+        <ItemList>
+          <Item
+            title="QR코드 스캔하기"
+            subTitle="카메라로 제품의 QR코드를 인식합니다"
+            option="qr"
+            onPress={actions.scanPress}
+          />
+        </ItemList>
+
+        <View style={styles.serialInputSection}>
           {state.serialInput ? (
             <FocusableInput
               title="시리얼 번호"
               value={state.serial}
               onChangeText={actions.serialInput}
               placeholder="시리얼 번호"
+              iconName="my"
             />
           ) : (
-            <Pressable onPress={actions.serialInputPress}>
-              {({ pressed }) => (
-                <View style={[styles.option, pressed && styles.optionPressed]}>
-                  <FontAwesome6
-                    name="hashtag"
-                    iconStyle="solid"
-                    style={styles.optionIcon}
-                  />
-                  <Text style={styles.optionText}>시리얼 번호 입력하기</Text>
-                </View>
-              )}
-            </Pressable>
+            <ItemList>
+              <Item
+                title="시리얼 번호 입력하기"
+                subTitle="제품 하단의 시리얼 번호를 직접 입력합니다"
+                option="serial"
+                onPress={actions.serialInputPress}
+              />
+            </ItemList>
           )}
-        </View>
-        <View style={styles.buttonContainer}>
-          <PressableButton
-            onPress={() => actions.savePress()}
-            title="저장"
-            background={['#304abb', '#3955cf']}
-            pressableStyle={styles.button}
-          />
-          <PressableButton
-            onPress={actions.prevPress}
-            title="뒤로"
-            background={['#3c3c3c', '#5a5a5a']}
-            pressableStyle={styles.button}
-          />
         </View>
       </View>
     </View>
@@ -75,44 +55,13 @@ const styles = StyleSheet.create({
   },
   title: {
     marginTop: 30,
-    color: '#eeeeee',
+    marginBottom: 15,
+    color: WHITE,
     textAlign: 'center',
-    lineHeight: 30,
     fontSize: 20,
-    fontFamily: PRETENDARD.MEDIUM,
+    fontFamily: DM_SANS.BOLD,
   },
-  select: {
-    marginTop: 20,
-    gap: 20,
-  },
-  option: {
-    borderWidth: 1,
-    borderColor: '#eee',
-    borderRadius: 10,
-    paddingVertical: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 15,
-  },
-  optionPressed: {
-    backgroundColor: '#222',
-  },
-  optionText: {
-    color: '#eee',
-    fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 23,
-    marginLeft: 15,
-  },
-  optionIcon: {
-    fontSize: 40,
-    color: '#eee',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    gap: 30,
-    marginTop: 20,
-  },
-  button: {
-    flex: 1,
+  serialInputSection: {
+    marginTop: 10,
   },
 })

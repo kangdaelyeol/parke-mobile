@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
 import { useHeaderViewModel } from '@/view-model/setting'
 import { PRETENDARD } from '@/theme/fonts'
+import { GRAY } from '@/theme/color'
 
 export const Header = () => {
   const { actions } = useHeaderViewModel()
@@ -49,6 +50,6 @@ const styles = StyleSheet.create({
     color: '#ebebeb',
   },
   btnPressed: {
-    color: '#666',
+    color: GRAY,
   },
 })
