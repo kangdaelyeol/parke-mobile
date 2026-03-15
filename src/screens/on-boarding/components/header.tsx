@@ -1,31 +1,21 @@
+import { LogoText } from '@/components'
 import { StyleSheet, View } from 'react-native'
-import { LogoIcon, LogoText } from '@/assets/logo'
-
 export const Header = () => {
   return (
-    <View style={styles.header}>
+    <View style={styles.container}>
       <View style={styles.logoContainer}>
-        <LogoIcon style={styles.logoIcon} width={40} height={50} />
-        <LogoText style={styles.logoText} width={120} height={50} />
+        <LogoText letterSpacing={5.8} fontSize={21} />
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  header: {
-    height: 150,
-    justifyContent: 'flex-end',
+  container: {
+    width: '100%',
   },
   logoContainer: {
-    marginHorizontal: 'auto',
-    flexDirection: 'row',
-  },
-  logoIcon: {
-    marginTop: 0,
-  },
-  logoText: {
-    marginTop: 5,
-    marginLeft: 10,
+    alignItems: 'center',
+    marginTop: 100,
   },
 })

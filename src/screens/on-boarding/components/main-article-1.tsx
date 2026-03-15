@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { OnBoardingIcon1_1 } from '@/assets/illustrations'
+import { DM_SANS } from '@/theme/fonts'
+import { GRAY, WHITE } from '@/theme/color'
 
 export const MainArticle1 = () => {
   return (
@@ -25,13 +27,14 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 25,
-    color: 'white',
-    fontWeight: '700',
+    color: WHITE,
+    fontFamily: DM_SANS.BOLD,
   },
   subTitle: {
     marginTop: 20,
     fontSize: 17,
-    color: 'gray',
+    fontFamily: DM_SANS.MEDIUM,
+    color: GRAY,
   },
   onBoardingIllustrator1: {
     marginTop: 130,

@@ -2,6 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { useOnBoardingFooterViewModel } from '@/view-model'
 import { PAGE_COUNT } from '@on-boarding/constants'
 import { PressableButton } from '@/components'
+import { BLUE_PRIMARY, GRAY, WHITE } from '@/theme/color'
 
 export const Footer = () => {
   const { state, actions } = useOnBoardingFooterViewModel()
@@ -26,23 +27,25 @@ export const Footer = () => {
             ),
           )}
         </View>
-        {state.pageIdx < PAGE_COUNT ? (
-          <PressableButton
-            title="다음"
-            onPress={actions.nextPress}
-            background={['#ffffff', '#d5d5d5']}
-            textStyle={styles.nextBtnText}
-            style={styles.btn}
-          />
-        ) : (
-          <PressableButton
-            title="시작하기"
-            onPress={actions.startPress}
-            background={['#53c79c', '#5cdeae']}
-            textStyle={styles.startBtnText}
-            style={[styles.startBtn, styles.btn]}
-          />
-        )}
+        <View style={styles.buttonContainer}>
+          {state.pageIdx < PAGE_COUNT ? (
+            <PressableButton
+              title="다음"
+              onPress={actions.nextPress}
+              background={[BLUE_PRIMARY, '#2530ff']}
+              style={styles.btn}
+              text={[WHITE, WHITE]}
+            />
+          ) : (
+            <PressableButton
+              title="시작하기"
+              onPress={actions.startPress}
+              background={['#53c79c', '#5cdeae']}
+              textStyle={styles.startBtnText}
+              style={[styles.startBtn, styles.btn]}
+            />
+          )}
+        </View>
       </View>
     </View>
   )
@@ -50,10 +53,10 @@ export const Footer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'flex-end',
-    height: 300,
-    paddingBottom: 20,
-    paddingHorizontal: 30,
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   wrapper: {
     width: '100%',
@@ -71,26 +74,24 @@ const styles = StyleSheet.create({
     height: 13,
     borderRadius: '50%',
     backgroundColor: '#a2f1cd',
-    boxShadow: '0px 0px 10px 2px #a2f1cd',
+    boxShadow: '0px 0px 5px #a2f1cd',
   },
   inActiveDot: {
     width: 13,
     height: 13,
     borderRadius: '50%',
-    backgroundColor: '#555555',
+    backgroundColor: GRAY,
   },
   btn: {
-    marginBottom: 10,
     paddingVertical: 4,
   },
-  nextBtnText: {
-    color: 'black',
-  },
   startBtn: {
-    marginBottom: 10,
-    boxShadow: '0px 0px 20px #5cdeae',
+    boxShadow: '0px 0px 5px #5cdeae',
   },
   startBtnText: {
-    color: 'white',
+    color: WHITE,
+  },
+  buttonContainer: {
+    marginBottom: 20,
   },
 })
