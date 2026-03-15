@@ -1,9 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput } from '@/components'
-import { useInitViewModel } from '@/view-model'
+import { useInitContext } from '@/contexts'
 
 export const Main = () => {
-  const { state, actions } = useInitViewModel()
+  const { state, actions } = useInitContext()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>

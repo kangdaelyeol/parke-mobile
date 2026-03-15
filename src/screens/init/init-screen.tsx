@@ -1,11 +1,10 @@
 import { StyleSheet, View } from 'react-native'
 import { Loading } from '@/components'
-import { useInitViewModel } from '@/view-model'
 import { Main, Footer, Header } from './components'
+import { InitContextProvider, useInitContext } from '@/contexts'
 
-export default function InitScreen() {
-  const { state } = useInitViewModel()
-
+const InitContent = () => {
+  const { state } = useInitContext()
   return (
     <View style={styles.container}>
       {state.loading && <Loading />}
@@ -13,6 +12,14 @@ export default function InitScreen() {
       <Main />
       <Footer />
     </View>
+  )
+}
+
+export default function InitScreen() {
+  return (
+    <InitContextProvider>
+      <InitContent />
+    </InitContextProvider>
   )
 }
 

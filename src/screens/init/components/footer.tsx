@@ -1,6 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { PressableButton } from '@/components'
-import { useInitViewModel } from '@/view-model'
 import {
   BLUE_PRIMARY,
   DARK,
@@ -8,9 +7,10 @@ import {
   GRAY_DEEP,
   GRAY_LIGHT,
 } from '@/theme/color'
+import { useInitContext } from '@/contexts'
 
 export const Footer = () => {
-  const { actions } = useInitViewModel()
+  const { actions } = useInitContext()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
