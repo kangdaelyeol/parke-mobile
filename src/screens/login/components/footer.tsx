@@ -1,9 +1,9 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native'
 import { KakaoLogo } from '@/assets/logo'
-import { useLoginViewModel } from '@/view-model'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
+import { useLoginContext } from '@/contexts'
 export const Footer = () => {
-  const { actions } = useLoginViewModel()
+  const { actions } = useLoginContext()
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>

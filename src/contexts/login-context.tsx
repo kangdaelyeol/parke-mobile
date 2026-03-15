@@ -1,4 +1,10 @@
-import { useEffect, useState } from 'react'
+import {
+  useEffect,
+  useState,
+  createContext,
+  PropsWithChildren,
+  useContext,
+} from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UserDto } from '@/domain/user'
@@ -8,9 +14,11 @@ import { userService, authService } from '@/services'
 import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
 
+const LoginContext = createContext({} as LoginViewModel)
+
 const isUserDto = (dto: any): dto is UserDto => dto.id
 
-export const useLoginViewModel = (): LoginViewModel => {
+export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const { setUser } = useUserContext()
   const [loading, setLoading] = useState(false)
   const navigation = useNavigation<LoginStackNavigationProp>()
@@ -84,6 +92,13 @@ export const useLoginViewModel = (): LoginViewModel => {
     setUser(userRes)
     return navigation.replace('Init')
   }
-
-  return { state: { loading }, actions: { kakaoLoginPress } }
+  return (
+    <LoginContext.Provider
+      value={{ state: { loading }, actions: { kakaoLoginPress } }}
+    >
+      {children}
+    </LoginContext.Provider>
+  )
 }
+
+export const useLoginContext = () => useContext(LoginContext)
