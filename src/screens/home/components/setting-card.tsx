@@ -1,69 +1,60 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { TextInput } from 'react-native-gesture-handler'
+import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useSettingCardViewModel } from '@/view-model/home'
 import { HomeSettingCardProps } from '@home/types'
+import { FocusableInput, PressableButton } from '@/components'
+import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useSettingCardViewModel(card)
 
   return (
     <Animated.View style={[styles.container, animated.optionStyle]}>
-      <View style={styles.wrapper}>
-        <View>
-          <Text style={styles.text}>Title</Text>
-          <TextInput
-            placeholder="Name"
-            value={state.title}
-            style={styles.input}
-            onChangeText={actions.titleInput}
+      <KeyboardAwareScrollView
+        contentContainerStyle={styles.wrapper}
+        extraScrollHeight={15}
+        enableOnAndroid
+      >
+        <FocusableInput
+          title="Parke 이름"
+          placeholder="Parke 이름"
+          value={state.title}
+          onChangeText={actions.titleInput}
+          iconName="card"
+        />
+        <FocusableInput
+          title="전화번호"
+          placeholder="전화번호"
+          value={state.phone}
+          onChangeText={actions.phoneInput}
+          iconName="phone"
+        />
+        <FocusableInput
+          title="메시지"
+          placeholder="메시지"
+          value={state.message}
+          onChangeText={actions.messageInput}
+          iconName="message"
+        />
+      </KeyboardAwareScrollView>
+      <View style={styles.btnContainer}>
+        <View style={styles.btnWrapper}>
+          <PressableButton
+            title="저장"
+            background={[BLUE_PRIMARY, '#1732ff']}
+            text={[WHITE, WHITE]}
+            onPress={actions.savePress}
+            pressableStyle={styles.pressable}
           />
-        </View>
-        <View>
-          <Text style={styles.text}>Phone</Text>
-          <TextInput
-            placeholder="010-1234-5678"
-            value={state.phone}
-            style={styles.input}
-            onChangeText={actions.phoneInput}
+          <PressableButton
+            title="취소"
+            background={[DARK, DARK_LIGHT]}
+            border={[DARK_LIGHT, GRAY_DEEP]}
+            text={[WHITE, WHITE]}
+            onPress={actions.cancelPress}
+            pressableStyle={styles.pressable}
           />
-        </View>
-        <View>
-          <Text style={styles.text}>Message</Text>
-          <TextInput
-            placeholder="Message"
-            value={state.message}
-            style={styles.input}
-            onChangeText={actions.messageInput}
-          />
-        </View>
-        <View style={styles.btnContainer}>
-          <Pressable style={styles.pressable} onPress={actions.savePress}>
-            {({ pressed }) => (
-              <Text
-                style={[
-                  styles.btn,
-                  styles.saveBtn,
-                  pressed && styles.saveBtnPressed,
-                ]}
-              >
-                저장
-              </Text>
-            )}
-          </Pressable>
-          <Pressable style={styles.pressable} onPress={actions.cancelPress}>
-            {({ pressed }) => (
-              <Text
-                style={[
-                  styles.btn,
-                  styles.cancelBtn,
-                  pressed && styles.cancelBtnPressed,
-                ]}
-              >
-                취소
-              </Text>
-            )}
-          </Pressable>
         </View>
       </View>
     </Animated.View>
@@ -78,6 +69,7 @@ const styles = StyleSheet.create({
     right: 0,
     marginHorizontal: 'auto',
     marginTop: 0,
+    bottom: 0,
   },
   wrapper: {
     width: '100%',
@@ -101,12 +93,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   btnContainer: {
-    marginTop: 10,
-    flexDirection: 'row',
-    gap: 30,
+    position: 'absolute',
+    bottom: 110,
+    left: 0,
+    right: 0,
   },
-  pressable: {
-    flex: 1,
+  btnWrapper: {
+    flexDirection: 'row',
+    gap: 15,
+    width: '100%',
+    marginHorizontal: 'auto',
+    maxWidth: 360,
   },
   btn: {
     paddingVertical: 20,
@@ -115,19 +112,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     fontWeight: 'bold',
   },
-  saveBtn: {
-    color: '#bcbcbc',
-    backgroundColor: '#17182f',
-  },
-  saveBtnPressed: {
-    backgroundColor: '#262b73',
-  },
-  cancelBtn: {
-    textAlign: 'center',
-    color: '#eeeeee',
-    backgroundColor: '#2e2f31',
-  },
-  cancelBtnPressed: {
-    backgroundColor: '#4e4f53',
+  pressable: {
+    flex: 1,
   },
 })
