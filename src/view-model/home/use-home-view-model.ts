@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import { useUserContext, useHomeContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
@@ -47,6 +47,10 @@ export const useHomeViewModel = () => {
           Alert.alert(
             'Bluetooth 권한 필요',
             'Parke 백그라운드 스캔을 위해 블루투스 권한을 허용해주세요',
+            [
+              { text: '취소', style: 'destructive' },
+              { text: '설정으로 이동', onPress: () => Linking.openSettings() },
+            ],
           )
           return setScanning(false)
         }

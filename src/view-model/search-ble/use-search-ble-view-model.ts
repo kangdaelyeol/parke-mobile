@@ -1,6 +1,6 @@
 import { permissionService } from '@/services'
 import { useEffect } from 'react'
-import { Alert } from 'react-native'
+import { Alert, Linking } from 'react-native'
 import { useSearchBleContext, useUserContext } from '@/contexts'
 import { useNavigation } from '@react-navigation/native'
 import { SearchBleStackNavigationProp } from '@/navigation/types'
@@ -25,6 +25,10 @@ export const useSearchBleViewModel = () => {
         Alert.alert(
           'Bluetooth 권한 필요',
           'Parke 스캔을 위해 설정에서 블루투스 권한을 허용해주세요',
+          [
+            { text: '취소', style: 'destructive' },
+            { text: '설정으로 이동', onPress: () => Linking.openSettings() },
+          ],
         )
         return navigation.goBack()
       }
