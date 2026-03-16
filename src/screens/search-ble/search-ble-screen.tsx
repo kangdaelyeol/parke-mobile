@@ -3,16 +3,22 @@ import { Footer, Header, Radar, Title } from '@search-ble/components'
 import { SearchBleProvider } from '@/contexts'
 import { useSearchBleViewModel } from '@/view-model/search-ble'
 
-export default function SearchBleScreen() {
+const SearchBleContent = () => {
   useSearchBleViewModel()
   return (
+    <View style={styles.container}>
+      <Header />
+      <Title />
+      <Radar />
+      <Footer />
+    </View>
+  )
+}
+
+export default function SearchBleScreen() {
+  return (
     <SearchBleProvider>
-      <View style={styles.container}>
-        <Header />
-        <Title />
-        <Radar />
-        <Footer />
-      </View>
+      <SearchBleContent />
     </SearchBleProvider>
   )
 }
