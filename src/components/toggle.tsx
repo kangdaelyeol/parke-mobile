@@ -1,7 +1,12 @@
 import { StyleSheet, View, Pressable } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useToggleViewModel } from '@/view-model/setting'
-import { ToggleProps } from '@setting/types'
+
+interface ToggleProps {
+  value: boolean
+  disabled?: boolean
+  onValueChange: (val: boolean) => void
+}
 
 export const Toggle = ({ value, disabled, onValueChange }: ToggleProps) => {
   const { actions, animated } = useToggleViewModel({

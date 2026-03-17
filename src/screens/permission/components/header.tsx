@@ -1,6 +1,6 @@
+import { StyleSheet, Text, View } from 'react-native'
 import { GRAY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
-import { StyleSheet, Text, View } from 'react-native'
 
 export const Header = () => {
   return (

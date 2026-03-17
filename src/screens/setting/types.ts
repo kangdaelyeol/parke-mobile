@@ -1,11 +1,6 @@
 import { AnimatedViewModel, ViewModel } from '@/types/common'
 import { StyleProp, ViewStyle } from 'react-native'
 
-export interface ToggleProps {
-  value: boolean
-  disabled?: boolean
-  onValueChange: (val: boolean) => void
-}
 
 interface HeaderActions {
   backPress: () => void

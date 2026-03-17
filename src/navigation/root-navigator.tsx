@@ -10,7 +10,7 @@ import {
   ScanCompleteScreen,
   PermissionScreen,
 } from '@/screens'
-import { RootStackParamList } from './types'
+import { RootStackParamList } from '@/navigation/types'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 

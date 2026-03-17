@@ -1,6 +1,6 @@
+import { StyleSheet, View } from 'react-native'
 import { useCardSliderContext, useUserContext } from '@/contexts'
 import { DARK_LIGHT, GRAY } from '@/theme/color'
-import { StyleSheet, View } from 'react-native'
 
 interface DotProps {
   selected: boolean

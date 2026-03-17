@@ -1,7 +1,7 @@
 import { View, StyleSheet } from 'react-native'
 import { Loading } from '@/components'
-import { Footer, Main } from './components'
 import { LoginContextProvider, useLoginContext } from '@/contexts'
+import { Footer, Main } from './components'
 
 const LoginContent = () => {
   const { state } = useLoginContext()

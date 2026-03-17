@@ -1,9 +1,9 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { CarIllustration } from './illustrations'
 import { DM_SANS } from '@/theme/fonts'
 import { useNavigation } from '@react-navigation/native'
 import { HomeStackNavigationProp } from '@/navigation/types'
 import { GRAY, WHITE } from '@/theme/color'
+import { CarIllustration } from './illustrations'
 
 export const EmptyView = () => {
   const navigation = useNavigation<HomeStackNavigationProp>()

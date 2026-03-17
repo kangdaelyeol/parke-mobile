@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Loading } from '@/components'
-import { Main, Footer, Header } from './components'
 import { InitContextProvider, useInitContext } from '@/contexts'
+import { Main, Footer, Header } from './components'
 
 const InitContent = () => {
   const { state } = useInitContext()

@@ -1,9 +1,9 @@
+import { JSX } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
 import { Item, ItemList } from '@/components'
 import { useSearchBleContext } from '@/contexts'
 import { BLUE_PRIMARY, GRAY_DEEP } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
-import { JSX } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
 
 const getProximity = (rssi: number): string => {
   if (rssi > -45) return '바로 옆'
