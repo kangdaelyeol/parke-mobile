@@ -6,7 +6,8 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { SettingToggleViewModel, ToggleProps } from '@setting/types'
+import { SettingToggleViewModel } from '@setting/types'
+import { ToggleProps } from '@/components/types'
 
 export const useToggleViewModel = ({
   value,
