@@ -59,11 +59,11 @@ const styles = StyleSheet.create({
   iconImage: {},
   titleSection: {
     flexDirection: 'row',
-    marginTop: 20,
+    marginTop: 15,
   },
   iconText: {
     color: WHITE,
-    fontSize: 40,
+    fontSize: 34,
     fontFamily: DM_SANS.REGULAR,
     letterSpacing: 11,
     textAlign: 'center',
@@ -76,6 +76,6 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     letterSpacing: 1,
     fontSize: 16,
-    marginTop: 20,
+    marginTop: 10,
   },
 })

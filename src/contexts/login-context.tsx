@@ -20,8 +20,15 @@ const isUserDto = (dto: any): dto is UserDto => dto.id
 
 export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const { setUser } = useUserContext()
-  const [loading, setLoading] = useState(false)
   const navigation = useNavigation<LoginStackNavigationProp>()
+  const [loading, setLoading] = useState(false)
+  const [allConfirm, setAllConfirm] = useState(false)
+  const [ageConfirm, setAgeConfirm] = useState(false)
+  const [termConfirm, setTermConfirm] = useState(false)
+  const [consentConfirm, setConsentConfirm] = useState(false)
+  const [thirdConsentConfirm, setThirdConsentConfirm] = useState(false)
+  const [bottomSheet, setBottomSheet] = useState(false)
+
 
   useEffect(() => {
     ;(async () => {
@@ -42,7 +49,54 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     })()
   }, [navigation, setUser])
 
+  const allConfirmPress = () => {
+    const val = !allConfirm
+    setAllConfirm(val)
+    setAgeConfirm(val)
+    setTermConfirm(val)
+    setConsentConfirm(val)
+    setThirdConsentConfirm(val)
+  }
+
+  const ageConfirmPress = () => {
+    const val = !ageConfirm
+    if (val && termConfirm && consentConfirm && thirdConsentConfirm) {
+      setAllConfirm(true)
+    } else setAllConfirm(false)
+
+    setAgeConfirm(val)
+    console.log(val)
+  }
+
+  const termConfirmPress = () => {
+    const val = !termConfirm
+    if (val && ageConfirm && consentConfirm && thirdConsentConfirm) {
+      setAllConfirm(true)
+    } else setAllConfirm(false)
+
+    setTermConfirm(val)
+  }
+
+  const consentConfirmPress = () => {
+    const val = !consentConfirm
+    if (val && ageConfirm && termConfirm && thirdConsentConfirm) {
+      setAllConfirm(true)
+    } else setAllConfirm(false)
+
+    setConsentConfirm(val)
+  }
+  
+  const thirdConsentConfirmPress = () => {
+    const val = !thirdConsentConfirm
+    if (val && ageConfirm && consentConfirm && termConfirm) {
+      setAllConfirm(true)
+    } else setAllConfirm(false)
+
+    setThirdConsentConfirm(val)
+  }
+
   const kakaoLoginPress = async () => {
+    if (!allConfirm) return Alert.alert('필수 동의가 필요합니다.')
     if (loading) return
 
     setLoading(true)
@@ -92,9 +146,27 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     setUser(userRes)
     return navigation.replace('Init')
   }
+
   return (
     <LoginContext.Provider
-      value={{ state: { loading }, actions: { kakaoLoginPress } }}
+      value={{
+        state: {
+          loading,
+          allConfirm,
+          ageConfirm,
+          termConfirm,
+          consentConfirm,
+          thirdConsentConfirm,
+        },
+        actions: {
+          kakaoLoginPress,
+          allConfirmPress,
+          ageConfirmPress,
+          termConfirmPress,
+          consentConfirmPress,
+          thirdConsentConfirmPress,
+        },
+      }}
     >
       {children}
     </LoginContext.Provider>
