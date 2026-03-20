@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import { settingService } from '@/services'
 import { SettingMainViewModel } from '@setting/types'
+import { useSettingContext } from '@/contexts'
 
 export const useMainViewModel = (): SettingMainViewModel => {
+  const { showBottomSheet } = useSettingContext()
   const [autoSet, setAutoSet] = useState(false)
   const [notice, setNotice] = useState(false)
   const [active, setActive] = useState(true)
@@ -46,6 +48,19 @@ export const useMainViewModel = (): SettingMainViewModel => {
     noticeChange: (val: boolean) => {
       setNotice(val)
       settingService.setNotice(val)
+    },
+
+    privacyPress: () => {
+      showBottomSheet('privacy')
+    },
+    termsPress: () => {
+      showBottomSheet('terms')
+    },
+    consentPress: () => {
+      showBottomSheet('consent')
+    },
+    consentThirdPress: () => {
+      showBottomSheet('consent-third')
     },
   }
 

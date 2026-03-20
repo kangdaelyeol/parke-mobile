@@ -1,11 +1,24 @@
 import { StyleSheet, View } from 'react-native'
 import { Header, Main } from '@setting/components'
-export default function SettingScreen() {
+import { TermBottomSheet } from '@/components'
+import { SettingContextProvider, useSettingContext } from '@/contexts'
+
+const SettingScreenContent = () => {
+  const { modalRef, docType } = useSettingContext()
   return (
     <View style={styles.container}>
       <Header />
       <Main />
+      <TermBottomSheet modalRef={modalRef} docState={docType} />
     </View>
+  )
+}
+
+export default function SettingScreen() {
+  return (
+    <SettingContextProvider>
+      <SettingScreenContent />
+    </SettingContextProvider>
   )
 }
 
