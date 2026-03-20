@@ -10,8 +10,8 @@ import Animated, {
 import { GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { useLoginContext } from '@/contexts'
-import { CheckIllustration } from '@/screens/login/components/illustrations'
 import { DocType } from '@/types/common'
+import { CheckIllustration } from '@login/components/illustrations'
 
 interface Props {
   confirm: boolean

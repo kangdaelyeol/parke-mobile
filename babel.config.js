@@ -16,6 +16,7 @@ module.exports = {
           '@search-ble': './src/screens/search-ble',
           '@scan-complete': './src/screens/scan-complete',
           '@permission': './src/screens/permission',
+          '@login': './src/screens/login',
         },
         extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
