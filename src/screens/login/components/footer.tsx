@@ -3,7 +3,8 @@ import { KakaoLogo } from '@/assets/logo'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { useLoginContext } from '@/contexts'
 import { CheckBoxLine } from './check-box-line'
-import { DARK } from '@/theme/color'
+import { DARK, GRAY, GRAY_DEEP } from '@/theme/color'
+import { DocIllustration } from './illustrations'
 export const Footer = () => {
   const { actions, state } = useLoginContext()
   return (
@@ -28,24 +29,38 @@ export const Footer = () => {
             confirmPress={actions.termConfirmPress}
             label="서비스 이용약관 동의"
             required
-            docs="1"
+            docs="terms"
           />
           <CheckBoxLine
             confirm={state.consentConfirm}
             confirmPress={actions.consentConfirmPress}
             label="개인정보 수집·이용 동의"
             required
-            docs="1"
+            docs="consent"
           />
           <CheckBoxLine
             confirm={state.thirdConsentConfirm}
             confirmPress={actions.thirdConsentConfirmPress}
             label="개인정보 제3자 제공 동의"
             required
-            docs="1"
+            docs="consent-third"
           />
+          <View style={styles.divider} />
+          <View style={styles.privacyContainer}>
+            <DocIllustration size={20} />
+            <Pressable
+              onPress={() => actions.showDocPress('privacy')}
+              style={styles.privacyTextContainer}
+            >
+              <Text style={styles.privacyText}>개인정보 처리방침</Text>
+              <Text style={styles.privacyShowText}>보기</Text>
+            </Pressable>
+          </View>
         </View>
-        <Pressable onPress={actions.kakaoLoginPress} style={styles.kakaoLogin}>
+        <Pressable
+          onPress={actions.kakaoLoginPress}
+          style={[styles.kakaoLogin, !state.allConfirm && styles.loginDisabled]}
+        >
           <View>
             <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
             <KakaoLogo style={styles.kakaoSymbol} width={20} height={20} />
@@ -84,6 +99,9 @@ const styles = StyleSheet.create({
     color: '#000000ea',
     fontSize: 17,
   },
+  loginDisabled: {
+    opacity: 0.5,
+  },
   kakaoSymbol: {
     position: 'absolute',
     top: 2,
@@ -100,7 +118,29 @@ const styles = StyleSheet.create({
     backgroundColor: DARK,
   },
   confirmSection: {
-    gap: 10,
+    gap: 13,
     marginBottom: 20,
+  },
+  privacyContainer: {
+    paddingLeft: 6,
+    flexDirection: 'row',
+    gap: 6,
+    marginBottom: 5,
+  },
+  privacyTextContainer: {
+    flex: 1,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  privacyText: {
+    color: GRAY,
+    fontFamily: DM_SANS.MEDIUM,
+    fontSize: 15,
+  },
+  privacyShowText: {
+    color: GRAY_DEEP,
+    fontFamily: DM_SANS.BOLD,
+    fontSize: 14,
   },
 })
