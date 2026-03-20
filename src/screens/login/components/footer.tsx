@@ -5,6 +5,7 @@ import { useLoginContext } from '@/contexts'
 import { CheckBoxLine } from './check-box-line'
 import { DARK, GRAY, GRAY_DEEP } from '@/theme/color'
 import { DocIllustration } from './illustrations'
+import { AppleButton } from '@invertase/react-native-apple-authentication'
 export const Footer = () => {
   const { actions, state } = useLoginContext()
   return (
@@ -57,15 +58,30 @@ export const Footer = () => {
             </Pressable>
           </View>
         </View>
-        <Pressable
-          onPress={actions.kakaoLoginPress}
-          style={[styles.kakaoLogin, !state.allConfirm && styles.loginDisabled]}
-        >
-          <View>
-            <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
-            <KakaoLogo style={styles.kakaoSymbol} width={20} height={20} />
-          </View>
-        </Pressable>
+        <View style={styles.loginSection}>
+          <AppleButton
+            cornerRadius={13}
+            style={[
+              styles.appleButton,
+              !state.allConfirm && styles.loginDisabled,
+            ]}
+            buttonStyle={AppleButton.Style.WHITE}
+            buttonType={AppleButton.Type.SIGN_IN}
+            onPress={actions.appleLoginPress}
+          />
+          <Pressable
+            onPress={actions.kakaoLoginPress}
+            style={[
+              styles.kakaoLogin,
+              !state.allConfirm && styles.loginDisabled,
+            ]}
+          >
+            <View>
+              <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
+              <KakaoLogo style={styles.kakaoSymbol} width={20} height={20} />
+            </View>
+          </Pressable>
+        </View>
         <Text style={styles.designCreditText}>Designed by Originals</Text>
       </View>
     </View>
@@ -142,5 +158,13 @@ const styles = StyleSheet.create({
     color: GRAY_DEEP,
     fontFamily: DM_SANS.BOLD,
     fontSize: 14,
+  },
+  loginSection: {
+    gap: 15,
+  },
+  appleButton: {
+    width: '100%',
+    height: 60,
+    marginHorizontal: 'auto',
   },
 })

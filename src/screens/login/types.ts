@@ -1,9 +1,9 @@
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { DocType, ViewModel } from '@/types/common'
 
-
 interface LoginActions {
   kakaoLoginPress: () => Promise<void>
+  appleLoginPress: () => Promise<void>
   allConfirmPress: () => void
   ageConfirmPress: () => void
   termConfirmPress: () => void
@@ -23,4 +23,4 @@ interface LoginState {
   docType: DocType
 }
 
-export type LoginViewModel = ViewModel<LoginState, LoginActions>
+export type LoginContextValue = ViewModel<LoginState, LoginActions>

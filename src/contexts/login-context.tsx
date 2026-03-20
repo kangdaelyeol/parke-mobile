@@ -9,14 +9,15 @@ import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
-import { LoginViewModel } from '@/screens/login/types'
+import { LoginContextValue } from '@/screens/login/types'
 import { userService, authService } from '@/services'
 import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
 import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
+import appleAuth from '@invertase/react-native-apple-authentication'
 
-const LoginContext = createContext({} as LoginViewModel)
+const LoginContext = createContext({} as LoginContextValue)
 
 const isUserDto = (dto: any): dto is UserDto => dto.id
 
@@ -153,6 +154,29 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     showBottomSheet(type)
   }
 
+  const appleLoginPress = async () => {
+    if (!appleAuth.isSupported)
+      return Alert.alert('이 기기에서 지원하지 않습니다.')
+    if (!allConfirm) return
+    if (loading) return
+    setLoading(true)
+
+    try {
+      const credential = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      })
+
+      if (!credential) return setLoading(false)
+      console.log(credential)
+    } catch (e) {
+      console.log(e)
+      setLoading(false)
+    }
+
+    setLoading(false)
+  }
+
   return (
     <LoginContext.Provider
       value={{
@@ -174,6 +198,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           consentConfirmPress,
           thirdConsentConfirmPress,
           showDocPress,
+          appleLoginPress,
         },
       }}
     >

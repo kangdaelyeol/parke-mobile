@@ -1,9 +1,9 @@
 import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { useMainViewModel } from '@/view-model/setting'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP } from '@/theme/color'
 import { Item, ItemDivider, ItemList } from '@/components'
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 
 export const Main = () => {
   const { state, actions } = useMainViewModel()
