@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
   introSection: {
     marginHorizontal: 'auto',
     alignItems: 'center',
+    marginBottom: 150,
   },
   appIcon: {
     width: 100,
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 25,
-    borderWidth: 1.6,
+    borderWidth: 1.4,
     borderColor: GRAY_DEEP,
     overflow: 'hidden',
   },
