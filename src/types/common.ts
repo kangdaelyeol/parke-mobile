@@ -8,3 +8,5 @@ type WithAnimated<VM extends object, M> = Readonly<
 >
 
 export type AnimatedViewModel<S, A, M> = WithAnimated<ViewModel<S, A>, M>
+
+export type DocType = 'privacy' | 'terms' | 'consent' | 'consent-third'

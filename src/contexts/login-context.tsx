@@ -4,17 +4,17 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
-  useRef,
 } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
-import { DocType, LoginViewModel } from '@/screens/login/types'
+import { LoginViewModel } from '@/screens/login/types'
 import { userService, authService } from '@/services'
 import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { useTermBottomSheet } from '@/hooks'
+import { DocType } from '@/types/common'
 
 const LoginContext = createContext({} as LoginViewModel)
 
@@ -29,9 +29,8 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const [termConfirm, setTermConfirm] = useState(false)
   const [consentConfirm, setConsentConfirm] = useState(false)
   const [thirdConsentConfirm, setThirdConsentConfirm] = useState(false)
-  const [docType, setDocType] = useState<DocType>('terms')
 
-  const modalRef = useRef<BottomSheetModal>(null)
+  const { modalRef, docType, showBottomSheet } = useTermBottomSheet()
 
   useEffect(() => {
     ;(async () => {
@@ -151,8 +150,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const showDocPress = (type: DocType) => {
-    setDocType(type)
-    modalRef.current?.present()
+    showBottomSheet(type)
   }
 
   return (

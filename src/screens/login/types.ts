@@ -1,7 +1,6 @@
-import { ViewModel } from '@/types/common'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { DocType, ViewModel } from '@/types/common'
 
-export type DocType = 'privacy' | 'terms' | 'consent' | 'consent-third'
 
 interface LoginActions {
   kakaoLoginPress: () => Promise<void>

@@ -2,7 +2,7 @@ import { JSX } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
-import { Toggle } from '@setting/components'
+import { Toggle } from '@/components'
 import {
   ActiveIllustration,
   BellIllustration,

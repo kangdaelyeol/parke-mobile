@@ -11,7 +11,7 @@ import { GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { useLoginContext } from '@/contexts'
 import { CheckIllustration } from '@/screens/login/components/illustrations'
-import { DocType } from '@/screens/login/types'
+import { DocType } from '@/types/common'
 
 interface Props {
   confirm: boolean

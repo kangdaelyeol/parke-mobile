@@ -6,8 +6,8 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import { useLoginContext } from '@/contexts'
 import { Consent, ConsentThird, Privacy, Terms } from './terms'
+import { DocType } from '@/types/common'
 
 const renderBackdrop = (
   props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps,
@@ -20,11 +20,15 @@ const renderBackdrop = (
   />
 )
 
-export const TermBottomSheet = () => {
-  const { state } = useLoginContext()
+interface Props {
+  docState: DocType
+  modalRef: React.RefObject<BottomSheetModal | null>
+}
+
+export const TermBottomSheet = ({ docState, modalRef }: Props) => {
   return (
     <BottomSheetModal
-      ref={state.modalRef}
+      ref={modalRef}
       enablePanDownToClose={true}
       backdropComponent={renderBackdrop}
       backgroundStyle={styles.backgroundStyle}
@@ -32,10 +36,10 @@ export const TermBottomSheet = () => {
     >
       <BottomSheetView style={styles.container}>
         <ScrollView>
-          {state.docType === 'privacy' && <Privacy />}
-          {state.docType === 'terms' && <Terms />}
-          {state.docType === 'consent' && <Consent />}
-          {state.docType === 'consent-third' && <ConsentThird />}
+          {docState === 'privacy' && <Privacy />}
+          {docState === 'terms' && <Terms />}
+          {docState === 'consent' && <Consent />}
+          {docState === 'consent-third' && <ConsentThird />}
         </ScrollView>
       </BottomSheetView>
     </BottomSheetModal>
