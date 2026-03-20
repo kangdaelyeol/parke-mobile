@@ -9,7 +9,9 @@ import Animated, {
 } from 'react-native-reanimated'
 import { GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
-import { CheckIllustration } from './illustrations'
+import { useLoginContext } from '@/contexts'
+import { CheckIllustration } from '@/screens/login/components/illustrations'
+import { DocType } from '@/screens/login/types'
 
 interface Props {
   confirm: boolean
@@ -17,7 +19,7 @@ interface Props {
   label: string
   top?: boolean
   required?: boolean
-  docs?: string
+  docs?: DocType
 }
 
 export const CheckBoxLine = ({
@@ -28,6 +30,8 @@ export const CheckBoxLine = ({
   docs,
   label,
 }: Props) => {
+  const { actions } = useLoginContext()
+
   const progress = useSharedValue(0)
 
   const checkIconStyle = useAnimatedStyle(() => ({
@@ -75,7 +79,11 @@ export const CheckBoxLine = ({
         )}
         <Text style={[styles.label, top && styles.topLabel]}>{label}</Text>
       </Pressable>
-      {docs && <Text style={styles.docsBtn}>보기</Text>}
+      {docs && (
+        <Text onPress={() => actions.showDocPress(docs)} style={styles.docsBtn}>
+          보기
+        </Text>
+      )}
     </View>
   )
 }
@@ -107,6 +115,7 @@ const styles = StyleSheet.create({
   },
   topLabel: {
     fontSize: 17,
+    fontFamily: DM_SANS.BOLD,
     color: WHITE,
   },
   requiredBox: {

@@ -4,15 +4,17 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
+  useRef,
 } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
-import { LoginViewModel } from '@/screens/login/types'
+import { DocType, LoginViewModel } from '@/screens/login/types'
 import { userService, authService } from '@/services'
 import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 const LoginContext = createContext({} as LoginViewModel)
 
@@ -27,8 +29,9 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const [termConfirm, setTermConfirm] = useState(false)
   const [consentConfirm, setConsentConfirm] = useState(false)
   const [thirdConsentConfirm, setThirdConsentConfirm] = useState(false)
-  const [bottomSheet, setBottomSheet] = useState(false)
+  const [docType, setDocType] = useState<DocType>('terms')
 
+  const modalRef = useRef<BottomSheetModal>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -85,7 +88,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
 
     setConsentConfirm(val)
   }
-  
+
   const thirdConsentConfirmPress = () => {
     const val = !thirdConsentConfirm
     if (val && ageConfirm && consentConfirm && termConfirm) {
@@ -96,7 +99,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const kakaoLoginPress = async () => {
-    if (!allConfirm) return Alert.alert('필수 동의가 필요합니다.')
+    if (!allConfirm) return
     if (loading) return
 
     setLoading(true)
@@ -147,6 +150,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     return navigation.replace('Init')
   }
 
+  const showDocPress = (type: DocType) => {
+    setDocType(type)
+    modalRef.current?.present()
+  }
+
   return (
     <LoginContext.Provider
       value={{
@@ -157,6 +165,8 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           termConfirm,
           consentConfirm,
           thirdConsentConfirm,
+          modalRef,
+          docType,
         },
         actions: {
           kakaoLoginPress,
@@ -165,6 +175,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           termConfirmPress,
           consentConfirmPress,
           thirdConsentConfirmPress,
+          showDocPress,
         },
       }}
     >
