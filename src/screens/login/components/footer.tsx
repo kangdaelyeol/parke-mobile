@@ -1,63 +1,34 @@
 import { View, StyleSheet, Text, Pressable } from 'react-native'
-import { KakaoLogo } from '@/assets/logo'
-import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { useLoginContext } from '@/contexts'
-import { CheckBoxLine } from './check-box-line'
-import { DARK, GRAY, GRAY_DEEP } from '@/theme/color'
-import { DocIllustration } from './illustrations'
 import { AppleButton } from '@invertase/react-native-apple-authentication'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
+import { KakaoLogo } from '@/assets/logo'
+import { useLoginContext } from '@/contexts'
+import { DM_SANS, PRETENDARD } from '@/theme/fonts'
+import { GRAY, GRAY_DEEP } from '@/theme/color'
+import { CheckBoxLine } from '@login/components'
 export const Footer = () => {
   const { actions, state } = useLoginContext()
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
-        <View style={styles.confirmSection}>
+        <Pressable
+          onPress={actions.termsAndConsentConfirmPress}
+          style={styles.confirmSection}
+        >
           <CheckBoxLine
+            label="이용약관 및 개인정보 처리 동의"
             confirm={state.allConfirm}
-            confirmPress={actions.allConfirmPress}
-            label="전체 동의"
-            top
+            confirmPress={actions.termsAndConsentConfirmPress}
           />
-          <View style={styles.divider} />
-          <CheckBoxLine
-            confirm={state.ageConfirm}
-            confirmPress={actions.ageConfirmPress}
-            label="만 14세 이상입니다"
-            required
+          <FontAwesome6
+            iconStyle="solid"
+            name="angle-right"
+            size={12}
+            color={GRAY}
+            onPress={actions.termsAndConsentConfirmPress}
           />
-          <CheckBoxLine
-            confirm={state.termConfirm}
-            confirmPress={actions.termConfirmPress}
-            label="서비스 이용약관 동의"
-            required
-            docs="terms"
-          />
-          <CheckBoxLine
-            confirm={state.consentConfirm}
-            confirmPress={actions.consentConfirmPress}
-            label="개인정보 수집·이용 동의"
-            required
-            docs="consent"
-          />
-          <CheckBoxLine
-            confirm={state.thirdConsentConfirm}
-            confirmPress={actions.thirdConsentConfirmPress}
-            label="개인정보 제3자 제공 동의"
-            required
-            docs="consent-third"
-          />
-          <View style={styles.divider} />
-          <View style={styles.privacyContainer}>
-            <DocIllustration size={20} />
-            <Pressable
-              onPress={() => actions.showDocPress('privacy')}
-              style={styles.privacyTextContainer}
-            >
-              <Text style={styles.privacyText}>개인정보 처리방침</Text>
-              <Text style={styles.privacyShowText}>보기</Text>
-            </Pressable>
-          </View>
-        </View>
+        </Pressable>
         <View style={styles.loginSection}>
           <AppleButton
             cornerRadius={13}
@@ -104,7 +75,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     marginHorizontal: 'auto',
     width: '100%',
-    height: 60,
+    height: 50,
     backgroundColor: '#fee500',
     borderRadius: 15,
     alignItems: 'center',
@@ -129,12 +100,9 @@ const styles = StyleSheet.create({
     fontFamily: DM_SANS.MEDIUM,
     color: '#333',
   },
-  divider: {
-    height: 1,
-    backgroundColor: DARK,
-  },
   confirmSection: {
-    gap: 13,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginBottom: 20,
   },
   privacyContainer: {
@@ -164,7 +132,7 @@ const styles = StyleSheet.create({
   },
   appleButton: {
     width: '100%',
-    height: 60,
+    height: 50,
     marginHorizontal: 'auto',
   },
 })

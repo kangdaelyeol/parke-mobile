@@ -10,6 +10,7 @@ interface LoginActions {
   consentConfirmPress: () => void
   thirdConsentConfirmPress: () => void
   showDocPress: (val: DocType) => void
+  termsAndConsentConfirmPress: () => void
 }
 
 interface LoginState {
@@ -21,6 +22,7 @@ interface LoginState {
   thirdConsentConfirm: boolean
   modalRef: React.RefObject<BottomSheetModal | null>
   docType: DocType
+  confirmSheetRef: React.RefObject<BottomSheetModal | null>
 }
 
 export type LoginContextValue = ViewModel<LoginState, LoginActions>

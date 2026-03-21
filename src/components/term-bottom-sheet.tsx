@@ -15,7 +15,7 @@ const renderBackdrop = (
   <BottomSheetBackdrop
     {...props}
     disappearsOnIndex={-1}
-    appearsOnIndex={0}
+    appearsOnIndex={1}
     pressBehavior="close"
   />
 )

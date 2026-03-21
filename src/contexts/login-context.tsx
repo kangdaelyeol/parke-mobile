@@ -4,18 +4,20 @@ import {
   createContext,
   PropsWithChildren,
   useContext,
+  useRef,
 } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
+import appleAuth from '@invertase/react-native-apple-authentication'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
-import { LoginContextValue } from '@/screens/login/types'
+import { LoginContextValue } from '@login/types'
 import { userService, authService } from '@/services'
 import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
 import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
-import appleAuth from '@invertase/react-native-apple-authentication'
 
 const LoginContext = createContext({} as LoginContextValue)
 
@@ -32,6 +34,8 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const [thirdConsentConfirm, setThirdConsentConfirm] = useState(false)
 
   const { modalRef, docType, showBottomSheet } = useTermBottomSheet()
+
+  const confirmSheetRef = useRef<BottomSheetModal | null>(null)
 
   useEffect(() => {
     ;(async () => {
@@ -59,6 +63,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     setTermConfirm(val)
     setConsentConfirm(val)
     setThirdConsentConfirm(val)
+    val && confirmSheetRef.current?.close()
   }
 
   const ageConfirmPress = () => {
@@ -96,6 +101,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     } else setAllConfirm(false)
 
     setThirdConsentConfirm(val)
+  }
+
+  const termsAndConsentConfirmPress = () => {
+    console.log(confirmSheetRef.current)
+    confirmSheetRef.current?.present()
   }
 
   const kakaoLoginPress = async () => {
@@ -189,6 +199,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           thirdConsentConfirm,
           modalRef,
           docType,
+          confirmSheetRef,
         },
         actions: {
           kakaoLoginPress,
@@ -199,6 +210,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           thirdConsentConfirmPress,
           showDocPress,
           appleLoginPress,
+          termsAndConsentConfirmPress,
         },
       }}
     >

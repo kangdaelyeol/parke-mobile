@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   introSection: {
     marginHorizontal: 'auto',
     alignItems: 'center',
-    marginBottom: 150,
+    marginBottom: 70,
   },
   appIcon: {
     width: 100,
