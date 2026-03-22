@@ -6,6 +6,7 @@ import { useLoginContext } from '@/contexts'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP } from '@/theme/color'
 import { CheckBoxLine } from '@login/components'
+import { OriginalsLogoText } from '@/assets/illustrations'
 export const Footer = () => {
   const { actions, state } = useLoginContext()
 
@@ -40,20 +41,25 @@ export const Footer = () => {
             buttonType={AppleButton.Type.SIGN_IN}
             onPress={actions.appleLoginPress}
           />
-          <Pressable
-            onPress={actions.kakaoLoginPress}
-            style={[
-              styles.kakaoLogin,
-              !state.allConfirm && styles.loginDisabled,
-            ]}
-          >
-            <View>
-              <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
-              <KakaoLogo style={styles.kakaoSymbol} width={20} height={20} />
-            </View>
+          <Pressable onPress={actions.kakaoLoginPress}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.kakaoLogin,
+                  !state.allConfirm && styles.loginDisabled,
+                  state.allConfirm && pressed && styles.kakaoLoginPressed,
+                ]}
+              >
+                <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
+                <KakaoLogo style={styles.kakaoSymbol} width={20} height={20} />
+              </View>
+            )}
           </Pressable>
         </View>
-        <Text style={styles.designCreditText}>Designed by Originals</Text>
+        <View style={styles.designCreditText}>
+          <Text style={styles.credit}>Designed by</Text>
+          <OriginalsLogoText height={7} fill="#333" style={styles.logoText} />
+        </View>
       </View>
     </View>
   )
@@ -81,6 +87,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  kakaoLoginPressed: {
+    backgroundColor: '#ffe600ab',
+  },
   loginBtnText: {
     fontFamily: PRETENDARD.BOLD,
     color: '#000000ea',
@@ -91,12 +100,16 @@ const styles = StyleSheet.create({
   },
   kakaoSymbol: {
     position: 'absolute',
-    top: 2,
-    left: -35,
+    top: 15,
+    left: 90,
   },
   designCreditText: {
     marginBottom: 20,
     marginHorizontal: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  credit: {
     fontFamily: DM_SANS.MEDIUM,
     color: '#333',
   },
@@ -134,5 +147,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     marginHorizontal: 'auto',
+  },
+  logoText: {
+    marginLeft: 3,
   },
 })
