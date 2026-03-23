@@ -51,8 +51,10 @@ interface StartSearchBleProps {
 interface StartBackgroundScanProps {
   readonly cards: CardDto[]
   readonly user: UserDto
-  setCards: React.Dispatch<React.SetStateAction<CardDto[]>>
   refreshStateSession: () => void
+  onCardChange: (cardId: string) => void
+  onDBError: () => void
+  onError: (e: any) => void
 }
 
 export interface BleService {
@@ -65,8 +67,10 @@ export interface BleService {
   startBackgroundScan: ({
     cards,
     user,
-    setCards,
     refreshStateSession,
+    onCardChange,
+    onDBError,
+    onError,
   }: StartBackgroundScanProps) => Promise<void>
   startSearchBle: ({
     cards,

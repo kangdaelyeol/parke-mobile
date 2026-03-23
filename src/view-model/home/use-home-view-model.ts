@@ -58,10 +58,25 @@ export const useHomeViewModel = () => {
         sub = bleService.getManager()?.onStateChange(state => {
           if (state === 'PoweredOn') {
             bleService.startBackgroundScan({
-              setCards,
               cards,
               user,
               refreshStateSession,
+              onCardChange: (cardId: string) => {
+                setCards(prev => {
+                  const newCards = [...prev]
+                  const index = newCards.findIndex(c => c.id === cardId)
+                  if (index === -1) return prev
+                  newCards[index].phone = user.phone
+                  return newCards
+                })
+              },
+              onDBError: () => {
+                Alert.alert('정보 업데이트 중 네트워크에 문제가 발생했습니다.')
+              },
+              onError: (e: any) => {
+                console.log(e)
+                Alert.alert(`[BLE] scan handler error: ${e}`)
+              },
             })
             setScanning(true)
 

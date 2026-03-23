@@ -1,5 +1,3 @@
-import { isOwnCard } from './../../.history/src/helpers/ble-service-helper_20260323150731'
-import { Alert } from 'react-native'
 import { BleManager, Device } from 'react-native-ble-plx'
 import {
   BLE_DEVICE_NAME,
@@ -17,6 +15,7 @@ import {
   canNotifySimultaneousConnection,
   isAlertDeniedCooldownActive,
   isScanCooldownActive,
+  isOwnCard,
 } from '@/helpers'
 import { bleCacheService, cardService, settingService } from '@/services'
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils'
@@ -69,8 +68,10 @@ export const bleService: BleService = {
   startBackgroundScan: async ({
     cards,
     user,
-    setCards,
     refreshStateSession,
+    onDBError,
+    onError,
+    onCardChange,
   }) => {
     if (!bleManager) bleService.initManager()
     if (!isBleManager(bleManager)) return
@@ -137,7 +138,12 @@ export const bleService: BleService = {
               notifyPhoneChange(card.phone, user.phone, card.deviceId)
 
             // 앱이 실행중이면 앱 스크린에서 알림
-            notifyChangePhoneOnScreen(card.title, card.id, user.phone, setCards)
+            notifyChangePhoneOnScreen(
+              card.title,
+              card.id,
+              user.phone,
+              onCardChange,
+            )
             refreshStateSession()
           } else {
             // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
@@ -146,19 +152,13 @@ export const bleService: BleService = {
               extractNumber(user.phone),
             )
             if (!res) {
-              Alert.alert('정보 업데이트 중 네트워크에 문제가 발생했습니다.')
+              onDBError()
               return
             }
 
             bleCacheService.increasePhoneChangeCount()
 
-            setCards(prev => {
-              const newCards = [...prev]
-              const index = newCards.findIndex(c => c.id === card.id)
-              if (index === -1) return prev
-              newCards[index].phone = user.phone
-              return newCards
-            })
+            onCardChange(card.id)
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
             if (settings.notice) nofifyMessage(user.phone)
@@ -166,7 +166,7 @@ export const bleService: BleService = {
             refreshStateSession()
           }
         } catch (e) {
-          Alert.alert(`[BLE] scan handler error: ${e}`)
+          onError(e)
         } finally {
           try {
             await device?.cancelConnection()

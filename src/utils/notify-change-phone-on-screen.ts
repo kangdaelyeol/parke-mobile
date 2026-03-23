@@ -1,13 +1,12 @@
 import { Alert } from 'react-native'
 import { bleCacheService, cardService } from '@/services'
-import { CardDto } from '@/domain/card'
 import { convertPhone } from '@/helpers'
 
 export const notifyChangePhoneOnScreen = (
   cardName: string,
   cardId: string,
   phone: string,
-  setCards: React.Dispatch<React.SetStateAction<CardDto[]>>,
+  onCardChange: (cardId: string) => void,
 ) => {
   Alert.alert(
     '전화번호 변경',
@@ -31,13 +30,7 @@ export const notifyChangePhoneOnScreen = (
               '오류가 발생했습니다. 잠시후 다시 시도해주세요.',
             )
           }
-          setCards(prev => {
-            const newCards = [...prev]
-            const index = newCards.findIndex(c => c.id === cardId)
-            if (index === -1) return prev
-            newCards[index].phone = phone
-            return newCards
-          })
+          onCardChange(cardId)
           Alert.alert('전화번호가 변경되었습니다!')
           bleCacheService.increasePhoneChangeCount()
           bleCacheService.clearAlertPending()
