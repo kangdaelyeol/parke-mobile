@@ -36,9 +36,22 @@ export const useSearchBleViewModel = () => {
       sub = bleService.getManager()?.onStateChange(state => {
         if (state === 'PoweredOn') {
           bleService.startSearchBle({
-            navigation,
-            setRssi,
             cards,
+            onError: (e: any) => {
+              console.log(e)
+              Alert.alert(e)
+              navigation.goBack()
+            },
+            onDuplicated: () => {
+              Alert.alert('이미 등록된 장치입니다.')
+              navigation.goBack()
+            },
+            onDeviceFound: (deviceId: string) => {
+              navigation.replace('ScanComplete', {value: deviceId})
+            },
+            onRssiChange: (rssi) => {
+              setRssi(rssi)
+            }
           })
           sub?.remove()
         }

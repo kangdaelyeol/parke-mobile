@@ -175,7 +175,13 @@ export const bleService: BleService = {
       },
     )
   },
-  startSearchBle: async ({ navigation, setRssi, cards }) => {
+  startSearchBle: async ({
+    cards,
+    onError,
+    onDuplicated,
+    onDeviceFound,
+    onRssiChange,
+  }) => {
     if (!bleManager) bleService.initManager()
     if (!isBleManager(bleManager)) return
     console.log('try search ble')
@@ -193,7 +199,7 @@ export const bleService: BleService = {
         if (!isCandidate(device)) return
         if (!isBleManager(bleManager)) return
 
-        setRssi(String(device.rssi))
+        onRssiChange(String(device.rssi))
 
         if (!device.rssi || device.rssi < -55) return
 
@@ -205,12 +211,10 @@ export const bleService: BleService = {
           if (deviceId.slice(0, 5) !== 'UNSET') {
             console.log(device)
             if (cards.find(c => c.deviceId === deviceId)) {
-              Alert.alert('이미 등록된 장치입니다.')
-              return navigation.goBack()
+              onDuplicated()
+              return
             }
-            navigation.replace('ScanComplete', {
-              value: deviceId,
-            })
+            onDeviceFound(deviceId)
           } else {
             const base64Id = generateSerialNumber()
             console.log(base64Id)
@@ -222,15 +226,13 @@ export const bleService: BleService = {
               base64Id,
             )
             await device.cancelConnection()
-            navigation.replace('ScanComplete', {
-              value: base64ToUtf(base64Id),
-            })
+            onDeviceFound(base64ToUtf(base64Id))
           }
         } catch (e) {
           console.log(e)
           await device.cancelConnection()
-          Alert.alert('통신 중 오류가 발생했습니다. 다시 시도해주세요.')
-          return navigation.goBack()
+          onError(e)
+          return
         }
       },
     )

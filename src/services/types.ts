@@ -1,7 +1,6 @@
 import { AlertPending } from '@/client'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
-import { SearchBleStackNavigationProp } from '@/navigation/types'
 import { BleManager } from 'react-native-ble-plx'
 
 interface kakaoProfile {
@@ -42,9 +41,11 @@ export interface BleCacheService {
 }
 
 interface StartSearchBleProps {
-  navigation: SearchBleStackNavigationProp
-  setRssi: React.Dispatch<React.SetStateAction<string>>
   readonly cards: CardDto[]
+  onError: (e: any) => void
+  onDuplicated: () => void
+  onDeviceFound: (val: string) => void
+  onRssiChange: (val: string) => void
 }
 
 interface StartBackgroundScanProps {
@@ -68,9 +69,11 @@ export interface BleService {
     refreshStateSession,
   }: StartBackgroundScanProps) => Promise<void>
   startSearchBle: ({
-    navigation,
-    setRssi,
     cards,
+    onError,
+    onDuplicated,
+    onDeviceFound,
+    onRssiChange,
   }: StartSearchBleProps) => Promise<void>
 }
 
