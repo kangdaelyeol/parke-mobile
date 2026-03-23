@@ -67,7 +67,7 @@ export const Privacy = () => {
             · 카카오 로그인을 통한 수집: 닉네임, 이메일 (카카오로부터 제공받음)
           </Text>
           <Text style={styles.item}>
-            · 앱 내 직접 입력: 휴대전화번호, 차량번호
+            · 앱 내 직접 입력: 휴대전화번호
           </Text>
         </View>
         <Text style={styles.title}>제4조 (개인정보의 제3자 제공)</Text>
