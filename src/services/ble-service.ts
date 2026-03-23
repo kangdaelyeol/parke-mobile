@@ -1,14 +1,11 @@
+import { isOwnCard } from './../../.history/src/helpers/ble-service-helper_20260323150731'
 import { Alert } from 'react-native'
 import { BleManager, Device } from 'react-native-ble-plx'
 import {
   BLE_DEVICE_NAME,
   CHAR_UUID,
-  NOTIFY_COOLDOWN_MS,
-  RENEW_INTERVAL_MS,
-  SCAN_COOLDOWN_MS,
   GATT_SERVICE_UUID,
   ADV_SERVICE_UUID,
-  SIMULTANEOUS_INTERVAL_MS,
 } from '@/constants'
 import {
   generateSerialNumber,
@@ -17,6 +14,9 @@ import {
   base64ToUtf,
   getDeviceId,
   getBatteryLevel,
+  canNotifySimultaneousConnection,
+  isAlertDeniedCooldownActive,
+  isScanCooldownActive,
 } from '@/helpers'
 import { bleCacheService, cardService, settingService } from '@/services'
 import { extractNumber, notifyChangePhoneOnScreen } from '@/utils'
@@ -91,12 +91,7 @@ export const bleService: BleService = {
 
           const deviceId = getDeviceId(device.manufacturerData as string)
 
-          // 기본 스캔 쿨다운
-          if (
-            Date.now() - bleCacheService.getDeviceSeenAt(deviceId) <
-            SCAN_COOLDOWN_MS
-          )
-            return
+          if (isScanCooldownActive(deviceId)) return
 
           bleCacheService.markDeviceSeenAt(deviceId)
 
@@ -116,34 +111,20 @@ export const bleService: BleService = {
           bleCacheService.markBleScan(card.title, batteryLevel)
           refreshStateSession()
 
-          // 카드의 번호와 자신의 번호와 일치하면 현재 시점을 마킹하고 종료.
-          if (String(user.phone) === String(card.phone)) {
+          if (isOwnCard(user.phone, card.phone)) {
             await cardService.updateUpdatedAt(card.id)
             return
           }
 
           const settings = settingService.getSettings()
 
-          // 동시 접속의 경우 사용자 확정을 위해 변경 여부를 알림(알림 설정인 경우). 거절 주기는 1시간.
-          if (
-            Date.now() < Number(card.updatedAt) + RENEW_INTERVAL_MS &&
-            settings.notice &&
-            bleCacheService.getSimultaneousConnectionAlertAt() +
-              SIMULTANEOUS_INTERVAL_MS <
-              Date.now()
-          ) {
+          if (canNotifySimultaneousConnection(card)) {
             notifyPhoneChange(card.phone, user.phone, card.deviceId)
             bleCacheService.markSimultaneousConnectionAlertAt()
           }
 
-          // 자동변경 설정이 아닐시 알림
           if (!settings.autoSet) {
-            // 이전에 변경 거부가 있었는지 확인
-            if (
-              Date.now() <
-              bleCacheService.getAlertLastDeniedAt() + NOTIFY_COOLDOWN_MS
-            )
-              return
+            if (isAlertDeniedCooldownActive()) return
 
             // 백그라운드로부터 포그라운드 알림 저장(pending...)
             bleCacheService.pushAlertPending({
@@ -153,7 +134,6 @@ export const bleService: BleService = {
             })
 
             if (settings.notice)
-              // 알림 설정이 되어 있어야 백그라운드에서 알림
               notifyPhoneChange(card.phone, user.phone, card.deviceId)
 
             // 앱이 실행중이면 앱 스크린에서 알림
