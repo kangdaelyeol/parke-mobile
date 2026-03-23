@@ -1,18 +1,24 @@
-import { get, ref, remove, set, update } from '@react-native-firebase/database'
+import {
+  get,
+  ref,
+  remove,
+  serverTimestamp,
+  set,
+  update,
+} from '@react-native-firebase/database'
 import { db } from '@/firebaseApp'
 import { UserDto } from '@/domain/user'
 import { UserClient } from './types'
 
 export const userClient: UserClient = {
   create: async dto => {
-    const { id, nickname, phone, cardIdList } = dto
-    const key = id
     try {
-      await set(ref(db, `user/${key}`), {
-        id,
-        nickname,
-        phone,
-        cardIdList,
+      await set(ref(db, `user/${dto.id}`), {
+        ...dto,
+        termsOfServiceAgreedAt: serverTimestamp(),
+        privacyCollectionAgreedAt: serverTimestamp(),
+        privacyThirdPartyAgreedAt: serverTimestamp(),
+        ageVerificationAgreedAt: serverTimestamp(),
       })
       return true
     } catch (e) {
