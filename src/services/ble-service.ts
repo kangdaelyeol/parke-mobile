@@ -8,6 +8,7 @@ import {
   SCAN_COOLDOWN_MS,
   GATT_SERVICE_UUID,
   ADV_SERVICE_UUID,
+  SIMULTANEOUS_INTERVAL_MS,
 } from '@/constants'
 import {
   generateSerialNumber,
@@ -121,11 +122,19 @@ export const bleService: BleService = {
             return
           }
 
-          // 업데이트 이후 일정 시간동안 db갱신이 안되어 있으면 운전중이 아니므로 다른 번호로 업데이트 진행.
-          // 그렇지 않으면 운전중이기 때문에 updatedAt값 갱신을 함. 따라서 다른 번호로 업데이트를 진행하지 않음.
-          if (Date.now() < Number(card.updatedAt) + RENEW_INTERVAL_MS) return
-
           const settings = settingService.getSettings()
+
+          // 동시 접속의 경우 사용자 확정을 위해 변경 여부를 알림(알림 설정인 경우). 거절 주기는 1시간.
+          if (
+            Date.now() < Number(card.updatedAt) + RENEW_INTERVAL_MS &&
+            settings.notice &&
+            bleCacheService.getSimultaneousConnectionAlertAt() +
+              SIMULTANEOUS_INTERVAL_MS <
+              Date.now()
+          ) {
+            notifyPhoneChange(card.phone, user.phone, card.deviceId)
+            bleCacheService.markSimultaneousConnectionAlertAt()
+          }
 
           // 자동변경 설정이 아닐시 알림
           if (!settings.autoSet) {
