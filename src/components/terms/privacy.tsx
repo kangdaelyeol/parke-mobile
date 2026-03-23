@@ -44,13 +44,11 @@ export const Privacy = () => {
             <Text style={styles.tableHead}>처리목적</Text>
             <Text style={styles.tableHead}>수집 항목</Text>
             <Text style={styles.tableHead}>보유 기간</Text>
-            <Text style={styles.tableHead}>근거</Text>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.tableData}>회원 가입 및 관리</Text>
             <Text style={styles.tableData}>닉네임, 이메일, 휴대전화번호</Text>
             <Text style={styles.tableData}>회원 탈퇴 시까지</Text>
-            <Text style={styles.tableData}>정보주체 동의</Text>
           </View>
           <View style={styles.tableRow}>
             <Text style={styles.tableData}>주차 QR코드 서비스 </Text>
@@ -58,7 +56,6 @@ export const Privacy = () => {
             <Text style={styles.tableData}>
               QR코드 삭제 또는 회원 탈퇴 시까지
             </Text>
-            <Text style={styles.tableData}>정보주체 동의</Text>
           </View>
         </View>
         <Text style={styles.title}>제3조 (개인정보의 수집 방법)</Text>
@@ -121,11 +118,6 @@ export const Privacy = () => {
             </Text>
           </View>
         </View>
-        <Text style={styles.paragraph}>
-          ※ 제3자 제공에 대한 동의는 회원가입 시점에 별도로 받으며, 정보주체는
-          제3자 제공 동의를 거부할 권리가 있습니다. 다만, 동의를 거부하는 경우
-          주차 QR코드 서비스 이용이 제한될 수 있습니다.
-        </Text>
         <Text style={styles.title}>제5조 (개인정보처리의 위탁)</Text>
         <Text style={styles.paragraph}>
           회사는 원활한 개인정보 업무처리를 위하여 다음과 같이 개인정보
@@ -135,13 +127,10 @@ export const Privacy = () => {
           <View style={styles.tableRow}>
             <Text style={styles.tableHead}>수탁업체</Text>
             <Text style={styles.tableHead}>위탁 업무 내용</Text>
-            <Text style={styles.tableHead}>보유 및 이용 기간</Text>
           </View>
-
           <View style={styles.tableRow}>
             <Text style={styles.tableData}>카카오</Text>
             <Text style={styles.tableData}>카카오 로그인 연동 (본인 인증)</Text>
-            <Text style={styles.tableData}>위탁계약 종료 시까지</Text>
           </View>
         </View>
         <Text style={styles.title}>
@@ -158,7 +147,10 @@ export const Privacy = () => {
           <Text style={styles.item}> · 처리정지 요구</Text>
         </View>
         <Text style={styles.paragraph}>
-          요구 방법: 앱: 마이페이지 &rarr; 회원정보 수정
+          개인정보에 대한 열람, 내역 또는 정정을 요구하고자 할 경우 에는
+          『회원정보변경』을 클릭하여 본인 확인 절차를 거치신 후 직접 열람 또는
+          정정 하거나, 개인정보관리책임자에게 전화 또는 E-mail로 연락하시면 지체
+          없이 열람, 내역 제공 및 정정 조치를 즉시 취하겠습니다.
         </Text>
         <Text style={styles.paragraph}>
           회원이 개인정보의 오류에 대한 정정을 요청하신 경우에는 정정을 완료하기
@@ -205,31 +197,58 @@ export const Privacy = () => {
           <Text style={styles.item}>
             · 전자적 파일 형태: 복구 및 재생이 불가능한 방법으로 영구 삭제
           </Text>
-          <Text style={styles.item}>
-            · 기록물, 인쇄물, 서면 등: 파쇄 또는 소각
-          </Text>
         </View>
-
         <Text style={styles.title}>제8조 (개인정보의 안전성 확보 조치)</Text>
         <Text style={styles.paragraph}>
           회사는 개인정보의 안전성 확보를 위해 다음과 같은 조치를 취하고
           있습니다.
         </Text>
+        <Text style={styles.paragraph}>1. 기술적 대책</Text>
         <View style={styles.list}>
           <Text style={styles.item}>
             · 개인정보의 암호화: 이용자의 휴대전화번호 등 중요 개인정보는
             암호화되어 저장·관리됩니다.
           </Text>
           <Text style={styles.item}>
+            · 이용자의 개인정보는 비밀번호에 의해 보호되며 파일 및 전송데이터를
+            암호화하거나 파일 잠금기능(Lock)을 사용하여 중요한 데이터는 별도의
+            보안기능을 통해 보호.
+          </Text>
+          <Text style={styles.item}>
+            · 백신프로그램을 이용하여 컴퓨터 바이러스에 의한 피해를 방지하기
+            위한 조치
+          </Text>
+          <Text style={styles.item}>
+            · 백신프로그램은 주기적으로 업데이트되며 갑작스런 바이러스가 출현할
+            경우 백신이 나오는 즉시 이를 제공함으로써 개인정보가 침해되는 것을
+            방지
+          </Text>
+          <Text style={styles.item}>
             · 접근 통제: 개인정보를 처리하는 데이터베이스시스템에 대한
             접근권한의 부여, 변경, 말소를 통하여 접근을 통제합니다.
           </Text>
+        </View>
+        <Text style={styles.paragraph}>2. 관리적 대책</Text>
+        <View style={styles.list}>
           <Text style={styles.item}>
-            · 접속기록의 보관: 개인정보 처리시스템에 접속한 기록을 최소 1년 이상
-            보관·관리합니다.
+            · 개인정보를 처리하는 직원을 대상으로 새로운 보안 기술 습득 및
+            개인정보 보호 의무 등에 관해 정기적인 사내 교육 실시.
+          </Text>
+          <Text style={styles.item}>
+            · 입사시 개인정보 관련 처리자의 보안서약서를 통하여 사람에 의한
+            정보유출을 사전에 방지하고 개인정보보호정책에 대한 이행사항 및
+            직원의 준수여부를 감사하기 위한 내부절차를 마련.
+          </Text>
+          <Text style={styles.item}>
+            · 개인정보 관련 처리자의 업무 인수인계는 보안이 유지된 상태에서
+            철저하게 이뤄지고 있으며 입사 및 퇴사 후 개인정보 사고에 대한 책임을
+            명확화.
+          </Text>
+          <Text style={styles.item}>
+            · 개인정보와 일반 데이터를 혼합하여 보관하지 않고 별도로 분리하여
+            보관.
           </Text>
         </View>
-
         <Text style={styles.title}>제9조 (개인정보 보호책임자)</Text>
         <Text style={styles.paragraph}>
           회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와
@@ -239,20 +258,12 @@ export const Privacy = () => {
         <Text style={styles.paragraph}>개인정보 보호책임자</Text>
         <View style={styles.list}>
           <Text style={styles.item}> · 성명: 강대렬</Text>
-          <Text style={styles.item}> · 직책: CTO</Text>
           <Text style={styles.item}>
             · 연락처: daniel@originalshq.com / 010-2413-0510
           </Text>
         </View>
 
-        <Text style={styles.title}>제10조 (개인정보 처리방침의 변경)</Text>
-        <Text style={styles.paragraph}>
-          이 개인정보 처리방침은 시행일로부터 적용되며, 법령 및 방침에 따른
-          변경내용의 추가, 삭제 및 정정이 있는 경우에는 변경사항의 시행 7일
-          전부터 공지사항을 통하여 고지할 것입니다.
-        </Text>
-
-        <Text style={styles.title}>제11조 (권익침해 구제방법)</Text>
+        <Text style={styles.title}>제10조 (권익침해 구제방법)</Text>
         <Text style={styles.paragraph}>
           정보주체는 개인정보침해로 인한 구제를 받기 위하여
           개인정보분쟁조정위원회, 한국인터넷진흥원 개인정보침해신고센터 등에
@@ -268,6 +279,12 @@ export const Privacy = () => {
           <Text style={styles.item}> · 대검찰청: 1301 (www.spo.go.kr)</Text>
           <Text style={styles.item}> · 경찰청: 182 (ecrm.cyber.go.kr)</Text>
         </View>
+        <Text style={styles.title}>제11조 (개인정보 처리방침의 변경)</Text>
+        <Text style={styles.paragraph}>
+          법령 및 방침에 따른 변경내용의 추가, 삭제 및 정정이 있는 경우에는
+          변경사항의 시행 7일 전부터 공지사항을 통하여 고지할 것입니다. 위
+          개인정보 처리방침은 2026년 3월 17일부터 적용됩니다.
+        </Text>
       </View>
     </View>
   )

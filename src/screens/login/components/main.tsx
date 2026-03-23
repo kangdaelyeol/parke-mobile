@@ -2,7 +2,7 @@ import { View, StyleSheet, Text } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import { LogoIcon1024 } from '@/assets/logo'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { BLUE_PRIMARY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { BLUE_PRIMARY, DARK, GRAY_DEEP, WHITE } from '@/theme/color'
 export const Main = () => {
   return (
     <View style={styles.container}>
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 25,
     borderWidth: 1.4,
-    borderColor: GRAY_DEEP,
+    borderColor: DARK,
     overflow: 'hidden',
   },
   gradient: {
