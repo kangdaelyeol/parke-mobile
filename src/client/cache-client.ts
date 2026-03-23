@@ -20,6 +20,8 @@ export const cacheClient: CacheClient = {
   },
   setAlertPending: pendingList =>
     kv.set('ble:pending', JSON.stringify(pendingList)),
+  markSimultaneousConnectionAlertAt: () => kv.set('ble:simultaneous', Date.now()),
+  getSimultaneousConnectionAlertAt: () => kv.getNumber('ble:simultaneous') ?? 0,
 
   // setting
   setActive: setting => kv.set('setting:active', setting),

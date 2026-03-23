@@ -29,6 +29,8 @@ export interface BleCacheService {
   markDeviceSeenAt: (deviceId: string) => void
   getDeviceSeenAt: (deviceId: string) => number
   getAlertPendingList: () => AlertPending[]
+  getSimultaneousConnectionAlertAt: () => number
+  markSimultaneousConnectionAlertAt: () => void
   pushAlertPending: ({ phone, cardId, cardName }: pushAlertPendingProp) => void
   deleteAlertPending: (cardId: string) => void
   clearAlertPending: () => void

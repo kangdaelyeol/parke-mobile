@@ -46,4 +46,10 @@ export const bleCacheService: BleCacheService = {
     const phoneChangeCount = cacheClient.getPhoneChangeCount()
     cacheClient.setPhoneChangeCount(phoneChangeCount + 1)
   },
+  getSimultaneousConnectionAlertAt: () => {
+    return cacheClient.getSimultaneousConnectionAlertAt()
+  },
+  markSimultaneousConnectionAlertAt: () => {
+    cacheClient.markSimultaneousConnectionAlertAt()
+  },
 }

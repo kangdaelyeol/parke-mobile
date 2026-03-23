@@ -50,6 +50,8 @@ export interface CacheClient {
   setAlertDeniedAt(time: number): void
   getAlertPendingList(): AlertPending[]
   setAlertPending(pendingList: AlertPending[]): void
+  markSimultaneousConnectionAlertAt: () => void
+  getSimultaneousConnectionAlertAt: () => number
   setActive(setting: boolean): void
   getActive(): boolean
   setNotice(setting: boolean): void
