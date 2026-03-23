@@ -13,6 +13,7 @@ import {
   logout,
 } from '@react-native-seoul/kakao-login'
 import { AuthService } from './types'
+import { getHashedPassword } from '@/helpers'
 
 export const authService: AuthService = {
   getKakaoProfile: async () => {
@@ -38,7 +39,8 @@ export const authService: AuthService = {
   kakaoLogout: async () => {
     await logout()
   },
-  firebaseLogin: async (email, password) => {
+  firebaseLogin: async (email) => {
+    const password = getHashedPassword(email)
     try {
       const cred = await signInWithEmailAndPassword(getAuth(), email, password)
       return cred.user.uid
@@ -47,7 +49,8 @@ export const authService: AuthService = {
       return null
     }
   },
-  firebaseSignIn: async (email, password) => {
+  firebaseSignIn: async (email) => {
+    const password = getHashedPassword(email)
     try {
       const cred = await createUserWithEmailAndPassword(
         getAuth(),

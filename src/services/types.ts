@@ -10,8 +10,8 @@ interface kakaoProfile {
 }
 
 export interface AuthService {
-  firebaseLogin: (email: string, password: string) => Promise<string | null>
-  firebaseSignIn: (email: string, password: string) => Promise<string | null>
+  firebaseLogin: (email: string) => Promise<string | null>
+  firebaseSignIn: (email: string) => Promise<string | null>
   firebaseSignOut: () => Promise<void>
   firebaseDeleteUser: () => Promise<void>
   kakaoLogin: () => Promise<kakaoProfile | null>

@@ -1,5 +1,5 @@
 export * from './convert-phone'
 export * from './notify-message'
 export * from './notify-phone-change'
-export * from './get-hashed-password'
 export * from './ble-service-helper'
+export * from './auth-service-helper'

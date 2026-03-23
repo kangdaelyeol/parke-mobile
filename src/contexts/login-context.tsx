@@ -14,7 +14,6 @@ import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
 import { LoginContextValue } from '@login/types'
 import { userService, authService } from '@/services'
-import { getHashedPassword } from '@/helpers'
 import { useUserContext } from '@/contexts'
 import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
@@ -44,8 +43,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       const kakaoProfile = await authService.getKakaoProfile()
       if (!kakaoProfile) return setLoading(false)
 
-      const password = getHashedPassword(kakaoProfile.email)
-      const uid = await authService.firebaseLogin(kakaoProfile.email, password)
+      const uid = await authService.firebaseLogin(kakaoProfile.email)
       if (!uid) return setLoading(false)
 
       const user = await userService.get(uid)
@@ -125,12 +123,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     const { email, nickname } = kakaoProfile
 
     // 첫 로그인시 - 가입
-    const password = getHashedPassword(email)
-    const uid = await authService.firebaseSignIn(email, password)
+    const uid = await authService.firebaseSignIn(email)
 
     if (!uid) {
       // 계정이 존재하는 경우
-      const firebaseUid = await authService.firebaseLogin(email, password)
+      const firebaseUid = await authService.firebaseLogin(email)
 
       if (!firebaseUid) {
         Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.')
