@@ -59,8 +59,16 @@ export const ScanCompleteContextProvider = ({
       savePress: async () => {
         if (serial.trim() === '')
           return Alert.alert('시리얼 번호를 입력해주세요.')
-
         setLoading(true)
+
+        const serialRes = await cardService.getAllow(serial.trim())
+        if (!serialRes) {
+          setLoading(false)
+          return Alert.alert(
+            '시리얼 번호 입력 오류',
+            '시리얼 번호를 확인해주세요.',
+          )
+        }
 
         const cardRes = await cardService.create({
           id: serial,

@@ -46,6 +46,16 @@ export const cardClient: CardClient = {
       return null
     }
   },
+  getAllowById: async id => {
+    try {
+      const snapShot = await get(ref(db, `allow/${id}`))
+      if (!snapShot.exists()) return null
+      return snapShot.val()
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  },
   deleteById: async id => {
     try {
       await remove(ref(db, `card/${id}`))

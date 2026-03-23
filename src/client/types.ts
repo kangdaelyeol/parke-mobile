@@ -10,6 +10,7 @@ export type AlertPending = null | {
 export interface CardClient {
   create(dto: CardDto): Promise<CardDto | null>
   getById(id: string): Promise<CardDto | null>
+  getAllowById(id: string): Promise<boolean | null>
   deleteById(id: string): Promise<boolean>
   update(
     dto: { id: string } & Partial<

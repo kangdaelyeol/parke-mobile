@@ -18,6 +18,11 @@ export const cardService: CardService = {
       )
       .map(r => r.value)
   },
+  getAllow: async serial => {
+    const res = await cardClient.getAllowById(serial)
+    console.log(res)
+    return res
+  },
   update: async card => {
     const cardEntity = Card.fromDto(card)
 

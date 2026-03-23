@@ -89,6 +89,7 @@ export interface CacheService {
 export interface CardService {
   get: (id: string) => Promise<CardDto | null>
   getList: (idList: string[]) => Promise<CardDto[] | null>
+  getAllow: (serial: string) => Promise<Boolean | null>
   update: (card: CardDto) => Promise<CardDto | null>
   create: (card: CardDto) => Promise<CardDto | null>
   delete: (cardId: string, userId: string) => Promise<boolean>
