@@ -1,6 +1,6 @@
 import { Alert } from 'react-native'
 import { bleCacheService, cardService } from '@/services'
-import { convertPhone } from '@/helpers'
+import { formatPhone } from '@/utils'
 
 export const notifyChangePhoneOnScreen = (
   cardName: string,
@@ -10,7 +10,7 @@ export const notifyChangePhoneOnScreen = (
 ) => {
   Alert.alert(
     '전화번호 변경',
-    `${cardName}에 저장된 번호를 ${convertPhone(phone)}으로 변경할까요?`,
+    `${cardName}에 저장된 번호를 ${formatPhone(phone)}으로 변경할까요?`,
     [
       {
         text: '취소',

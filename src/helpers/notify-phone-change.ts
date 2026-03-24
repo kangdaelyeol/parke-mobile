@@ -1,5 +1,5 @@
 import notifee from '@notifee/react-native'
-import { convertPhone } from './convert-phone'
+import { formatPhone } from '@/utils'
 
 // 알림 띄우기
 export const notifyPhoneChange = (
@@ -9,7 +9,7 @@ export const notifyPhoneChange = (
 ) => {
   notifee.displayNotification({
     title: '전화번호 변경 확인',
-    body: `등록된 번호 ${convertPhone(oldPhone)}을(를) ${convertPhone(
+    body: `등록된 번호 ${formatPhone(oldPhone)}을(를) ${formatPhone(
       newPhone,
     )}으로 변경하시겠습니까?\n번호를 변경하려면 길게 눌러서 확인해주세요.`,
     data: { newPhone, cardId }, // 문자열이면 OK

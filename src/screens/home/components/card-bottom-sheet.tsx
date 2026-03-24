@@ -9,7 +9,7 @@ import {
 import { Toggle } from '@home/components'
 import { useCardViewModel } from '@/view-model/home'
 import { Loading } from '@/components'
-import { convertPhone } from '@/helpers'
+import { formatPhone } from '@/utils'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { BluetoothIllustration, PhoneIllustration } from './illustrations'
 
@@ -58,7 +58,7 @@ export const CardBottomSheet = ({
         <View style={styles.header}>
           <View style={styles.headerDescription}>
             <Text style={styles.headerTitle}>{title}</Text>
-            <Text style={styles.phone}>{convertPhone(phone)}</Text>
+            <Text style={styles.phone}>{formatPhone(phone)}</Text>
           </View>
           <View style={styles.scanState}>
             <View style={[styles.dot, scan ? styles.dotOn : styles.dotOff]} />

@@ -8,7 +8,6 @@ import {
   update,
 } from '@react-native-firebase/database'
 import { Card, CardDto } from '@/domain/card'
-import { convertPhone } from '@/helpers'
 import { CardClient } from './types'
 
 export const cardClient: CardClient = {
@@ -40,7 +39,7 @@ export const cardClient: CardClient = {
       if (!snapShot.exists()) return null
 
       const card = snapShot.val() as CardDto
-      return { ...card, phone: convertPhone(card.phone) }
+      return card
     } catch (e) {
       console.log(e)
       return null

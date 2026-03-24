@@ -3,10 +3,9 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
-import { convertPhone } from '@/helpers'
 import { InitStackNavigationProp } from '@/navigation/types'
 import { userService } from '@/services'
-import { extractNumber } from '@/utils'
+import { extractNumber, formatPhone } from '@/utils'
 import { InitViewModel } from '@/screens/init/types'
 
 const InitContext = createContext({} as InitViewModel)
@@ -15,14 +14,14 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
   const navigation = useNavigation<InitStackNavigationProp>()
   const { user, setUser } = useUserContext()
   const [nickname, setNickname] = useState(user.nickname)
-  const [phone, setPhone] = useState(user.phone)
+  const [phone, setPhone] = useState(user.phone || '')
   const [loading, setLoading] = useState(false)
 
   const actions = {
     phoneInput: (val: string) => {
-      setPhone(extractNumber(val))
+      setPhone(formatPhone(extractNumber(val)))
     },
-    nicknameInput: (val: string) => setNickname(val),
+    nicknameInput: (val: string) => setNickname(val.trim()),
 
     savePress: async () => {
       console.log(nickname, phone)
@@ -33,7 +32,7 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
       setLoading(true)
       const res = await userService.updateNicknameAndPhone(
         user.id,
-        nickname.trim(),
+        nickname,
         phone,
       )
       setUser(prev => ({ ...prev, nickname, phone }))
@@ -44,7 +43,19 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
       }
       navigation.replace('Home')
     },
-    skipPress: () => {
+    skipPress: async () => {
+      setLoading(true)
+      const res = await userService.updateNicknameAndPhone(
+        user.id,
+        nickname === '' ? 'user' : nickname,
+        phone === '' ? '01000000000' : phone,
+      )
+      setUser(prev => ({ ...prev, nickname, phone }))
+      if (!res) {
+        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+        setLoading(false)
+        return
+      }
       navigation.replace('Home')
     },
   }
@@ -55,7 +66,7 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
         actions,
         state: {
           nickname,
-          phone: convertPhone(phone),
+          phone,
           loading,
         },
       }}

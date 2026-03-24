@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useUserContext } from '@/contexts'
-import { convertPhone } from '@/helpers'
+import { formatPhone } from '@/utils'
 import { ProfileStackNavigationProp } from '@/navigation/types'
 import { authService, userService } from '@/services'
 import { extractNumber } from '@/utils'
@@ -11,14 +11,14 @@ import { ProfileMainViewModel } from '@profile/types'
 export const useMainViewModel = (): ProfileMainViewModel => {
   const { user, setUser } = useUserContext()
   const [nickname, setNickname] = useState(user.nickname)
-  const [phone, setPhone] = useState(user.phone)
+  const [phone, setPhone] = useState(formatPhone(user.phone))
   const [loading, setLoading] = useState(false)
 
   const navigation = useNavigation<ProfileStackNavigationProp>()
 
   const actions = {
     phoneInput: (val: string) => {
-      setPhone(extractNumber(val))
+      setPhone(formatPhone(extractNumber(val)))
     },
 
     nicknameInput: (val: string) => setNickname(val),
@@ -98,7 +98,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     state: {
       loading,
       nickname,
-      phone: convertPhone(phone),
+      phone,
     },
     actions: actions,
   }

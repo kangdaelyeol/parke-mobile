@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { convertPhone } from '@/helpers'
+import { formatPhone } from '@/utils'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useCardViewModel } from '@/view-model/home'
 import { HomeCardProps } from '@home/types'
@@ -39,7 +39,7 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
             </Pressable>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.message}>{message}</Text>
-            <Text style={styles.phone}>{convertPhone(String(phone))}</Text>
+            <Text style={styles.phone}>{formatPhone(String(phone))}</Text>
             <View style={styles.scan}>
               {scan ? (
                 <Animated.View

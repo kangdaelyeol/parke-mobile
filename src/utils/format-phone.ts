@@ -1,4 +1,4 @@
-export const convertPhone = (num: string): string => {
+export const formatPhone = (num: string): string => {
   const numExtacted = num.replace(/\D/g, '')
 
   if (numExtacted.length >= 4 && numExtacted.length <= 6) {

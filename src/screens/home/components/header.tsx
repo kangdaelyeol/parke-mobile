@@ -2,8 +2,8 @@ import { StyleSheet, Text, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { useHomeContext, useUserContext } from '@/contexts'
-import { convertPhone } from '@/helpers'
 import { GRAY, GREEN, RED, WHITE } from '@/theme/color'
+import { formatPhone } from '@/utils'
 
 export const Header = () => {
   const { scanning } = useHomeContext()
@@ -13,7 +13,7 @@ export const Header = () => {
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
         <View style={styles.textSection}>
-          <Text style={styles.phone}>{convertPhone(user.phone)}</Text>
+          <Text style={styles.phone}>{formatPhone(user.phone)}</Text>
           <View style={styles.scan}>
             <View
               style={[

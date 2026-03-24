@@ -1,5 +1,3 @@
-import { convertPhone } from '@/helpers'
-import { extractNumber } from '@/utils'
 import { useEffect, useState } from 'react'
 import {
   useAnimatedStyle,
@@ -14,6 +12,7 @@ import {
 import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
 import { HomeSettingCardViewModel } from '@home/types'
+import { formatPhone, extractNumber } from '@/utils'
 
 export const useSettingCardViewModel = (
   card: CardDto,
@@ -65,14 +64,14 @@ export const useSettingCardViewModel = (
     },
     titleInput: (val: string) => setTitle(val),
     messageInput: (val: string) => setMessage(val),
-    phoneInput: (val: string) => setPhone(convertPhone(val)),
+    phoneInput: (val: string) => setPhone(formatPhone(extractNumber(val))),
   }
 
   return {
     state: {
       title,
       message,
-      phone: convertPhone(phone),
+      phone,
     },
     actions,
     animated: {
