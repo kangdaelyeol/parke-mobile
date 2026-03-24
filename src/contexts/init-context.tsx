@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { InitStackNavigationProp } from '@/navigation/types'
 import { userService } from '@/services'
-import { extractNumber, formatPhone } from '@/utils'
+import { extractNumber } from '@/utils'
 import { InitViewModel } from '@/screens/init/types'
 
 const InitContext = createContext({} as InitViewModel)
@@ -19,7 +19,7 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
 
   const actions = {
     phoneInput: (val: string) => {
-      setPhone(formatPhone(extractNumber(val)))
+      setPhone(extractNumber(val))
     },
     nicknameInput: (val: string) => setNickname(val.trim()),
 

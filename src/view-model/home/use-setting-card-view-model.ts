@@ -12,7 +12,7 @@ import {
 import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
 import { HomeSettingCardViewModel } from '@home/types'
-import { formatPhone, extractNumber } from '@/utils'
+import { extractNumber } from '@/utils'
 
 export const useSettingCardViewModel = (
   card: CardDto,
@@ -42,7 +42,7 @@ export const useSettingCardViewModel = (
       const res = await cardService.update({
         ...cards[selectedCardIdx],
         title,
-        phone: extractNumber(phone),
+        phone,
         message,
       })
 
@@ -64,7 +64,7 @@ export const useSettingCardViewModel = (
     },
     titleInput: (val: string) => setTitle(val),
     messageInput: (val: string) => setMessage(val),
-    phoneInput: (val: string) => setPhone(formatPhone(extractNumber(val))),
+    phoneInput: (val: string) => setPhone(extractNumber(val)),
   }
 
   return {

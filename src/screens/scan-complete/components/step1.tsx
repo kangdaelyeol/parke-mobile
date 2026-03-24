@@ -3,6 +3,7 @@ import { FocusableInput } from '@/components'
 import { useScanCompleteContext } from '@/contexts'
 import { DM_SANS } from '@/theme/fonts'
 import { WHITE } from '@/theme/color'
+import { formatPhone } from '@/utils'
 
 export const Step1 = () => {
   const { state, actions } = useScanCompleteContext()
@@ -20,7 +21,7 @@ export const Step1 = () => {
       <FocusableInput
         title="전화번호"
         placeholder="전화번호"
-        value={state.phone}
+        value={formatPhone(state.phone)}
         onChangeText={actions.phoneInput}
         iconName="phone"
       />

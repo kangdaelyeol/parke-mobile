@@ -39,7 +39,7 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
             </Pressable>
             <Text style={styles.title}>{title}</Text>
             <Text style={styles.message}>{message}</Text>
-            <Text style={styles.phone}>{formatPhone(String(phone))}</Text>
+            <Text style={styles.phone}>{formatPhone(phone)}</Text>
             <View style={styles.scan}>
               {scan ? (
                 <Animated.View

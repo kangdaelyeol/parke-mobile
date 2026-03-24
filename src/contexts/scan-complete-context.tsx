@@ -9,7 +9,7 @@ import {
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
-import { extractNumber, formatPhone } from '@/utils'
+import { extractNumber } from '@/utils'
 import { cardService, userService } from '@/services'
 import { ScanCompleteStackNavigationProp } from '@/navigation/types'
 import { ScanCompleteContextValue } from '@scan-complete/types'
@@ -37,7 +37,7 @@ export const ScanCompleteContextProvider = ({
   const actions = useMemo(
     () => ({
       phoneInput: (v: string) => {
-        setPhone(formatPhone(extractNumber(v)))
+        setPhone(extractNumber(v))
       },
       nameInput: (v: string) => {
         setName(v)
@@ -148,7 +148,7 @@ export const ScanCompleteContextProvider = ({
   }
 
   useEffect(() => {
-    setPhone(formatPhone(user.phone))
+    setPhone(user.phone)
   }, [user.phone, setPhone])
 
   return (

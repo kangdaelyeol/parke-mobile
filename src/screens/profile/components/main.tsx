@@ -10,6 +10,7 @@ import {
   RED_LIGHT,
   WHITE,
 } from '@/theme/color'
+import { formatPhone } from '@/utils'
 
 export const Main = () => {
   const { state, actions } = useMainViewModel()
@@ -29,7 +30,7 @@ export const Main = () => {
             title="연락처"
             placeholder="연락처"
             onChangeText={actions.phoneInput}
-            value={state.phone}
+            value={formatPhone(state.phone)}
             iconName="phone"
           />
         </View>

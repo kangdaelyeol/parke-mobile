@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput } from '@/components'
 import { useInitContext } from '@/contexts'
+import { formatPhone } from '@/utils'
 
 export const Main = () => {
   const { state, actions } = useInitContext()
@@ -19,7 +20,7 @@ export const Main = () => {
             <FocusableInput
               title="연락처"
               placeholder="연락처"
-              value={state.phone}
+              value={formatPhone(state.phone)}
               onChangeText={actions.phoneInput}
               iconName="phone"
             />

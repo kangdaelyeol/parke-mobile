@@ -3,6 +3,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useScanCompleteContext } from '@/contexts/scan-complete-context'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { formatPhone } from '@/utils'
 
 type CardProps = {
   deviceId: string
@@ -23,7 +24,7 @@ export const Card = ({ deviceId }: CardProps) => {
           <Text style={styles.brand}>Parké</Text>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.message}>{message}</Text>
-          <Text style={styles.phone}>{phone}</Text>
+          <Text style={styles.phone}>{formatPhone(phone)}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.infoLabel}>

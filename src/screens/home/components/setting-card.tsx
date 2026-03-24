@@ -5,6 +5,7 @@ import { useSettingCardViewModel } from '@/view-model/home'
 import { HomeSettingCardProps } from '@home/types'
 import { FocusableInput, PressableButton } from '@/components'
 import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
+import { formatPhone } from '@/utils'
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useSettingCardViewModel(card)
@@ -26,7 +27,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
         <FocusableInput
           title="전화번호"
           placeholder="전화번호"
-          value={state.phone}
+          value={formatPhone(state.phone)}
           onChangeText={actions.phoneInput}
           iconName="phone"
         />
