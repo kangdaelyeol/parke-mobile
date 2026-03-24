@@ -1,12 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
-import {
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  StyleSheet,
-  View,
-  Text,
-} from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { ScanCompleteStackParamList } from '@/navigation/types'
 import { ScanCompleteContextProvider, useScanCompleteContext } from '@/contexts'
@@ -19,6 +11,7 @@ import {
 } from '@scan-complete/components'
 import { Loading } from '@/components'
 import { PRETENDARD } from '@/theme/fonts'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 type ScanCompleteProps = {
   route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>
@@ -37,16 +30,12 @@ const ScanCompleteContent = ({ deviceId }: ScanCompleteContentProps) => {
       {state.loading && <Loading />}
       {state.scanPage && <QrScan />}
       <ProgressStepper />
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      >
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={styles.wrapper}>
-            <Card deviceId={deviceId} />
-            <Main deviceId={deviceId} />
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      <KeyboardAwareScrollView enableOnAndroid extraScrollHeight={10}>
+        <View style={styles.wrapper}>
+          <Card deviceId={deviceId} />
+          <Main deviceId={deviceId} />
+        </View>
+      </KeyboardAwareScrollView>
       <Footer />
     </View>
   )
