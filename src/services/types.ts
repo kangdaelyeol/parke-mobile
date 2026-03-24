@@ -1,7 +1,7 @@
+import { BleManager } from 'react-native-ble-plx'
 import { AlertPending } from '@/client'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
-import { BleManager } from 'react-native-ble-plx'
 
 interface kakaoProfile {
   email: string
@@ -95,12 +95,24 @@ export interface CacheService {
   }
 }
 
+interface CreateCardInput {
+  id: string
+  phone: string
+  message: string
+  title: string
+  scan: boolean
+  deviceId: string
+  userId: string
+  userNickname: string
+
+}
+
 export interface CardService {
   get: (id: string) => Promise<CardDto | null>
   getList: (idList: string[]) => Promise<CardDto[] | null>
   getAllow: (serial: string) => Promise<Boolean | null>
   update: (card: CardDto) => Promise<CardDto | null>
-  create: (card: CardDto) => Promise<CardDto | null>
+  create: (input: CreateCardInput) => Promise<CardDto | null>
   delete: (cardId: string, userId: string) => Promise<boolean>
   updateScan: (id: string, scan: boolean) => Promise<boolean>
   updatePhone: (id: string, phone: string) => Promise<boolean>

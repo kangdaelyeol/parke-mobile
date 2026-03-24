@@ -37,8 +37,21 @@ export const cardService: CardService = {
       return null
     }
   },
-  create: async card => {
-    const cardEntity = Card.create(card)
+  create: async input => {
+    const { id, phone, message, title, scan, deviceId, userId, userNickname } =
+      input
+
+    const cardEntity = Card.create({
+      id,
+      phone,
+      message,
+      title,
+      updatedBy: userNickname,
+      updatedAt: serverTimestamp(),
+      scan,
+      deviceId,
+      ownerList: [userId],
+    })
     try {
       const res = await cardClient.create(cardEntity.toDto())
       if (res !== null) return res

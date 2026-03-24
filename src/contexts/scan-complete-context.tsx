@@ -8,7 +8,6 @@ import {
 } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import { serverTimestamp } from 'firebase/database'
 import { useUserContext } from '@/contexts'
 import { convertPhone } from '@/helpers'
 import { extractNumber } from '@/utils'
@@ -75,11 +74,10 @@ export const ScanCompleteContextProvider = ({
           phone,
           message,
           title: name,
-          updatedBy: user.nickname,
-          updatedAt: serverTimestamp(),
           scan: true,
           deviceId,
-          ownerList: [user.id],
+          userId: user.id,
+          userNickname: user.nickname,
         })
 
         if (!cardRes) {
