@@ -12,8 +12,10 @@ import {
   login,
   logout,
 } from '@react-native-seoul/kakao-login'
+import appleAuth from '@invertase/react-native-apple-authentication'
 import { AuthService } from './types'
 import { getHashedPassword } from '@/helpers'
+import { cacheService } from './cache-service'
 
 export const authService: AuthService = {
   getKakaoProfile: async () => {
@@ -28,18 +30,37 @@ export const authService: AuthService = {
     try {
       const res: KakaoOAuthToken = await login()
       if (res) {
-        const profile: KakaoProfile = await getProfile()
-        return { email: profile.email, nickname: profile.nickname }
+        return authService.getKakaoProfile()
       }
       return null
     } catch (e) {
       return null
     }
   },
+  appleLogin: async () => {
+    if (!appleAuth.isSupported) return null
+    try {
+      const credential = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      })
+      if (!credential) return null
+
+      return credential.user
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  },
   kakaoLogout: async () => {
     await logout()
+    cacheService.clearLoginProvider()
   },
-  firebaseLogin: async (email) => {
+  appleLogout: () => {
+    cacheService.clearAppleUser()
+    cacheService.clearLoginProvider()
+  },
+  firebaseLogin: async email => {
     const password = getHashedPassword(email)
     try {
       const cred = await signInWithEmailAndPassword(getAuth(), email, password)
@@ -49,7 +70,7 @@ export const authService: AuthService = {
       return null
     }
   },
-  firebaseSignIn: async (email) => {
+  firebaseSignIn: async email => {
     const password = getHashedPassword(email)
     try {
       const cred = await createUserWithEmailAndPassword(
@@ -62,12 +83,82 @@ export const authService: AuthService = {
       return null
     }
   },
-
   firebaseSignOut: async () => {
     await signOut(getAuth())
   },
   firebaseDeleteUser: async () => {
     const user = getAuth().currentUser
     if (user) await deleteUser(user)
+  },
+  autoLogin: async () => {
+    const loginProvider = cacheService.getLoginProvider()
+    if (!loginProvider) return null
+
+    switch (loginProvider) {
+      case 'apple':
+        const appleUser = cacheService.getAppleUser()
+        if (!appleUser) return null
+
+        const appleUid = await authService.firebaseLogin(appleUser)
+        if (appleUid) return appleUid
+        break
+      case 'kakao':
+        const kakaoProfile = await authService.getKakaoProfile()
+        if (!kakaoProfile) return null
+
+        const kakaoUid = await authService.firebaseLogin(kakaoProfile.email)
+        if (kakaoUid) return kakaoUid
+        break
+    }
+
+    return null
+  },
+  signInOrLogin: async (identifier, provider) => {
+    const uid = await authService.firebaseSignIn(identifier)
+    if (uid) {
+      cacheService.setLoginProvider(provider)
+      return { uid, isNew: true }
+    }
+
+    const loginUid = await authService.firebaseLogin(identifier)
+    if (loginUid) {
+      cacheService.setLoginProvider(provider)
+      return { uid: loginUid, isNew: false }
+    }
+
+    return null
+  },
+  signOut: async () => {
+    const loginProvider = cacheService.getLoginProvider()
+    if (!loginProvider) return false
+
+    switch (loginProvider) {
+      case 'apple':
+        try {
+          await authService.firebaseSignOut()
+          authService.appleLogout()
+          return true
+        } catch (e) {
+          console.log(e)
+          return false
+        }
+      case 'kakao':
+        try {
+        } catch (e) {
+          console.log(e)
+          return false
+        }
+        await authService.kakaoLogout()
+        await authService.firebaseSignOut()
+        return true
+    }
+  },
+  clearAuth: async () => {
+    await Promise.allSettled([
+      authService.kakaoLogout(),
+      authService.firebaseSignOut(),
+      authService.appleLogout(),
+    ])
+    cacheService.clearLoginProvider()
   },
 }
