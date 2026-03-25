@@ -8,7 +8,6 @@ import {
 } from 'react'
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
-import appleAuth from '@invertase/react-native-apple-authentication'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
@@ -40,10 +39,8 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     ;(async () => {
       if (!navigation) return
       setLoading(true)
-      const kakaoProfile = await authService.getKakaoProfile()
-      if (!kakaoProfile) return setLoading(false)
 
-      const uid = await authService.firebaseLogin(kakaoProfile.email)
+      const uid = await authService.autoLogin()
       if (!uid) return setLoading(false)
 
       const user = await userService.get(uid)
@@ -123,19 +120,15 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     const { email, nickname } = kakaoProfile
 
     // 첫 로그인시 - 가입
-    const uid = await authService.firebaseSignIn(email)
+    const authRes = await authService.signInOrLogin(email, 'kakao')
 
-    if (!uid) {
-      // 계정이 존재하는 경우
-      const firebaseUid = await authService.firebaseLogin(email)
+    if (!authRes) {
+      Alert.alert('로그인에 실패하였습니다')
+      return setLoading(false)
+    }
 
-      if (!firebaseUid) {
-        Alert.alert('로그인에 실패하였습니다. 다시 시도해주세요.')
-        setLoading(false)
-        return
-      }
-
-      const userRes = await userService.get(firebaseUid)
+    if (!authRes.isNew) {
+      const userRes = await userService.get(authRes.uid)
 
       if (!isUserDto(userRes)) {
         Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
@@ -146,7 +139,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return navigation.replace('Home')
     }
 
-    const userRes = await userService.create({ id: uid, nickname })
+    const userRes = await userService.create({ id: authRes.uid, nickname })
 
     if (!isUserDto(userRes)) {
       Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
@@ -162,26 +155,44 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const appleLoginPress = async () => {
-    if (!appleAuth.isSupported)
-      return Alert.alert('이 기기에서 지원하지 않습니다.')
     if (!allConfirm) return
     if (loading) return
     setLoading(true)
 
-    try {
-      const credential = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      })
-
-      if (!credential) return setLoading(false)
-      console.log(credential)
-    } catch (e) {
-      console.log(e)
-      setLoading(false)
+    const appleUserId = await authService.appleLogin()
+    if (!appleUserId) {
+      Alert.alert('로그인에 실패하였습니다')
+      return setLoading(false)
     }
 
-    setLoading(false)
+    const authRes = await authService.signInOrLogin(appleUserId, 'apple')
+    if (!authRes) {
+      Alert.alert('로그인에 실패하였습니다')
+      return setLoading(false)
+    }
+
+    if (!authRes.isNew) {
+      const userRes = await userService.get(authRes.uid)
+      if (!isUserDto(userRes)) {
+        Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+        return setLoading(false)
+      }
+
+      setUser(userRes)
+      return navigation.replace('Home')
+    }
+
+    const userRes = await userService.create({
+      id: authRes.uid,
+      nickname: '',
+    })
+    if (!isUserDto(userRes)) {
+      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+      return setLoading(false)
+    }
+
+    setUser(userRes)
+    return navigation.replace('Init')
   }
 
   return (
