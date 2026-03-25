@@ -2,7 +2,7 @@ import notifee from '@notifee/react-native'
 import { formatPhone } from '@/utils'
 
 // 알림 띄우기
-export const notifyPhoneChange = (
+export const notifyChangePhoneOnBackground = (
   oldPhone: string,
   newPhone: string,
   cardId: string,

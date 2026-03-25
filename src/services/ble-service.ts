@@ -7,8 +7,6 @@ import {
 } from '@/constants'
 import {
   generateSerialNumber,
-  nofifyMessage,
-  notifyPhoneChange,
   base64ToUtf,
   getDeviceId,
   getBatteryLevel,
@@ -18,7 +16,12 @@ import {
   isOwnCard,
 } from '@/helpers'
 import { bleCacheService, cardService, settingService } from '@/services'
-import { extractNumber, notifyChangePhoneOnScreen } from '@/utils'
+import {
+  extractNumber,
+  notifyChangePhoneOnBackground,
+  notifyChangePhoneOnScreen,
+  nofifyChangePhoneMessage,
+} from '@/utils'
 import { BleService } from './types'
 
 const g = globalThis as any
@@ -114,13 +117,14 @@ export const bleService: BleService = {
 
           if (isOwnCard(user.phone, card.phone)) {
             await cardService.updateUpdatedAt(card.id)
+            bleCacheService.markSimultaneousConnectionAlertAt()
             return
           }
 
           const settings = settingService.getSettings()
 
           if (canNotifySimultaneousConnection(card)) {
-            notifyPhoneChange(card.phone, user.phone, card.deviceId)
+            notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
             bleCacheService.markSimultaneousConnectionAlertAt()
           }
 
@@ -135,7 +139,11 @@ export const bleService: BleService = {
             })
 
             if (settings.notice)
-              notifyPhoneChange(card.phone, user.phone, card.deviceId)
+              notifyChangePhoneOnBackground(
+                card.phone,
+                user.phone,
+                card.deviceId,
+              )
 
             // 앱이 실행중이면 앱 스크린에서 알림
             notifyChangePhoneOnScreen(
@@ -161,7 +169,7 @@ export const bleService: BleService = {
             onCardPhoneChange(card.id, user.phone)
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
-            if (settings.notice) nofifyMessage(user.phone)
+            if (settings.notice) nofifyChangePhoneMessage(user.phone)
 
             refreshStateSession()
           }
