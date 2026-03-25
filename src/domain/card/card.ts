@@ -7,7 +7,6 @@ export class Card {
     private title: string,
     private phone: string,
     private message: string,
-    private scan: boolean,
     private updatedAt: object,
     private updatedBy: string,
     private deviceId: string,
@@ -20,7 +19,6 @@ export class Card {
 
     const phone = props.phone ?? ''
     const message = props.message ?? ''
-    const scan = !!props.scan
     const updatedAt = props.updatedAt ?? serverTimestamp()
     const updatedBy = props.updatedBy ?? ''
     const deviceId = props.deviceId ?? ''
@@ -31,7 +29,6 @@ export class Card {
       title,
       phone,
       message,
-      scan,
       updatedAt,
       updatedBy,
       deviceId,
@@ -49,7 +46,6 @@ export class Card {
       title: this.title,
       phone: this.phone,
       message: this.message,
-      scan: this.scan,
       updatedAt: this.updatedAt,
       updatedBy: this.updatedBy,
       deviceId: this.deviceId,
