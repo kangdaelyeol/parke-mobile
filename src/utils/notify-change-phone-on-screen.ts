@@ -6,7 +6,7 @@ export const notifyChangePhoneOnScreen = (
   cardName: string,
   cardId: string,
   phone: string,
-  onCardChange: (cardId: string) => void,
+  onCardPhoneChange: (cardId: string, phone:string) => void,
 ) => {
   Alert.alert(
     '전화번호 변경',
@@ -30,7 +30,7 @@ export const notifyChangePhoneOnScreen = (
               '오류가 발생했습니다. 잠시후 다시 시도해주세요.',
             )
           }
-          onCardChange(cardId)
+          onCardPhoneChange(cardId, phone)
           Alert.alert('전화번호가 변경되었습니다!')
           bleCacheService.increasePhoneChangeCount()
           bleCacheService.clearAlertPending()

@@ -19,7 +19,7 @@ export const useSettingCardViewModel = (
 ): HomeSettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()
   const { selectedCardIdx } = useCardSliderContext()
-  const { cards, setCards } = useUserContext()
+  const { cards, actions: userContextActions } = useUserContext()
 
   const [title, setTitle] = useState(card.title)
   const [phone, setPhone] = useState(card.phone)
@@ -47,14 +47,12 @@ export const useSettingCardViewModel = (
       })
 
       if (res) {
-        setCards(prev => {
-          const index = cards.findIndex(
-            cd => cd.id === cards[selectedCardIdx].id,
-          )
-          const newCards = [...prev]
-          newCards[index] = res
-          return newCards
-        })
+        userContextActions.updateCardInfo(
+          cards[selectedCardIdx].id,
+          title,
+          phone,
+          message,
+        )
       } else {
         // Display Error
       }

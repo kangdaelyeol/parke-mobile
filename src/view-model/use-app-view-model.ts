@@ -11,7 +11,7 @@ import { notifyChangePhoneOnScreen } from '@/utils'
 import { useUserContext } from '@/contexts'
 
 export const useAppViewModel = () => {
-  const { setCards } = useUserContext()
+  const { actions: userContextActions } = useUserContext()
 
   useEffect(() => {
     permissionService.setupNotifications()
@@ -51,7 +51,7 @@ export const useAppViewModel = () => {
             pending.cardName,
             pending.cardId,
             pending.phone,
-            setCards,
+            userContextActions.updateCardPhone,
           )
       })
 
@@ -59,5 +59,5 @@ export const useAppViewModel = () => {
     })
 
     return () => sub.remove()
-  }, [setCards])
+  }, [userContextActions])
 }

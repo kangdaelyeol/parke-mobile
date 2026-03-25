@@ -66,7 +66,7 @@ interface StartBackgroundScanProps {
   readonly cards: CardDto[]
   readonly user: UserDto
   refreshStateSession: () => void
-  onCardChange: (cardId: string) => void
+  onCardPhoneChange: (cardId: string, phone: string) => void
   onDBError: () => void
   onError: (e: any) => void
 }
@@ -82,7 +82,7 @@ export interface BleService {
     cards,
     user,
     refreshStateSession,
-    onCardChange,
+    onCardPhoneChange,
     onDBError,
     onError,
   }: StartBackgroundScanProps) => Promise<void>

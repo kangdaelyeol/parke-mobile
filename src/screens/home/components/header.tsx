@@ -13,7 +13,7 @@ export const Header = () => {
       <View style={styles.headerWrapper}>
         <LogoIcon width={35} height={35} style={styles.icon} />
         <View style={styles.textSection}>
-          <Text style={styles.phone}>{formatPhone(user.phone)}</Text>
+          <Text style={styles.phone}>{formatPhone(user?.phone || '')}</Text>
           <View style={styles.scan}>
             <View
               style={[

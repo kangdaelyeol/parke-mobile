@@ -20,7 +20,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 export const useCardViewModel = (idx: number): HomeCardViewModel => {
   const { settingCard, cardSettingController } = useCardSettingContext()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
-  const { user, setCards, cards, setUser } = useUserContext()
+  const { user, cards, actions: userContextActions } = useUserContext()
   const [loading, setLoading] = useState(false)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
@@ -73,15 +73,13 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       cardSettingController.showSetting(selectedCardIdx)
     },
     deletePress: () => {
+      if (!user) return
       Alert.alert('Parke 삭제', '삭제하시겠습니까? - (재등록 가능)', [
         {
           text: '삭제',
           onPress: async () => {
             setLoading(true)
 
-            const filteredCardList = cards.filter(
-              card => card.id !== selectedCard.id,
-            )
             const cardDeleteRes = await cardService.delete(
               selectedCard.id,
               user.id,
@@ -92,12 +90,8 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
               return setLoading(false)
             }
 
+            userContextActions.deleteCard(selectedCard.id)
             setLoading(false)
-            setCards(filteredCardList)
-            setUser(prev => ({
-              ...prev,
-              cardIdList: filteredCardList.map(c => c.id),
-            }))
           },
         },
         { text: '취소', style: 'cancel' },
@@ -122,15 +116,10 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
         return setLoading(false)
       }
       setLoading(false)
-      setCards(prev =>
-        prev.map(card =>
-          card.id !== selectedCard.id
-            ? { ...card }
-            : { ...card, scan: !card.scan },
-        ),
-      )
+      userContextActions.toggleCardScan(selectedCard.id)
     },
     changePhonePress: async () => {
+      if (!user) return
       const { phone } = user
       setLoading(true)
       const res = await cardService.updatePhone(selectedCard.id, phone)
@@ -139,11 +128,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
         return setLoading(false)
       }
       setLoading(false)
-      setCards(prev =>
-        prev.map(card =>
-          card.id !== selectedCard.id ? { ...card } : { ...card, phone },
-        ),
-      )
+      userContextActions.updateCardPhone(selectedCard.id, phone)
     },
     morePress: () => {
       bottomSheetModalRef.current?.present()

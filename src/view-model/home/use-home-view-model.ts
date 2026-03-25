@@ -5,8 +5,12 @@ import { useUserContext, useHomeContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
 
 export const useHomeViewModel = () => {
-  const { cards, user, syncCardList, setCards, refreshStateSession } =
-    useUserContext()
+  const {
+    cards,
+    user,
+    syncCardList,
+    actions: userContextActions,
+  } = useUserContext()
   const [loading, setLoading] = useState(false)
   const { setScanning } = useHomeContext()
 
@@ -60,16 +64,8 @@ export const useHomeViewModel = () => {
             bleService.startBackgroundScan({
               cards,
               user,
-              refreshStateSession,
-              onCardChange: (cardId: string) => {
-                setCards(prev => {
-                  const newCards = [...prev]
-                  const index = newCards.findIndex(c => c.id === cardId)
-                  if (index === -1) return prev
-                  newCards[index].phone = user.phone
-                  return newCards
-                })
-              },
+              refreshStateSession: userContextActions.refreshStateSession,
+              onCardPhoneChange: userContextActions.updateCardPhone,
               onDBError: () => {
                 Alert.alert('정보 업데이트 중 네트워크에 문제가 발생했습니다.')
               },
@@ -90,7 +86,7 @@ export const useHomeViewModel = () => {
         bleService.stopScan(nowSession)
         setScanning(false)
       }
-    }, [user, cards, setCards, setScanning, refreshStateSession]),
+    }, [user, cards, setScanning, userContextActions]),
   )
 
   return { state: { loading } }

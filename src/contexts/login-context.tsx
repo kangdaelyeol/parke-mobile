@@ -22,7 +22,7 @@ const LoginContext = createContext({} as LoginContextValue)
 const isUserDto = (dto: any): dto is UserDto => dto.id
 
 export const LoginContextProvider = ({ children }: PropsWithChildren) => {
-  const { setUser } = useUserContext()
+  const { actions: userContectActions } = useUserContext()
   const navigation = useNavigation<LoginStackNavigationProp>()
   const [loading, setLoading] = useState(false)
   const [allConfirm, setAllConfirm] = useState(false)
@@ -46,10 +46,10 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       const user = await userService.get(uid)
       if (!user) return setLoading(false)
 
-      setUser(user)
+      userContectActions.initUser(user)
       navigation.replace('Home')
     })()
-  }, [navigation, setUser])
+  }, [navigation, userContectActions])
 
   const allConfirmPress = () => {
     const val = !allConfirm
@@ -135,7 +135,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
         return setLoading(false)
       }
 
-      setUser(userRes)
+      userContectActions.initUser(userRes)
       return navigation.replace('Home')
     }
 
@@ -146,7 +146,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return setLoading(false)
     }
 
-    setUser(userRes)
+    userContectActions.initUser(userRes)
     return navigation.replace('Init')
   }
 
@@ -178,7 +178,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
         return setLoading(false)
       }
 
-      setUser(userRes)
+      userContectActions.initUser(userRes)
       return navigation.replace('Home')
     }
 
@@ -191,7 +191,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return setLoading(false)
     }
 
-    setUser(userRes)
+    userContectActions.initUser(userRes)
     return navigation.replace('Init')
   }
 

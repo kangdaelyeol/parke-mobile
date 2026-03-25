@@ -39,6 +39,7 @@ export type HomeStackNavigationProp = NativeStackNavigationProp<
 export type InitStackParamList = {
   Init: undefined
   Home: undefined
+  Login: undefined
 }
 
 export type InitStackNavigationProp = NativeStackNavigationProp<

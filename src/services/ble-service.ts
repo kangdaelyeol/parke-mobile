@@ -71,7 +71,7 @@ export const bleService: BleService = {
     refreshStateSession,
     onDBError,
     onError,
-    onCardChange,
+    onCardPhoneChange,
   }) => {
     if (!bleManager) bleService.initManager()
     if (!isBleManager(bleManager)) return
@@ -142,7 +142,7 @@ export const bleService: BleService = {
               card.title,
               card.id,
               user.phone,
-              onCardChange,
+              onCardPhoneChange,
             )
             refreshStateSession()
           } else {
@@ -158,7 +158,7 @@ export const bleService: BleService = {
 
             bleCacheService.increasePhoneChangeCount()
 
-            onCardChange(card.id)
+            onCardPhoneChange(card.id, user.phone)
 
             // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
             if (settings.notice) nofifyMessage(user.phone)

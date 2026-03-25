@@ -4,6 +4,7 @@ import {
   PropsWithChildren,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from 'react'
 import { CardDto } from '@/domain/card/card-dto'
@@ -15,20 +16,36 @@ const isCardList = (v: any): v is CardDto[] => {
   return v !== null
 }
 
+const isUserDto = (v: any): v is UserDto => {
+  return v !== null
+}
+
 interface UserContextValue {
   cards: CardDto[]
-  user: UserDto
-  setUser: React.Dispatch<React.SetStateAction<UserDto>>
-  setCards: React.Dispatch<React.SetStateAction<CardDto[]>>
+  user: UserDto | null
   syncCardList: () => Promise<void>
-  refreshStateSession: () => void
   stateSession: number
+  actions: {
+    addCardId: (serial: string) => void
+    deleteCard: (cardId: string) => void
+    setUserNicknameAndPhone: (nickname: string, phone: string) => void
+    updateCardPhone: (cardId: string, phone: string) => void
+    toggleCardScan: (cardId: string) => void
+    updateCardInfo: (
+      cardId: string,
+      title: string,
+      phone: string,
+      message: string,
+    ) => void
+    initUser: (dto: UserDto) => void
+    refreshStateSession: () => void
+  }
 }
 
 const userContext = createContext({} as UserContextValue)
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
-  const [user, setUser] = useState<UserDto>({
+  const [user, setUser] = useState<UserDto | null>({
     id: 'uss',
     nickname: 'rkdeofuf',
     phone: '01024130510',
@@ -37,11 +54,12 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
   const [cards, setCards] = useState<CardDto[]>([])
   const [stateSession, setStateSession] = useState(0)
-  const refreshStateSession = () => setStateSession(prev => prev + 1)
 
   const syncCardList = useCallback(async () => {
+    if (!user) return
     const userNow = await userClient.getById(user.id)
     if (!userNow) return
+    if (userNow.cardIdList.length === cards.length) return
     const cardList = await cardService.getList(userNow.cardIdList || [])
     if (!isCardList(cardList))
       return Alert.alert(
@@ -49,18 +67,85 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       )
     setCards(cardList)
     setUser(userNow)
-  }, [user.id])
-  
+  }, [cards.length, user])
+
+  const actions = useMemo(
+    () => ({
+      refreshStateSession: () => setStateSession(prev => prev + 1),
+      addCardId: (cardId: string) => {
+        if (!user) return
+        const newCardIdList = [...user?.cardIdList, cardId]
+        return setUser(prev => {
+          if (isUserDto(prev)) return { ...prev, cardIdList: newCardIdList }
+          else return null
+        })
+      },
+      deleteCard: (cardId: string) => {
+        const filteredCardList = cards.filter(card => card.id !== cardId)
+        setCards(filteredCardList)
+        setUser(prev => {
+          if (isUserDto(prev))
+            return {
+              ...prev,
+              cardIdList: filteredCardList.map(card => card.id),
+            }
+          else return prev
+        })
+      },
+      setUserNicknameAndPhone: (nickname: string, phone: string) => {
+        if (!user) return
+        setUser(prev => {
+          if (isUserDto(prev)) return { ...prev, nickname, phone }
+          else return null
+        })
+      },
+      updateCardPhone: (cardId: string, phone: string) => {
+        setCards(prev =>
+          prev.map(card =>
+            card.id !== cardId ? { ...card } : { ...card, phone },
+          ),
+        )
+      },
+      toggleCardScan: (cardId: string) => {
+        setCards(prev =>
+          prev.map(card =>
+            card.id !== cardId ? { ...card } : { ...card, scan: !card.scan },
+          ),
+        )
+      },
+      updateCardInfo: (
+        cardId: string,
+        title: string,
+        phone: string,
+        message: string,
+      ) => {
+        setCards(prev => {
+          const index = cards.findIndex(cd => cd.id === cardId)
+          const newCards = [...prev]
+          newCards[index] = {
+            ...cards[index],
+            title,
+            phone,
+            message,
+          }
+          return newCards
+        })
+      },
+      initUser: (dto: UserDto) => {
+        setUser(dto)
+      },
+    }),
+    [cards, user],
+  )
+
   return (
     <userContext.Provider
       value={{
         stateSession,
-        refreshStateSession,
         cards,
         user,
-        setCards,
-        setUser,
         syncCardList,
+        actions,
       }}
     >
       {children}

@@ -19,10 +19,10 @@ const ScanCompleteContext = createContext({} as ScanCompleteContextValue)
 export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
-  const { user, setUser } = useUserContext()
+  const { user, actions: userContextActions } = useUserContext()
 
   const [phone, setPhone] = useState('')
-  const [name, setName] = useState(`Parke${user.cardIdList.length + 1}`)
+  const [name, setName] = useState('')
   const [message, setMessage] = useState('')
   const [serial, setSerial] = useState('')
   const [currentStep, setCurrentStep] = useState(0)
@@ -55,6 +55,7 @@ export const ScanCompleteContextProvider = ({
         setCurrentStep(prev => prev - 1)
       },
       savePress: async () => {
+        if (!user) return
         if (serial.trim() === '')
           return Alert.alert('시리얼 번호를 입력해주세요.')
         setLoading(true)
@@ -96,7 +97,7 @@ export const ScanCompleteContextProvider = ({
           return setLoading(false)
         }
 
-        setUser(prev => ({ ...prev, cardIdList: newCardIdList }))
+        userContextActions.addCardId(serial)
 
         Alert.alert('저장 성공!')
         navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
@@ -118,16 +119,14 @@ export const ScanCompleteContextProvider = ({
       setDeviceId,
     }),
     [
+      user,
+      serial,
+      phone,
       message,
       name,
-      navigation,
-      phone,
-      serial,
-      setUser,
-      user.cardIdList,
-      user.id,
-      user.nickname,
       deviceId,
+      userContextActions,
+      navigation,
     ],
   )
 
@@ -148,8 +147,10 @@ export const ScanCompleteContextProvider = ({
   }
 
   useEffect(() => {
+    if (!user) return
     setPhone(user.phone)
-  }, [user.phone, setPhone])
+    setName(`Parke${user.cardIdList.length + 1}`)
+  }, [user, setPhone])
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>

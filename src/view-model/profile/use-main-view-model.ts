@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { useUserContext } from '@/contexts'
 import { ProfileStackNavigationProp } from '@/navigation/types'
@@ -8,12 +8,18 @@ import { extractNumber } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
-  const { user, setUser } = useUserContext()
-  const [nickname, setNickname] = useState(user.nickname)
-  const [phone, setPhone] = useState(user.phone)
+  const { user, actions: userContextActions } = useUserContext()
+  const [nickname, setNickname] = useState('')
+  const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
 
   const navigation = useNavigation<ProfileStackNavigationProp>()
+
+  useEffect(() => {
+    if (!user) return
+    setPhone(user.phone)
+    setNickname(user.nickname)
+  }, [user])
 
   const actions = {
     phoneInput: (val: string) => {
@@ -23,6 +29,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     nicknameInput: (val: string) => setNickname(val),
 
     savePress: async () => {
+      if (!user) return
       if (nickname.trim() === '') return Alert.alert('닉네임을 입력해주세요.')
 
       if (phone.trim() === '') return Alert.alert('휴대폰 번호를 입력해주세요.')
@@ -37,11 +44,8 @@ export const useMainViewModel = (): ProfileMainViewModel => {
         Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
         return setLoading(false)
       }
-      setUser(prev => ({
-        ...prev,
-        nickname,
-        phone,
-      }))
+
+      userContextActions.setUserNicknameAndPhone(nickname, phone)
       navigation.goBack()
     },
 
@@ -68,6 +72,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
       ])
     },
     deletePress: async () => {
+      if (!user) return
       Alert.alert('Delete User', '회원탈퇴 하시겠습니까?', [
         {
           text: '예',
