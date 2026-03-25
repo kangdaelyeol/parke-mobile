@@ -2,15 +2,10 @@ import { cacheClient } from '@/client'
 import { BleCacheService } from './types'
 
 export const bleCacheService: BleCacheService = {
-  markDeviceSeenAt: deviceId => {
-    cacheClient.setDeviceSeenAt(deviceId, Date.now())
-  },
-  getDeviceSeenAt: deviceId => {
-    return cacheClient.getDeviceSeenAt(deviceId)
-  },
-  getAlertPendingList: () => {
-    return cacheClient.getAlertPendingList()
-  },
+  markDeviceSeenAt: deviceId =>
+    cacheClient.setDeviceSeenAt(deviceId, Date.now()),
+  getDeviceSeenAt: deviceId => cacheClient.getDeviceSeenAt(deviceId),
+  getAlertPendingList: () => cacheClient.getAlertPendingList(),
   pushAlertPending: ({ phone, cardId, cardName }) => {
     const pendingList = cacheClient.getAlertPendingList()
     pendingList.push({ phone, cardId, cardName })
@@ -23,18 +18,10 @@ export const bleCacheService: BleCacheService = {
     )
     return newPendingList
   },
-  clearAlertPending: () => {
-    cacheClient.setAlertPending([])
-  },
-  markAlertLastDeniedAt: () => {
-    cacheClient.setAlertDeniedAt(Date.now())
-  },
-  clearAlertLastDeniedAt: () => {
-    cacheClient.setAlertDeniedAt(0)
-  },
-  getAlertLastDeniedAt: () => {
-    return cacheClient.getAlertDeniedAt()
-  },
+  clearAlertPending: () => cacheClient.setAlertPending([]),
+  markAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(Date.now()),
+  clearAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(0),
+  getAlertLastDeniedAt: () => cacheClient.getAlertDeniedAt(),
   markBleScan: (deviceName, batteryLevel) => {
     const bleScanCount = cacheClient.getBleScanCount()
     cacheClient.setBleScanCount(bleScanCount + 1)
@@ -46,10 +33,10 @@ export const bleCacheService: BleCacheService = {
     const phoneChangeCount = cacheClient.getPhoneChangeCount()
     cacheClient.setPhoneChangeCount(phoneChangeCount + 1)
   },
-  getSimultaneousConnectionAlertAt: () => {
-    return cacheClient.getSimultaneousConnectionAlertAt()
-  },
-  markSimultaneousConnectionAlertAt: () => {
-    cacheClient.markSimultaneousConnectionAlertAt()
-  },
+  getSimultaneousConnectionAlertAt: () =>
+    cacheClient.getSimultaneousConnectionAlertAt(),
+  markSimultaneousConnectionAlertAt: () =>
+    cacheClient.markSimultaneousConnectionAlertAt(),
+  getDeviceScan: deviceId => cacheClient.getDeviceScan(deviceId),
+  setDeviceScan: (deviceId, scan) => cacheClient.setDeviceScan(deviceId, scan),
 }

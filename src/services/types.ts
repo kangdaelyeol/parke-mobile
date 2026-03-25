@@ -8,11 +8,6 @@ interface kakaoProfile {
   nickname: string
 }
 
-interface AuthRes {
-  uid: string
-  isNew: boolean
-}
-
 export interface AuthService {
   firebaseLogin: (email: string) => Promise<string | null>
   firebaseSignIn: (email: string) => Promise<string | null>
@@ -27,7 +22,7 @@ export interface AuthService {
   signInOrLogin: (
     identifier: string,
     provider: LoginProvider,
-  ) => Promise<AuthRes | null>
+  ) => Promise<string | null>
   signOut: () => Promise<boolean>
   clearAuth: () => Promise<void>
 }
@@ -52,10 +47,12 @@ export interface BleCacheService {
   getAlertLastDeniedAt: () => number
   markBleScan: (deviceName: string, batteryLevel: string) => void
   increasePhoneChangeCount: () => void
+  getDeviceScan: (deviceId: string) => boolean
+  setDeviceScan: (deviceId: string, scan: boolean) => void
 }
 
 interface StartSearchBleProps {
-  readonly cards: CardDto[]
+  readonly cards: CardState[]
   onError: (e: any) => void
   onDuplicated: () => void
   onDeviceFound: (val: string) => void
@@ -63,7 +60,7 @@ interface StartSearchBleProps {
 }
 
 interface StartBackgroundScanProps {
-  readonly cards: CardDto[]
+  readonly cards: CardState[]
   readonly user: UserDto
   refreshStateSession: () => void
   onCardPhoneChange: (cardId: string, phone: string) => void
@@ -122,20 +119,26 @@ interface CreateCardInput {
   phone: string
   message: string
   title: string
-  scan: boolean
   deviceId: string
   userId: string
   userNickname: string
 }
 
+export type CardState = CardDto & { scan: boolean }
+
 export interface CardService {
-  get: (id: string) => Promise<CardDto | null>
-  getList: (idList: string[]) => Promise<CardDto[] | null>
+  getCard: (id: string) => Promise<CardState | null>
+  getList: (idList: string[]) => Promise<CardState[] | null>
   getAllow: (serial: string) => Promise<Boolean | null>
-  update: (card: CardDto) => Promise<CardDto | null>
-  create: (input: CreateCardInput) => Promise<CardDto | null>
-  delete: (cardId: string, userId: string) => Promise<boolean>
-  updateScan: (id: string, scan: boolean) => Promise<boolean>
+  updateCardInfo: (
+    cardId: string,
+    title: string,
+    phone: string,
+    message: string,
+  ) => Promise<boolean>
+  createCard: (input: CreateCardInput) => Promise<CardState | null>
+  deleteCard: (cardId: string, userId: string) => Promise<boolean>
+  updateScan: (deviceId: string, scan: boolean) => void
   updatePhone: (id: string, phone: string) => Promise<boolean>
   updateUpdatedAt: (id: string) => Promise<boolean>
 }

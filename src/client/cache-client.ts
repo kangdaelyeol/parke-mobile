@@ -30,6 +30,8 @@ export const cacheClient: CacheClient = {
   markSimultaneousConnectionAlertAt: () =>
     kv.set('ble:simultaneous', Date.now()),
   getSimultaneousConnectionAlertAt: () => kv.getNumber('ble:simultaneous') ?? 0,
+  getDeviceScan: deviceId => kv.getBoolean(`ble:scan-${deviceId}`) ?? true,
+  setDeviceScan: (deviceId, scan) => kv.set(`ble:scan-${deviceId}`, scan),
 
   // setting
   setActive: setting => kv.set('setting:active', setting),

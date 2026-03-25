@@ -75,4 +75,6 @@ export interface CacheClient {
   setLastScanDeviceName: (deviceName: string) => void
   getLastScanTime: () => number
   markLastScanTime: () => void
+  getDeviceScan: (deviceId: string) => boolean
+  setDeviceScan: (deviceId: string, scan: boolean) => void
 }
