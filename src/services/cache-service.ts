@@ -17,12 +17,8 @@ export const cacheService: CacheService = {
     cacheClient.setPhoneChangeCount(0)
     cacheClient.setToday(new Date().toISOString().slice(0, 10))
   },
-  setHasSeenOnBoarding: value => {
-    cacheClient.setHasSeenOnBoarding(value)
-  },
-  getHasSeenOnBoarding: () => {
-    return cacheClient.getHasSeenOnBoarding()
-  },
+  setHasSeenOnBoarding: value => cacheClient.setHasSeenOnBoarding(value),
+  getHasSeenOnBoarding: () => cacheClient.getHasSeenOnBoarding(),
   ensureTodayDashBoardCache: () => {
     const cacheToday = cacheClient.getToday()
     const nowToday = new Date().toISOString().slice(0, 10)
@@ -47,4 +43,10 @@ export const cacheService: CacheService = {
       lastScanTime,
     }
   },
+  getAppleUser: () => cacheClient.getAppleUser(),
+  setAppleUser: id => cacheClient.setAppleUser(id),
+  clearAppleUser: () => cacheClient.setAppleUser(''),
+  setLoginProvider: provider => cacheClient.setLoginProvider(provider),
+  getLoginProvider: () => cacheClient.getLoginProvider(),
+  clearLoginProvider: () => cacheClient.setLoginProvider(''),
 }

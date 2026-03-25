@@ -8,14 +8,28 @@ interface kakaoProfile {
   nickname: string
 }
 
+interface AuthRes {
+  uid: string
+  isNew: boolean
+}
+
 export interface AuthService {
   firebaseLogin: (email: string) => Promise<string | null>
   firebaseSignIn: (email: string) => Promise<string | null>
   firebaseSignOut: () => Promise<void>
   firebaseDeleteUser: () => Promise<void>
+  appleLogin: () => Promise<string | null>
+  appleLogout: () => void
   kakaoLogin: () => Promise<kakaoProfile | null>
   kakaoLogout: () => Promise<void>
   getKakaoProfile: () => Promise<kakaoProfile | null>
+  autoLogin: () => Promise<string | null>
+  signInOrLogin: (
+    identifier: string,
+    provider: LoginProvider,
+  ) => Promise<AuthRes | null>
+  signOut: () => Promise<boolean>
+  clearAuth: () => Promise<void>
 }
 
 interface pushAlertPendingProp {
@@ -81,6 +95,8 @@ export interface BleService {
   }: StartSearchBleProps) => Promise<void>
 }
 
+export type LoginProvider = 'apple' | 'kakao'
+
 export interface CacheService {
   ensureInitialized: () => void
   setHasSeenOnBoarding: (value: boolean) => void
@@ -93,6 +109,12 @@ export interface CacheService {
     lastScanDeviceName: string
     lastScanTime: number
   }
+  getAppleUser: () => string | null
+  setAppleUser: (v: string) => void
+  clearAppleUser: () => void
+  setLoginProvider: (v: LoginProvider) => void
+  getLoginProvider: () => LoginProvider | ''
+  clearLoginProvider: () => void
 }
 
 interface CreateCardInput {
@@ -104,7 +126,6 @@ interface CreateCardInput {
   deviceId: string
   userId: string
   userNickname: string
-
 }
 
 export interface CardService {
