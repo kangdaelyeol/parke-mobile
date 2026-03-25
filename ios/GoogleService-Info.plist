@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.originals.parke</string>
+	<string>com.originalshq.parke</string>
 	<key>PROJECT_ID</key>
 	<string>parke-42fac</string>
 	<key>STORAGE_BUCKET</key>
