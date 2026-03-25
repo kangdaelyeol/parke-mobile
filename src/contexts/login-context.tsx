@@ -19,7 +19,7 @@ import { DocType } from '@/types/common'
 
 const LoginContext = createContext({} as LoginContextValue)
 
-const isUserDto = (dto: any): dto is UserDto => dto.id
+const isUserDto = (dto: any): dto is UserDto => dto?.id
 
 export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const { actions: userContectActions } = useUserContext()
@@ -99,7 +99,6 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const termsAndConsentConfirmPress = () => {
-    console.log(confirmSheetRef.current)
     confirmSheetRef.current?.present()
   }
 
@@ -119,34 +118,27 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
 
     const { email, nickname } = kakaoProfile
 
-    // 첫 로그인시 - 가입
-    const authRes = await authService.signInOrLogin(email, 'kakao')
+    const firebaseId = await authService.signInOrLogin(email, 'kakao')
+    console.log(firebaseId)
 
-    if (!authRes) {
+    if (!firebaseId) {
       Alert.alert('로그인에 실패하였습니다')
       return setLoading(false)
     }
 
-    if (!authRes.isNew) {
-      const userRes = await userService.get(authRes.uid)
+    const dto = await userService.get(firebaseId)
 
-      if (!isUserDto(userRes)) {
-        Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
-        return setLoading(false)
-      }
-
-      userContectActions.initUser(userRes)
+    if (isUserDto(dto)) {
+      userContectActions.initUser(dto)
       return navigation.replace('Home')
     }
 
-    const userRes = await userService.create({ id: authRes.uid, nickname })
-
-    if (!isUserDto(userRes)) {
+    const res = await userService.create({ id: firebaseId, nickname })
+    if (!isUserDto(res)) {
       Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
       return setLoading(false)
     }
-
-    userContectActions.initUser(userRes)
+    userContectActions.initUser(res)
     return navigation.replace('Init')
   }
 
@@ -165,33 +157,30 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return setLoading(false)
     }
 
-    const authRes = await authService.signInOrLogin(appleUserId, 'apple')
-    if (!authRes) {
+    const firebaseId = await authService.signInOrLogin(appleUserId, 'apple')
+    if (!firebaseId) {
       Alert.alert('로그인에 실패하였습니다')
       return setLoading(false)
     }
 
-    if (!authRes.isNew) {
-      const userRes = await userService.get(authRes.uid)
-      if (!isUserDto(userRes)) {
-        Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
-        return setLoading(false)
-      }
+    const dto = await userService.get(firebaseId)
 
-      userContectActions.initUser(userRes)
+    if (isUserDto(dto)) {
+      userContectActions.initUser(dto)
       return navigation.replace('Home')
     }
 
-    const userRes = await userService.create({
-      id: authRes.uid,
+    const res = await userService.create({
+      id: firebaseId,
       nickname: '',
     })
-    if (!isUserDto(userRes)) {
+
+    if (!isUserDto(res)) {
       Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
       return setLoading(false)
     }
 
-    userContectActions.initUser(userRes)
+    userContectActions.initUser(res)
     return navigation.replace('Init')
   }
 

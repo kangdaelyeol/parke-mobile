@@ -117,13 +117,13 @@ export const authService: AuthService = {
     const uid = await authService.firebaseSignIn(identifier)
     if (uid) {
       cacheService.setLoginProvider(provider)
-      return { uid, isNew: true }
+      return uid
     }
 
     const loginUid = await authService.firebaseLogin(identifier)
     if (loginUid) {
       cacheService.setLoginProvider(provider)
-      return { uid: loginUid, isNew: false }
+      return loginUid
     }
 
     return null
