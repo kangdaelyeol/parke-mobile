@@ -1,5 +1,6 @@
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
+import { LoginProvider } from '@/services/types'
 
 export type AlertPending = null | {
   phone: string
@@ -40,6 +41,10 @@ export interface UserClient {
 }
 
 export interface CacheClient {
+  setLoginProvider: (v: string) => void
+  getLoginProvider: () => LoginProvider | ''
+  setAppleUser: (v: string) => void
+  getAppleUser: () => string | null
   getHasInitializedCache(): boolean
   setHasInitializedCache(setting: boolean): void
   getHasSeenOnBoarding(): boolean

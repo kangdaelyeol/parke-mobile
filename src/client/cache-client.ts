@@ -1,8 +1,15 @@
 import { MMKV } from 'react-native-mmkv'
 import { AlertPending, CacheClient } from '@/client'
+import { LoginProvider } from '@/services/types'
 export const kv = new MMKV()
 
 export const cacheClient: CacheClient = {
+  setLoginProvider: v => kv.set('auth:loginProvider', v),
+  getLoginProvider: () =>
+    (kv.getString('auth:loginProvider') as LoginProvider) ?? '',
+  // apple login
+  setAppleUser: v => kv.set('apple:user', v),
+  getAppleUser: () => kv.getString('apple:user') ?? null,
   // global
   getHasInitializedCache: () => kv.getBoolean('initialized') ?? false,
   setHasInitializedCache: setting => kv.set('initialized', setting),
@@ -20,7 +27,8 @@ export const cacheClient: CacheClient = {
   },
   setAlertPending: pendingList =>
     kv.set('ble:pending', JSON.stringify(pendingList)),
-  markSimultaneousConnectionAlertAt: () => kv.set('ble:simultaneous', Date.now()),
+  markSimultaneousConnectionAlertAt: () =>
+    kv.set('ble:simultaneous', Date.now()),
   getSimultaneousConnectionAlertAt: () => kv.getNumber('ble:simultaneous') ?? 0,
 
   // setting
