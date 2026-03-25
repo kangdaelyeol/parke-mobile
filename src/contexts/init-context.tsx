@@ -58,7 +58,7 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
         nickname === '' ? 'user' : nickname,
         phone === '' ? '01000000000' : phone,
       )
-      userContextActions.setUserNicknameAndPhone(nickname, phone)
+      userContextActions.setUserNicknameAndPhone(nickname, '01000000000')
       if (!res) {
         Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
         setLoading(false)
