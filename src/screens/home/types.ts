@@ -37,7 +37,7 @@ interface CardActions {
   editPress: () => void
   deletePress: () => void
   previewPress: () => Promise<void>
-  scanChangePress: () => Promise<void>
+  scanChangePress: () => void
   changePhonePress: () => Promise<void>
   morePress: () => void
 }

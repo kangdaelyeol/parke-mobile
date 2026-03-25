@@ -1,3 +1,5 @@
+import { useEffect, useRef, useState } from 'react'
+import { Alert, Linking } from 'react-native'
 import {
   Easing,
   useAnimatedStyle,
@@ -5,17 +7,15 @@ import {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import {
   useCardSettingContext,
   useCardSliderContext,
   useUserContext,
 } from '@/contexts'
 import { HomeCardViewModel } from '@home/types'
-import { useEffect, useRef, useState } from 'react'
-import { Alert, Linking } from 'react-native'
 import { cardService } from '@/services'
 import { PARKE_WEB_URL } from '@/constants'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 export const useCardViewModel = (idx: number): HomeCardViewModel => {
   const { settingCard, cardSettingController } = useCardSettingContext()
@@ -80,7 +80,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
           onPress: async () => {
             setLoading(true)
 
-            const cardDeleteRes = await cardService.delete(
+            const cardDeleteRes = await cardService.deleteCard(
               selectedCard.id,
               user.id,
             )
@@ -105,18 +105,9 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
         return Alert.alert('웹 사이트를 열 수 없습니다. 확인해주세요')
       await Linking.openURL(url)
     },
-    scanChangePress: async () => {
-      setLoading(true)
-      const res = await cardService.updateScan(
-        selectedCard.id,
-        !selectedCard.scan,
-      )
-      if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
-        return setLoading(false)
-      }
-      setLoading(false)
-      userContextActions.toggleCardScan(selectedCard.id)
+    scanChangePress: () => {
+      cardService.updateScan(selectedCard.deviceId, !selectedCard.scan)
+      userContextActions.setCardScan(selectedCard.id, !selectedCard.scan)
     },
     changePhonePress: async () => {
       if (!user) return

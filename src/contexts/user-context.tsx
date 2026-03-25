@@ -7,12 +7,12 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { CardDto } from '@/domain/card/card-dto'
 import { UserDto } from '@/domain/user/user-dto'
 import { cardService } from '@/services'
 import { userClient } from '@/client'
+import { CardState } from '@/services/types'
 
-const isCardList = (v: any): v is CardDto[] => {
+const isCardList = (v: any): v is CardState[] => {
   return v !== null
 }
 
@@ -21,7 +21,7 @@ const isUserDto = (v: any): v is UserDto => {
 }
 
 interface UserContextValue {
-  cards: CardDto[]
+  cards: CardState[]
   user: UserDto | null
   syncCardList: () => Promise<void>
   stateSession: number
@@ -30,7 +30,7 @@ interface UserContextValue {
     deleteCard: (cardId: string) => void
     setUserNicknameAndPhone: (nickname: string, phone: string) => void
     updateCardPhone: (cardId: string, phone: string) => void
-    toggleCardScan: (cardId: string) => void
+    setCardScan: (cardId: string, scan: boolean) => void
     updateCardInfo: (
       cardId: string,
       title: string,
@@ -52,7 +52,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     cardIdList: [],
   })
 
-  const [cards, setCards] = useState<CardDto[]>([])
+  const [cards, setCards] = useState<CardState[]>([])
   const [stateSession, setStateSession] = useState(0)
 
   const syncCardList = useCallback(async () => {
@@ -106,11 +106,12 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
           ),
         )
       },
-      toggleCardScan: (cardId: string) => {
+      setCardScan: (cardId: string, scan: boolean) => {
         setCards(prev =>
-          prev.map(card =>
-            card.id !== cardId ? { ...card } : { ...card, scan: !card.scan },
-          ),
+          prev.map(card => {
+            if (card.id !== cardId) return card
+            return { ...card, scan }
+          }),
         )
       },
       updateCardInfo: (

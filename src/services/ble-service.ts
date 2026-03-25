@@ -104,7 +104,7 @@ export const bleService: BleService = {
           const cardState = cards.find(c => c.deviceId === deviceId)
           if (!cardState || !cardState.scan) return
 
-          const card = await cardService.get(cardState.id)
+          const card = await cardService.getCard(cardState.id)
           if (!card) return
 
           console.log('find:', card)

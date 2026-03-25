@@ -13,6 +13,7 @@ import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
 import { HomeSettingCardViewModel } from '@home/types'
 import { extractNumber } from '@/utils'
+import { Alert } from 'react-native'
 
 export const useSettingCardViewModel = (
   card: CardDto,
@@ -39,23 +40,23 @@ export const useSettingCardViewModel = (
   const actions = {
     savePress: async () => {
       cardSettingController.hideSetting()
-      const res = await cardService.update({
-        ...cards[selectedCardIdx],
+      const res = await cardService.updateCardInfo(
+        cards[selectedCardIdx].id,
         title,
         phone,
         message,
-      })
+      )
 
-      if (res) {
-        userContextActions.updateCardInfo(
-          cards[selectedCardIdx].id,
-          title,
-          phone,
-          message,
-        )
-      } else {
-        // Display Error
+      if (!res) {
+        Alert.alert('네트워크 오류', '잠시 후 다시 시도해주세요.')
+        return
       }
+      userContextActions.updateCardInfo(
+        cards[selectedCardIdx].id,
+        title,
+        phone,
+        message,
+      )
     },
     cancelPress: () => {
       cardSettingController.hideSetting()

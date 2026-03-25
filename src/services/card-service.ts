@@ -1,19 +1,22 @@
 import { serverTimestamp } from 'firebase/database'
 import { cardClient, userClient } from '@/client'
-import { Card, CardDto } from '@/domain/card'
-import { CardService } from './types'
+import { Card } from '@/domain/card'
+import { bleCacheService } from '@/services'
+import { CardService, CardState } from '@/services/types'
 
 export const cardService: CardService = {
-  get: async id => {
-    const res = await cardClient.getById(id)
-    return res
+  getCard: async id => {
+    const dto = await cardClient.getById(id)
+    if (!dto) return null
+    const scan = bleCacheService.getDeviceScan(dto.deviceId)
+    return { ...dto, scan }
   },
   getList: async idList => {
-    const res = await Promise.allSettled(idList.map(cardClient.getById))
+    const res = await Promise.allSettled(idList.map(cardService.getCard))
     if (!res) return null
     return res
       .filter(
-        (r): r is PromiseFulfilledResult<CardDto> =>
+        (r): r is PromiseFulfilledResult<CardState> =>
           r.status === 'fulfilled' && r.value !== null,
       )
       .map(r => r.value)
@@ -23,23 +26,18 @@ export const cardService: CardService = {
     console.log(res)
     return res
   },
-  update: async card => {
-    const cardEntity = Card.fromDto(card)
-
+  updateCardInfo: async (cardId, title, phone, message) => {
     try {
-      const cardDto = cardEntity.toDto()
-      const res = await cardClient.update(cardDto)
-
-      if (res === true) return cardDto
-      else return null
+      const res = await cardClient.update({ id: cardId, title, phone, message })
+      if (res === true) return true
+      else return false
     } catch (e) {
       console.log(e)
-      return null
+      return false
     }
   },
-  create: async input => {
-    const { id, phone, message, title, scan, deviceId, userId, userNickname } =
-      input
+  createCard: async input => {
+    const { id, phone, message, title, deviceId, userId, userNickname } = input
 
     const cardEntity = Card.create({
       id,
@@ -48,20 +46,21 @@ export const cardService: CardService = {
       title,
       updatedBy: userNickname,
       updatedAt: serverTimestamp(),
-      scan,
       deviceId,
       ownerList: [userId],
     })
     try {
-      const res = await cardClient.create(cardEntity.toDto())
-      if (res !== null) return res
-      else return null
+      const dto = await cardClient.create(cardEntity.toDto())
+      if (dto !== null) {
+        bleCacheService.setDeviceScan(dto.deviceId, true)
+        return { ...dto, scan: true }
+      } else return null
     } catch (e) {
       console.log(e)
       return null
     }
   },
-  delete: async (cardId, userId) => {
+  deleteCard: async (cardId, userId) => {
     const card = await cardClient.getById(cardId)
     const user = await userClient.getById(userId)
     if (!user || !card) return false
@@ -76,9 +75,7 @@ export const cardService: CardService = {
     if (newOwnerList.length === 0) return await cardClient.deleteById(cardId)
     return cardClient.update({ ...card, ownerList: newOwnerList })
   },
-  updateScan: async (id, scan) => {
-    return await cardClient.update({ id, scan })
-  },
+  updateScan: (deviceId, scan) => bleCacheService.setDeviceScan(deviceId, scan),
   updatePhone: async (id, phone) => {
     return await cardClient.update({ id, phone })
   },

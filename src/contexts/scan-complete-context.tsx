@@ -69,12 +69,11 @@ export const ScanCompleteContextProvider = ({
           )
         }
 
-        const cardRes = await cardService.create({
+        const cardRes = await cardService.createCard({
           id: serial,
           phone,
           message,
           title: name,
-          scan: true,
           deviceId,
           userId: user.id,
           userNickname: user.nickname,
