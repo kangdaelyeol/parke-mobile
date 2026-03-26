@@ -14,7 +14,7 @@ import {
 } from '@react-native-seoul/kakao-login'
 import appleAuth from '@invertase/react-native-apple-authentication'
 import { AuthService } from './types'
-import { getHashedPassword } from '@/helpers'
+import { formatToAppleEmail, getHashedPassword } from '@/helpers'
 import { cacheService } from './cache-service'
 
 export const authService: AuthService = {
@@ -30,6 +30,7 @@ export const authService: AuthService = {
     try {
       const res: KakaoOAuthToken = await login()
       if (res) {
+        cacheService.setLoginProvider('kakao')
         return authService.getKakaoProfile()
       }
       return null
@@ -38,15 +39,21 @@ export const authService: AuthService = {
     }
   },
   appleLogin: async () => {
+    console.log(appleAuth.isSupported)
     if (!appleAuth.isSupported) return null
     try {
       const credential = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       })
+      console.log(credential)
       if (!credential) return null
 
-      return credential.user
+      const formattedEmail = formatToAppleEmail(credential.user)
+
+      cacheService.setAppleUser(formattedEmail)
+      cacheService.setLoginProvider('apple')
+      return formattedEmail
     } catch (e) {
       console.log(e)
       return null
@@ -80,6 +87,7 @@ export const authService: AuthService = {
       )
       return cred.user.uid
     } catch (e) {
+      console.log(e)
       return null
     }
   },
@@ -113,16 +121,14 @@ export const authService: AuthService = {
 
     return null
   },
-  signInOrLogin: async (identifier, provider) => {
+  signInOrLogin: async identifier => {
     const uid = await authService.firebaseSignIn(identifier)
     if (uid) {
-      cacheService.setLoginProvider(provider)
       return uid
     }
 
     const loginUid = await authService.firebaseLogin(identifier)
     if (loginUid) {
-      cacheService.setLoginProvider(provider)
       return loginUid
     }
 
@@ -137,6 +143,7 @@ export const authService: AuthService = {
         try {
           await authService.firebaseSignOut()
           authService.appleLogout()
+          cacheService.clearLoginProvider()
           return true
         } catch (e) {
           console.log(e)
@@ -144,12 +151,13 @@ export const authService: AuthService = {
         }
       case 'kakao':
         try {
+          await authService.firebaseSignOut()
+          await authService.kakaoLogout()
+          cacheService.clearLoginProvider()
         } catch (e) {
           console.log(e)
           return false
         }
-        await authService.kakaoLogout()
-        await authService.firebaseSignOut()
         return true
     }
   },
