@@ -15,7 +15,6 @@ const HomeScreenContent = () => {
     <View style={styles.container}>
       {state.loading && <Loading />}
       <Header />
-      <View style={styles.divider} />
       <Main />
       <Footer />
     </View>
@@ -38,12 +37,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'black',
-  },
-  divider: {
-    height: 1,
-    width: '90%',
-    backgroundColor: '#2a2a2a',
-    marginVertical: 15,
-    marginHorizontal: 'auto',
   },
 })

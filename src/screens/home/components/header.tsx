@@ -32,6 +32,7 @@ export const Header = () => {
           </View>
         </View>
       </View>
+      <View style={styles.divider} />
     </View>
   )
 }
@@ -39,6 +40,8 @@ export const Header = () => {
 const styles = StyleSheet.create({
   header: {
     width: '100%',
+    backgroundColor: '#000000',
+    zIndex: 1,
   },
   headerWrapper: {
     marginTop: 40,
@@ -94,5 +97,12 @@ const styles = StyleSheet.create({
   scanOffDot: {
     backgroundColor: RED,
     boxShadow: `0px 0px 6px ${RED}`,
+  },
+  divider: {
+    height: 1,
+    width: '90%',
+    backgroundColor: '#2a2a2a',
+    marginTop: 15,
+    marginHorizontal: 'auto',
   },
 })
