@@ -1,4 +1,5 @@
 import { CardDto } from '@/domain/card'
+import { CardState } from '@/services/types'
 import { AnimatedViewModel } from '@/types/common'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { StyleProp, ViewStyle } from 'react-native'
@@ -7,7 +8,7 @@ import { PanGesture } from 'react-native-gesture-handler'
 interface MainState {
   selectedCardIdx: number
   isSetting: boolean
-  cards: CardDto[]
+  cards: CardState[]
   cardLength: number
 }
 
@@ -21,7 +22,7 @@ interface MainActions {
   panGesture: PanGesture
 }
 
-interface CardState {
+interface CardComponentState {
   loading: boolean
   settingCard: number
   bottomSheetModalRef: React.RefObject<BottomSheetModal | null>
@@ -87,7 +88,7 @@ export type HomeMainViewModel = AnimatedViewModel<
 >
 
 export type HomeCardViewModel = AnimatedViewModel<
-  CardState,
+  CardComponentState,
   CardActions,
   CardAnimated
 >
@@ -111,15 +112,12 @@ export type HomeTodaySummaryViewModel = AnimatedViewModel<
 >
 
 export interface HomeCardOptionProps {
-  card: CardDto
+  card: CardState
 }
 
 export interface HomeCardProps {
-  title: string
-  phone: string
+  card: CardState
   idx: number
-  message: string
-  scan: boolean
 }
 
 export interface HomeEmptyCardProps {

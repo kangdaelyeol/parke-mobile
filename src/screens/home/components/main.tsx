@@ -40,7 +40,7 @@ export const Main = () => {
                   >
                     {state.cards &&
                       state.cards.map((card, idx) => (
-                        <Card key={idx} {...card} idx={idx} />
+                        <Carsd key={idx} card={card} idx={idx} />
                       ))}
                     <EmptyCard idx={state.cardLength} />
                   </Animated.View>

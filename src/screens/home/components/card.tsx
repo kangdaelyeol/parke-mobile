@@ -20,7 +20,7 @@ import {
 const BOTTOM_HEIGHT = 60
 const TOP_HEIGHT = CARD_HEIGHT - BOTTOM_HEIGHT
 
-export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
+export const Card = ({ card, idx }: HomeCardProps) => {
   const { animated, actions, state } = useCardViewModel(idx)
 
   return (
@@ -37,11 +37,11 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
                 </View>
               )}
             </Pressable>
-            <Text style={styles.title}>{title}</Text>
-            <Text style={styles.message}>{message}</Text>
-            <Text style={styles.phone}>{formatPhone(phone)}</Text>
+            <Text style={styles.title}>{card.title}</Text>
+            <Text style={styles.message}>{card.message}</Text>
+            <Text style={styles.phone}>{formatPhone(card.phone)}</Text>
             <View style={styles.scan}>
-              {scan ? (
+              {card.scan ? (
                 <Animated.View
                   style={[animated.scanOnDotStyle, styles.dot, styles.dotOn]}
                 />
@@ -50,11 +50,11 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
               )}
               <Text
                 style={[
-                  scan ? styles.scanTextOn : styles.scanTextOff,
+                  card.scan ? styles.scanTextOn : styles.scanTextOff,
                   styles.scanText,
                 ]}
               >
-                {scan ? '자동감지 On' : '자동감지 Off'}
+                {card.scan ? '자동감지 On' : '자동감지 Off'}
               </Text>
             </View>
           </View>
@@ -110,9 +110,9 @@ export const Card = ({ title, phone, idx, message, scan }: HomeCardProps) => {
       </Animated.View>
       <CardBottomSheet
         modalRef={state.bottomSheetModalRef}
-        title={title}
-        phone={phone}
-        scan={scan}
+        title={card.title}
+        phone={card.phone}
+        scan={card.scan}
         idx={idx}
       />
     </Pressable>
