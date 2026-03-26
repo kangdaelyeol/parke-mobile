@@ -2,14 +2,17 @@ import { StyleSheet, View } from 'react-native'
 import { Loading } from '@/components'
 import { InitContextProvider, useInitContext } from '@/contexts'
 import { Main, Footer, Header } from './components'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const InitContent = () => {
   const { state } = useInitContext()
   return (
     <View style={styles.container}>
       {state.loading && <Loading />}
-      <Header />
-      <Main />
+      <KeyboardAwareScrollView enableOnAndroid extraScrollHeight={150}>
+        <Header />
+        <Main />
+      </KeyboardAwareScrollView>
       <Footer />
     </View>
   )

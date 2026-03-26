@@ -34,6 +34,7 @@ export const Main = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
+    minHeight: 400,
   },
   wrapper: {
     width: '100%',

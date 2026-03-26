@@ -13,6 +13,7 @@ export const Footer = () => {
   const { actions } = useInitContext()
   return (
     <View style={styles.container}>
+      
       <View style={styles.wrapper}>
         <View style={styles.buttonSection}>
           <PressableButton
@@ -38,6 +39,7 @@ export const Footer = () => {
 
 const styles = StyleSheet.create({
   container: {
+    backgroundColor: '#000000',
     position: 'absolute',
     bottom: 0,
     left: 0,
