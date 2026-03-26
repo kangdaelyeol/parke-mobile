@@ -57,7 +57,7 @@
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>BLE 기기를 스캔하고 연결하는 데 필요합니다.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string></string>
+	<string>BLE 기기를 스캔하고 연결하는 데 필요합니다.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>QR 코드를 스캔하기 위해 카메라 접근이 필요합니다.</string>
 	<key>NSUserNotificationUsageDescription</key>
