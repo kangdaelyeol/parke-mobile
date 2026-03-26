@@ -11,34 +11,36 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useSettingCardViewModel(card)
 
   return (
-    <Animated.View style={[styles.container, animated.optionStyle]}>
-      <KeyboardAwareScrollView
-        contentContainerStyle={styles.wrapper}
-        extraScrollHeight={15}
-        enableOnAndroid
-      >
-        <FocusableInput
-          title="Parke 이름"
-          placeholder="Parke 이름"
-          value={state.title}
-          onChangeText={actions.titleInput}
-          iconName="card"
-        />
-        <FocusableInput
-          title="전화번호"
-          placeholder="전화번호"
-          value={formatPhone(state.phone)}
-          onChangeText={actions.phoneInput}
-          iconName="phone"
-        />
-        <FocusableInput
-          title="메시지"
-          placeholder="메시지"
-          value={state.message}
-          onChangeText={actions.messageInput}
-          iconName="message"
-        />
-      </KeyboardAwareScrollView>
+    <>
+      <Animated.View style={[styles.container, animated.optionStyle]}>
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.wrapper}
+          extraScrollHeight={15}
+          enableOnAndroid
+        >
+          <FocusableInput
+            title="Parke 이름"
+            placeholder="Parke 이름"
+            value={state.title}
+            onChangeText={actions.titleInput}
+            iconName="card"
+          />
+          <FocusableInput
+            title="전화번호"
+            placeholder="전화번호"
+            value={formatPhone(state.phone)}
+            onChangeText={actions.phoneInput}
+            iconName="phone"
+          />
+          <FocusableInput
+            title="메시지"
+            placeholder="메시지"
+            value={state.message}
+            onChangeText={actions.messageInput}
+            iconName="message"
+          />
+        </KeyboardAwareScrollView>
+      </Animated.View>
       <View style={styles.btnContainer}>
         <View style={styles.btnWrapper}>
           <PressableButton
@@ -58,7 +60,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
           />
         </View>
       </View>
-    </Animated.View>
+    </>
   )
 }
 
@@ -69,7 +71,6 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     marginHorizontal: 'auto',
-    marginTop: 0,
     bottom: 0,
   },
   wrapper: {
@@ -95,7 +96,9 @@ const styles = StyleSheet.create({
   },
   btnContainer: {
     position: 'absolute',
+    backgroundColor: '#000000',
     bottom: 110,
+    paddingTop: 10,
     left: 0,
     right: 0,
   },

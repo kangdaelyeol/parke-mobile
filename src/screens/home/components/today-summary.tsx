@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     maxWidth: 360,
+    paddingTop: 10,
     width: '100%',
     marginHorizontal: 'auto',
   },

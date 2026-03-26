@@ -13,50 +13,47 @@ import {
 import { useMainViewModel } from '@/view-model/home'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export const Main = () => {
   const { state, actions, animated } = useMainViewModel()
 
   return (
     <View style={styles.container}>
-      <KeyboardAwareScrollView enableOnAndroid>
-        <View style={styles.wrapper}>
-          {state.cardLength === 0 ? (
-            <EmptyView />
-          ) : (
-            <>
-              {!state.isSetting && <TodaySummary />}
-              <GestureDetector gesture={actions.panGesture}>
-                <Animated.View
-                  style={[styles.cardContainer, animated.sliderStyle]}
-                >
-                  <Animated.View style={animated.cardTitleStyle}>
-                    <View style={styles.title}>
-                      <Text style={styles.titleText}>내 기기</Text>
-                    </View>
-                  </Animated.View>
-                  <View style={styles.cardSlider}>
-                    <Animated.View
-                      style={[animated.moverStyle, styles.cardSliderMover]}
-                    >
-                      {state.cards &&
-                        state.cards.map((card, idx) => (
-                          <Card key={idx} card={card} idx={idx} />
-                        ))}
-                      <EmptyCard idx={state.cardLength} />
-                    </Animated.View>
+      <View style={styles.wrapper}>
+        {state.cardLength === 0 ? (
+          <EmptyView />
+        ) : (
+          <>
+            {!state.isSetting && <TodaySummary />}
+            <GestureDetector gesture={actions.panGesture}>
+              <Animated.View
+                style={[styles.cardContainer, animated.sliderStyle]}
+              >
+                <Animated.View style={animated.cardTitleStyle}>
+                  <View style={styles.title}>
+                    <Text style={styles.titleText}>내 기기</Text>
                   </View>
-                  {!state.isSetting && <PaginationDots />}
                 </Animated.View>
-              </GestureDetector>
-            </>
-          )}
-          {state.isSetting && (
-            <SettingCard card={state.cards[state.selectedCardIdx]} />
-          )}
-        </View>
-      </KeyboardAwareScrollView>
+                <View style={styles.cardSlider}>
+                  <Animated.View
+                    style={[animated.moverStyle, styles.cardSliderMover]}
+                  >
+                    {state.cards &&
+                      state.cards.map((card, idx) => (
+                        <Card key={idx} card={card} idx={idx} />
+                      ))}
+                    <EmptyCard idx={state.cardLength} />
+                  </Animated.View>
+                </View>
+                {!state.isSetting && <PaginationDots />}
+              </Animated.View>
+            </GestureDetector>
+          </>
+        )}
+      </View>
+      {state.isSetting && (
+        <SettingCard card={state.cards[state.selectedCardIdx]} />
+      )}
     </View>
   )
 }
@@ -69,7 +66,6 @@ const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
     maxWidth: 400,
-    minHeight: 500,
     marginHorizontal: 'auto',
     paddingBottom: 200,
     flex: 1,
