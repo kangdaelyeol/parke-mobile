@@ -14,6 +14,7 @@ import {
   isAlertDeniedCooldownActive,
   isScanCooldownActive,
   isOwnCard,
+  canRenewPhoneNumber,
 } from '@/helpers'
 import { bleCacheService, cardService, settingService } from '@/services'
 import {
@@ -126,7 +127,10 @@ export const bleService: BleService = {
           if (canNotifySimultaneousConnection(card)) {
             notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
             bleCacheService.markSimultaneousConnectionAlertAt()
+            return
           }
+
+          if(!canRenewPhoneNumber(card)) return
 
           if (!settings.autoSet) {
             if (isAlertDeniedCooldownActive()) return

@@ -54,3 +54,7 @@ export const isScanCooldownActive = (deviceId: string) => {
     Date.now() - bleCacheService.getDeviceSeenAt(deviceId) < SCAN_COOLDOWN_MS
   )
 }
+
+export const canRenewPhoneNumber = (card: CardDto): boolean => {
+  return Number(card.updatedAt) + RENEW_INTERVAL_MS < Date.now()
+}
