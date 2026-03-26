@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     width: '100%',
     maxWidth: 380,
+    minHeight: 660,
     marginHorizontal: 'auto',
   },
   header: {

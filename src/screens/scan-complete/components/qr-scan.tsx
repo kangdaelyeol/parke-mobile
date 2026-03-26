@@ -4,6 +4,7 @@ import { LogoText, PressableButton } from '@/components'
 import { useQrScanViewModel } from '@/view-model/scan-complete'
 import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export const QrScan = () => {
   const { state, actions } = useQrScanViewModel()
@@ -22,24 +23,28 @@ export const QrScan = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <View style={styles.logoContainer}>
-          <LogoText fontSize={24} letterSpacing={4.5} />
+      <KeyboardAwareScrollView enableOnAndroid>
+        <View style={styles.wrapper}>
+          <View style={styles.logoContainer}>
+            <LogoText fontSize={24} letterSpacing={4.5} />
+          </View>
+          <Text style={styles.title}>
+            Parke에 각인된 QR 코드를 스캔해주세요
+          </Text>
+          <Camera
+            codeScanner={actions.codeScanner as any}
+            style={styles.camera}
+            device={state.device}
+            isActive={!state.scanned}
+          />
+          <PressableButton
+            pressableStyle={styles.button}
+            background={[BLUE_PRIMARY, '#1820ff']}
+            title="돌아가기"
+            onPress={actions.scanBackPress}
+          />
         </View>
-        <Text style={styles.title}>Parke에 각인된 QR 코드를 스캔해주세요</Text>
-        <Camera
-          codeScanner={actions.codeScanner as any}
-          style={styles.camera}
-          device={state.device}
-          isActive={!state.scanned}
-        />
-        <PressableButton
-          pressableStyle={styles.button}
-          background={[BLUE_PRIMARY, '#1820ff']}
-          title="돌아가기"
-          onPress={actions.scanBackPress}
-        />
-      </View>
+      </KeyboardAwareScrollView>
     </View>
   )
 }
@@ -55,6 +60,7 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingHorizontal: 10,
     maxWidth: 360,
+    minHeight: 700,
   },
   title: {
     color: WHITE,

@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000000',
     marginTop: 20,
+    paddingBottom: 10,
   },
   wrapper: {
     flexDirection: 'row',

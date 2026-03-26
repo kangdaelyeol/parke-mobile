@@ -50,11 +50,14 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 30,
+    bottom: 0,
+    backgroundColor: '#000000',
+    zIndex: 1,
   },
   wrapper: {
     width: '100%',
     maxWidth: 400,
+    paddingBottom: 30,
     marginHorizontal: 'auto',
   },
   buttonContainer: {
