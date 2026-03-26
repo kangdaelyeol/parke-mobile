@@ -19,10 +19,7 @@ export interface AuthService {
   kakaoLogout: () => Promise<void>
   getKakaoProfile: () => Promise<kakaoProfile | null>
   autoLogin: () => Promise<string | null>
-  signInOrLogin: (
-    identifier: string,
-    provider: LoginProvider,
-  ) => Promise<string | null>
+  signInOrLogin: (identifier: string) => Promise<string | null>
   signOut: () => Promise<boolean>
   clearAuth: () => Promise<void>
 }

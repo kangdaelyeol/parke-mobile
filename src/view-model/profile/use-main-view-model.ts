@@ -56,8 +56,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
           onPress: async () => {
             setLoading(true)
             try {
-              await authService.kakaoLogout()
-              await authService.firebaseSignOut()
+              await authService.signOut()
               return navigation.navigate('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
@@ -81,8 +80,8 @@ export const useMainViewModel = (): ProfileMainViewModel => {
               setLoading(true)
               const res = await userService.delete(user.id)
               if (res) {
-                await authService.kakaoLogout()
                 await authService.firebaseDeleteUser()
+                await authService.signOut()
                 return navigation.replace('Login')
               }
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')

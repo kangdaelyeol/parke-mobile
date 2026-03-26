@@ -68,7 +68,6 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     } else setAllConfirm(false)
 
     setAgeConfirm(val)
-    console.log(val)
   }
 
   const termConfirmPress = () => {
@@ -118,11 +117,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
 
     const { email, nickname } = kakaoProfile
 
-    const firebaseId = await authService.signInOrLogin(email, 'kakao')
-    console.log(firebaseId)
+    const firebaseId = await authService.signInOrLogin(email)
 
     if (!firebaseId) {
       Alert.alert('로그인에 실패하였습니다')
+      authService.kakaoLogout()
       return setLoading(false)
     }
 
@@ -152,14 +151,16 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     setLoading(true)
 
     const appleUserId = await authService.appleLogin()
+
     if (!appleUserId) {
       Alert.alert('로그인에 실패하였습니다')
       return setLoading(false)
     }
 
-    const firebaseId = await authService.signInOrLogin(appleUserId, 'apple')
+    const firebaseId = await authService.signInOrLogin(appleUserId)
     if (!firebaseId) {
       Alert.alert('로그인에 실패하였습니다')
+      authService.appleLogout()
       return setLoading(false)
     }
 
