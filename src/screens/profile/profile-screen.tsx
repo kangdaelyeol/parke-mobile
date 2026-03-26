@@ -1,11 +1,14 @@
 import { StyleSheet, View } from 'react-native'
 import { Main, Header } from '@profile/components'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 export default function ProfileScreen() {
   return (
     <View style={styles.container}>
       <Header />
-      <Main />
+      <KeyboardAwareScrollView enableOnAndroid extraScrollHeight={100}>
+        <Main />
+      </KeyboardAwareScrollView>
     </View>
   )
 }
