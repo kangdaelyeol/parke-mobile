@@ -1,3 +1,4 @@
+import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 import { LoginProvider } from '@/services/types'
@@ -13,31 +14,33 @@ export interface CardClient {
   getById(id: string): Promise<CardDto | null>
   getAllowById(id: string): Promise<boolean | null>
   deleteById(id: string): Promise<boolean>
-  update(
-    dto: { id: string } & Partial<
-      Pick<
-        CardDto,
-        | 'scan'
-        | 'message'
-        | 'phone'
-        | 'title'
-        | 'updatedAt'
-        | 'updatedBy'
-        | 'ownerList'
-      >
-    >,
-  ): Promise<boolean>
+  update(dto: { id: string } & Partial<CardDto>): Promise<boolean>
 }
 
+interface ClientSuccess<T> {
+  status: true
+  payload: T
+}
+
+interface ClientFailure<E = unknown> {
+  status: false
+  error: E
+}
+
+type ClientResult<T, E> = ClientSuccess<T> | ClientFailure<E>
+
+type FirebaseResult<T> = ClientResult<
+  T,
+  ReactNativeFirebase.NativeFirebaseError
+>
+
 export interface UserClient {
-  create(dto: UserDto): Promise<boolean>
+  create(dto: UserDto): Promise<FirebaseResult<boolean>>
   update(
-    dto: { id: string } & Partial<
-      Pick<UserDto, 'cardIdList' | 'nickname' | 'phone'>
-    >,
-  ): Promise<boolean>
-  getById(id: string): Promise<UserDto | null>
-  deleteById(id: string): Promise<boolean>
+    dto: { id: string } & Partial<UserDto>,
+  ): Promise<FirebaseResult<boolean>>
+  getById(id: string): Promise<FirebaseResult<UserDto | null>>
+  deleteById(id: string): Promise<FirebaseResult<boolean>>
 }
 
 export interface CacheClient {

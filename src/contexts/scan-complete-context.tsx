@@ -86,13 +86,13 @@ export const ScanCompleteContextProvider = ({
 
         const newCardIdList = [...user.cardIdList, serial]
 
-        const userRes = await userService.updateCardIdList(
+        const updateUserRes = await userService.updateCardIdList(
           user.id,
           newCardIdList,
         )
 
-        if (!userRes) {
-          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+        if (!updateUserRes.status) {
+          Alert.alert(updateUserRes.message)
           return setLoading(false)
         }
 

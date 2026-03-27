@@ -78,17 +78,18 @@ export const useMainViewModel = (): ProfileMainViewModel => {
           onPress: async () => {
             try {
               setLoading(true)
-              const res = await userService.delete(user.id)
-              if (res) {
-                await authService.firebaseDeleteUser()
-                await authService.signOut()
-                return navigation.replace('Login')
+              const res = await userService.deleteUser(user.id)
+
+              if (!res.status) {
+                Alert.alert(res.message)
+                return setLoading(false)
               }
-              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
-              return setLoading(false)
+              await authService.firebaseDeleteUser()
+              await authService.signOut()
+              return navigation.replace('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
-              return setLoading(false)
+              return navigation.replace('Login')
             }
           },
         },

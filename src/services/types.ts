@@ -165,19 +165,31 @@ export interface SettingService {
   setActive: (val: boolean) => void
 }
 
+interface UserServiceSuccess<T> {
+  status: true
+  payload: T
+}
+
+interface UserServiceFailure {
+  status: false
+  message: string
+}
+
+type UserServiceResponse<T> = UserServiceSuccess<T> | UserServiceFailure
+
 export interface UserService {
-  get: (id: string) => Promise<UserDto | null>
-  create: (
+  getUser: (id: string) => Promise<UserServiceResponse<UserDto>>
+  createUser: (
     user: { id: string } & Partial<
       Pick<UserDto, 'cardIdList' | 'id' | 'nickname' | 'phone'>
     >,
-  ) => Promise<UserDto | null>
+  ) => Promise<UserServiceResponse<UserDto>>
   updateNicknameAndPhone: (
     id: string,
     nickname: string,
     phone: string,
-  ) => Promise<boolean>
-  updateCardIdList: (id: string, cardList: string[]) => Promise<boolean>
-  delete: (id: string) => Promise<boolean>
-  deleteCard: (userId: string, cardId: string) => Promise<boolean>
+  ) => Promise<UserServiceResponse<boolean>>
+  updateCardIdList: (id: string, cardList: string[]) => Promise<UserServiceResponse<boolean>>
+  deleteUser: (id: string) => Promise<UserServiceResponse<boolean>>
+  deleteCard: (userId: string, cardId: string) => Promise<UserServiceResponse<boolean>>
 }

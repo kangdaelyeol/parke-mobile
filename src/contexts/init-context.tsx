@@ -43,12 +43,12 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
         nickname,
         phone,
       )
-      userContextActions.setUserNicknameAndPhone(nickname, phone)
-      if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+      if (!res.status) {
+        Alert.alert(res.message)
         setLoading(false)
         return
       }
+      userContextActions.setUserNicknameAndPhone(nickname, phone)
       navigation.replace('Home')
     },
     skipPress: async () => {
@@ -63,12 +63,12 @@ export const InitContextProvider = ({ children }: PropsWithChildren) => {
         nickname === '' ? 'user' : nickname,
         phone === '' ? '01000000000' : phone,
       )
-      userContextActions.setUserNicknameAndPhone(nickname, '01000000000')
-      if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+      if (!res.status) {
+        Alert.alert(res.message)
         setLoading(false)
         return
       }
+      userContextActions.setUserNicknameAndPhone(nickname, '01000000000')
       navigation.replace('Home')
     },
   }

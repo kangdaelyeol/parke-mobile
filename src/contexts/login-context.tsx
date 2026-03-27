@@ -9,7 +9,6 @@ import {
 import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { UserDto } from '@/domain/user'
 import { LoginStackNavigationProp } from '@/navigation/types'
 import { LoginContextValue } from '@login/types'
 import { userService, authService } from '@/services'
@@ -18,8 +17,6 @@ import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
 
 const LoginContext = createContext({} as LoginContextValue)
-
-const isUserDto = (dto: any): dto is UserDto => dto?.id
 
 export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const { actions: userContectActions } = useUserContext()
@@ -43,10 +40,13 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       const uid = await authService.autoLogin()
       if (!uid) return setLoading(false)
 
-      const user = await userService.get(uid)
-      if (!user) return setLoading(false)
+      const userRes = await userService.getUser(uid)
+      if (!userRes.status) {
+        Alert.alert(userRes.message)
+        return setLoading(false)
+      }
 
-      userContectActions.initUser(user)
+      userContectActions.initUser(userRes.payload)
       navigation.replace('Home')
     })()
   }, [navigation, userContectActions])
@@ -125,19 +125,23 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return setLoading(false)
     }
 
-    const dto = await userService.get(firebaseId)
+    const getUserRes = await userService.getUser(firebaseId)
 
-    if (isUserDto(dto)) {
-      userContectActions.initUser(dto)
+    if (getUserRes.status) {
+      userContectActions.initUser(getUserRes.payload)
       return navigation.replace('Home')
     }
 
-    const res = await userService.create({ id: firebaseId, nickname })
-    if (!isUserDto(res)) {
-      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+    const createUserRes = await userService.createUser({
+      id: firebaseId,
+      nickname,
+    })
+
+    if (!createUserRes.status) {
+      Alert.alert(createUserRes.message)
       return setLoading(false)
     }
-    userContectActions.initUser(res)
+    userContectActions.initUser(createUserRes.payload)
     return navigation.replace('Init')
   }
 
@@ -164,24 +168,24 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       return setLoading(false)
     }
 
-    const dto = await userService.get(firebaseId)
+    const getUserRes = await userService.getUser(firebaseId)
 
-    if (isUserDto(dto)) {
-      userContectActions.initUser(dto)
+    if (getUserRes.status) {
+      userContectActions.initUser(getUserRes.payload)
       return navigation.replace('Home')
     }
 
-    const res = await userService.create({
+    const createUserRes = await userService.createUser({
       id: firebaseId,
       nickname: '',
     })
 
-    if (!isUserDto(res)) {
-      Alert.alert('네트워크 오류: 잠시 후 다시 시도해주세요.')
+    if (!createUserRes.status) {
+      Alert.alert(createUserRes.message)
       return setLoading(false)
     }
 
-    userContectActions.initUser(res)
+    userContectActions.initUser(createUserRes.payload)
     return navigation.replace('Init')
   }
 
