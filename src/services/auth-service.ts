@@ -71,13 +71,13 @@ export const authService: AuthService = {
     const password = getHashedPassword(email)
     try {
       const cred = await signInWithEmailAndPassword(getAuth(), email, password)
-      return cred.user.uid
+      return { status: true, payload: cred.user.uid }
     } catch (e) {
       console.log(e)
-      return null
+      return { status: false, payload: null }
     }
   },
-  firebaseSignIn: async email => {
+  firebaseSignUp: async email => {
     const password = getHashedPassword(email)
     try {
       const cred = await createUserWithEmailAndPassword(
@@ -85,10 +85,10 @@ export const authService: AuthService = {
         email,
         password,
       )
-      return cred.user.uid
+      return { status: true, payload: cred.user.uid }
     } catch (e) {
       console.log(e)
-      return null
+      return { status: false, payload: null }
     }
   },
   firebaseSignOut: async () => {
@@ -107,29 +107,29 @@ export const authService: AuthService = {
         const appleUser = cacheService.getAppleUser()
         if (!appleUser) return null
 
-        const appleUid = await authService.firebaseLogin(appleUser)
-        if (appleUid) return appleUid
+        const appleRes = await authService.firebaseLogin(appleUser)
+        if (appleRes.status) return appleRes.payload
         break
       case 'kakao':
         const kakaoProfile = await authService.getKakaoProfile()
         if (!kakaoProfile) return null
 
-        const kakaoUid = await authService.firebaseLogin(kakaoProfile.email)
-        if (kakaoUid) return kakaoUid
+        const kakaoRes = await authService.firebaseLogin(kakaoProfile.email)
+        if (kakaoRes.status) return kakaoRes.payload
         break
     }
 
     return null
   },
   signInOrLogin: async identifier => {
-    const uid = await authService.firebaseSignIn(identifier)
-    if (uid) {
-      return uid
+    const signUpRes = await authService.firebaseSignUp(identifier)
+    if (signUpRes.status) {
+      return signUpRes.payload
     }
 
-    const loginUid = await authService.firebaseLogin(identifier)
-    if (loginUid) {
-      return loginUid
+    const loginRes = await authService.firebaseLogin(identifier)
+    if (loginRes.status) {
+      return loginRes.payload
     }
 
     return null

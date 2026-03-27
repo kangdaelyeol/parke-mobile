@@ -8,9 +8,14 @@ interface kakaoProfile {
   nickname: string
 }
 
+interface AuthResponse {
+  status: boolean
+  payload: string | null
+}
+
 export interface AuthService {
-  firebaseLogin: (email: string) => Promise<string | null>
-  firebaseSignIn: (email: string) => Promise<string | null>
+  firebaseLogin: (email: string) => Promise<AuthResponse>
+  firebaseSignUp: (email: string) => Promise<AuthResponse>
   firebaseSignOut: () => Promise<void>
   firebaseDeleteUser: () => Promise<void>
   appleLogin: () => Promise<string | null>
