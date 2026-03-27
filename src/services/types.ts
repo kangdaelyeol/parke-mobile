@@ -13,6 +13,18 @@ interface AuthResponse {
   payload: string | null
 }
 
+interface ServiceSuccess<T> {
+  status: true
+  payload: T
+}
+
+interface ServiceFailure {
+  status: false
+  message: string
+}
+
+type ServiceResponse<T> = ServiceSuccess<T> | ServiceFailure
+
 export interface AuthService {
   firebaseLogin: (email: string) => Promise<AuthResponse>
   firebaseSignUp: (email: string) => Promise<AuthResponse>
@@ -165,31 +177,25 @@ export interface SettingService {
   setActive: (val: boolean) => void
 }
 
-interface UserServiceSuccess<T> {
-  status: true
-  payload: T
-}
-
-interface UserServiceFailure {
-  status: false
-  message: string
-}
-
-type UserServiceResponse<T> = UserServiceSuccess<T> | UserServiceFailure
-
 export interface UserService {
-  getUser: (id: string) => Promise<UserServiceResponse<UserDto>>
+  getUser: (id: string) => Promise<ServiceResponse<UserDto>>
   createUser: (
     user: { id: string } & Partial<
       Pick<UserDto, 'cardIdList' | 'id' | 'nickname' | 'phone'>
     >,
-  ) => Promise<UserServiceResponse<UserDto>>
+  ) => Promise<ServiceResponse<UserDto>>
   updateNicknameAndPhone: (
     id: string,
     nickname: string,
     phone: string,
-  ) => Promise<UserServiceResponse<boolean>>
-  updateCardIdList: (id: string, cardList: string[]) => Promise<UserServiceResponse<boolean>>
-  deleteUser: (id: string) => Promise<UserServiceResponse<boolean>>
-  deleteCard: (userId: string, cardId: string) => Promise<UserServiceResponse<boolean>>
+  ) => Promise<ServiceResponse<boolean>>
+  updateCardIdList: (
+    id: string,
+    cardList: string[],
+  ) => Promise<ServiceResponse<boolean>>
+  deleteUser: (id: string) => Promise<ServiceResponse<boolean>>
+  deleteCard: (
+    userId: string,
+    cardId: string,
+  ) => Promise<ServiceResponse<boolean>>
 }
