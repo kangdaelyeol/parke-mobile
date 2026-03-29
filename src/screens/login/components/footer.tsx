@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text, Pressable } from 'react-native'
+import { View, StyleSheet, Text, Pressable, Platform } from 'react-native'
 import { AppleButton } from '@invertase/react-native-apple-authentication'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { KakaoLogo } from '@/assets/logo'
@@ -31,16 +31,18 @@ export const Footer = () => {
           />
         </Pressable>
         <View style={styles.loginSection}>
-          <AppleButton
-            cornerRadius={13}
-            style={[
-              styles.appleButton,
-              !state.allConfirm && styles.loginDisabled,
-            ]}
-            buttonStyle={AppleButton.Style.WHITE}
-            buttonType={AppleButton.Type.SIGN_IN}
-            onPress={actions.appleLoginPress}
-          />
+          {Platform.OS === 'ios' && (
+            <AppleButton
+              cornerRadius={13}
+              style={[
+                styles.appleButton,
+                !state.allConfirm && styles.loginDisabled,
+              ]}
+              buttonStyle={AppleButton.Style.WHITE}
+              buttonType={AppleButton.Type.SIGN_IN}
+              onPress={actions.appleLoginPress}
+            />
+          )}
           <Pressable onPress={actions.kakaoLoginPress}>
             {({ pressed }) => (
               <View
