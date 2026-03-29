@@ -85,8 +85,8 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
               user.id,
             )
 
-            if (!cardDeleteRes) {
-              Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+            if (!cardDeleteRes.status) {
+              Alert.alert(cardDeleteRes.message)
               return setLoading(false)
             }
 
@@ -114,8 +114,8 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       const { phone } = user
       setLoading(true)
       const res = await cardService.updatePhone(selectedCard.id, phone)
-      if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+      if (!res.status) {
+        Alert.alert(res.message)
         return setLoading(false)
       }
       setLoading(false)

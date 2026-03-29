@@ -66,8 +66,8 @@ export const useHomeViewModel = () => {
               user,
               refreshStateSession: userContextActions.refreshStateSession,
               onCardPhoneChange: userContextActions.updateCardPhone,
-              onDBError: () => {
-                Alert.alert('정보 업데이트 중 네트워크에 문제가 발생했습니다.')
+              onDBError: (message: string) => {
+                Alert.alert(message)
               },
               onError: (e: any) => {
                 console.log(e)

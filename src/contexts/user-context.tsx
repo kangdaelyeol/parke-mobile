@@ -12,10 +12,6 @@ import { cardService } from '@/services'
 import { userClient } from '@/client'
 import { CardState } from '@/services/types'
 
-const isCardList = (v: any): v is CardState[] => {
-  return v !== null
-}
-
 const isUserDto = (v: any): v is UserDto => {
   return v !== null
 }
@@ -57,15 +53,18 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
   const syncCardList = useCallback(async () => {
     if (!user) return
-    const userNow = await userClient.getById(user.id)
-    if (!userNow) return
+    const userRes = await userClient.getById(user.id)
+    if (!userRes.status) return
+    if (userRes.payload === null) return
+    const userNow = userRes.payload
+
     if (userNow.cardIdList.length === cards.length) return
     const cardList = await cardService.getList(userNow.cardIdList || [])
-    if (!isCardList(cardList))
+    if (!cardList.status)
       return Alert.alert(
         'uset context - syncCardList: 카드 정보를 불러오는데 실패했습니다.',
       )
-    setCards(cardList)
+    setCards(cardList.payload || [])
     setUser(userNow)
   }, [cards.length, user])
 

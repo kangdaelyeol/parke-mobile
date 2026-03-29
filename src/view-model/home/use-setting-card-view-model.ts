@@ -47,8 +47,8 @@ export const useSettingCardViewModel = (
         message,
       )
 
-      if (!res) {
-        Alert.alert('네트워크 오류', '잠시 후 다시 시도해주세요.')
+      if (!res.status) {
+        Alert.alert(res.message)
         return
       }
       userContextActions.updateCardInfo(

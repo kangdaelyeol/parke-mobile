@@ -7,62 +7,75 @@ import {
   set,
   update,
 } from '@react-native-firebase/database'
+import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { Card, CardDto } from '@/domain/card'
 import { CardClient } from './types'
 
 export const cardClient: CardClient = {
   create: async dto => {
     const entity = Card.fromDto(dto)
-    const { id, title, phone, message, scan, updatedBy, deviceId, ownerList } =
-      entity.toDto()
+    const { id, title, phone, message, deviceId, ownerList } = entity.toDto()
     try {
       await set(ref(db, `card/${id}`), {
         id,
         title,
         phone,
         message,
-        scan,
         updatedAt: serverTimestamp(),
-        updatedBy,
         deviceId,
         ownerList,
       })
     } catch (e) {
       console.log(e)
-      return null
+      return {
+        status: false,
+        error: e as ReactNativeFirebase.NativeFirebaseError,
+      }
     }
-    return dto
+    return { status: true, payload: dto }
   },
   getById: async id => {
     try {
       const snapShot = await get(ref(db, `/card/${id}`))
-      if (!snapShot.exists()) return null
+      if (!snapShot.exists()) return { status: true, payload: null }
 
       const card = snapShot.val() as CardDto
-      return card
+      return { status: true, payload: card }
     } catch (e) {
       console.log(e)
-      return null
+      return {
+        status: false,
+        error: e as ReactNativeFirebase.NativeFirebaseError,
+      }
     }
   },
   getAllowById: async id => {
     try {
       const snapShot = await get(ref(db, `allow/${id}`))
-      if (!snapShot.exists()) return null
-      return snapShot.val()
+      if (!snapShot.exists()) return { status: true, payload: null }
+      return { status: true, payload: snapShot.val() as boolean }
     } catch (e) {
       console.log(e)
-      return null
+      return {
+        status: false,
+        error: e as ReactNativeFirebase.NativeFirebaseError,
+      }
     }
   },
   deleteById: async id => {
     try {
       await remove(ref(db, `card/${id}`))
+      return {
+        status: true,
+        payload: true,
+      }
     } catch (e) {
       console.log(e)
-      return false
+      return {
+        status: false,
+        error: e as ReactNativeFirebase.NativeFirebaseError,
+      }
     }
-    return true
   },
   update: async dto => {
     const { id } = dto
@@ -72,10 +85,16 @@ export const cardClient: CardClient = {
         ...dto,
         updatedAt: serverTimestamp(),
       })
-      return true
+      return {
+        status: true,
+        payload: true,
+      }
     } catch (e) {
       console.log(e)
-      return false
+      return {
+        status: false,
+        error: e as ReactNativeFirebase.NativeFirebaseError,
+      }
     }
   },
 }

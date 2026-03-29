@@ -10,7 +10,7 @@ import { Alert } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { extractNumber } from '@/utils'
-import { cardService, userService } from '@/services'
+import { cardService } from '@/services'
 import { ScanCompleteStackNavigationProp } from '@/navigation/types'
 import { ScanCompleteContextValue } from '@scan-complete/types'
 
@@ -60,39 +60,28 @@ export const ScanCompleteContextProvider = ({
           return Alert.alert('시리얼 번호를 입력해주세요.')
         setLoading(true)
 
-        const serialRes = await cardService.getAllow(serial.trim())
-        if (!serialRes) {
-          setLoading(false)
-          return Alert.alert(
-            '시리얼 번호 입력 오류',
-            '시리얼 번호를 확인해주세요.',
-          )
+        const allowRes = await cardService.getAllow(serial.trim())
+        if (!allowRes.status) {
+          Alert.alert(allowRes.message)
+          return setLoading(false)
         }
 
-        const cardRes = await cardService.createCard({
+        Alert.alert('시리얼 번호 입력 오류', '시리얼 번호를 확인해주세요.')
+
+        const newCardIdList = [...user.cardIdList, serial]
+
+        const createRes = await cardService.createCard({
           id: serial,
           phone,
           message,
           title: name,
           deviceId,
           userId: user.id,
-          userNickname: user.nickname,
+          newCardIdList: newCardIdList,
         })
 
-        if (!cardRes) {
-          Alert.alert('오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
-          return setLoading(false)
-        }
-
-        const newCardIdList = [...user.cardIdList, serial]
-
-        const updateUserRes = await userService.updateCardIdList(
-          user.id,
-          newCardIdList,
-        )
-
-        if (!updateUserRes.status) {
-          Alert.alert(updateUserRes.message)
+        if (!createRes.status) {
+          Alert.alert(createRes.message)
           return setLoading(false)
         }
 

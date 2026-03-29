@@ -26,10 +26,12 @@ export const useAppViewModel = () => {
 
       if (actionId !== 'confirm' || !newPhone || !cardId) return
 
-      try {
-        await cardService.updatePhone(String(cardId), String(newPhone))
-      } catch (e) {
-        Alert.alert('오류', '전화번호 변경에 실패했습니다.')
+      const res = await cardService.updatePhone(
+        String(cardId),
+        String(newPhone),
+      )
+      if (!res.status) {
+        return Alert.alert(res.message)
       }
       bleCacheService.markAlertLastDeniedAt()
       bleCacheService.clearAlertPending()
