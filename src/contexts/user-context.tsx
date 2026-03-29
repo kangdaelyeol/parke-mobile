@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import { UserDto } from '@/domain/user/user-dto'
-import { cardService, userService } from '@/services'
+import { authService, cardService, userService } from '@/services'
 import { CardState } from '@/services/types'
 
 const isUserDto = (v: any): v is UserDto => {
@@ -61,11 +61,19 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [stateSession, setStateSession] = useState(0)
 
   const syncCardList = useCallback(async (): Promise<SyncResponse> => {
-    if (!user) return { status: false, message: '유저 정보가 없습니다.' }
+    if (!user) {
+      authService.signOut()
+      return { status: false, message: '유저 정보가 없습니다.' }
+    }
     const userRes = await userService.getUser(user.id)
-    if (!userRes.status) return { status: false, message: userRes.message }
-    if (userRes.payload === null)
+    if (!userRes.status) {
+      authService.signOut()
+      return { status: false, message: userRes.message }
+    }
+    if (userRes.payload === null) {
+      authService.signOut()
       return { status: false, message: '유저 정보를 불러오는데 실패했습니다.' }
+    }
 
     const userNow = userRes.payload
 

@@ -19,7 +19,7 @@ export const createCardTransaction = async (
   try {
     await update(ref(db), {
       [`card/${card.id}`]: card,
-      [`user/${userId}/ownerList`]: newCardList,
+      [`user/${userId}/cardIdList`]: newCardList,
     })
     return { status: true, payload: true }
   } catch (e) {

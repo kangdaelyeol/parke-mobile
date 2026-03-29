@@ -66,7 +66,10 @@ export const ScanCompleteContextProvider = ({
           return setLoading(false)
         }
 
-        Alert.alert('시리얼 번호 입력 오류', '시리얼 번호를 확인해주세요.')
+        if (allowRes.payload === null) {
+          Alert.alert('시리얼 번호 입력 오류', '시리얼 번호를 확인해주세요.')
+          return setLoading(false)
+        }
 
         const newCardIdList = [...user.cardIdList, serial]
 
