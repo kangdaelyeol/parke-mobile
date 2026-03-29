@@ -1,9 +1,9 @@
 import { db } from '@/firebaseApp'
-import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { ref, update } from '@react-native-firebase/database'
 import { FirebaseResult } from '@/client'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
+import { clientFail, clientOk } from '@/utils'
 
 interface DeleteCardTransactionProps {
   user: UserDto
@@ -21,12 +21,9 @@ export const createCardTransaction = async (
       [`card/${card.id}`]: card,
       [`user/${userId}/cardIdList`]: newCardList,
     })
-    return { status: true, payload: true }
+    return clientOk(true)
   } catch (e) {
-    return {
-      status: false,
-      error: e as ReactNativeFirebase.NativeFirebaseError,
-    }
+    return clientFail(e)
   }
 }
 
@@ -40,11 +37,8 @@ export const deleteCardTransaction = async ({
       [`user/${user.id}`]: user,
       [`card/${cardId}`]: card,
     })
-    return { status: true, payload: true }
+    return clientOk(true)
   } catch (e) {
-    return {
-      status: false,
-      error: e as ReactNativeFirebase.NativeFirebaseError,
-    }
+    return clientFail(e)
   }
 }

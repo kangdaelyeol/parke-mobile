@@ -8,7 +8,7 @@ import {
 import { db } from '@/firebaseApp'
 import { UserDto } from '@/domain/user'
 import { UserClient } from './types'
-import { ReactNativeFirebase } from '@react-native-firebase/app'
+import { clientFail, clientOk } from '@/utils'
 
 export const userClient: UserClient = {
   create: async dto => {
@@ -20,13 +20,9 @@ export const userClient: UserClient = {
         privacyThirdPartyAgreedAt: serverTimestamp(),
         ageVerificationAgreedAt: serverTimestamp(),
       })
-      return { status: true, payload: true }
+      return clientOk(true)
     } catch (e) {
-      const error = e as ReactNativeFirebase.NativeFirebaseError
-      return {
-        status: false,
-        error,
-      }
+      return clientFail(e)
     }
   },
   update: async dto => {
@@ -36,25 +32,22 @@ export const userClient: UserClient = {
       await update(ref(db, `user/${key}`), {
         ...dto,
       })
-      return { status: true, payload: true }
+      return clientOk(true)
     } catch (e) {
       console.log(e)
-      const error = e as ReactNativeFirebase.NativeFirebaseError
-      return { status: false, error }
+      return clientFail(e)
     }
   },
   getById: async id => {
     try {
       const key = id
       const snapShot = await get(ref(db, `user/${key}`))
-      if (!snapShot.exists()) return { status: true, payload: null }
+      if (!snapShot.exists()) return clientOk(null)
       const userRaw = snapShot.val() as UserDto
-      if (!userRaw.cardIdList) userRaw.cardIdList = []
-      return { status: true, payload: userRaw }
+      return clientOk(userRaw)
     } catch (e) {
       console.log(e)
-      const error = e as ReactNativeFirebase.NativeFirebaseError
-      return { status: false, error }
+      return clientFail(e)
     }
   },
 }

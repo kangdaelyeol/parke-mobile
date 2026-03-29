@@ -5,37 +5,31 @@ import {
   serverTimestamp,
   update,
 } from '@react-native-firebase/database'
-import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { CardDto } from '@/domain/card'
 import { CardClient } from './types'
+import { clientFail, clientOk } from '@/utils'
 
 export const cardClient: CardClient = {
   getById: async id => {
     try {
       const snapShot = await get(ref(db, `/card/${id}`))
-      if (!snapShot.exists()) return { status: true, payload: null }
+      if (!snapShot.exists()) return clientOk(null)
 
       const card = snapShot.val() as CardDto
-      return { status: true, payload: card }
+      return clientOk(card)
     } catch (e) {
       console.log(e)
-      return {
-        status: false,
-        error: e as ReactNativeFirebase.NativeFirebaseError,
-      }
+      return clientFail(e)
     }
   },
   getAllowById: async id => {
     try {
       const snapShot = await get(ref(db, `allow/${id}`))
-      if (!snapShot.exists()) return { status: true, payload: null }
-      return { status: true, payload: snapShot.val() as boolean }
+      if (!snapShot.exists()) return clientOk(null)
+      return clientOk(snapShot.val() as boolean)
     } catch (e) {
       console.log(e)
-      return {
-        status: false,
-        error: e as ReactNativeFirebase.NativeFirebaseError,
-      }
+      return clientFail(e)
     }
   },
 
@@ -52,10 +46,7 @@ export const cardClient: CardClient = {
       }
     } catch (e) {
       console.log(e)
-      return {
-        status: false,
-        error: e as ReactNativeFirebase.NativeFirebaseError,
-      }
+      return clientFail(e)
     }
   },
 }

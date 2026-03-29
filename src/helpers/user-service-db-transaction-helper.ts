@@ -1,8 +1,8 @@
 import { db } from '@/firebaseApp'
-import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { ref, update } from '@react-native-firebase/database'
 import { FirebaseResult } from '@/client'
 import { CardDto } from '@/domain/card'
+import { clientFail, clientOk } from '@/utils'
 
 export type CardUpdates = Record<string, CardDto | null>
 
@@ -17,14 +17,8 @@ export const deleteUserTransaction = async ({
 }: DeleteUserTransactionProps): Promise<FirebaseResult<boolean>> => {
   try {
     await update(ref(db), { ...cardUpdates, [`user/${userId}`]: null })
-    return {
-      status: true,
-      payload: true,
-    }
+    return clientOk(true)
   } catch (e) {
-    return {
-      status: false,
-      error: e as ReactNativeFirebase.NativeFirebaseError,
-    }
+    return clientFail(e)
   }
 }

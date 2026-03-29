@@ -3,12 +3,12 @@ import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 import { LoginProvider } from '@/services/types'
 
-interface ClientSuccess<T> {
+export interface ClientSuccess<T> {
   status: true
   payload: T
 }
 
-interface ClientFailure<E = unknown> {
+export interface ClientFailure<E = unknown> {
   status: false
   error: E
 }
