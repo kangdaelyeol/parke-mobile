@@ -77,21 +77,23 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
     const userNow = userRes.payload
 
+    const cardIdList = userNow.cardIdList || []
+
     const isCardListSynced =
-      userNow.cardIdList.length === cards.length &&
-      userNow.cardIdList.every(id => cards.some(card => card.id === id))
+      cardIdList.length === cards.length &&
+      cardIdList.every(id => cards.some(card => card.id === id))
 
-    if (isCardListSynced) return { status: true }
+    if (cardIdList.length === 0 || isCardListSynced) return { status: true }
 
-    const cardList = await cardService.getList(userNow.cardIdList || [])
-    if (!cardList.status)
+    const cardListRes = await cardService.getList(userNow.cardIdList || [])
+    if (!cardListRes.status)
       return {
         status: false,
         message:
           'uset context - syncCardList: 카드 정보를 불러오는데 실패했습니다.',
       }
 
-    setCards(cardList.payload || [])
+    setCards(cardListRes.payload || [])
     setUser(userNow)
     return { status: true }
   }, [cards, user])
