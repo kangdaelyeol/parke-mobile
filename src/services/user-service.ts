@@ -2,7 +2,7 @@ import { cardClient, userClient } from '@/client'
 import { Card } from '@/domain/card'
 import { User } from '@/domain/user'
 import { UserService } from './types'
-import { getFirebaseErrorMessage } from '@/utils'
+import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
 import {
   CardUpdates,
   deleteCardTransaction,
@@ -13,26 +13,25 @@ export const userService: UserService = {
   getUser: async id => {
     const res = await userClient.getById(id)
     if (res.status) {
-      if (res.payload === null)
-        return { status: false, message: '유저가 존재하지 않습니다.' }
-      return { status: true, payload: res.payload }
-    } else return { status: false, message: getFirebaseErrorMessage(res.error) }
+      if (res.payload === null) return serviceFail('유저가 존재하지 않습니다.')
+      return serviceOk(res.payload)
+    } else return serviceFail(getFirebaseErrorMessage(res.error))
   },
   createUser: async user => {
     const dto = User.create(user).toDto()
     const res = await userClient.create(dto)
-    if (res.status) return { status: true, payload: dto }
-    else return { status: false, message: getFirebaseErrorMessage(res.error) }
+    if (res.status) return serviceOk(dto)
+    else return serviceFail(getFirebaseErrorMessage(res.error))
   },
   updateNicknameAndPhone: async (id, nickname, phone) => {
     const res = await userClient.update({ id, nickname, phone })
-    if (res.status) return { status: true, payload: true }
-    else return { status: false, message: getFirebaseErrorMessage(res.error) }
+    if (res.status) return serviceOk(true)
+    else return serviceFail(getFirebaseErrorMessage(res.error))
   },
   updateCardIdList: async (id, cardIdList) => {
     const res = await userClient.update({ id, cardIdList })
-    if (res.status) return { status: true, payload: true }
-    else return { status: false, message: getFirebaseErrorMessage(res.error) }
+    if (res.status) return serviceOk(true)
+    else return serviceFail(getFirebaseErrorMessage(res.error))
   },
   deleteUser: async (userId, cardList) => {
     const cardUpdates = {} as CardUpdates
@@ -49,28 +48,23 @@ export const userService: UserService = {
     })
 
     const deleteRes = await deleteUserTransaction({ userId, cardUpdates })
-    if (deleteRes.status) return { status: true, payload: true }
-    else
-      return {
-        status: false,
-        message: getFirebaseErrorMessage(deleteRes.error),
-      }
+    if (deleteRes.status) return serviceOk(true)
+    else return serviceFail(getFirebaseErrorMessage(deleteRes.error))
   },
   deleteCard: async (userId, cardId) => {
     const userRes = await userClient.getById(userId)
     if (!userRes.status)
-      return { status: false, message: getFirebaseErrorMessage(userRes.error) }
+      return serviceFail(getFirebaseErrorMessage(userRes.error))
     const cardRes = await cardClient.getById(cardId)
     if (!cardRes.status)
-      return { status: false, message: getFirebaseErrorMessage(cardRes.error) }
+      return serviceFail(getFirebaseErrorMessage(cardRes.error))
 
     const { payload: user } = userRes
     const { payload: card } = cardRes
 
-    if (!user)
-      return { status: false, message: '유저 정보가 존재하지 않습니다.' }
+    if (!user) return serviceFail('유저 정보가 존재하지 않습니다.')
     if (!card) {
-      return { status: false, message: '카드 정보를 불러오는데 실패했습니다.' }
+      return serviceFail('카드 정보를 불러오는데 실패했습니다.')
     }
 
     const newCardIdList = user.cardIdList.filter(id => id !== cardId)
@@ -83,12 +77,8 @@ export const userService: UserService = {
         cardId: card.id,
         card: null,
       })
-      if (transactionRes.status) return { status: true, payload: true }
-      else
-        return {
-          status: false,
-          message: getFirebaseErrorMessage(transactionRes.error),
-        }
+      if (transactionRes.status) return serviceOk(true)
+      else return serviceFail(getFirebaseErrorMessage(transactionRes.error))
     }
 
     card.ownerList = newCardOwnerList
@@ -97,8 +87,7 @@ export const userService: UserService = {
       cardId: card.id,
       card,
     })
-    if (transactionRes.status) return { status: true, payload: true }
-    else
-      return { status: false, message: '카드 정보 업데이트에 실패했습니다. ' }
+    if (transactionRes.status) return serviceOk(true)
+    else return serviceFail('카드 정보 업데이트에 실패했습니다.')
   },
 }
