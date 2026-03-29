@@ -3,20 +3,6 @@ import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 import { LoginProvider } from '@/services/types'
 
-export type AlertPending = null | {
-  phone: string
-  cardId: string
-  cardName: string
-}
-
-export interface CardClient {
-  create(dto: CardDto): Promise<CardDto | null>
-  getById(id: string): Promise<CardDto | null>
-  getAllowById(id: string): Promise<boolean | null>
-  deleteById(id: string): Promise<boolean>
-  update(dto: { id: string } & Partial<CardDto>): Promise<boolean>
-}
-
 interface ClientSuccess<T> {
   status: true
   payload: T
@@ -29,10 +15,26 @@ interface ClientFailure<E = unknown> {
 
 type ClientResult<T, E> = ClientSuccess<T> | ClientFailure<E>
 
-type FirebaseResult<T> = ClientResult<
+export type FirebaseResult<T> = ClientResult<
   T,
   ReactNativeFirebase.NativeFirebaseError
 >
+
+export type AlertPending = null | {
+  phone: string
+  cardId: string
+  cardName: string
+}
+
+export interface CardClient {
+  create(dto: CardDto): Promise<FirebaseResult<CardDto>>
+  getById(id: string): Promise<FirebaseResult<CardDto | null>>
+  getAllowById(id: string): Promise<FirebaseResult<boolean | null>>
+  deleteById(id: string): Promise<FirebaseResult<boolean>>
+  update(
+    dto: { id: string } & Partial<CardDto>,
+  ): Promise<FirebaseResult<boolean>>
+}
 
 export interface UserClient {
   create(dto: UserDto): Promise<FirebaseResult<boolean>>

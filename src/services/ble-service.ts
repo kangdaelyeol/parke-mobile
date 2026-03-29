@@ -105,8 +105,10 @@ export const bleService: BleService = {
           const cardState = cards.find(c => c.deviceId === deviceId)
           if (!cardState || !cardState.scan) return
 
-          const card = await cardService.getCard(cardState.id)
-          if (!card) return
+          const cardRes = await cardService.getCard(cardState.id)
+          if (!cardRes.status) return
+
+          const card = cardRes.payload
 
           console.log('find:', card)
           const batteryLevel = getBatteryLevel(
@@ -130,7 +132,7 @@ export const bleService: BleService = {
             return
           }
 
-          if(!canRenewPhoneNumber(card)) return
+          if (!canRenewPhoneNumber(card)) return
 
           if (!settings.autoSet) {
             if (isAlertDeniedCooldownActive()) return
@@ -163,8 +165,8 @@ export const bleService: BleService = {
               card.id,
               extractNumber(user.phone),
             )
-            if (!res) {
-              onDBError()
+            if (!res.status) {
+              onDBError(res.message)
               return
             }
 

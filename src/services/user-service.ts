@@ -3,6 +3,7 @@ import { CardDto } from '@/domain/card'
 import { User } from '@/domain/user'
 import { UserService } from './types'
 import { getFirebaseErrorMessage } from '@/utils'
+import { deleteCardTransaction } from '@/helpers'
 
 const isCardDto = (obj: any): obj is CardDto => {
   return (
@@ -38,8 +39,8 @@ export const userService: UserService = {
     if (res.status) return { status: true, payload: true }
     else return { status: false, message: getFirebaseErrorMessage(res.error) }
   },
-  updateCardIdList: async (id, cardList) => {
-    const res = await userClient.update({ id, cardIdList: cardList })
+  updateCardIdList: async (id, cardIdList) => {
+    const res = await userClient.update({ id, cardIdList })
     if (res.status) return { status: true, payload: true }
     else return { status: false, message: getFirebaseErrorMessage(res.error) }
   },
@@ -74,29 +75,44 @@ export const userService: UserService = {
     const userRes = await userClient.getById(userId)
     if (!userRes.status)
       return { status: false, message: getFirebaseErrorMessage(userRes.error) }
-    const card = await cardClient.getById(cardId)
-    if (!card)
-      return { status: false, message: '카드 정보를 불러오는데 실패했습니다.' }
+    const cardRes = await cardClient.getById(cardId)
+    if (!cardRes.status)
+      return { status: false, message: getFirebaseErrorMessage(cardRes.error) }
 
     const { payload: user } = userRes
+    const { payload: card } = cardRes
 
     if (!user)
       return { status: false, message: '유저 정보가 존재하지 않습니다.' }
+    if (!card) {
+      return { status: false, message: '카드 정보를 불러오는데 실패했습니다.' }
+    }
 
     const newCardIdList = user.cardIdList.filter(id => id !== cardId)
     user.cardIdList = newCardIdList
-    await userClient.update(user)
 
     const newCardOwnerList = card.ownerList.filter(id => id !== userId)
     if (newCardOwnerList.length === 0) {
-      const cardDeleteRes = await cardClient.deleteById(cardId)
-      if (cardDeleteRes) return { status: true, payload: true }
-      else return { status: false, message: '카드 삭제에 실패했습니다. ' }
+      const transactionRes = await deleteCardTransaction({
+        user,
+        cardId: card.id,
+        card: null,
+      })
+      if (transactionRes.status) return { status: true, payload: true }
+      else
+        return {
+          status: false,
+          message: getFirebaseErrorMessage(transactionRes.error),
+        }
     }
 
     card.ownerList = newCardOwnerList
-    const cardUpdateRes = await cardClient.update(card)
-    if (cardUpdateRes) return { status: true, payload: true }
+    const transactionRes = await deleteCardTransaction({
+      user,
+      cardId: card.id,
+      card,
+    })
+    if (transactionRes.status) return { status: true, payload: true }
     else
       return { status: false, message: '카드 정보 업데이트에 실패했습니다. ' }
   },

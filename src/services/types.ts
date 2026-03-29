@@ -13,12 +13,12 @@ interface AuthResponse {
   payload: string | null
 }
 
-interface ServiceSuccess<T> {
+export interface ServiceSuccess<T> {
   status: true
   payload: T
 }
 
-interface ServiceFailure {
+export interface ServiceFailure {
   status: false
   message: string
 }
@@ -78,7 +78,7 @@ interface StartBackgroundScanProps {
   readonly user: UserDto
   refreshStateSession: () => void
   onCardPhoneChange: (cardId: string, phone: string) => void
-  onDBError: () => void
+  onDBError: (message: string) => void
   onError: (e: any) => void
 }
 
@@ -135,26 +135,29 @@ interface CreateCardInput {
   title: string
   deviceId: string
   userId: string
-  userNickname: string
+  newCardIdList: string[]
 }
 
 export type CardState = CardDto & { scan: boolean }
 
 export interface CardService {
-  getCard: (id: string) => Promise<CardState | null>
-  getList: (idList: string[]) => Promise<CardState[] | null>
-  getAllow: (serial: string) => Promise<Boolean | null>
+  getCard: (id: string) => Promise<ServiceResponse<CardState>>
+  getList: (idList: string[]) => Promise<ServiceResponse<CardState[] | null>>
+  getAllow: (serial: string) => Promise<ServiceResponse<Boolean | null>>
   updateCardInfo: (
     cardId: string,
     title: string,
     phone: string,
     message: string,
-  ) => Promise<boolean>
-  createCard: (input: CreateCardInput) => Promise<CardState | null>
-  deleteCard: (cardId: string, userId: string) => Promise<boolean>
+  ) => Promise<ServiceResponse<boolean>>
+  createCard: (input: CreateCardInput) => Promise<ServiceResponse<CardState>>
+  deleteCard: (
+    cardId: string,
+    userId: string,
+  ) => Promise<ServiceResponse<boolean>>
   updateScan: (deviceId: string, scan: boolean) => void
-  updatePhone: (id: string, phone: string) => Promise<boolean>
-  updateUpdatedAt: (id: string) => Promise<boolean>
+  updatePhone: (id: string, phone: string) => Promise<ServiceResponse<boolean>>
+  updateUpdatedAt: (id: string) => Promise<ServiceResponse<boolean>>
 }
 
 export interface PermissionService {
@@ -191,7 +194,7 @@ export interface UserService {
   ) => Promise<ServiceResponse<boolean>>
   updateCardIdList: (
     id: string,
-    cardList: string[],
+    cardIdList: string[],
   ) => Promise<ServiceResponse<boolean>>
   deleteUser: (id: string) => Promise<ServiceResponse<boolean>>
   deleteCard: (
