@@ -196,7 +196,10 @@ export interface UserService {
     id: string,
     cardIdList: string[],
   ) => Promise<ServiceResponse<boolean>>
-  deleteUser: (id: string) => Promise<ServiceResponse<boolean>>
+  deleteUser: (
+    id: string,
+    cardList: CardState[],
+  ) => Promise<ServiceResponse<boolean>>
   deleteCard: (
     userId: string,
     cardId: string,

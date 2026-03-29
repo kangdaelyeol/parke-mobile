@@ -8,7 +8,7 @@ import { extractNumber } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
-  const { user, actions: userContextActions } = useUserContext()
+  const { user, cards, actions: userContextActions } = useUserContext()
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
@@ -78,7 +78,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
           onPress: async () => {
             try {
               setLoading(true)
-              const res = await userService.deleteUser(user.id)
+              const res = await userService.deleteUser(user.id, cards)
 
               if (!res.status) {
                 Alert.alert(res.message)

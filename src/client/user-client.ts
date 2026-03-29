@@ -1,7 +1,6 @@
 import {
   get,
   ref,
-  remove,
   serverTimestamp,
   set,
   update,
@@ -52,17 +51,6 @@ export const userClient: UserClient = {
       const userRaw = snapShot.val() as UserDto
       if (!userRaw.cardIdList) userRaw.cardIdList = []
       return { status: true, payload: userRaw }
-    } catch (e) {
-      console.log(e)
-      const error = e as ReactNativeFirebase.NativeFirebaseError
-      return { status: false, error }
-    }
-  },
-  deleteById: async id => {
-    try {
-      const key = id
-      await remove(ref(db, `user/${key}`))
-      return { status: true, payload: true }
     } catch (e) {
       console.log(e)
       const error = e as ReactNativeFirebase.NativeFirebaseError

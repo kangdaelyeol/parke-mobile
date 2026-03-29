@@ -4,9 +4,11 @@ import { ref, update } from '@react-native-firebase/database'
 import { FirebaseResult } from '@/client'
 import { CardDto } from '@/domain/card'
 
+export type CardUpdates = Record<string, CardDto | null>
+
 interface DeleteUserTransactionProps {
   userId: string
-  cardUpdates: Record<string, CardDto | null>
+  cardUpdates: CardUpdates
 }
 
 export const deleteUserTransaction = async ({

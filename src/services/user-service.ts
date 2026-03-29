@@ -1,23 +1,13 @@
 import { cardClient, userClient } from '@/client'
-import { CardDto } from '@/domain/card'
+import { Card } from '@/domain/card'
 import { User } from '@/domain/user'
 import { UserService } from './types'
 import { getFirebaseErrorMessage } from '@/utils'
-import { deleteCardTransaction } from '@/helpers'
-
-const isCardDto = (obj: any): obj is CardDto => {
-  return (
-    obj.id ||
-    obj.title ||
-    obj.phone ||
-    obj.message ||
-    obj.scan ||
-    obj.updatedAt ||
-    obj.updatedBy ||
-    obj.deviceId ||
-    obj.ownerList
-  )
-}
+import {
+  CardUpdates,
+  deleteCardTransaction,
+  deleteUserTransaction,
+} from '@/helpers'
 
 export const userService: UserService = {
   getUser: async id => {
@@ -44,26 +34,21 @@ export const userService: UserService = {
     if (res.status) return { status: true, payload: true }
     else return { status: false, message: getFirebaseErrorMessage(res.error) }
   },
-  deleteUser: async id => {
-    const userRes = await userClient.getById(id)
-    if (!userRes.status)
-      return { status: false, message: getFirebaseErrorMessage(userRes.error) }
+  deleteUser: async (userId, cardList) => {
+    const cardUpdates = {} as CardUpdates
 
-    if (userRes.payload === null)
-      return { status: false, message: '유저 정보가 존재하지 않습니다.' }
+    cardList.forEach(card => {
+      const cardDto = Card.create({ ...card }).toDto()
+      const newOwnerList = cardDto.ownerList.filter(
+        ownerId => ownerId !== userId,
+      )
 
-    const { payload: user } = userRes
-
-    user.cardIdList.forEach(async cardId => {
-      const card = await cardClient.getById(cardId)
-      if (!isCardDto(card)) return
-
-      card.ownerList = card.ownerList.filter(userId => userId !== id)
-      if (card.ownerList.length === 0) await cardClient.deleteById(cardId)
-      else await cardClient.update(card)
+      cardDto.ownerList = newOwnerList
+      cardUpdates[`card/${cardDto.id}`] =
+        newOwnerList.length === 0 ? null : cardDto
     })
 
-    const deleteRes = await userClient.deleteById(id)
+    const deleteRes = await deleteUserTransaction({ userId, cardUpdates })
     if (deleteRes.status) return { status: true, payload: true }
     else
       return {

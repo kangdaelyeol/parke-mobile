@@ -30,7 +30,6 @@ export interface CardClient {
   create(dto: CardDto): Promise<FirebaseResult<CardDto>>
   getById(id: string): Promise<FirebaseResult<CardDto | null>>
   getAllowById(id: string): Promise<FirebaseResult<boolean | null>>
-  deleteById(id: string): Promise<FirebaseResult<boolean>>
   update(
     dto: { id: string } & Partial<CardDto>,
   ): Promise<FirebaseResult<boolean>>
@@ -42,7 +41,6 @@ export interface UserClient {
     dto: { id: string } & Partial<UserDto>,
   ): Promise<FirebaseResult<boolean>>
   getById(id: string): Promise<FirebaseResult<UserDto | null>>
-  deleteById(id: string): Promise<FirebaseResult<boolean>>
 }
 
 export interface CacheClient {

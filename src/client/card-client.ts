@@ -2,7 +2,6 @@ import { db } from '@/firebaseApp'
 import {
   get,
   ref,
-  remove,
   serverTimestamp,
   set,
   update,
@@ -62,21 +61,7 @@ export const cardClient: CardClient = {
       }
     }
   },
-  deleteById: async id => {
-    try {
-      await remove(ref(db, `card/${id}`))
-      return {
-        status: true,
-        payload: true,
-      }
-    } catch (e) {
-      console.log(e)
-      return {
-        status: false,
-        error: e as ReactNativeFirebase.NativeFirebaseError,
-      }
-    }
-  },
+  
   update: async dto => {
     const { id } = dto
 
