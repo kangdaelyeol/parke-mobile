@@ -8,7 +8,6 @@ export class Card {
     private phone: string,
     private message: string,
     private updatedAt: object,
-    private updatedBy: string,
     private deviceId: string,
     private ownerList: string[],
   ) {}
@@ -20,20 +19,10 @@ export class Card {
     const phone = props.phone ?? ''
     const message = props.message ?? ''
     const updatedAt = props.updatedAt ?? serverTimestamp()
-    const updatedBy = props.updatedBy ?? ''
     const deviceId = props.deviceId ?? ''
     const ownerList = props.ownerList ?? []
 
-    return new Card(
-      id,
-      title,
-      phone,
-      message,
-      updatedAt,
-      updatedBy,
-      deviceId,
-      ownerList,
-    )
+    return new Card(id, title, phone, message, updatedAt, deviceId, ownerList)
   }
 
   static fromDto(dto: CardDto): Card {
@@ -47,7 +36,6 @@ export class Card {
       phone: this.phone,
       message: this.message,
       updatedAt: this.updatedAt,
-      updatedBy: this.updatedBy,
       deviceId: this.deviceId,
       ownerList: this.ownerList,
     }

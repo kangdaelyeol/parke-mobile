@@ -4,7 +4,6 @@ export interface CardDto {
   phone: string
   message: string
   updatedAt: unknown
-  updatedBy: string
   deviceId: string
   ownerList: string[]
 }
