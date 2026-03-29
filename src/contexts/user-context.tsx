@@ -1,4 +1,3 @@
-import { Alert } from 'react-native'
 import {
   createContext,
   PropsWithChildren,
@@ -8,18 +7,28 @@ import {
   useState,
 } from 'react'
 import { UserDto } from '@/domain/user/user-dto'
-import { cardService } from '@/services'
-import { userClient } from '@/client'
+import { cardService, userService } from '@/services'
 import { CardState } from '@/services/types'
 
 const isUserDto = (v: any): v is UserDto => {
   return v !== null
 }
 
+interface SyncSuccess {
+  status: true
+}
+
+interface SyncFailure {
+  status: false
+  message: string
+}
+
+type SyncResponse = SyncSuccess | SyncFailure
+
 interface UserContextValue {
   cards: CardState[]
   user: UserDto | null
-  syncCardList: () => Promise<void>
+  syncCardList: () => Promise<SyncResponse>
   stateSession: number
   actions: {
     addCardId: (serial: string) => void
@@ -51,22 +60,33 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [cards, setCards] = useState<CardState[]>([])
   const [stateSession, setStateSession] = useState(0)
 
-  const syncCardList = useCallback(async () => {
-    if (!user) return
-    const userRes = await userClient.getById(user.id)
-    if (!userRes.status) return
-    if (userRes.payload === null) return
+  const syncCardList = useCallback(async (): Promise<SyncResponse> => {
+    if (!user) return { status: false, message: '유저 정보가 없습니다.' }
+    const userRes = await userService.getUser(user.id)
+    if (!userRes.status) return { status: false, message: userRes.message }
+    if (userRes.payload === null)
+      return { status: false, message: '유저 정보를 불러오는데 실패했습니다.' }
+
     const userNow = userRes.payload
 
-    if (userNow.cardIdList.length === cards.length) return
+    const isCardListSynced =
+      userNow.cardIdList.length === cards.length &&
+      userNow.cardIdList.every(id => cards.some(card => card.id === id))
+
+    if (isCardListSynced) return { status: true }
+
     const cardList = await cardService.getList(userNow.cardIdList || [])
     if (!cardList.status)
-      return Alert.alert(
-        'uset context - syncCardList: 카드 정보를 불러오는데 실패했습니다.',
-      )
+      return {
+        status: false,
+        message:
+          'uset context - syncCardList: 카드 정보를 불러오는데 실패했습니다.',
+      }
+
     setCards(cardList.payload || [])
     setUser(userNow)
-  }, [cards.length, user])
+    return { status: true }
+  }, [cards, user])
 
   const actions = useMemo(
     () => ({
@@ -100,9 +120,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       },
       updateCardPhone: (cardId: string, phone: string) => {
         setCards(prev =>
-          prev.map(card =>
-            card.id !== cardId ? { ...card } : { ...card, phone },
-          ),
+          prev.map(card => (card.id !== cardId ? card : { ...card, phone })),
         )
       },
       setCardScan: (cardId: string, scan: boolean) => {

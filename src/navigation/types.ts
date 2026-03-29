@@ -29,6 +29,7 @@ export type HomeStackParamList = {
   Profile: undefined
   SearchBLE: undefined
   OnBoarding: undefined
+  Login: undefined
 }
 
 export type HomeStackNavigationProp = NativeStackNavigationProp<

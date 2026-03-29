@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 import {
   useAnimatedStyle,
   useSharedValue,
@@ -13,7 +14,6 @@ import { cardService } from '@/services'
 import { CardDto } from '@/domain/card'
 import { HomeSettingCardViewModel } from '@home/types'
 import { extractNumber } from '@/utils'
-import { Alert } from 'react-native'
 
 export const useSettingCardViewModel = (
   card: CardDto,

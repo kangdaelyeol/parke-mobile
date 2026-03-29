@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react'
 import { Alert, Linking } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext, useHomeContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
+import { HomeStackNavigationProp } from '@/navigation/types'
 
 export const useHomeViewModel = () => {
   const {
@@ -13,16 +14,21 @@ export const useHomeViewModel = () => {
   } = useUserContext()
   const [loading, setLoading] = useState(false)
   const { setScanning } = useHomeContext()
+  const navigation = useNavigation<HomeStackNavigationProp>()
 
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return
       ;(async () => {
         setLoading(true)
-        await syncCardList()
+        const syncRes = await syncCardList()
+        if (!syncRes.status) {
+          Alert.alert(syncRes.message)
+          return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+        }
         setLoading(false)
       })()
-    }, [syncCardList, user?.id]),
+    }, [syncCardList, user?.id, navigation]),
   )
 
   useFocusEffect(

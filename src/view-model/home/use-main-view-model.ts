@@ -1,9 +1,3 @@
-import {
-  useCardSettingContext,
-  useCardSliderContext,
-  useUserContext,
-} from '@/contexts'
-import { HomeMainViewModel } from '@home/types'
 import { useEffect } from 'react'
 import {
   Easing,
@@ -12,6 +6,12 @@ import {
   withDelay,
   withTiming,
 } from 'react-native-reanimated'
+import {
+  useCardSettingContext,
+  useCardSliderContext,
+  useUserContext,
+} from '@/contexts'
+import { HomeMainViewModel } from '@home/types'
 
 export const useMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext()
