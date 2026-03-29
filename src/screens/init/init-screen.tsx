@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Loading } from '@/components'
 import { InitContextProvider, useInitContext } from '@/contexts'
 import { Main, Footer, Header } from './components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 const InitContent = () => {
   const { state } = useInitContext()

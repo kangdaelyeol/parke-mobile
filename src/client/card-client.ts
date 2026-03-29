@@ -3,36 +3,13 @@ import {
   get,
   ref,
   serverTimestamp,
-  set,
   update,
 } from '@react-native-firebase/database'
 import { ReactNativeFirebase } from '@react-native-firebase/app'
-import { Card, CardDto } from '@/domain/card'
+import { CardDto } from '@/domain/card'
 import { CardClient } from './types'
 
 export const cardClient: CardClient = {
-  create: async dto => {
-    const entity = Card.fromDto(dto)
-    const { id, title, phone, message, deviceId, ownerList } = entity.toDto()
-    try {
-      await set(ref(db, `card/${id}`), {
-        id,
-        title,
-        phone,
-        message,
-        updatedAt: serverTimestamp(),
-        deviceId,
-        ownerList,
-      })
-    } catch (e) {
-      console.log(e)
-      return {
-        status: false,
-        error: e as ReactNativeFirebase.NativeFirebaseError,
-      }
-    }
-    return { status: true, payload: dto }
-  },
   getById: async id => {
     try {
       const snapShot = await get(ref(db, `/card/${id}`))
@@ -61,10 +38,9 @@ export const cardClient: CardClient = {
       }
     }
   },
-  
+
   update: async dto => {
     const { id } = dto
-
     try {
       await update(ref(db, `card/${id}`), {
         ...dto,

@@ -27,7 +27,6 @@ export type AlertPending = null | {
 }
 
 export interface CardClient {
-  create(dto: CardDto): Promise<FirebaseResult<CardDto>>
   getById(id: string): Promise<FirebaseResult<CardDto | null>>
   getAllowById(id: string): Promise<FirebaseResult<boolean | null>>
   update(
