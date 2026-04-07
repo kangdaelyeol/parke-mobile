@@ -47,6 +47,13 @@ class AppDelegate:  UIResponder, UIApplicationDelegate, UNUserNotificationCenter
     return false
   }
 
+  func application(
+    _ application: UIApplication,
+    supportedInterfaceOrientationsFor window: UIWindow?
+  ) -> UIInterfaceOrientationMask {
+    return Orientation.getOrientation()
+  }
+
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {

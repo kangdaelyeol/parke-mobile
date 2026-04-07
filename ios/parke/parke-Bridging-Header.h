@@ -17,5 +17,6 @@
 
 // 마지막에 RNKakaoLogins import
 #import "RNKakaoLogins.h"
+#import "Orientation.h"
 
 #endif /* parke_Bridging_Header_h */
