@@ -1,5 +1,5 @@
-import { useCallback, useState } from 'react'
-import { Alert, Linking } from 'react-native'
+import { useCallback, useEffect, useState } from 'react'
+import { Alert, AppState, Linking } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext, useHomeContext } from '@/contexts'
 import { bleService, settingService, permissionService } from '@/services'
@@ -16,6 +16,7 @@ export const useHomeViewModel = () => {
   const { setScanning } = useHomeContext()
   const navigation = useNavigation<HomeStackNavigationProp>()
 
+  // 앱 화면 전환시(다른 스크린에서 Home스크린으로 가는 경우 카드 상태 갱신 및 로그인 상태 체크)
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return
@@ -94,6 +95,21 @@ export const useHomeViewModel = () => {
       }
     }, [user, cards, setScanning, userContextActions]),
   )
+
+  // active 포그라운드로 돌아오는 경우 카드 상태 갱신
+  useEffect(() => {
+    const subScription = AppState.addEventListener('change', async state => {
+      if (state === 'active') {
+        setLoading(true)
+        await syncCardList()
+        setLoading(false)
+      }
+    })
+
+    return () => {
+      subScription.remove()
+    }
+  }, [syncCardList])
 
   return { state: { loading } }
 }
