@@ -14,8 +14,9 @@ const isUserDto = (v: any): v is UserDto => {
   return v !== null
 }
 
-interface SyncSuccess {
+interface SyncSuccess<T> {
   status: true
+  payload: T
 }
 
 interface SyncFailure {
@@ -23,12 +24,13 @@ interface SyncFailure {
   message: string
 }
 
-type SyncResponse = SyncSuccess | SyncFailure
+type SyncResponse<T> = SyncSuccess<T> | SyncFailure
 
 interface UserContextValue {
   cards: CardState[]
   user: UserDto | null
-  syncCardList: () => Promise<SyncResponse>
+  syncCardList: () => Promise<SyncResponse<null>>
+  validateUser: () => Promise<SyncResponse<UserDto>>
   stateSession: number
   actions: {
     addCardId: (serial: string) => void
@@ -60,7 +62,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [cards, setCards] = useState<CardState[]>([])
   const [stateSession, setStateSession] = useState(0)
 
-  const syncCardList = useCallback(async (): Promise<SyncResponse> => {
+  const validateUser = useCallback(async (): Promise<SyncResponse<UserDto>> => {
     if (!user) {
       authService.signOut()
       return { status: false, message: '유저 정보가 없습니다.' }
@@ -74,8 +76,14 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       authService.signOut()
       return { status: false, message: '유저 정보를 불러오는데 실패했습니다.' }
     }
+    return { status: true, payload: userRes.payload }
+  }, [user])
 
-    const userNow = userRes.payload
+  const syncCardList = useCallback(async (): Promise<SyncResponse<null>> => {
+    const validationRes = await validateUser()
+    if (!validationRes.status) return validationRes
+
+    const userNow = validationRes.payload
 
     const cardIdList = userNow.cardIdList || []
 
@@ -83,7 +91,8 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       cardIdList.length === cards.length &&
       cardIdList.every(id => cards.some(card => card.id === id))
 
-    if (cardIdList.length === 0 || isCardListSynced) return { status: true }
+    if (cardIdList.length === 0 || isCardListSynced)
+      return { status: true, payload: null }
 
     const cardListRes = await cardService.getList(userNow.cardIdList || [])
     if (!cardListRes.status)
@@ -95,8 +104,8 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
     setCards(cardListRes.payload || [])
     setUser(userNow)
-    return { status: true }
-  }, [cards, user])
+    return { status: true, payload: null }
+  }, [cards, validateUser])
 
   const actions = useMemo(
     () => ({
@@ -173,6 +182,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
         cards,
         user,
         syncCardList,
+        validateUser,
         actions,
       }}
     >

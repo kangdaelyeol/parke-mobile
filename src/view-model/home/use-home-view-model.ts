@@ -101,7 +101,11 @@ export const useHomeViewModel = () => {
     const subScription = AppState.addEventListener('change', async state => {
       if (state === 'active') {
         setLoading(true)
-        await syncCardList()
+        const res = await syncCardList()
+        if (!res.status) {
+          Alert.alert(res.message)
+          return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+        }
         setLoading(false)
       }
     })
@@ -109,7 +113,7 @@ export const useHomeViewModel = () => {
     return () => {
       subScription.remove()
     }
-  }, [syncCardList])
+  }, [syncCardList, navigation])
 
   return { state: { loading } }
 }
