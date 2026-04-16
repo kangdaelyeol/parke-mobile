@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { Alert, AppState } from 'react-native'
+import Orientation from 'react-native-orientation-locker'
+import DeviceInfo from 'react-native-device-info'
 import notifee, { EventType } from '@notifee/react-native'
 import {
   cardService,
@@ -14,9 +16,20 @@ export const useAppViewModel = () => {
   const { actions: userContextActions } = useUserContext()
 
   useEffect(() => {
-    permissionService.setupNotifications()
+    ;(async () => {
+      await permissionService.setupNotifications()
+    })()
     cacheService.ensureInitialized()
     cacheService.ensureTodayDashBoardCache()
+
+    console.log('effect')
+    console.log(DeviceInfo.isTablet())
+
+    if (DeviceInfo.isTablet()) {
+      Orientation.unlockAllOrientations()
+    } else {
+      Orientation.lockToPortrait()
+    }
 
     const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
       if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return
