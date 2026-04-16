@@ -4,17 +4,16 @@
   "exclude": ["node_modules", "ios/Pods"],
   "compilerOptions": {
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@home/*": ["src/screens/home/*"],
-      "@on-boarding/*": ["src/screens/on-boarding/*"],
-      "@profile/*": ["src/screens/profile/*"],
-      "@setting/*": ["src/screens/setting/*"],
-      "@search-ble/*": ["src/screens/search-ble/*"],
-      "@scan-complete/*": ["src/screens/scan-complete/*"],
-      "@permission/*": ["src/screens/permission/*"],
-      "@login/*": ["src/screens/login/*"]
+      "@/*": ["./src/*"],
+      "@home/*": ["./src/screens/home/*"],
+      "@on-boarding/*": ["./src/screens/on-boarding/*"],
+      "@profile/*": ["./src/screens/profile/*"],
+      "@setting/*": ["./src/screens/setting/*"],
+      "@search-ble/*": ["./src/screens/search-ble/*"],
+      "@scan-complete/*": ["./src/screens/scan-complete/*"],
+      "@permission/*": ["./src/screens/permission/*"],
+      "@login/*": ["./src/screens/login/*"]
     }
   }
 }

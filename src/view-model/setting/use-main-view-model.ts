@@ -23,6 +23,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
     setActive(settings.active)
   }, [])
 
+  // Validate user
   useFocusEffect(
     useCallback(() => {
       ;(async () => {
