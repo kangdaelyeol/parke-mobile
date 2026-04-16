@@ -67,7 +67,8 @@ export type ProfileStackParamList = {
 
 export type ProfileStackNavigationProp = NativeStackNavigationProp<
   ProfileStackParamList,
-  'Profile'
+  'Profile',
+  'Login'
 >
 
 export type ScanCompleteStackParamList = {
@@ -95,6 +96,7 @@ export type SettingStackParamList = {
   Setting: undefined
   Home: undefined
   OnBoarding: undefined
+  Login: undefined
 }
 
 export type SettingStackNavigationProp =

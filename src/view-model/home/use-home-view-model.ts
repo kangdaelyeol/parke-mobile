@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Alert, AppState, Linking } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext, useHomeContext } from '@/contexts'
@@ -97,23 +97,26 @@ export const useHomeViewModel = () => {
   )
 
   // active 포그라운드로 돌아오는 경우 카드 상태 갱신
-  useEffect(() => {
-    const subScription = AppState.addEventListener('change', async state => {
-      if (state === 'active') {
-        setLoading(true)
-        const res = await syncCardList()
-        if (!res.status) {
-          Alert.alert(res.message)
-          return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+  useFocusEffect(
+    useCallback(() => {
+      const subScription = AppState.addEventListener('change', async state => {
+        if (state === 'active') {
+          console.log('active')
+          setLoading(true)
+          const res = await syncCardList()
+          if (!res.status) {
+            Alert.alert(res.message)
+            return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          }
+          setLoading(false)
         }
-        setLoading(false)
-      }
-    })
+      })
 
-    return () => {
-      subScription.remove()
-    }
-  }, [syncCardList, navigation])
+      return () => {
+        subScription.remove()
+      }
+    }, [syncCardList, navigation]),
+  )
 
   return { state: { loading } }
 }

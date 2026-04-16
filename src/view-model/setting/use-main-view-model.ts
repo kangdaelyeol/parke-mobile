@@ -1,11 +1,13 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { Alert } from 'react-native'
 import { cacheService, settingService } from '@/services'
 import { SettingMainViewModel } from '@setting/types'
-import { useSettingContext } from '@/contexts'
-import { useNavigation } from '@react-navigation/native'
+import { useSettingContext, useUserContext } from '@/contexts'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { SettingStackNavigationProp } from '@/navigation/types'
 
 export const useMainViewModel = (): SettingMainViewModel => {
+  const { validateUser } = useUserContext()
   const { showBottomSheet } = useSettingContext()
   const [autoSet, setAutoSet] = useState(false)
   const [notice, setNotice] = useState(false)
@@ -20,6 +22,18 @@ export const useMainViewModel = (): SettingMainViewModel => {
     setNotice(settings.notice)
     setActive(settings.active)
   }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      ;(async () => {
+        const res = await validateUser()
+        if (!res.status) {
+          Alert.alert(res.message)
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+        }
+      })()
+    }, [validateUser, navigation]),
+  )
 
   const noticeDisabled = active === false || autoSet === false ? true : false
 

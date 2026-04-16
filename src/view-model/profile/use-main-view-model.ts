@@ -1,5 +1,5 @@
-import { useNavigation } from '@react-navigation/native'
-import { useEffect, useState } from 'react'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
+import { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { useUserContext } from '@/contexts'
 import { ProfileStackNavigationProp } from '@/navigation/types'
@@ -8,7 +8,12 @@ import { extractNumber } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
-  const { user, cards, actions: userContextActions } = useUserContext()
+  const {
+    user,
+    cards,
+    actions: userContextActions,
+    validateUser,
+  } = useUserContext()
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
@@ -20,6 +25,19 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     setPhone(user.phone)
     setNickname(user.nickname)
   }, [user])
+
+  // validate user
+  useFocusEffect(
+    useCallback(() => {
+      ;(async () => {
+        const res = await validateUser()
+        if (!res.status) {
+          Alert.alert(res.message)
+          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+        }
+      })()
+    }, [validateUser, navigation]),
+  )
 
   const actions = {
     phoneInput: (val: string) => {
