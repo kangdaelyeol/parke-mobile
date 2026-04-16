@@ -98,6 +98,16 @@ export const Main = () => {
             </View>
           </View>
         </View>
+        <View style={styles.section}>
+          <Text style={styles.title}>기타</Text>
+          <View style={styles.termSection}>
+            <View style={styles.termLine}>
+              <Pressable onPress={actions.onBoardingPress}>
+                <Text style={styles.termText}>온보딩 화면 보기</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
       </View>
     </ScrollView>
   )
@@ -108,6 +118,7 @@ const styles = StyleSheet.create({
     width: '100%',
     maxWidth: 400,
     paddingHorizontal: 10,
+    paddingBottom: 80,
     marginHorizontal: 'auto',
   },
   section: {

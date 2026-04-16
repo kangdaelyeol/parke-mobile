@@ -1,13 +1,17 @@
 import { useEffect, useState } from 'react'
-import { settingService } from '@/services'
+import { cacheService, settingService } from '@/services'
 import { SettingMainViewModel } from '@setting/types'
 import { useSettingContext } from '@/contexts'
+import { useNavigation } from '@react-navigation/native'
+import { SettingStackNavigationProp } from '@/navigation/types'
 
 export const useMainViewModel = (): SettingMainViewModel => {
   const { showBottomSheet } = useSettingContext()
   const [autoSet, setAutoSet] = useState(false)
   const [notice, setNotice] = useState(false)
   const [active, setActive] = useState(true)
+
+  const navigation = useNavigation<SettingStackNavigationProp>()
 
   // init settings value on UI
   useEffect(() => {
@@ -61,6 +65,10 @@ export const useMainViewModel = (): SettingMainViewModel => {
     },
     consentThirdPress: () => {
       showBottomSheet('consent-third')
+    },
+    onBoardingPress: () => {
+      cacheService.setHasSeenOnBoarding(false)
+      navigation.reset({ index: 0, routes: [{ name: 'OnBoarding' }] })
     },
   }
 

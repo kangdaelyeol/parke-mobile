@@ -1,13 +1,13 @@
 import { cardClient, userClient } from '@/client'
 import { Card } from '@/domain/card'
 import { User } from '@/domain/user'
-import { UserService } from './types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
 import {
   CardUpdates,
   deleteCardTransaction,
   deleteUserTransaction,
 } from '@/helpers'
+import { UserService } from './types'
 
 export const userService: UserService = {
   getUser: async id => {

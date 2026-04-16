@@ -94,6 +94,7 @@ export type SearchBleStackNavigationProp = NativeStackNavigationProp<
 export type SettingStackParamList = {
   Setting: undefined
   Home: undefined
+  OnBoarding: undefined
 }
 
 export type SettingStackNavigationProp =

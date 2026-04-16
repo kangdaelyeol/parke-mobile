@@ -13,6 +13,7 @@ interface MainActions {
   termsPress: () => void
   consentPress: () => void
   consentThirdPress: () => void
+  onBoardingPress: () => void
 }
 
 interface MainState {
