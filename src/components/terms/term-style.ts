@@ -59,4 +59,8 @@ export const styles = StyleSheet.create({
     borderColor: GRAY,
     width: 100,
   },
+  strong: {
+    fontFamily: DM_SANS.BOLD,
+    color: '#ddd',
+  },
 })

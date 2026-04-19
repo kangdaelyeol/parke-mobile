@@ -7,9 +7,12 @@ export const Consent = () => {
       <View style={styles.wrapper}>
         <Text style={styles.mainTitle}>[필수] 개인정보 수집·이용 동의</Text>
         <Text style={styles.paragraph}>
-          (주)오리지널스(이하 "회사")는 서비스 제공을 위해 아래와 같이
-          개인정보를 수집·이용하고자 합니다. 내용을 자세히 읽으신 후 동의 여부를
-          결정하여 주십시오.
+          (주)오리지널스(이하 "회사")는{' '}
+          <Text style={styles.strong}>
+            「개인정보 보호법」 제15조제1항제1호
+          </Text>
+          에 따라 아래와 같이 개인정보를 수집·이용하고자 합니다. 내용을 자세히
+          읽으신 후 동의 여부를 결정하여 주십시오.
         </Text>
         <View style={styles.table}>
           <View style={styles.tableRow}>
