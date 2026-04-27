@@ -14,6 +14,7 @@ export const userService: UserService = {
     const res = await userClient.getById(id)
     if (res.status) {
       if (res.payload === null) return serviceFail('유저가 존재하지 않습니다.')
+      if (!res.payload.cardIdList) res.payload.cardIdList = []
       return serviceOk(res.payload)
     } else return serviceFail(getFirebaseErrorMessage(res.error))
   },

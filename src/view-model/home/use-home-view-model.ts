@@ -32,6 +32,7 @@ export const useHomeViewModel = () => {
     }, [syncCardList, user?.id, navigation]),
   )
 
+
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return

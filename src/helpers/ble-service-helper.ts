@@ -33,13 +33,11 @@ export const canNotifySimultaneousConnection = (card: CardDto) => {
     bleCacheService.getSimultaneousConnectionAlertAt() +
       SIMULTANEOUS_INTERVAL_MS <
     Date.now()
-  console.log(bleCacheService.getSimultaneousConnectionAlertAt())
 
   return isRecentlyUpdated && isNoticeEnabled && isAlertCooldownPassed
 }
 
 export const isOwnCard = (userPhone: string, cardPhone: string) => {
-  console.log(userPhone, cardPhone)
   return String(userPhone) === String(cardPhone)
 }
 

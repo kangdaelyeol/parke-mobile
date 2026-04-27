@@ -39,7 +39,6 @@ export const authService: AuthService = {
     }
   },
   appleLogin: async () => {
-    console.log(appleAuth.isSupported)
     if (!appleAuth.isSupported) return null
     try {
       const credential = await appleAuth.performRequest({

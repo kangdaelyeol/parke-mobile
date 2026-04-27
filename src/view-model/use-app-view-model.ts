@@ -22,9 +22,6 @@ export const useAppViewModel = () => {
     cacheService.ensureInitialized()
     cacheService.ensureTodayDashBoardCache()
 
-    console.log('effect')
-    console.log(DeviceInfo.isTablet())
-
     if (DeviceInfo.isTablet()) {
       Orientation.unlockAllOrientations()
     } else {

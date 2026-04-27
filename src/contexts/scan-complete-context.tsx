@@ -19,7 +19,7 @@ const ScanCompleteContext = createContext({} as ScanCompleteContextValue)
 export const ScanCompleteContextProvider = ({
   children,
 }: PropsWithChildren) => {
-  const { user, actions: userContextActions } = useUserContext()
+  const { user, cards, actions: userContextActions } = useUserContext()
 
   const [phone, setPhone] = useState('')
   const [name, setName] = useState('')
@@ -138,10 +138,10 @@ export const ScanCompleteContextProvider = ({
   }
 
   useEffect(() => {
-    if (!user) return
+    if (!user || !cards) return
     setPhone(user.phone)
-    setName(`Parke${user.cardIdList.length + 1}`)
-  }, [user, setPhone])
+    setName(`Parke${cards.length + 1}`)
+  }, [user, cards, setPhone])
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>
