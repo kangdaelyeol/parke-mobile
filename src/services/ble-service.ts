@@ -33,7 +33,7 @@ let isBackgroundScanning = false
 let isSearching = false
 
 const isCandidate = (dev: Device) =>
-  !!dev && (dev.name ?? '').startsWith(BLE_DEVICE_NAME)
+  !!dev && (dev.localName ?? '').startsWith(BLE_DEVICE_NAME)
 
 const isBleManager = (manager: any): manager is BleManager => {
   return manager instanceof BleManager
@@ -114,6 +114,7 @@ export const bleService: BleService = {
           const batteryLevel = getBatteryLevel(
             device.manufacturerData as string,
           )
+          console.log('battery:', batteryLevel)
 
           bleCacheService.markBleScan(card.title, batteryLevel)
           refreshStateSession()
@@ -210,6 +211,8 @@ export const bleService: BleService = {
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return
+        console.log(device)
+
         if (!isCandidate(device)) return
         if (!isBleManager(bleManager)) return
 
@@ -223,25 +226,26 @@ export const bleService: BleService = {
           const deviceId = getDeviceId(device.manufacturerData as string)
 
           if (deviceId.slice(0, 5) !== 'UNSET') {
-            console.log(device)
             if (cards.find(c => c.deviceId === deviceId)) {
               onDuplicated()
               return
             }
             onDeviceFound(deviceId)
-          } else {
-            const base64Id = generateSerialNumber()
-            console.log(base64Id)
-            const d = await device.connect()
-            await d.discoverAllServicesAndCharacteristics()
-            await d.writeCharacteristicWithResponseForService(
-              GATT_SERVICE_UUID,
-              CHAR_UUID,
-              base64Id,
-            )
-            await device.cancelConnection()
-            onDeviceFound(base64ToUtf(base64Id))
+            return
           }
+
+          const base64Id = generateSerialNumber()
+          const d = await device.connect()
+          await d.discoverAllServicesAndCharacteristics()
+          await d.writeCharacteristicWithResponseForService(
+            GATT_SERVICE_UUID,
+            CHAR_UUID,
+            base64Id,
+          )
+          console.log('on disconnecting...')
+          await device.cancelConnection()
+          console.log('disconnecting succeed!')
+          onDeviceFound(base64ToUtf(base64Id))
         } catch (e) {
           console.log(e)
           await device.cancelConnection()

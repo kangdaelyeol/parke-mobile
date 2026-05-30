@@ -16,13 +16,18 @@ export const generateSerialNumber = () => {
   return Buffer.from(Date.now().toString(36)).toString('base64')
 }
 
+/** Mnf Data spec
+ * Company Id: 0 ~ 1
+ * Serial Number: 2 ~ 9
+ * Battery Level: 10
+ */
+export const getDeviceId = (manufacturer: string) => {
+  return Buffer.from(manufacturer, 'base64').toString('utf8').slice(2, 10) // 8 length
+}
+
 export const getBatteryLevel = (manufacturer: string): string => {
   const buf = Buffer.from(manufacturer, 'base64')
   return String(buf[10])
-}
-
-export const getDeviceId = (manufacturer: string) => {
-  return Buffer.from(manufacturer, 'base64').toString('utf8').slice(2, 10) // 8 length
 }
 
 export const canNotifySimultaneousConnection = (card: CardDto) => {
