@@ -13,6 +13,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     cards,
     actions: userContextActions,
     validateUser,
+    setCards,
   } = useUserContext()
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
@@ -75,6 +76,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
             setLoading(true)
             try {
               await authService.signOut()
+              setCards([])
               return navigation.navigate('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')

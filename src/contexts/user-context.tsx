@@ -28,6 +28,7 @@ type SyncResponse<T> = SyncSuccess<T> | SyncFailure
 
 interface UserContextValue {
   cards: CardState[]
+  setCards: React.Dispatch<React.SetStateAction<CardState[]>>
   user: UserDto | null
   syncCardList: () => Promise<SyncResponse<null>>
   validateUser: () => Promise<SyncResponse<UserDto>>
@@ -53,9 +54,9 @@ const userContext = createContext({} as UserContextValue)
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<UserDto | null>({
-    id: 'uss',
-    nickname: 'rkdeofuf',
-    phone: '01024130510',
+    id: '',
+    nickname: '',
+    phone: '',
     cardIdList: [],
   })
 
@@ -85,13 +86,15 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
     const userNow = validationRes.payload
 
+    console.log(userNow)
+
     const cardIdList = userNow.cardIdList || []
 
-    const isCardListSynced =
+    const isCardListSync =
       cardIdList.length === cards.length &&
       cardIdList.every(id => cards.some(card => card.id === id))
 
-    if (cardIdList.length === 0 || isCardListSynced)
+    if (cardIdList.length === 0 || isCardListSync)
       return { status: true, payload: null }
 
     const cardListRes = await cardService.getList(userNow.cardIdList || [])
@@ -180,6 +183,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       value={{
         stateSession,
         cards,
+        setCards,
         user,
         syncCardList,
         validateUser,

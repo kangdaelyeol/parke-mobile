@@ -47,11 +47,11 @@ export const useSearchBleViewModel = () => {
               navigation.goBack()
             },
             onDeviceFound: (deviceId: string) => {
-              navigation.replace('ScanComplete', {value: deviceId})
+              navigation.replace('ScanComplete', { value: deviceId })
             },
-            onRssiChange: (rssi) => {
+            onRssiChange: rssi => {
               setRssi(rssi)
-            }
+            },
           })
           sub?.remove()
         }

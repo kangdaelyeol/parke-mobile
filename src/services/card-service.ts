@@ -1,6 +1,6 @@
 import { serverTimestamp } from 'firebase/database'
 import { cardClient, userClient } from '@/client'
-import { Card } from '@/domain/card'
+import { Card, CardDto } from '@/domain/card'
 import { bleCacheService } from '@/services'
 import { CardService, CardState, ServiceSuccess } from '@/services/types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
@@ -50,15 +50,35 @@ export const cardService: CardService = {
   createCard: async input => {
     const { id, phone, message, title, deviceId, userId, newCardIdList } = input
 
-    const cardDto = Card.create({
-      id,
-      phone,
-      message,
-      title,
-      updatedAt: serverTimestamp(),
-      deviceId,
-      ownerList: [userId],
-    }).toDto()
+    const cardRes = await cardClient.getById(id)
+
+    let cardDto: null | CardDto = null
+
+    if (!cardRes.status) {
+      return serviceFail(getFirebaseErrorMessage(cardRes.error))
+    }
+
+    if (!cardRes.payload)
+      cardDto = Card.create({
+        id,
+        phone,
+        message,
+        title,
+        updatedAt: serverTimestamp(),
+        deviceId,
+        ownerList: [userId],
+      }).toDto()
+    else {
+      cardDto = Card.create({
+        id,
+        phone,
+        message,
+        title,
+        updatedAt: serverTimestamp(),
+        deviceId,
+        ownerList: [...cardRes.payload.ownerList, userId],
+      }).toDto()
+    }
 
     const res = await createCardTransaction(cardDto, userId, newCardIdList)
     if (!res.status) {
