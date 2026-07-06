@@ -1,5 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
-import { StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, useWindowDimensions, ViewStyle } from 'react-native'
 import {
   Easing,
   useAnimatedStyle,
@@ -20,25 +20,32 @@ interface CardSettingContext {
 const cardSettingContext = createContext<CardSettingContext>(
   {} as CardSettingContext,
 )
-const SLIDER_MARGIN_TOP_ACTIVE = 10
-const SLIDER_MARGIN_TOP_INACTIVE = 300
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
-  const sliderMarginTop = useSharedValue(SLIDER_MARGIN_TOP_INACTIVE)
+  const sliderMarginTopactive = 10
+  let sliderMargitTopInactive = 300
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
+
+  if (isSmall) {
+    sliderMargitTopInactive = 250
+  }
+
+  const sliderMarginTop = useSharedValue(sliderMargitTopInactive)
 
   const [settingCard, setSettingCard] = useState(-1)
 
   const cardSettingController = {
     showSetting: (idx: number) => {
       setSettingCard(idx)
-      sliderMarginTop.value = withTiming(SLIDER_MARGIN_TOP_ACTIVE, {
+      sliderMarginTop.value = withTiming(sliderMarginTopactive, {
         duration: 400,
         easing: Easing.out(Easing.cubic),
       })
     },
     hideSetting: () => {
       setSettingCard(-1)
-      sliderMarginTop.value = withTiming(SLIDER_MARGIN_TOP_INACTIVE, {
+      sliderMarginTop.value = withTiming(sliderMargitTopInactive, {
         duration: 400,
         easing: Easing.out(Easing.cubic),
       })

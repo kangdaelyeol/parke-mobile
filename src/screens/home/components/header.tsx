@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { useHomeContext, useUserContext } from '@/contexts'
@@ -8,9 +8,14 @@ import { formatPhone } from '@/utils'
 export const Header = () => {
   const { scanning } = useHomeContext()
   const { user } = useUserContext()
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
+
   return (
     <View style={styles.header}>
-      <View style={styles.headerWrapper}>
+      <View
+        style={[styles.headerWrapper, isSmall && styles.headerWrapperSmall]}
+      >
         <LogoIcon width={35} height={35} style={styles.icon} />
         <View style={styles.textSection}>
           <Text style={styles.phone}>{formatPhone(user?.phone || '')}</Text>
@@ -44,12 +49,16 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   headerWrapper: {
+    maxWidth: 400,
     marginTop: 40,
     boxSizing: 'border-box',
     height: 60,
     width: '100%',
-    maxWidth: 400,
     marginHorizontal: 'auto',
+  },
+  headerWrapperSmall: {
+    maxWidth: 350,
+    marginTop: 30,
   },
   icon: {
     position: 'absolute',

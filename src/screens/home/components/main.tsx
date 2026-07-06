@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated from 'react-native-reanimated'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
@@ -16,10 +16,12 @@ import { GRAY } from '@/theme/color'
 
 export const Main = () => {
   const { state, actions, animated } = useMainViewModel()
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
 
   return (
     <View style={styles.container}>
-      <View style={styles.wrapper}>
+      <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
         {state.cardLength === 0 ? (
           <EmptyView />
         ) : (
@@ -69,6 +71,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     paddingBottom: 200,
     flex: 1,
+  },
+  wrapperSmall: {
+    maxWidth: 330,
   },
   cardContainer: {
     width: CARD_WIDTH,
