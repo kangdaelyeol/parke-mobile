@@ -1,4 +1,10 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native'
 import { HomeFooterIconProps } from '@home/types'
 import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants'
 import { DM_SANS } from '@/theme/fonts'
@@ -30,6 +36,9 @@ export const FooterIcon = ({
   onPress,
   iconSize,
 }: HomeFooterIconProps) => {
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
+
   return (
     <Pressable onPress={onPress}>
       {({ pressed }) => (
@@ -41,6 +50,7 @@ export const FooterIcon = ({
                 color: pressed ? ICON_COLOR_PRESSED : ICON_COLOR,
               },
               styles.title,
+              isSmall && styles.titleSmall,
             ]}
           >
             {label}
@@ -61,9 +71,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   title: {
-    fontSize: 12,
     fontFamily: DM_SANS.BOLD,
     textAlign: 'center',
+    fontSize: 12,
     marginTop: 8,
+  },
+  titleSmall: {
+    fontSize: 10,
+    marginTop: 4,
   },
 })
