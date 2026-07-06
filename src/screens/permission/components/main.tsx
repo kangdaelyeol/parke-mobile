@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { Item, ItemDivider, ItemList } from '@/components'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP } from '@/theme/color'
@@ -12,14 +12,55 @@ const Badge = () => {
 }
 
 export const Main = () => {
+  const { width } = useWindowDimensions()
+  const style =
+    width < 400
+      ? {
+          titleStyle: {
+            fontSize: 15,
+          },
+          subTitleStyle: { fontSize: 13, marginTop: 10 },
+          container: {
+            marginTop: 15,
+          },
+          section: {
+            marginTop: 5,
+          },
+          noneText: {
+            paddingVertical: 4,
+            fontSize: 12,
+          },
+        }
+      : {
+          titleStyle: {
+            fontSize: 16,
+          },
+          subTitleStyle: {
+            fontSize: 16,
+            marginTop: 10,
+            lineHeight: 22,
+          },
+          container: {
+            marginTop: 25,
+          },
+          section: {
+            marginTop: 20,
+          },
+          noneText: {
+            paddingVertical: 17,
+            fontSize: 16,
+          },
+        }
   return (
-    <View style={styles.container}>
+    <View style={{ ...styles.container, ...style.container }}>
       <View style={styles.wrapper}>
         <View style={styles.section}>
-          <Text style={styles.title}>필수적 접근 권한</Text>
-          <Text style={styles.noneText}>없음</Text>
+          <Text style={{ ...styles.title, ...style.titleStyle }}>
+            필수적 접근 권한
+          </Text>
+          <Text style={{ ...styles.noneText, ...style.noneText }}>없음</Text>
         </View>
-        <View style={styles.section}>
+        <View style={style.section}>
           <Text style={styles.title}>선택적 접근 권한</Text>
           <ItemList>
             <Item
@@ -70,7 +111,6 @@ const styles = StyleSheet.create({
     paddingVertical: 17,
     color: GRAY_DEEP,
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 16,
   },
   badgeContainer: {
     borderRadius: 9,
