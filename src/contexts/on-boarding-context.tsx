@@ -1,4 +1,5 @@
 import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import { useWindowDimensions } from 'react-native'
 import { SharedValue, useSharedValue } from 'react-native-reanimated'
 
 export interface OnBoardingContextValue {
@@ -20,6 +21,8 @@ export const OnBoardingContextProvider = ({ children }: PropsWithChildren) => {
   const [pageIdx, setPageIdx] = useState(1)
   const [loading, setLoading] = useState(true)
   const [hasSeenOnBoarding, setHasSeenOnBoarding] = useState(false)
+  const { width, height } = useWindowDimensions()
+  console.log(width, height)
 
   const initialValue = {
     pageIdx,
