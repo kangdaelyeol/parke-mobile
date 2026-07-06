@@ -13,54 +13,21 @@ const Badge = () => {
 
 export const Main = () => {
   const { width } = useWindowDimensions()
-  const style =
-    width < 400
-      ? {
-          titleStyle: {
-            fontSize: 15,
-          },
-          subTitleStyle: { fontSize: 13, marginTop: 10 },
-          container: {
-            marginTop: 15,
-          },
-          section: {
-            marginTop: 5,
-          },
-          noneText: {
-            paddingVertical: 4,
-            fontSize: 12,
-          },
-        }
-      : {
-          titleStyle: {
-            fontSize: 16,
-          },
-          subTitleStyle: {
-            fontSize: 16,
-            marginTop: 10,
-            lineHeight: 22,
-          },
-          container: {
-            marginTop: 25,
-          },
-          section: {
-            marginTop: 20,
-          },
-          noneText: {
-            paddingVertical: 17,
-            fontSize: 16,
-          },
-        }
+
+  const isSmall = width < 400
+
   return (
-    <View style={{ ...styles.container, ...style.container }}>
-      <View style={styles.wrapper}>
-        <View style={styles.section}>
-          <Text style={{ ...styles.title, ...style.titleStyle }}>
+    <View style={[styles.container, isSmall && styles.containerSmall]}>
+      <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
+        <View style={[styles.section, isSmall && styles.sectionSmall]}>
+          <Text style={[styles.title, isSmall && styles.titleSmall]}>
             필수적 접근 권한
           </Text>
-          <Text style={{ ...styles.noneText, ...style.noneText }}>없음</Text>
+          <Text style={[styles.noneText, isSmall && styles.noneTextSmall]}>
+            없음
+          </Text>
         </View>
-        <View style={style.section}>
+        <View style={[styles.section, isSmall && styles.sectionSmall]}>
           <Text style={styles.title}>선택적 접근 권한</Text>
           <ItemList>
             <Item
@@ -94,24 +61,38 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 25,
   },
+  containerSmall: {
+    marginTop: 15,
+  },
   wrapper: {
     marginHorizontal: 'auto',
     width: '100%',
     maxWidth: 360,
   },
+  wrapperSmall: {
+    maxWidth: 340,
+  },
   section: {
     marginTop: 20,
+  },
+  sectionSmall: {
+    marginTop: 10,
   },
   title: {
     color: GRAY,
     fontFamily: DM_SANS.BOLD,
     fontSize: 16,
   },
+  titleSmall: {
+    fontSize: 15,
+  },
   noneText: {
-    paddingVertical: 17,
     color: GRAY_DEEP,
     fontFamily: PRETENDARD.MEDIUM,
+    paddingVertical: 17,
+    fontSize: 16,
   },
+  noneTextSmall: { paddingVertical: 4, fontSize: 12 },
   badgeContainer: {
     borderRadius: 9,
     paddingHorizontal: 10,
