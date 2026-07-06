@@ -60,60 +60,27 @@ export const Item = ({
   onPress,
 }: ItemProps) => {
   const { width } = useWindowDimensions()
-  const style =
-    width < 400
-      ? {
-          container: {
-            paddingHorizontal: 10,
-            paddingVertical: 10,
-          },
-          title: {
-            fontSize: 14,
-          },
-          subTitle: {
-            fontSize: 10,
-          },
-          iconContainer: {
-            width: 30,
-            height: 30,
-            padding: 5,
-            borderRadius: 5,
-          },
-        }
-      : {
-          container: {
-            paddingHorizontal: 20,
-            paddingVertical: 18,
-          },
-          title: {
-            fontSize: 16,
-          },
-          subTitle: {
-            fontSize: 12,
-          },
-          iconContainer: {
-            width: 42,
-            height: 42,
-            borderRadius: 9,
-            padding: 8,
-          },
-        }
+  const isSmall = width < 400
 
   const Icon = ICONS[option]
   const backgroundColor = ICON_BG_COLORS[option]
   return (
     <Pressable
       onPress={onPress}
-      style={{ ...styles.container, ...style.container }}
+      style={[styles.container, isSmall && styles.containerSmall]}
     >
       <View style={styles.left}>
-        <View style={{ ...styles.iconContainer, ...style.iconContainer }}>
+        <View
+          style={[styles.iconContainer, isSmall && styles.iconContainerSmall]}
+        >
           <View style={[styles.iconBackground, { backgroundColor }]} />
           <Icon />
         </View>
         <View style={styles.descSection}>
-          <Text style={{ ...styles.title, ...style.title }}>{title}</Text>
-          <Text style={{ ...styles.subTitle, ...style.subTitle }}>
+          <Text style={[styles.title, isSmall && styles.titleSmall]}>
+            {title}
+          </Text>
+          <Text style={[styles.subTitle, isSmall && styles.subTitleSmall]}>
             {subTitle}
           </Text>
         </View>
@@ -142,6 +109,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 18,
   },
+  containerSmall: {
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+  },
   left: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -150,6 +121,16 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
+    width: 42,
+    height: 42,
+    borderRadius: 9,
+    padding: 8,
+  },
+  iconContainerSmall: {
+    width: 30,
+    height: 30,
+    padding: 5,
+    borderRadius: 5,
   },
   iconBackground: {
     ...StyleSheet.absoluteFillObject,
@@ -161,10 +142,18 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 16,
+  },
+  titleSmall: {
+    fontSize: 14,
   },
   subTitle: {
     color: GRAY,
     fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 12,
+  },
+  subTitleSmall: {
+    fontSize: 10,
   },
   right: { justifyContent: 'center' },
 })
