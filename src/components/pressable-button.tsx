@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   TextStyle,
+  useWindowDimensions,
   View,
   ViewStyle,
 } from 'react-native'
@@ -32,6 +33,8 @@ export const PressableButton = ({
   text,
   border,
 }: PressableButtonProps) => {
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
   return (
     <Pressable onPress={onPress} style={pressableStyle}>
       {({ pressed }) => (
@@ -40,18 +43,19 @@ export const PressableButton = ({
             styles.button,
             background && { backgroundColor: background[0] },
             background && pressed && { backgroundColor: background[1] },
-            style,
             border && styles.border,
             border && { borderColor: border[0] },
             border && pressed && { borderColor: border[1] },
+            style,
           ]}
         >
           <Text
             style={[
               styles.buttonText,
-              textStyle,
+              isSmall && styles.buttonTextSmall,
               text && { color: text[0] },
               text && pressed && { color: text[1] },
+              textStyle,
             ]}
           >
             {title}
@@ -72,6 +76,9 @@ const styles = StyleSheet.create({
     fontFamily: DM_SANS.BOLD,
     fontSize: 16,
     color: WHITE,
+  },
+  buttonTextSmall: {
+    padding: 12,
   },
   border: { borderWidth: 1 },
 })

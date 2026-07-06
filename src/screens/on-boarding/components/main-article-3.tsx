@@ -11,16 +11,7 @@ import { DM_SANS } from '@/theme/fonts'
 
 export const MainArticle3 = () => {
   const { width } = useWindowDimensions()
-  const style =
-    width < 400
-      ? {
-          imgWidth: 300,
-          imgHeight: 300 * (225 / 400),
-        }
-      : {
-          imgWidth: 400,
-          imgHeight: 225,
-        }
+  const isSmall = width < 400
 
   return (
     <View style={styles.container}>
@@ -31,8 +22,8 @@ export const MainArticle3 = () => {
       <Image
         style={styles.image}
         source={OnBoardingIcon3}
-        width={style.imgWidth}
-        height={style.imgHeight}
+        width={isSmall ? 300 : 400}
+        height={isSmall ? 300 * (225 / 400) : 225}
       />
     </View>
   )

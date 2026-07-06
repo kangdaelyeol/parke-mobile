@@ -5,33 +5,20 @@ import { DM_SANS } from '@/theme/fonts'
 
 export const MainArticle2 = () => {
   const { width } = useWindowDimensions()
-  const style =
-    width < 400
-      ? {
-          imgWidth: 200,
-          imgHeight: 200,
-          titleStyle: { fontSize: 20, lineHeight: 30, marginTop: 20 },
-          subTitleStyle: { fontSize: 13, lineHeight: 20, marginTop: 10 },
-        }
-      : {
-          imgWidth: 300,
-          imgHeight: 300,
-          titleStyle: { fontSize: 33, marginTop: 30 },
-          subTitleStyle: { fontSize: 19, lineHeight: 25, marginTop: 20 },
-        }
+  const isSmall = width < 400
 
   return (
     <View style={styles.container}>
       <OnBoardingIcon2
-        width={style.imgWidth}
-        height={style.imgHeight}
+        width={isSmall ? 200 : 300}
+        height={isSmall ? 200 : 300}
         style={styles.illustrator}
       />
-      <Text style={{ ...styles.title, ...style.titleStyle }}>
+      <Text style={[styles.title, isSmall && styles.titleSmall]}>
         QR 스캔시 운전자에 맞는{'\n'}번호 자동 전환
       </Text>
 
-      <Text style={{ ...styles.subTitle, ...style.subTitleStyle }}>
+      <Text style={[styles.subTitle, isSmall && styles.subTitleSmall]}>
         BLE 기반으로 운전자를 자동 인식하여{'\n'}실시간으로 연락처를 변경합니다
       </Text>
     </View>
@@ -48,10 +35,17 @@ const styles = StyleSheet.create({
     color: WHITE,
     fontFamily: DM_SANS.BOLD,
     textAlign: 'center',
+    fontSize: 33,
+    marginTop: 30,
   },
+  titleSmall: { fontSize: 24, marginTop: 20 },
   subTitle: {
     color: GRAY,
     textAlign: 'center',
     fontFamily: DM_SANS.MEDIUM,
+    fontSize: 19,
+    lineHeight: 25,
+    marginTop: 20,
   },
+  subTitleSmall: { fontSize: 12, lineHeight: 17, marginTop: 10 },
 })

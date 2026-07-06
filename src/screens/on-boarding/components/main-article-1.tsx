@@ -7,42 +7,24 @@ export const MainArticle1 = () => {
   // const { width, height } = useWindowDimensions()
   const { width } = useWindowDimensions()
   const widthRatio = 466 / 190
-  const style =
-    width < 400
-      ? {
-          imgHeight: 100,
-          imgWidth: 100 * widthRatio,
-          title: { fontSize: 25, marginTop: 20 },
-          subTitle: { fontSize: 17, marginTop: 20 },
-          onBoardingIllustrator1: {
-            marginTop: 100,
-          },
-        }
-      : {
-          imgHeight: 150,
-          imgWidth: 150 * widthRatio,
-          title: { fontSize: 28, marginTop: 20 },
-          subTitle: { fontSize: 17, marginTop: 20 },
-          onBoardingIllustrator1: {
-            marginTop: 150,
-          },
-        }
+
+  const isSmall = width < 400
 
   return (
     <View style={styles.container}>
       <OnBoardingIcon1_1
-        style={{
-          ...styles.onBoardingIllustrator1,
-          ...style.onBoardingIllustrator1,
-        }}
-        width={style.imgWidth}
-        height={style.imgHeight}
+        style={[
+          styles.onBoardingIllustrator1,
+          isSmall && styles.onBoardingIllustrator1Small,
+        ]}
+        width={isSmall ? 100 * widthRatio : 150 * widthRatio}
+        height={isSmall ? 100 : 150}
       />
       <View style={styles.textContainer}>
-        <Text style={{ ...styles.title, ...style.title }}>
+        <Text style={[styles.title, isSmall && styles.titleSmall]}>
           가족이 함께 쓰는 차량, 전화번호는?
         </Text>
-        <Text style={{ ...styles.subTitle, ...style.subTitle }}>
+        <Text style={[styles.subTitle, isSmall && styles.subTitleSmall]}>
           운전자가 바뀔 때마다 주차번호판을 교체하는 불편함
         </Text>
       </View>
@@ -55,8 +37,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   onBoardingIllustrator1: {
-    marginTop: 100,
+    marginTop: 150,
     marginHorizontal: 'auto',
+  },
+  onBoardingIllustrator1Small: {
+    marginTop: 100,
   },
   textContainer: {
     marginTop: 50,
@@ -65,9 +50,15 @@ const styles = StyleSheet.create({
   title: {
     color: WHITE,
     fontFamily: DM_SANS.BOLD,
+    fontSize: 28,
+    marginTop: 20,
   },
+  titleSmall: { fontSize: 23, marginTop: 20 },
   subTitle: {
     fontFamily: DM_SANS.MEDIUM,
     color: GRAY,
+    fontSize: 17,
+    marginTop: 20,
   },
+  subTitleSmall: { fontSize: 14, marginTop: 20 },
 })
