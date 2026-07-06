@@ -10,25 +10,30 @@ export const Header = () => {
   const { user } = useUserContext()
   const { width } = useWindowDimensions()
   const isSmall = width < 400
-
+  const iconSize = isSmall ? 28 : 35
+  
   return (
     <View style={styles.header}>
       <View
         style={[styles.headerWrapper, isSmall && styles.headerWrapperSmall]}
       >
-        <LogoIcon width={35} height={35} style={styles.icon} />
+        <LogoIcon width={iconSize} height={iconSize} style={styles.icon} />
         <View style={styles.textSection}>
-          <Text style={styles.phone}>{formatPhone(user?.phone || '')}</Text>
-          <View style={styles.scan}>
+          <Text style={[styles.phone, isSmall && styles.phoneSmall]}>
+            {formatPhone(user?.phone || '')}
+          </Text>
+          <View style={[styles.scan, isSmall && styles.scanSmall]}>
             <View
               style={[
                 styles.dot,
+                isSmall && styles.dotSmall,
                 scanning ? styles.scanOnDot : styles.scanOffDot,
               ]}
             />
             <Text
               style={[
                 styles.scanText,
+                isSmall && styles.scanTextSmall,
                 scanning ? styles.scanOnText : styles.scanOffText,
               ]}
             >
@@ -59,6 +64,7 @@ const styles = StyleSheet.create({
   headerWrapperSmall: {
     maxWidth: 350,
     marginTop: 30,
+    height: 40,
   },
   icon: {
     position: 'absolute',
@@ -76,17 +82,26 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: DM_MONO.MEDIUM,
   },
+  phoneSmall: {
+    fontSize: 14,
+  },
   scan: {
     marginTop: 5,
     flexDirection: 'row',
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  scanSmall: {
+    marginTop: 3,
+  },
   scanText: {
     marginLeft: 5,
     textAlign: 'right',
     fontSize: 12,
     fontFamily: DM_SANS.BOLD,
+  },
+  scanTextSmall: {
+    fontSize: 10,
   },
   scanOnText: {
     color: WHITE,
@@ -97,6 +112,11 @@ const styles = StyleSheet.create({
   dot: {
     width: 8,
     height: 8,
+    borderRadius: '50%',
+  },
+  dotSmall: {
+    width: 6,
+    height: 6,
     borderRadius: '50%',
   },
   scanOnDot: {

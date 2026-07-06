@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { DARK, GRAY, WHITE } from '@/theme/color'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
@@ -7,20 +7,37 @@ import { useTodaySummaryViewModel } from '@/view-model/home'
 
 export const TodaySummary = () => {
   const { state, animated } = useTodaySummaryViewModel()
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
+
   return (
     <Animated.View style={[styles.container, animated.containerStyle]}>
       <View style={styles.wrapper}>
-        <Text style={styles.title}>오늘의 현황</Text>
+        <Text style={[styles.title, isSmall && styles.titleSmall]}>
+          오늘의 현황
+        </Text>
         <View style={styles.bleDescription}>
-          <View style={styles.descSection}>
-            <Text style={styles.todayTitle}>BLE 감지</Text>
+          <View
+            style={[styles.descSection, isSmall && styles.descSectionSmall]}
+          >
+            <Text
+              style={[styles.todayTitle, isSmall && styles.todayTitleSmall]}
+            >
+              BLE 감지
+            </Text>
             <View style={styles.cntSection}>
               <Text style={styles.todayBleCnt}>{state.bleScanCount}</Text>
               <Text style={styles.todayCnt}>회</Text>
             </View>
           </View>
-          <View style={styles.descSection}>
-            <Text style={styles.todayTitle}>번호 변경</Text>
+          <View
+            style={[styles.descSection, isSmall && styles.descSectionSmall]}
+          >
+            <Text
+              style={[styles.todayTitle, isSmall && styles.todayTitleSmall]}
+            >
+              번호 변경
+            </Text>
             <View style={styles.cntSection}>
               <Text style={styles.todayPhoneCnt}>{state.phoneChangeCount}</Text>
               <Text style={styles.todayCnt}>회</Text>
@@ -29,7 +46,9 @@ export const TodaySummary = () => {
         </View>
         <View style={styles.divider} />
         <View>
-          <Text style={styles.title}>마지막 감지</Text>
+          <Text style={[styles.title, isSmall && styles.titleSmall]}>
+            마지막 감지
+          </Text>
           <Text
             style={styles.lastScanText}
           >{`${state.lastScanTime}분 전 · ${state.deviceName}`}</Text>
@@ -59,18 +78,25 @@ const styles = StyleSheet.create({
     fontFamily: DM_SANS.BOLD,
     fontSize: 15,
   },
+  titleSmall: {
+    fontSize: 12,
+  },
   bleDescription: {
     flexDirection: 'row',
-    marginTop: 20,
   },
   descSection: {
     flex: 1,
+    marginTop: 20,
+  },
+  descSectionSmall: {
+    marginTop: 10,
   },
   todayTitle: {
     color: GRAY,
     fontFamily: DM_SANS.BOLD,
     fontSize: 14,
   },
+  todayTitleSmall: { fontSize: 12 },
   cntSection: {
     flexDirection: 'row',
     alignItems: 'flex-end',

@@ -32,8 +32,15 @@ export const Main = () => {
                 style={[styles.cardContainer, animated.sliderStyle]}
               >
                 <Animated.View style={animated.cardTitleStyle}>
-                  <View style={styles.title}>
-                    <Text style={styles.titleText}>내 기기</Text>
+                  <View style={[styles.title, isSmall && styles.titleSmall]}>
+                    <Text
+                      style={[
+                        styles.titleText,
+                        isSmall && styles.titleTextSmall,
+                      ]}
+                    >
+                      내 기기
+                    </Text>
                   </View>
                 </Animated.View>
                 <View style={styles.cardSlider}>
@@ -92,9 +99,16 @@ const styles = StyleSheet.create({
     top: -40,
     left: -10,
   },
+  titleSmall: {
+    top: -25,
+    left: -5,
+  },
   titleText: {
     color: GRAY,
     fontSize: 15,
     fontFamily: DM_SANS.BOLD,
+  },
+  titleTextSmall: {
+    fontSize: 13,
   },
 })

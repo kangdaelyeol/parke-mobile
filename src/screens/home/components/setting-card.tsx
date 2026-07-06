@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSettingCardViewModel } from '@/view-model/home'
@@ -9,6 +9,8 @@ import { formatPhone } from '@/utils'
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useSettingCardViewModel(card)
+  const { width } = useWindowDimensions()
+  const isSmall = width < 400
 
   return (
     <>
@@ -41,7 +43,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
           />
         </KeyboardAwareScrollView>
       </Animated.View>
-      <View style={styles.btnContainer}>
+      <View style={[styles.btnContainer, isSmall && styles.btnContainerSmall]}>
         <View style={styles.btnWrapper}>
           <PressableButton
             title="저장"
@@ -97,10 +99,15 @@ const styles = StyleSheet.create({
   btnContainer: {
     position: 'absolute',
     backgroundColor: '#000000',
-    bottom: 110,
-    paddingTop: 10,
+    bottom: 90,
+    paddingVertical: 10,
     left: 0,
     right: 0,
+    borderTopColor: '#333',
+    borderTopWidth: 1,
+  },
+  btnContainerSmall: {
+    bottom: 60,
   },
   btnWrapper: {
     flexDirection: 'row',
