@@ -1,5 +1,11 @@
 import { JSX } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  Text,
+  Pressable,
+  useWindowDimensions,
+} from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 import { Toggle } from '@/components'
@@ -53,18 +59,63 @@ export const Item = ({
   Right,
   onPress,
 }: ItemProps) => {
+  const { width } = useWindowDimensions()
+  const style =
+    width < 400
+      ? {
+          container: {
+            paddingHorizontal: 10,
+            paddingVertical: 10,
+          },
+          title: {
+            fontSize: 14,
+          },
+          subTitle: {
+            fontSize: 10,
+          },
+          iconContainer: {
+            width: 30,
+            height: 30,
+            padding: 5,
+            borderRadius: 5,
+          },
+        }
+      : {
+          container: {
+            paddingHorizontal: 20,
+            paddingVertical: 18,
+          },
+          title: {
+            fontSize: 16,
+          },
+          subTitle: {
+            fontSize: 12,
+          },
+          iconContainer: {
+            width: 42,
+            height: 42,
+            borderRadius: 9,
+            padding: 8,
+          },
+        }
+
   const Icon = ICONS[option]
   const backgroundColor = ICON_BG_COLORS[option]
   return (
-    <Pressable onPress={onPress} style={styles.container}>
+    <Pressable
+      onPress={onPress}
+      style={{ ...styles.container, ...style.container }}
+    >
       <View style={styles.left}>
-        <View style={styles.iconContainer}>
+        <View style={{ ...styles.iconContainer, ...style.iconContainer }}>
           <View style={[styles.iconBackground, { backgroundColor }]} />
           <Icon />
         </View>
         <View style={styles.descSection}>
-          <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subTitle}>{subTitle}</Text>
+          <Text style={{ ...styles.title, ...style.title }}>{title}</Text>
+          <Text style={{ ...styles.subTitle, ...style.subTitle }}>
+            {subTitle}
+          </Text>
         </View>
       </View>
       {onValueChange && value !== undefined && (
@@ -96,9 +147,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iconContainer: {
-    width: 42,
-    height: 42,
-    borderRadius: 9,
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
@@ -113,12 +161,10 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 16,
   },
   subTitle: {
     color: GRAY,
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 12,
   },
   right: { justifyContent: 'center' },
 })

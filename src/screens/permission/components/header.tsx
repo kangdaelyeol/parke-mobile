@@ -10,7 +10,6 @@ export const Header = () => {
           titleStyle: {
             marginTop: 100,
             fontSize: 20,
-            lineHeight: 30,
           },
           subTitleStyle: { fontSize: 13, marginTop: 10 },
         }
@@ -18,7 +17,6 @@ export const Header = () => {
           titleStyle: {
             marginTop: 120,
             fontSize: 33,
-            lineHeight: 30,
           },
           subTitleStyle: {
             fontSize: 16,

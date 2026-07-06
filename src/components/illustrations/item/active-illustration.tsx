@@ -1,9 +1,9 @@
 import Svg, { Path } from 'react-native-svg'
-import { ITEM_ICON_SIZE } from '@/components/illustrations/constants'
+import { StyleSheet } from 'react-native'
 
 export const ActiveIllustration = () => {
   return (
-    <Svg viewBox="0 0 24 24" width={ITEM_ICON_SIZE} height={ITEM_ICON_SIZE}>
+    <Svg viewBox="0 0 24 24" style={styles.icon}>
       <Path
         stroke={'#F87171'}
         strokeWidth={2}
@@ -15,3 +15,7 @@ export const ActiveIllustration = () => {
     </Svg>
   )
 }
+
+const styles = StyleSheet.create({
+  icon: { width: '100%', height: '100%' },
+})

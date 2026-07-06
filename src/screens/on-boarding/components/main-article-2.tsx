@@ -14,10 +14,10 @@ export const MainArticle2 = () => {
           subTitleStyle: { fontSize: 13, lineHeight: 20, marginTop: 10 },
         }
       : {
-          imgWidth: 250,
-          imgHeight: 250,
-          titleStyle: { fontSize: 20, lineHeight: 30, marginTop: 20 },
-          subTitleStyle: { fontSize: 13, lineHeight: 20, marginTop: 10 },
+          imgWidth: 300,
+          imgHeight: 300,
+          titleStyle: { fontSize: 33, marginTop: 30 },
+          subTitleStyle: { fontSize: 19, lineHeight: 25, marginTop: 20 },
         }
 
   return (
