@@ -69,6 +69,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     width: '100%',
     maxWidth: 360,
+    paddingHorizontal: 10,
   },
   inputSection: {
     marginTop: 20,

@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     maxWidth: 350,
     marginHorizontal: 'auto',
     gap: 15,
+    height: 430,
   },
   text: {
     color: '#eaeaea',
