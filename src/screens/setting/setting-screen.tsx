@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Header, Main } from '@setting/components'
 import { TermBottomSheet } from '@/components'
-import { SettingContextProvider, useSettingContext } from '@/contexts'
+import { SettingContextProvider, useSettingContext } from '@setting/contexts'
 
 const SettingScreenContent = () => {
   const { modalRef, docType } = useSettingContext()

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
-import { useScanCompleteContext } from '@/contexts/scan-complete-context'
+import { useScanCompleteContext } from '@scan-complete/contexts'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'

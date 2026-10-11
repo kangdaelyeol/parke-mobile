@@ -10,7 +10,7 @@ import {
   PaginationDots,
   TodaySummary,
 } from '@home/components'
-import { useMainViewModel } from '@/view-model/home'
+import { useMainViewModel } from '@home/view-model'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 

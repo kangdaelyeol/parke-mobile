@@ -1,7 +1,7 @@
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useSettingCardViewModel } from '@/view-model/home'
+import { useSettingCardViewModel } from '@home/view-model'
 import { HomeSettingCardProps } from '@home/types'
 import { FocusableInput, PressableButton } from '@/components'
 import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'

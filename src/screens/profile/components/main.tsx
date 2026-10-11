@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput, Loading, PressableButton } from '@/components'
-import { useMainViewModel } from '@/view-model/profile'
+import { useMainViewModel } from '@profile/view-model'
 import {
   DARK,
   DARK_LIGHT,

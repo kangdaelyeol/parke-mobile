@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native'
-import { useFooterViewModel } from '@/view-model/on-boarding'
+import { useFooterViewModel } from '@on-boarding/view-model'
 import { PAGE_COUNT } from '@on-boarding/constants'
 import { PressableButton } from '@/components'
 import { BLUE_PRIMARY, GRAY, WHITE } from '@/theme/color'

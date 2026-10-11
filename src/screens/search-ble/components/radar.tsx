@@ -3,8 +3,8 @@ import Animated from 'react-native-reanimated'
 import Svg, { Circle, Line } from 'react-native-svg'
 import { size } from '@search-ble/constants'
 import { Sweeper } from '@search-ble/components'
-import { useSearchBleContext } from '@/contexts'
-import { useRaderViewModel } from '@/view-model/search-ble'
+import { useSearchBleContext } from '@search-ble/contexts'
+import { useRaderViewModel } from '@search-ble/view-model'
 import { BLUE_PRIMARY, DARK } from '@/theme/color'
 
 const { width } = Dimensions.get('window')

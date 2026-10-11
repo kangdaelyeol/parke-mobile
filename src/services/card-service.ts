@@ -1,10 +1,14 @@
-import { serverTimestamp } from 'firebase/database'
-import { cardClient, userClient } from '@/client'
+import { serverTimestamp } from '@react-native-firebase/database'
+import {
+  cardClient,
+  userClient,
+  createCardTransaction,
+  deleteCardTransaction,
+} from '@/client'
 import { Card, CardDto } from '@/domain/card'
 import { bleCacheService } from '@/services'
 import { CardService, CardState, ServiceSuccess } from '@/services/types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
-import { createCardTransaction, deleteCardTransaction } from '@/helpers'
 
 export const cardService: CardService = {
   getCard: async id => {

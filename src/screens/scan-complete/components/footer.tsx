@@ -1,5 +1,5 @@
 import { PressableButton } from '@/components'
-import { useScanCompleteContext } from '@/contexts'
+import { useScanCompleteContext } from '@scan-complete/contexts'
 import {
   BLUE_PRIMARY,
   DARK,

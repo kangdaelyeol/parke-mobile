@@ -23,7 +23,7 @@ export interface ServiceFailure {
   message: string
 }
 
-type ServiceResponse<T> = ServiceSuccess<T> | ServiceFailure
+export type ServiceResponse<T> = ServiceSuccess<T> | ServiceFailure
 
 export interface AuthService {
   firebaseLogin: (email: string) => Promise<AuthResponse>
@@ -73,7 +73,7 @@ interface StartSearchBleProps {
   onRssiChange: (val: string) => void
 }
 
-interface StartBackgroundScanProps {
+export interface StartBackgroundScanProps {
   readonly cards: CardState[]
   readonly user: UserDto
   refreshStateSession: () => void
@@ -199,9 +199,5 @@ export interface UserService {
   deleteUser: (
     id: string,
     cardList: CardState[],
-  ) => Promise<ServiceResponse<boolean>>
-  deleteCard: (
-    userId: string,
-    cardId: string,
   ) => Promise<ServiceResponse<boolean>>
 }

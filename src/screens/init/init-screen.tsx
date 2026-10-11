@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Loading } from '@/components'
-import { InitContextProvider, useInitContext } from '@/contexts'
+import { InitContextProvider, useInitContext } from '@/screens/init/contexts'
 import { Main, Footer, Header } from './components'
 
 const InitContent = () => {

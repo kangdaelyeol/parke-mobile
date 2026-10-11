@@ -1,7 +1,8 @@
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
-import { useHomeContext, useUserContext } from '@/contexts'
+import { useHomeContext } from '@home/contexts'
+import { useUserContext } from '@/contexts'
 import { GRAY, GREEN, RED, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
 

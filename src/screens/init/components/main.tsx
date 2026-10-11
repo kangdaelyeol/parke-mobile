@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { FocusableInput } from '@/components'
-import { useInitContext } from '@/contexts'
+import { useInitContext } from '@/screens/init/contexts'
 import { formatPhone } from '@/utils'
 
 export const Main = () => {

@@ -3,9 +3,9 @@ import {
   CardSettingProvider,
   SliderContextProvider,
   HomeProvider,
-} from '@/contexts'
+} from '@home/contexts'
 import { Header, Footer, Main } from '@home/components'
-import { useHomeViewModel } from '@/view-model/home'
+import { useHomeViewModel } from '@home/view-model'
 import { Loading } from '@/components'
 
 const HomeScreenContent = () => {

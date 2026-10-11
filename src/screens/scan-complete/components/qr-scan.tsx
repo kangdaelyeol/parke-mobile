@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { Camera } from 'react-native-vision-camera'
 import { LogoText, PressableButton } from '@/components'
-import { useQrScanViewModel } from '@/view-model/scan-complete'
+import { useQrScanViewModel } from '@scan-complete/view-model'
 import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'

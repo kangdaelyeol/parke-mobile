@@ -7,7 +7,7 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { Toggle } from '@home/components'
-import { useCardViewModel } from '@/view-model/home'
+import { useCardViewModel } from '@home/view-model'
 import { Loading } from '@/components'
 import { formatPhone } from '@/utils'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'

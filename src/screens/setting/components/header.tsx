@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
-import { useHeaderViewModel } from '@/view-model/setting'
+import { useHeaderViewModel } from '@setting/view-model'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 

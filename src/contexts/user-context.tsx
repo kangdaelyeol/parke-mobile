@@ -8,30 +8,14 @@ import {
 } from 'react'
 import { UserDto } from '@/domain/user/user-dto'
 import { authService, cardService, userService } from '@/services'
-import { CardState } from '@/services/types'
-
-const isUserDto = (v: any): v is UserDto => {
-  return v !== null
-}
-
-interface SyncSuccess<T> {
-  status: true
-  payload: T
-}
-
-interface SyncFailure {
-  status: false
-  message: string
-}
-
-type SyncResponse<T> = SyncSuccess<T> | SyncFailure
+import { CardState, ServiceResponse } from '@/services/types'
 
 interface UserContextValue {
   cards: CardState[]
   setCards: React.Dispatch<React.SetStateAction<CardState[]>>
   user: UserDto | null
-  syncCardList: () => Promise<SyncResponse<null>>
-  validateUser: () => Promise<SyncResponse<UserDto>>
+  syncCardList: () => Promise<ServiceResponse<null>>
+  validateUser: () => Promise<ServiceResponse<UserDto>>
   stateSession: number
   actions: {
     addCardId: (serial: string) => void
@@ -50,7 +34,7 @@ interface UserContextValue {
   }
 }
 
-const userContext = createContext({} as UserContextValue)
+const userContext = createContext<UserContextValue | null>(null)
 
 export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<UserDto | null>({
@@ -63,7 +47,9 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
   const [cards, setCards] = useState<CardState[]>([])
   const [stateSession, setStateSession] = useState(0)
 
-  const validateUser = useCallback(async (): Promise<SyncResponse<UserDto>> => {
+  const validateUser = useCallback(async (): Promise<
+    ServiceResponse<UserDto>
+  > => {
     if (!user) {
       authService.signOut()
       return { status: false, message: '유저 정보가 없습니다.' }
@@ -80,7 +66,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     return { status: true, payload: userRes.payload }
   }, [user])
 
-  const syncCardList = useCallback(async (): Promise<SyncResponse<null>> => {
+  const syncCardList = useCallback(async (): Promise<ServiceResponse<null>> => {
     const validationRes = await validateUser()
     if (!validationRes.status) return validationRes
 
@@ -114,31 +100,23 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     () => ({
       refreshStateSession: () => setStateSession(prev => prev + 1),
       addCardId: (cardId: string) => {
-        if (!user) return
-        const newCardIdList = [...user?.cardIdList, cardId]
-        return setUser(prev => {
-          if (isUserDto(prev)) return { ...prev, cardIdList: newCardIdList }
-          else return null
-        })
+        setUser(prev =>
+          prev ? { ...prev, cardIdList: [...prev.cardIdList, cardId] } : prev,
+        )
       },
       deleteCard: (cardId: string) => {
-        const filteredCardList = cards.filter(card => card.id !== cardId)
-        setCards(filteredCardList)
-        setUser(prev => {
-          if (isUserDto(prev))
-            return {
-              ...prev,
-              cardIdList: filteredCardList.map(card => card.id),
-            }
-          else return prev
-        })
+        setCards(prev => prev.filter(card => card.id !== cardId))
+        setUser(prev =>
+          prev
+            ? {
+                ...prev,
+                cardIdList: prev.cardIdList.filter(id => id !== cardId),
+              }
+            : prev,
+        )
       },
       setUserNicknameAndPhone: (nickname: string, phone: string) => {
-        if (!user) return
-        setUser(prev => {
-          if (isUserDto(prev)) return { ...prev, nickname, phone }
-          else return null
-        })
+        setUser(prev => (prev ? { ...prev, nickname, phone } : prev))
       },
       updateCardPhone: (cardId: string, phone: string) => {
         setCards(prev =>
@@ -147,10 +125,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       },
       setCardScan: (cardId: string, scan: boolean) => {
         setCards(prev =>
-          prev.map(card => {
-            if (card.id !== cardId) return card
-            return { ...card, scan }
-          }),
+          prev.map(card => (card.id !== cardId ? card : { ...card, scan })),
         )
       },
       updateCardInfo: (
@@ -159,40 +134,38 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
         phone: string,
         message: string,
       ) => {
-        setCards(prev => {
-          const index = cards.findIndex(cd => cd.id === cardId)
-          const newCards = [...prev]
-          newCards[index] = {
-            ...cards[index],
-            title,
-            phone,
-            message,
-          }
-          return newCards
-        })
+        setCards(prev =>
+          prev.map(card =>
+            card.id !== cardId ? card : { ...card, title, phone, message },
+          ),
+        )
       },
       initUser: (dto: UserDto) => {
         setUser(dto)
       },
     }),
-    [cards, user],
+    [],
   )
 
-  return (
-    <userContext.Provider
-      value={{
-        stateSession,
-        cards,
-        setCards,
-        user,
-        syncCardList,
-        validateUser,
-        actions,
-      }}
-    >
-      {children}
-    </userContext.Provider>
+  const value = useMemo(
+    () => ({
+      stateSession,
+      cards,
+      setCards,
+      user,
+      syncCardList,
+      validateUser,
+      actions,
+    }),
+    [stateSession, cards, user, syncCardList, validateUser, actions],
   )
+
+  return <userContext.Provider value={value}>{children}</userContext.Provider>
 }
 
-export const useUserContext = () => useContext(userContext)
+export const useUserContext = () => {
+  const context = useContext(userContext)
+  if (!context)
+    throw new Error('useUserContext must be used within UserContextProvider')
+  return context
+}

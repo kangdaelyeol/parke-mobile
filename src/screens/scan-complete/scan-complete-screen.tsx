@@ -1,7 +1,10 @@
 import { StyleSheet, View, Text } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
-import { ScanCompleteStackParamList } from '@/navigation/types'
-import { ScanCompleteContextProvider, useScanCompleteContext } from '@/contexts'
+import { RootStackParamList } from '@/navigation/types'
+import {
+  ScanCompleteContextProvider,
+  useScanCompleteContext,
+} from '@scan-complete/contexts'
 import {
   Main,
   ProgressStepper,
@@ -14,7 +17,7 @@ import { PRETENDARD } from '@/theme/fonts'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 type ScanCompleteProps = {
-  route: RouteProp<ScanCompleteStackParamList, 'ScanComplete'>
+  route: RouteProp<RootStackParamList, 'ScanComplete'>
 }
 
 type ScanCompleteContentProps = {

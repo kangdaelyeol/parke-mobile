@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { FocusableInput, Item, ItemList } from '@/components'
-import { useScanCompleteContext } from '@/contexts/scan-complete-context'
+import { useScanCompleteContext } from '@scan-complete/contexts'
 import { DM_SANS } from '@/theme/fonts'
 import { WHITE } from '@/theme/color'
 

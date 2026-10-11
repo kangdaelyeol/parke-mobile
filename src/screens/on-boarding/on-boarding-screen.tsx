@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import { Footer, Header, Slider } from '@on-boarding/components'
-import { OnBoardingContextProvider } from '@/contexts'
-import { useOnBoardingViewModel } from '@/view-model/on-boarding'
+import { OnBoardingContextProvider } from '@on-boarding/contexts'
+import { useOnBoardingViewModel } from '@on-boarding/view-model'
 import { Loading } from '@/components'
 
 const OnBoardingContent = () => {

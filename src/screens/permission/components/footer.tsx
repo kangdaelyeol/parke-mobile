@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { usePermissionFooterViewModel } from '@/view-model/use-permission-footer-view-model'
+import { usePermissionFooterViewModel } from '@permission/view-model'
 import { BLUE_PRIMARY, DARK, GRAY_LIGHT, WHITE } from '@/theme/color'
 
 export const Footer = () => {

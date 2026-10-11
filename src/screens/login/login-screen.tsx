@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native'
 import { Loading, TermBottomSheet } from '@/components'
-import { LoginContextProvider, useLoginContext } from '@/contexts'
+import { LoginContextProvider, useLoginContext } from '@login/contexts'
 import { ConsentBottomSheet, Footer, Main } from '@login/components'
 
 const LoginContent = () => {

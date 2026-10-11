@@ -1,7 +1,7 @@
 import { JSX } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Item, ItemList } from '@/components'
-import { useSearchBleContext } from '@/contexts'
+import { useSearchBleContext } from '@search-ble/contexts'
 import { BLUE_PRIMARY, GRAY_DEEP } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 

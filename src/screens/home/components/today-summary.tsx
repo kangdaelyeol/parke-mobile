@@ -3,7 +3,7 @@ import Animated from 'react-native-reanimated'
 import { DARK, GRAY, WHITE } from '@/theme/color'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { BatteryIllustration } from './illustrations'
-import { useTodaySummaryViewModel } from '@/view-model/home'
+import { useTodaySummaryViewModel } from '@home/view-model'
 
 export const TodaySummary = () => {
   const { state, animated } = useTodaySummaryViewModel()

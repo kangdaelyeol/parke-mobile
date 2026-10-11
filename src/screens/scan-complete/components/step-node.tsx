@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { DM_SANS } from '@/theme/fonts'
-import { useStepNodeViewModel } from '@/view-model/scan-complete'
+import { useStepNodeViewModel } from '@scan-complete/view-model'
 import { BLUE_PRIMARY, WHITE } from '@/theme/color'
 
 interface StepProps {

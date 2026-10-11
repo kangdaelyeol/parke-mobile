@@ -1,6 +1,6 @@
 import { View } from 'react-native'
 import { Step1, Step2 } from '@scan-complete/components'
-import { useMainViewModel } from '@/view-model/scan-complete'
+import { useMainViewModel } from '@scan-complete/view-model'
 
 type MainProps = {
   deviceId: string

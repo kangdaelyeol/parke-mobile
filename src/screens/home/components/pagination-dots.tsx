@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import { useCardSliderContext, useUserContext } from '@/contexts'
+import { useCardSliderContext } from '@home/contexts'
+import { useUserContext } from '@/contexts'
 import { DARK_LIGHT, GRAY } from '@/theme/color'
 
 interface DotProps {

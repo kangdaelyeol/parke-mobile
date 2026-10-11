@@ -1,5 +1,5 @@
 import { CardDto } from './card-dto'
-import { serverTimestamp } from 'firebase/database'
+import { serverTimestamp } from '@react-native-firebase/database'
 
 export class Card {
   private constructor(

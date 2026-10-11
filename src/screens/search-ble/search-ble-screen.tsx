@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Footer, Header, Radar, Title } from '@search-ble/components'
-import { SearchBleProvider } from '@/contexts'
-import { useSearchBleViewModel } from '@/view-model/search-ble'
+import { SearchBleProvider } from '@search-ble/contexts'
+import { useSearchBleViewModel } from '@search-ble/view-model'
 
 const SearchBleContent = () => {
   useSearchBleViewModel()

@@ -23,7 +23,7 @@ import {
   notifyChangePhoneOnScreen,
   nofifyChangePhoneMessage,
 } from '@/utils'
-import { BleService } from './types'
+import { BleService, StartBackgroundScanProps } from './types'
 
 const g = globalThis as any
 
@@ -40,6 +40,101 @@ const isBleManager = (manager: any): manager is BleManager => {
 }
 
 let bleManager: null | BleManager = null
+
+// 백그라운드 스캔 중 Parke 장치가 감지됐을 때의 처리
+const handleBackgroundDevice = async (
+  device: Device,
+  {
+    cards,
+    user,
+    refreshStateSession,
+    onDBError,
+    onCardPhoneChange,
+  }: Omit<StartBackgroundScanProps, 'onError'>,
+) => {
+  if (!isCandidate(device)) return
+
+  const deviceId = getDeviceId(device.manufacturerData as string)
+
+  if (isScanCooldownActive(deviceId)) return
+
+  bleCacheService.markDeviceSeenAt(deviceId)
+
+  console.log('deviceId:', deviceId)
+
+  const cardState = cards.find(c => c.deviceId === deviceId)
+  if (!cardState || !cardState.scan) return
+
+  const cardRes = await cardService.getCard(cardState.id)
+  if (!cardRes.status) return
+
+  const card = cardRes.payload
+
+  console.log('find:', card)
+  const batteryLevel = getBatteryLevel(device.manufacturerData as string)
+  console.log('battery:', batteryLevel)
+
+  bleCacheService.markBleScan(card.title, batteryLevel)
+  refreshStateSession()
+
+  if (isOwnCard(user.phone, card.phone)) {
+    await cardService.updateUpdatedAt(card.id)
+    bleCacheService.markSimultaneousConnectionAlertAt()
+    return
+  }
+
+  const settings = settingService.getSettings()
+
+  if (canNotifySimultaneousConnection(card)) {
+    notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
+    bleCacheService.markSimultaneousConnectionAlertAt()
+    return
+  }
+
+  if (!canRenewPhoneNumber(card)) return
+
+  if (!settings.autoSet) {
+    if (isAlertDeniedCooldownActive()) return
+
+    // 백그라운드로부터 포그라운드 알림 저장(pending...)
+    bleCacheService.pushAlertPending({
+      cardId: card.id,
+      phone: user.phone,
+      cardName: card.title,
+    })
+
+    if (settings.notice)
+      notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
+
+    // 앱이 실행중이면 앱 스크린에서 알림
+    notifyChangePhoneOnScreen(
+      card.title,
+      card.id,
+      user.phone,
+      onCardPhoneChange,
+    )
+    refreshStateSession()
+  } else {
+    // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
+    const res = await cardService.updatePhone(
+      card.id,
+      extractNumber(user.phone),
+    )
+    if (!res.status) {
+      onDBError(res.message)
+      return
+    }
+
+    bleCacheService.increasePhoneChangeCount()
+
+    onCardPhoneChange(card.id, user.phone)
+
+    // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
+    if (settings.notice) nofifyChangePhoneMessage(user.phone)
+
+    refreshStateSession()
+  }
+}
 
 export const bleService: BleService = {
   initManager: () => {
@@ -69,14 +164,7 @@ export const bleService: BleService = {
     isSearching = false
     isBackgroundScanning = false
   },
-  startBackgroundScan: async ({
-    cards,
-    user,
-    refreshStateSession,
-    onDBError,
-    onError,
-    onCardPhoneChange,
-  }) => {
+  startBackgroundScan: async ({ onError, ...scanProps }) => {
     if (!bleManager) bleService.initManager()
     if (!isBleManager(bleManager)) return
     console.log('try background scan')
@@ -92,94 +180,7 @@ export const bleService: BleService = {
       async (err, device) => {
         try {
           if (err || !device) return
-          if (!isCandidate(device)) return
-
-          const deviceId = getDeviceId(device.manufacturerData as string)
-
-          if (isScanCooldownActive(deviceId)) return
-
-          bleCacheService.markDeviceSeenAt(deviceId)
-
-          console.log('deviceId:', deviceId)
-
-          const cardState = cards.find(c => c.deviceId === deviceId)
-          if (!cardState || !cardState.scan) return
-
-          const cardRes = await cardService.getCard(cardState.id)
-          if (!cardRes.status) return
-
-          const card = cardRes.payload
-
-          console.log('find:', card)
-          const batteryLevel = getBatteryLevel(
-            device.manufacturerData as string,
-          )
-          console.log('battery:', batteryLevel)
-
-          bleCacheService.markBleScan(card.title, batteryLevel)
-          refreshStateSession()
-
-          if (isOwnCard(user.phone, card.phone)) {
-            await cardService.updateUpdatedAt(card.id)
-            bleCacheService.markSimultaneousConnectionAlertAt()
-            return
-          }
-
-          const settings = settingService.getSettings()
-
-          if (canNotifySimultaneousConnection(card)) {
-            notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
-            bleCacheService.markSimultaneousConnectionAlertAt()
-            return
-          }
-
-          if (!canRenewPhoneNumber(card)) return
-
-          if (!settings.autoSet) {
-            if (isAlertDeniedCooldownActive()) return
-
-            // 백그라운드로부터 포그라운드 알림 저장(pending...)
-            bleCacheService.pushAlertPending({
-              cardId: card.id,
-              phone: user.phone,
-              cardName: card.title,
-            })
-
-            if (settings.notice)
-              notifyChangePhoneOnBackground(
-                card.phone,
-                user.phone,
-                card.deviceId,
-              )
-
-            // 앱이 실행중이면 앱 스크린에서 알림
-            notifyChangePhoneOnScreen(
-              card.title,
-              card.id,
-              user.phone,
-              onCardPhoneChange,
-            )
-            refreshStateSession()
-          } else {
-            // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
-            const res = await cardService.updatePhone(
-              card.id,
-              extractNumber(user.phone),
-            )
-            if (!res.status) {
-              onDBError(res.message)
-              return
-            }
-
-            bleCacheService.increasePhoneChangeCount()
-
-            onCardPhoneChange(card.id, user.phone)
-
-            // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
-            if (settings.notice) nofifyChangePhoneMessage(user.phone)
-
-            refreshStateSession()
-          }
+          await handleBackgroundDevice(device, scanProps)
         } catch (e) {
           onError(e)
         } finally {

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useStepLineViewModel } from '@/view-model/scan-complete'
+import { useStepLineViewModel } from '@scan-complete/view-model'
 import { StepLineProps } from '@scan-complete/types'
 import { BLUE_PRIMARY } from '@/theme/color'
 

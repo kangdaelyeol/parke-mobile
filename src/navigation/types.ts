@@ -12,102 +12,15 @@ export type RootStackParamList = {
   Permission: undefined
 }
 
-export type LoginStackParamList = {
-  Login: undefined
-  Init: undefined
-  Home: undefined
-}
+type RootNavigationProp<T extends keyof RootStackParamList> =
+  NativeStackNavigationProp<RootStackParamList, T>
 
-export type LoginStackNavigationProp = NativeStackNavigationProp<
-  LoginStackParamList,
-  'Login'
->
-
-export type HomeStackParamList = {
-  Home: undefined
-  Setting: undefined
-  Profile: undefined
-  SearchBLE: undefined
-  OnBoarding: undefined
-  Login: undefined
-}
-
-export type HomeStackNavigationProp = NativeStackNavigationProp<
-  HomeStackParamList,
-  'Home'
->
-
-export type InitStackParamList = {
-  Init: undefined
-  Home: undefined
-  Login: undefined
-}
-
-export type InitStackNavigationProp = NativeStackNavigationProp<
-  InitStackParamList,
-  'Init'
->
-
-export type OnBoardingStackParamList = {
-  Permission: undefined
-  OnBoarding: undefined
-  Login: undefined
-}
-
-export type OnBoardingStackNavigationProp = NativeStackNavigationProp<
-  OnBoardingStackParamList,
-  'OnBoarding'
->
-
-export type ProfileStackParamList = {
-  Profile: undefined
-  Home: undefined
-  Login: undefined
-}
-
-export type ProfileStackNavigationProp = NativeStackNavigationProp<
-  ProfileStackParamList,
-  'Profile',
-  'Login'
->
-
-export type ScanCompleteStackParamList = {
-  ScanComplete: { value: string }
-  Home: undefined
-}
-
-export type ScanCompleteStackNavigationProp = NativeStackNavigationProp<
-  ScanCompleteStackParamList,
-  'ScanComplete'
->
-
-export type SearchBleStackParamList = {
-  SearchBLE: undefined
-  Home: undefined
-  ScanComplete: { value: string }
-}
-
-export type SearchBleStackNavigationProp = NativeStackNavigationProp<
-  SearchBleStackParamList,
-  'SearchBLE'
->
-
-export type SettingStackParamList = {
-  Setting: undefined
-  Home: undefined
-  OnBoarding: undefined
-  Login: undefined
-}
-
-export type SettingStackNavigationProp =
-  NativeStackNavigationProp<SettingStackParamList>
-
-export type PermissionStackParamList = {
-  Permission: undefined
-  Login: undefined
-}
-
-export type PermissionStackNavigationProp = NativeStackNavigationProp<
-  PermissionStackParamList,
-  'Permission'
->
+export type LoginStackNavigationProp = RootNavigationProp<'Login'>
+export type HomeStackNavigationProp = RootNavigationProp<'Home'>
+export type InitStackNavigationProp = RootNavigationProp<'Init'>
+export type OnBoardingStackNavigationProp = RootNavigationProp<'OnBoarding'>
+export type ProfileStackNavigationProp = RootNavigationProp<'Profile'>
+export type ScanCompleteStackNavigationProp = RootNavigationProp<'ScanComplete'>
+export type SearchBleStackNavigationProp = RootNavigationProp<'SearchBLE'>
+export type SettingStackNavigationProp = RootNavigationProp<'Setting'>
+export type PermissionStackNavigationProp = RootNavigationProp<'Permission'>

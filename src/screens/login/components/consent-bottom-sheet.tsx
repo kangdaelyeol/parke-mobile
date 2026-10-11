@@ -6,7 +6,7 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import { useLoginContext } from '@/contexts'
+import { useLoginContext } from '@login/contexts'
 import { CheckBoxLine } from '@login/components'
 import { DocIllustration } from '@login/components/illustrations'
 import { DARK, GRAY_DEEP } from '@/theme/color'

@@ -1,7 +1,7 @@
 import { StyleSheet, Text } from 'react-native'
 import Animated from 'react-native-reanimated'
-import { useSearchBleContext } from '@/contexts'
-import { useTitleViewModel } from '@/view-model/search-ble'
+import { useSearchBleContext } from '@search-ble/contexts'
+import { useTitleViewModel } from '@search-ble/view-model'
 import { title, subTitle } from '@search-ble/constants'
 import { DM_SANS } from '@/theme/fonts'
 import {

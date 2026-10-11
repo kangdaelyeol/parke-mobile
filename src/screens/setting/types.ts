@@ -1,5 +1,4 @@
-import { AnimatedViewModel, ViewModel } from '@/types/common'
-import { StyleProp, ViewStyle } from 'react-native'
+import { ViewModel } from '@/types/common'
 
 interface HeaderActions {
   backPress: () => void
@@ -24,21 +23,6 @@ interface MainState {
   active: boolean
 }
 
-interface ToggleActions {
-  handleTogglePress: () => void
-}
-
-interface ToggleAnimated {
-  dotStyle: StyleProp<ViewStyle>
-  backgroundStyle: StyleProp<ViewStyle>
-}
-
 export type SettingHeaderViewModel = ViewModel<{}, HeaderActions>
 
 export type SettingMainViewModel = ViewModel<MainState, MainActions>
-
-export type SettingToggleViewModel = AnimatedViewModel<
-  {},
-  ToggleActions,
-  ToggleAnimated
->

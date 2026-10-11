@@ -4,7 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { UserContextProvider } from '@/contexts'
-import { useAppViewModel } from '@/view-model'
+import { useAppViewModel } from '@/hooks'
 import RootNavigator from '@/navigation/root-navigator'
 
 const AppContent = () => {

@@ -7,7 +7,7 @@ import {
   GRAY_DEEP,
   GRAY_LIGHT,
 } from '@/theme/color'
-import { useInitContext } from '@/contexts'
+import { useInitContext } from '@/screens/init/contexts'
 
 export const Footer = () => {
   const { actions } = useInitContext()

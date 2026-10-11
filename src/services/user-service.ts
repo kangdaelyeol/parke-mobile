@@ -1,12 +1,7 @@
-import { cardClient, userClient } from '@/client'
+import { CardUpdates, deleteUserTransaction, userClient } from '@/client'
 import { Card } from '@/domain/card'
 import { User } from '@/domain/user'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
-import {
-  CardUpdates,
-  deleteCardTransaction,
-  deleteUserTransaction,
-} from '@/helpers'
 import { UserService } from './types'
 
 export const userService: UserService = {
@@ -51,44 +46,5 @@ export const userService: UserService = {
     const deleteRes = await deleteUserTransaction({ userId, cardUpdates })
     if (deleteRes.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(deleteRes.error))
-  },
-  deleteCard: async (userId, cardId) => {
-    const userRes = await userClient.getById(userId)
-    if (!userRes.status)
-      return serviceFail(getFirebaseErrorMessage(userRes.error))
-    const cardRes = await cardClient.getById(cardId)
-    if (!cardRes.status)
-      return serviceFail(getFirebaseErrorMessage(cardRes.error))
-
-    const { payload: user } = userRes
-    const { payload: card } = cardRes
-
-    if (!user) return serviceFail('유저 정보가 존재하지 않습니다.')
-    if (!card) {
-      return serviceFail('카드 정보를 불러오는데 실패했습니다.')
-    }
-
-    const newCardIdList = user.cardIdList.filter(id => id !== cardId)
-    user.cardIdList = newCardIdList
-
-    const newCardOwnerList = card.ownerList.filter(id => id !== userId)
-    if (newCardOwnerList.length === 0) {
-      const transactionRes = await deleteCardTransaction({
-        user,
-        cardId: card.id,
-        card: null,
-      })
-      if (transactionRes.status) return serviceOk(true)
-      else return serviceFail(getFirebaseErrorMessage(transactionRes.error))
-    }
-
-    card.ownerList = newCardOwnerList
-    const transactionRes = await deleteCardTransaction({
-      user,
-      cardId: card.id,
-      card,
-    })
-    if (transactionRes.status) return serviceOk(true)
-    else return serviceFail('카드 정보 업데이트에 실패했습니다.')
   },
 }
