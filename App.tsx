@@ -7,20 +7,26 @@ import { UserContextProvider } from '@/contexts'
 import { useAppViewModel } from '@/view-model'
 import RootNavigator from '@/navigation/root-navigator'
 
-function App() {
+const AppContent = () => {
   useAppViewModel()
   const isDarkMode = useColorScheme() === 'dark'
 
+  return (
+    <>
+      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <RootNavigator />
+    </>
+  )
+}
+
+function App() {
   return (
     <GestureHandlerRootView style={styles.handlerView}>
       <SafeAreaProvider>
         <NavigationContainer>
           <BottomSheetModalProvider>
             <UserContextProvider>
-              <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-              />
-              <RootNavigator />
+              <AppContent />
             </UserContextProvider>
           </BottomSheetModalProvider>
         </NavigationContainer>

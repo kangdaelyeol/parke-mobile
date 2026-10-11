@@ -16,7 +16,7 @@ export const bleCacheService: BleCacheService = {
     const newPendingList = pendingList.filter(
       pending => pending?.cardId !== cardId,
     )
-    return newPendingList
+    cacheClient.setAlertPending(newPendingList)
   },
   clearAlertPending: () => cacheClient.setAlertPending([]),
   markAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(Date.now()),

@@ -54,13 +54,13 @@ export const useMainViewModel = (): ProfileMainViewModel => {
       if (phone.trim() === '') return Alert.alert('휴대폰 번호를 입력해주세요.')
 
       setLoading(true)
-      const res = userService.updateNicknameAndPhone(
+      const res = await userService.updateNicknameAndPhone(
         user.id,
         nickname.trim(),
         phone,
       )
-      if (!res) {
-        Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
+      if (!res.status) {
+        Alert.alert(res.message)
         return setLoading(false)
       }
 
