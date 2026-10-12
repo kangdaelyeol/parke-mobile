@@ -11,6 +11,7 @@ import { useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { extractNumber } from '@/utils'
 import { cardService } from '@/services'
+import { CARD_MESSAGE_MAX_LENGTH } from '@/domain/card'
 import { ScanCompleteStackNavigationProp } from '@/navigation/types'
 import { ScanCompleteContextValue } from '@scan-complete/types'
 
@@ -43,7 +44,7 @@ export const ScanCompleteContextProvider = ({
         setName(v)
       },
       messageInput: (v: string) => {
-        setMessage(v)
+        setMessage(v.slice(0, CARD_MESSAGE_MAX_LENGTH))
       },
       serialInput: (v: string) => {
         setSerial(v)

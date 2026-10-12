@@ -1,6 +1,6 @@
 import { BleManager } from 'react-native-ble-plx'
 import { AlertPending } from '@/client'
-import { CardDto } from '@/domain/card'
+import { CardDto, CardInfo } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 
 interface kakaoProfile {
@@ -146,9 +146,7 @@ export interface CardService {
   getAllow: (serial: string) => Promise<ServiceResponse<Boolean | null>>
   updateCardInfo: (
     cardId: string,
-    title: string,
-    phone: string,
-    message: string,
+    info: CardInfo,
   ) => Promise<ServiceResponse<boolean>>
   createCard: (input: CreateCardInput) => Promise<ServiceResponse<CardState>>
   deleteCard: (

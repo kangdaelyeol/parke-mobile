@@ -1,28 +1,79 @@
-import { CardDto } from './card-dto'
+import { CARD_THEMES, CardCustom, CardDto, CardTheme } from './card-dto'
 import { serverTimestamp } from '@react-native-firebase/database'
+
+export const CARD_SCALE_MIN = 0.85
+export const CARD_SCALE_MAX = 1.3
+export const CARD_MESSAGE_MAX_LENGTH = 40
+export const DEFAULT_CARD_THEME: CardTheme = 'dark'
+export const DEFAULT_CARD_CUSTOM: CardCustom = {
+  accent: '#383bf9',
+  scale: 1,
+  message: '',
+}
+
+export const isCardAccent = (v: unknown): v is string =>
+  typeof v === 'string' && /^#[0-9a-fA-F]{6}$/.test(v)
+
+export const clampCardScale = (v: number) =>
+  Math.min(CARD_SCALE_MAX, Math.max(CARD_SCALE_MIN, Math.round(v * 100) / 100))
+
+type CardProps = Omit<CardDto, 'id' | 'theme' | 'custom'> & {
+  id?: string
+  theme?: CardTheme
+  custom?: Partial<CardCustom>
+  // 스키마 변경 전 카드는 message가 최상위에 있다
+  message?: string
+}
 
 export class Card {
   private constructor(
     private readonly id: string,
     private title: string,
     private phone: string,
-    private message: string,
+    private theme: CardTheme,
+    private custom: CardCustom,
     private updatedAt: object,
     private deviceId: string,
     private ownerList: string[],
   ) {}
 
-  static create(props: Omit<CardDto, 'id'> & { id?: string }): Card {
+  static create(props: CardProps): Card {
     const id = props.id ?? ''
-    const title = props.title.trim()
+    const title = (props.title ?? '').trim()
 
     const phone = props.phone ?? ''
-    const message = props.message ?? ''
+    const theme =
+      props.theme && CARD_THEMES.includes(props.theme)
+        ? props.theme
+        : DEFAULT_CARD_THEME
+    const custom = {
+      accent: isCardAccent(props.custom?.accent)
+        ? props.custom.accent
+        : DEFAULT_CARD_CUSTOM.accent,
+      scale:
+        typeof props.custom?.scale === 'number'
+          ? clampCardScale(props.custom.scale)
+          : DEFAULT_CARD_CUSTOM.scale,
+      message: (
+        props.custom?.message ??
+        props.message ??
+        DEFAULT_CARD_CUSTOM.message
+      ).slice(0, CARD_MESSAGE_MAX_LENGTH),
+    }
     const updatedAt = props.updatedAt ?? serverTimestamp()
     const deviceId = props.deviceId ?? ''
     const ownerList = props.ownerList ?? []
 
-    return new Card(id, title, phone, message, updatedAt, deviceId, ownerList)
+    return new Card(
+      id,
+      title,
+      phone,
+      theme,
+      custom,
+      updatedAt,
+      deviceId,
+      ownerList,
+    )
   }
 
   static fromDto(dto: CardDto): Card {
@@ -34,7 +85,8 @@ export class Card {
       id: this.id,
       title: this.title,
       phone: this.phone,
-      message: this.message,
+      theme: this.theme,
+      custom: this.custom,
       updatedAt: this.updatedAt,
       deviceId: this.deviceId,
       ownerList: this.ownerList,

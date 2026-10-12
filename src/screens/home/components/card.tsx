@@ -38,7 +38,7 @@ export const Card = ({ card, idx }: HomeCardProps) => {
               )}
             </Pressable>
             <Text style={styles.title}>{card.title}</Text>
-            <Text style={styles.message}>{card.message}</Text>
+            <Text style={styles.message}>{card.custom.message}</Text>
             <Text style={styles.phone}>{formatPhone(card.phone)}</Text>
             <View style={styles.scan}>
               {card.scan ? (

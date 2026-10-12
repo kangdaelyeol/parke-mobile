@@ -1,4 +1,4 @@
-import { CardDto } from '@/domain/card'
+import { CardDto, CardTheme } from '@/domain/card'
 import { CardState } from '@/services/types'
 import { AnimatedViewModel } from '@/types/common'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
@@ -55,6 +55,9 @@ interface SettingCardState {
   title: string
   message: string
   phone: string
+  theme: CardTheme
+  accent: string
+  scale: number
 }
 
 interface SettingCardAnimated {
@@ -67,6 +70,9 @@ interface SettingCardActions {
   titleInput: (val: string) => void
   messageInput: (val: string) => void
   phoneInput: (val: string) => void
+  themePress: (val: CardTheme) => void
+  accentInput: (val: string) => void
+  scaleChange: (val: number) => void
 }
 
 interface TodaySummaryState {
@@ -138,4 +144,19 @@ export interface HomeSettingCardProps {
 export interface IllustrationSizeProps {
   width?: number
   height?: number
+}
+
+export interface HomeThemeSelectorProps {
+  value: CardTheme
+  onChange: (val: CardTheme) => void
+}
+
+export interface HomeAccentPickerProps {
+  value: string
+  onChangeText: (val: string) => void
+}
+
+export interface HomeScaleStepperProps {
+  value: number
+  onChange: (val: number) => void
 }

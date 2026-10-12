@@ -6,6 +6,7 @@ import {
   useMemo,
   useState,
 } from 'react'
+import { CardInfo } from '@/domain/card'
 import { UserDto } from '@/domain/user/user-dto'
 import { authService, cardService, userService } from '@/services'
 import { CardState, ServiceResponse } from '@/services/types'
@@ -23,12 +24,7 @@ interface UserContextValue {
     setUserNicknameAndPhone: (nickname: string, phone: string) => void
     updateCardPhone: (cardId: string, phone: string) => void
     setCardScan: (cardId: string, scan: boolean) => void
-    updateCardInfo: (
-      cardId: string,
-      title: string,
-      phone: string,
-      message: string,
-    ) => void
+    updateCardInfo: (cardId: string, info: CardInfo) => void
     initUser: (dto: UserDto) => void
     refreshStateSession: () => void
   }
@@ -128,16 +124,9 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
           prev.map(card => (card.id !== cardId ? card : { ...card, scan })),
         )
       },
-      updateCardInfo: (
-        cardId: string,
-        title: string,
-        phone: string,
-        message: string,
-      ) => {
+      updateCardInfo: (cardId: string, info: CardInfo) => {
         setCards(prev =>
-          prev.map(card =>
-            card.id !== cardId ? card : { ...card, title, phone, message },
-          ),
+          prev.map(card => (card.id !== cardId ? card : { ...card, ...info })),
         )
       },
       initUser: (dto: UserDto) => {

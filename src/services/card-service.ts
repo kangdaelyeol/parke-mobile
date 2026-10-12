@@ -5,7 +5,7 @@ import {
   createCardTransaction,
   deleteCardTransaction,
 } from '@/client'
-import { Card, CardDto } from '@/domain/card'
+import { Card } from '@/domain/card'
 import { bleCacheService } from '@/services'
 import { CardService, CardState, ServiceSuccess } from '@/services/types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
@@ -18,7 +18,8 @@ export const cardService: CardService = {
     if (getCardRes.payload === null) {
       return serviceFail('카드 정보가 존재하지 않습니다.')
     }
-    const { payload: cardDto } = getCardRes
+    // 구 스키마(custom 없음)로 저장된 카드도 현재 형태로 맞춘다
+    const cardDto = Card.fromDto(getCardRes.payload).toDto()
     const scan = bleCacheService.getDeviceScan(cardDto.deviceId)
     return serviceOk({ ...cardDto, scan })
   },
@@ -44,8 +45,14 @@ export const cardService: CardService = {
     }
     return serviceOk(res.payload)
   },
-  updateCardInfo: async (cardId, title, phone, message) => {
-    const res = await cardClient.update({ id: cardId, title, phone, message })
+  updateCardInfo: async (cardId, { title, phone, theme, custom }) => {
+    const res = await cardClient.update({
+      id: cardId,
+      title,
+      phone,
+      theme,
+      custom,
+    })
     if (!res.status) {
       return serviceFail(getFirebaseErrorMessage(res.error))
     }
@@ -56,33 +63,23 @@ export const cardService: CardService = {
 
     const cardRes = await cardClient.getById(id)
 
-    let cardDto: null | CardDto = null
-
     if (!cardRes.status) {
       return serviceFail(getFirebaseErrorMessage(cardRes.error))
     }
 
-    if (!cardRes.payload)
-      cardDto = Card.create({
-        id,
-        phone,
-        message,
-        title,
-        updatedAt: serverTimestamp(),
-        deviceId,
-        ownerList: [userId],
-      }).toDto()
-    else {
-      cardDto = Card.create({
-        id,
-        phone,
-        message,
-        title,
-        updatedAt: serverTimestamp(),
-        deviceId,
-        ownerList: [...cardRes.payload.ownerList, userId],
-      }).toDto()
-    }
+    // 이미 등록된 카드(공동 소유)면 기존 테마/스타일은 유지한다
+    const existing = cardRes.payload
+
+    const cardDto = Card.create({
+      id,
+      phone,
+      title,
+      theme: existing?.theme,
+      custom: { ...existing?.custom, message },
+      updatedAt: serverTimestamp(),
+      deviceId,
+      ownerList: existing ? [...existing.ownerList, userId] : [userId],
+    }).toDto()
 
     const res = await createCardTransaction(cardDto, userId, newCardIdList)
     if (!res.status) {

@@ -3,6 +3,7 @@ import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSettingCardViewModel } from '@home/view-model'
 import { HomeSettingCardProps } from '@home/types'
+import { AccentPicker, ScaleStepper, ThemeSelector } from '@home/components'
 import { FocusableInput, PressableButton } from '@/components'
 import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
@@ -41,6 +42,12 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
             onChangeText={actions.messageInput}
             iconName="message"
           />
+          <ThemeSelector value={state.theme} onChange={actions.themePress} />
+          <AccentPicker
+            value={state.accent}
+            onChangeText={actions.accentInput}
+          />
+          <ScaleStepper value={state.scale} onChange={actions.scaleChange} />
         </KeyboardAwareScrollView>
       </Animated.View>
       <View style={[styles.btnContainer, isSmall && styles.btnContainerSmall]}>
@@ -80,7 +87,7 @@ const styles = StyleSheet.create({
     maxWidth: 350,
     marginHorizontal: 'auto',
     gap: 15,
-    height: 430,
+    paddingBottom: 170,
   },
   text: {
     color: '#eaeaea',
