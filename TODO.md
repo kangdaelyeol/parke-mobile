@@ -11,6 +11,7 @@
 - [ ] Android 재빌드 (`npm run android`)
   - [ ] 예전 패키지 앱 삭제: `adb uninstall com.parke`, `adb uninstall com.originals.parke`
 - [ ] 코드를 고쳤는데 화면에 반영되지 않으면 `npm start -- --reset-cache`
+- [ ] 출시 전 홈 헤더의 [임시] "주행 테스트" 버튼 제거 (`SHOW_DRIVE_TEST_BUTTON`, `header.tsx`)
 
 ## 2. 외부 콘솔 설정
 

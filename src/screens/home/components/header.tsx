@@ -1,4 +1,13 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import {
+  Pressable,
+  StyleSheet,
+  Text,
+  useWindowDimensions,
+  View,
+} from 'react-native'
+import { useNavigation } from '@react-navigation/native'
+import { HomeStackNavigationProp } from '@/navigation/types'
+import { SHOW_DRIVE_TEST_BUTTON } from '@/constants'
 import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { useBackgroundScanning } from '@/hooks'
@@ -8,6 +17,7 @@ import { formatPhone } from '@/utils'
 
 export const Header = () => {
   const scanning = useBackgroundScanning()
+  const navigation = useNavigation<HomeStackNavigationProp>()
   const { user } = useUserContext()
   const { width } = useWindowDimensions()
   const isSmall = width < 400
@@ -19,6 +29,24 @@ export const Header = () => {
         style={[styles.headerWrapper, isSmall && styles.headerWrapperSmall]}
       >
         <LogoIcon width={iconSize} height={iconSize} style={styles.icon} />
+        {SHOW_DRIVE_TEST_BUTTON && (
+          // [임시] 기기 없이 주행모드 테스트
+          <Pressable
+            onPress={() => navigation.navigate('Drive', {})}
+            style={[styles.driveTest, { left: iconSize + 24 }]}
+          >
+            {({ pressed }) => (
+              <Text
+                style={[
+                  styles.driveTestText,
+                  pressed && styles.driveTestPressed,
+                ]}
+              >
+                주행 테스트
+              </Text>
+            )}
+          </Pressable>
+        )}
         <View style={styles.textSection}>
           <Text style={[styles.phone, isSmall && styles.phoneSmall]}>
             {formatPhone(user?.phone || '')}
@@ -66,6 +94,23 @@ const styles = StyleSheet.create({
     maxWidth: 350,
     marginTop: 30,
     height: 40,
+  },
+  driveTest: {
+    position: 'absolute',
+    top: 17,
+  },
+  driveTestText: {
+    color: WHITE,
+    backgroundColor: '#383bf9',
+    fontFamily: DM_SANS.BOLD,
+    fontSize: 12,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 14,
+    overflow: 'hidden',
+  },
+  driveTestPressed: {
+    backgroundColor: '#1732ff',
   },
   icon: {
     position: 'absolute',

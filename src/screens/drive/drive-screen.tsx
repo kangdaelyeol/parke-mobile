@@ -19,7 +19,7 @@ type DriveScreenProps = {
 }
 
 export default function DriveScreen({ route }: DriveScreenProps) {
-  const { state, actions } = useDriveViewModel(route.params.cardId)
+  const { state, actions } = useDriveViewModel(route.params?.cardId)
   const { top } = useSafeAreaInsets()
   const isDriving = state.phase === 'driving'
 

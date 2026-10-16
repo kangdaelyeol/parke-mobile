@@ -10,7 +10,8 @@ export type RootStackParamList = {
   Setting: undefined
   Profile: undefined
   Permission: undefined
-  Drive: { cardId: string }
+  // cardId가 없으면 카드 없이 주행 (테스트용)
+  Drive: { cardId?: string }
 }
 
 type RootNavigationProp<T extends keyof RootStackParamList> =

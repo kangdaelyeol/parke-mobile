@@ -54,7 +54,7 @@ const log = (...args: unknown[]) => {
 }
 const round = (n: number, d = 1) => Math.round(n * 10 ** d) / 10 ** d
 
-export const useDriveViewModel = (cardId: string): DriveViewModel => {
+export const useDriveViewModel = (cardId?: string): DriveViewModel => {
   const navigation = useNavigation<DriveStackNavigationProp>()
   const { cards, user, actions: userContextActions } = useUserContext()
   const {
