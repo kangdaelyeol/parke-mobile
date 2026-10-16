@@ -8,6 +8,8 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { useNavigation } from '@react-navigation/native'
+import { HomeStackNavigationProp } from '@/navigation/types'
 import { useCardSettingContext, useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
 import { HomeCardViewModel } from '@home/types'
@@ -15,6 +17,7 @@ import { cardService } from '@/services'
 import { PARKE_WEB_URL } from '@/constants'
 
 export const useCardViewModel = (idx: number): HomeCardViewModel => {
+  const navigation = useNavigation<HomeStackNavigationProp>()
   const { settingCard, cardSettingController } = useCardSettingContext()
   const { selectedCardIdx, sliderController } = useCardSliderContext()
   const { user, cards, actions: userContextActions } = useUserContext()
@@ -62,6 +65,10 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
   })
 
   const actions = {
+    drivePress: () => {
+      if (!card) return
+      navigation.navigate('Drive', { cardId: card.id })
+    },
     cardPress: () => {
       if (settingCard !== -1) return
 

@@ -57,6 +57,15 @@ export const permissionService: PermissionService = {
       return res === RESULTS.GRANTED
     }
   },
+  ensureLocationPermission: async () => {
+    const permission =
+      Platform.OS === 'ios'
+        ? PERMISSIONS.IOS.LOCATION_WHEN_IN_USE
+        : PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION
+
+    const res = await request(permission)
+    return res === RESULTS.GRANTED || res === RESULTS.LIMITED
+  },
   // 권한 팝업을 띄우지 않고 허용 여부만 확인한다
   isBluetoothGranted: async () => {
     if (Platform.OS === 'ios')

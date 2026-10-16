@@ -68,6 +68,8 @@
 	<string>BLE 기기를 스캔하고 연결하는 데 필요합니다.</string>
 	<key>NSCameraUsageDescription</key>
 	<string>QR 코드를 스캔하기 위해 카메라 접근이 필요합니다.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>주행 모드에서 이동 경로와 거리를 기록하기 위해 위치 정보를 사용합니다.</string>
 	<key>NSUserNotificationUsageDescription</key>
 	<string>BLE 기기 상태를 알려드리기 위해 알림 권한이 필요합니다.</string>
 	<key>RCTNewArchEnabled</key>

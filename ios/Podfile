@@ -25,7 +25,8 @@ target 'parke' do
   )
   setup_permissions([
     'Bluetooth',
-    'Camera'
+    'Camera',
+    'LocationWhenInUse'
   ])
   post_install do |installer|
       installer.pods_project.targets.each do |target|

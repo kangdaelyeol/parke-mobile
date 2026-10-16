@@ -164,6 +164,7 @@ export interface PermissionService {
   setupNotifications: () => Promise<void>
   ensureBluetoothPermission: () => Promise<boolean>
   isBluetoothGranted: () => Promise<boolean>
+  ensureLocationPermission: () => Promise<boolean>
   ensureCameraPermission: () => Promise<boolean>
   ensureNotificationPermission: () => Promise<boolean>
 }

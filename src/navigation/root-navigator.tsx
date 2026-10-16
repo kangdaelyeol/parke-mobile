@@ -9,6 +9,7 @@ import {
   SearchBleScreen,
   ScanCompleteScreen,
   PermissionScreen,
+  DriveScreen,
 } from '@/screens'
 import { RootStackParamList } from '@/navigation/types'
 
@@ -28,6 +29,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="SearchBLE" component={SearchBleScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />
+      <Stack.Screen name="Drive" component={DriveScreen} />
     </Stack.Navigator>
   )
 }

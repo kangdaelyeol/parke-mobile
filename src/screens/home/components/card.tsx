@@ -7,7 +7,15 @@ import { HomeCardProps } from '@home/types'
 import { Loading } from '@/components'
 import { CardBottomSheet } from '@home/components'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { GRAY, WHITE, DARK, DARK_LIGHT, GREEN, RED } from '@/theme/color'
+import {
+  GRAY,
+  WHITE,
+  DARK,
+  DARK_LIGHT,
+  GREEN,
+  RED,
+  BLUE_PRIMARY,
+} from '@/theme/color'
 
 const BOTTOM_HEIGHT = 60
 const TOP_HEIGHT = CARD_HEIGHT - BOTTOM_HEIGHT
@@ -54,6 +62,19 @@ export const Card = ({ card, idx }: HomeCardProps) => {
           {state.settingCard === -1 && (
             <View style={styles.bottomSection}>
               <View style={styles.bottomLeft}>
+                <Pressable onPress={actions.drivePress}>
+                  {({ pressed }) => (
+                    <Text
+                      style={[
+                        styles.btn,
+                        styles.driveBtn,
+                        pressed && styles.driveBtnPressed,
+                      ]}
+                    >
+                      주행모드
+                    </Text>
+                  )}
+                </Pressable>
                 <Pressable onPress={actions.previewPress}>
                   {({ pressed }) => (
                     <Text
@@ -224,6 +245,15 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: DARK_LIGHT,
     paddingHorizontal: 15,
+  },
+  driveBtn: {
+    color: WHITE,
+    backgroundColor: BLUE_PRIMARY,
+    paddingHorizontal: 15,
+    overflow: 'hidden',
+  },
+  driveBtnPressed: {
+    backgroundColor: '#1732ff',
   },
   optionBtnPressed: {
     color: WHITE,

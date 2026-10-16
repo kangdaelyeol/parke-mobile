@@ -10,6 +10,7 @@ export type RootStackParamList = {
   Setting: undefined
   Profile: undefined
   Permission: undefined
+  Drive: { cardId: string }
 }
 
 type RootNavigationProp<T extends keyof RootStackParamList> =
@@ -24,3 +25,4 @@ export type ScanCompleteStackNavigationProp = RootNavigationProp<'ScanComplete'>
 export type SearchBleStackNavigationProp = RootNavigationProp<'SearchBLE'>
 export type SettingStackNavigationProp = RootNavigationProp<'Setting'>
 export type PermissionStackNavigationProp = RootNavigationProp<'Permission'>
+export type DriveStackNavigationProp = RootNavigationProp<'Drive'>

@@ -19,4 +19,10 @@ export const PHONE_CHANGE_ACTION = {
 } as const
 export const GOOGLE_WEB_CLIENT_ID =
   '1092969773825-bke8dokdo3cdfr2ribgavlc7lgkiev54.apps.googleusercontent.com'
+// 카카오맵 JavaScript 키 (카카오 개발자 콘솔 > 앱 키 > JavaScript 키)
+// 콘솔 > 플랫폼 키 > JavaScript 키 > JavaScript SDK 도메인에 KAKAO_MAP_BASE_URL을 등록해야 지도가 뜬다
+export const KAKAO_MAP_JS_KEY = '63bb3baacd0d6aa1b792cac97459eabf'
+// 반드시 https: 카카오 로더가 이 주소의 프로토콜로 지도 엔진을 받는데,
+// http면 iOS(ATS)/Android(cleartext 차단)에서 막혀 지도가 뜨지 않는다
+export const KAKAO_MAP_BASE_URL = 'https://localhost'
 export const PARKE_WEB_URL = 'https://parke-web.netlify.app/parke/'

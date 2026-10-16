@@ -34,6 +34,7 @@ interface CardAnimated {
 }
 
 interface CardActions {
+  drivePress: () => void
   cardPress: () => void
   editPress: () => void
   deletePress: (onDeleted?: () => void) => void
