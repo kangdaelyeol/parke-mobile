@@ -34,6 +34,12 @@ export const useAppViewModel = () => {
       const actionId = detail.pressAction?.id
       const { cardId, newPhone } = detail.notification?.data || {}
 
+      if (actionId === 'cancel') {
+        bleCacheService.markAlertLastDeniedAt()
+        bleCacheService.deleteAlertPending(String(cardId))
+        return
+      }
+
       if (actionId !== 'confirm' || !newPhone || !cardId) return
 
       const res = await cardService.updatePhone(

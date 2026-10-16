@@ -86,7 +86,7 @@ const handleBackgroundDevice = async (
   const settings = settingService.getSettings()
 
   if (canNotifySimultaneousConnection(card)) {
-    notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
+    notifyChangePhoneOnBackground(card.phone, user.phone, card.id)
     bleCacheService.markSimultaneousConnectionAlertAt()
     return
   }
@@ -104,7 +104,7 @@ const handleBackgroundDevice = async (
     })
 
     if (settings.notice)
-      notifyChangePhoneOnBackground(card.phone, user.phone, card.deviceId)
+      notifyChangePhoneOnBackground(card.phone, user.phone, card.id)
 
     // 앱이 실행중이면 앱 스크린에서 알림
     notifyChangePhoneOnScreen(

@@ -31,7 +31,8 @@ export const notifyChangePhoneOnScreen = (
           Alert.alert('전화번호가 변경되었습니다!')
           bleCacheService.increasePhoneChangeCount()
           bleCacheService.clearAlertPending()
-          bleCacheService.clearAlertLastDeniedAt()
+          // 직접 변경한 사용자에게는 한동안 다시 묻지 않는다
+          bleCacheService.markAlertLastDeniedAt()
         },
       },
     ],
