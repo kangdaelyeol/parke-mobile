@@ -224,4 +224,5 @@ export interface UserService {
     id: string,
     cardList: CardState[],
   ) => Promise<ServiceResponse<boolean>>
+  agreeLocation: (id: string) => Promise<ServiceResponse<boolean>>
 }

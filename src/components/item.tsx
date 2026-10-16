@@ -14,11 +14,19 @@ import {
   BellIllustration,
   BluetoothIllustration,
   CameraIllustration,
+  LocationIllustration,
   QrIllustration,
   SerialIllustration,
 } from '@/components/illustrations/item'
 
-type ItemOption = 'bluetooth' | 'notify' | 'active' | 'camera' | 'qr' | 'serial'
+type ItemOption =
+  | 'bluetooth'
+  | 'notify'
+  | 'active'
+  | 'camera'
+  | 'qr'
+  | 'serial'
+  | 'location'
 
 interface ItemProps {
   title: string
@@ -38,6 +46,7 @@ const ICONS: Record<ItemOption, () => JSX.Element> = {
   camera: CameraIllustration,
   qr: QrIllustration,
   serial: SerialIllustration,
+  location: LocationIllustration,
 }
 
 const ICON_BG_COLORS: Record<ItemOption, string> = {
@@ -47,6 +56,7 @@ const ICON_BG_COLORS: Record<ItemOption, string> = {
   camera: '#19192a',
   qr: '#1a1a2a',
   serial: '#1a2a1a',
+  location: '#2a221a',
 }
 
 export const Item = ({

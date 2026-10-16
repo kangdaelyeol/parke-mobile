@@ -6,6 +6,9 @@ interface LoginActions {
   appleLoginPress: () => Promise<void>
   googleLoginPress: () => Promise<void>
   allConfirmPress: () => void
+  agreeAndContinuePress: () => void
+  locationTermsConfirmPress: () => void
+  locationConsentConfirmPress: () => void
   ageConfirmPress: () => void
   termConfirmPress: () => void
   consentConfirmPress: () => void
@@ -17,6 +20,9 @@ interface LoginActions {
 interface LoginState {
   loading: boolean
   allConfirm: boolean
+  requiredConfirm: boolean
+  locationTermsConfirm: boolean
+  locationConsentConfirm: boolean
   ageConfirm: boolean
   termConfirm: boolean
   consentConfirm: boolean

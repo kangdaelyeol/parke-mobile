@@ -70,6 +70,24 @@ export const ConsentBottomSheet = () => {
             required
             docPress={() => actions.showDocPress('consent-third')}
           />
+          <CheckBoxLine
+            confirm={state.locationTermsConfirm}
+            confirmPress={actions.locationTermsConfirmPress}
+            label="위치기반서비스 이용약관 동의"
+            optional
+            docPress={() => actions.showDocPress('location-terms')}
+          />
+          <CheckBoxLine
+            confirm={state.locationConsentConfirm}
+            confirmPress={actions.locationConsentConfirmPress}
+            label="개인위치정보 수집·이용 동의"
+            optional
+            docPress={() => actions.showDocPress('location-consent')}
+          />
+          <Text style={styles.optionalNotice}>
+            선택 항목은 주행 모드(운행일지)에만 필요하며, 동의하지 않아도
+            로그인할 수 있습니다.
+          </Text>
           <View style={styles.divider} />
           <View style={styles.privacyContainer}>
             <DocIllustration size={23} />
@@ -82,7 +100,7 @@ export const ConsentBottomSheet = () => {
             </Pressable>
           </View>
           <PressableButton
-            onPress={actions.allConfirmPress}
+            onPress={actions.agreeAndContinuePress}
             title="동의하고 계속하기"
             background={['#5555ff', '#4c4cdb']}
           />
@@ -93,6 +111,11 @@ export const ConsentBottomSheet = () => {
 }
 
 const styles = StyleSheet.create({
+  optionalNotice: {
+    color: GRAY_DEEP,
+    fontFamily: DM_SANS.MEDIUM,
+    fontSize: 12,
+  },
   backgroundStyle: {
     backgroundColor: '#141414',
     borderTopColor: '#2a2a2a',

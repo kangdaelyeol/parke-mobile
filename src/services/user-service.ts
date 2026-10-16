@@ -29,6 +29,11 @@ export const userService: UserService = {
     if (res.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(res.error))
   },
+  agreeLocation: async id => {
+    const res = await userClient.agreeLocation(id)
+    if (res.status) return serviceOk(true)
+    else return serviceFail(getFirebaseErrorMessage(res.error))
+  },
   deleteUser: async (userId, cardList) => {
     const cardUpdates = {} as CardUpdates
 

@@ -50,6 +50,13 @@ export const Main = () => {
               option="bluetooth"
               Right={Badge}
             />
+            <ItemDivider />
+            <Item
+              title="위치"
+              subTitle="주행 모드에서 이동 경로·거리 기록시 사용 (주행 중에는 화면이 꺼져도 기록)"
+              option="location"
+              Right={Badge}
+            />
           </ItemList>
         </View>
       </View>

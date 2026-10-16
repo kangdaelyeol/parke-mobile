@@ -8,6 +8,7 @@ export const usePermissionFooterViewModel = (): PermissionFooterViewModel => {
     ensureBluetoothPermission,
     ensureCameraPermission,
     ensureNotificationPermission,
+    ensureLocationPermission,
   } = permissionService
 
   const navigation = useNavigation<PermissionStackNavigationProp>()
@@ -16,6 +17,7 @@ export const usePermissionFooterViewModel = (): PermissionFooterViewModel => {
     await ensureBluetoothPermission()
     await ensureCameraPermission()
     await ensureNotificationPermission()
+    await ensureLocationPermission()
     navigation.replace('Login')
   }
 

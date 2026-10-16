@@ -26,6 +26,7 @@ interface UserContextValue {
     setCardScan: (cardId: string, scan: boolean) => void
     updateCardInfo: (cardId: string, info: CardInfo) => void
     initUser: (dto: UserDto) => void
+    setLocationConsent: (agreedAt: number) => void
     refreshStateSession: () => void
   }
 }
@@ -131,6 +132,11 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       },
       initUser: (dto: UserDto) => {
         setUser(dto)
+      },
+      setLocationConsent: (agreedAt: number) => {
+        setUser(prev =>
+          prev ? { ...prev, locationConsentAgreedAt: agreedAt } : prev,
+        )
       },
     }),
     [],

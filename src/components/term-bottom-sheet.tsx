@@ -6,7 +6,14 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
-import { Consent, ConsentThird, Privacy, Terms } from './terms'
+import {
+  Consent,
+  ConsentThird,
+  LocationConsent,
+  LocationTerms,
+  Privacy,
+  Terms,
+} from './terms'
 import { DocType } from '@/types/common'
 
 const renderBackdrop = (
@@ -40,6 +47,8 @@ export const TermBottomSheet = ({ docState, modalRef }: Props) => {
           {docState === 'terms' && <Terms />}
           {docState === 'consent' && <Consent />}
           {docState === 'consent-third' && <ConsentThird />}
+          {docState === 'location-terms' && <LocationTerms />}
+          {docState === 'location-consent' && <LocationConsent />}
         </ScrollView>
       </BottomSheetView>
     </BottomSheetModal>

@@ -15,6 +15,7 @@ import { userService, authService } from '@/services'
 import { useUserContext } from '@/contexts'
 import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
+import { UserDto } from '@/domain/user'
 
 const LoginContext = createContext({} as LoginContextValue)
 
@@ -26,8 +27,14 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const [termConfirm, setTermConfirm] = useState(false)
   const [consentConfirm, setConsentConfirm] = useState(false)
   const [thirdConsentConfirm, setThirdConsentConfirm] = useState(false)
-  const allConfirm =
+  // 선택 동의: 위치기반서비스 이용약관 / 개인위치정보 수집·이용 (주행 모드용)
+  const [locationTermsConfirm, setLocationTermsConfirm] = useState(false)
+  const [locationConsentConfirm, setLocationConsentConfirm] = useState(false)
+  // 로그인은 필수 항목만 동의하면 된다
+  const requiredConfirm =
     ageConfirm && termConfirm && consentConfirm && thirdConsentConfirm
+  const locationConfirm = locationTermsConfirm && locationConsentConfirm
+  const allConfirm = requiredConfirm && locationConfirm
 
   const { modalRef, docType, showBottomSheet } = useTermBottomSheet()
 
@@ -52,14 +59,31 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     })()
   }, [navigation, userContectActions])
 
-  const allConfirmPress = () => {
-    const val = !allConfirm
+  const setAllConfirm = (val: boolean) => {
     setAgeConfirm(val)
     setTermConfirm(val)
     setConsentConfirm(val)
     setThirdConsentConfirm(val)
+    setLocationTermsConfirm(val)
+    setLocationConsentConfirm(val)
+  }
+
+  const allConfirmPress = () => {
+    const val = !allConfirm
+    setAllConfirm(val)
     val && confirmSheetRef.current?.close()
   }
+
+  // [동의하고 계속하기]: 필수 항목이 비어 있으면 전체 동의, 아니면 고른 그대로 닫는다
+  const agreeAndContinuePress = () => {
+    if (!requiredConfirm) setAllConfirm(true)
+    confirmSheetRef.current?.close()
+  }
+
+  const locationTermsConfirmPress = () => setLocationTermsConfirm(prev => !prev)
+
+  const locationConsentConfirmPress = () =>
+    setLocationConsentConfirm(prev => !prev)
 
   const ageConfirmPress = () => setAgeConfirm(prev => !prev)
 
@@ -73,12 +97,19 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     confirmSheetRef.current?.present()
   }
 
+  // 위치 선택 동의를 했으면 동의 시각을 남긴다 (실패해도 로그인은 진행, 주행 시작 때 다시 묻는다)
+  const withLocationConsent = async (dto: UserDto): Promise<UserDto> => {
+    if (!locationConfirm || dto.locationConsentAgreedAt) return dto
+    const res = await userService.agreeLocation(dto.id)
+    return res.status ? { ...dto, locationConsentAgreedAt: Date.now() } : dto
+  }
+
   // firebase 로그인 이후 공통 흐름: 유저 조회(없으면 생성) -> 화면 이동
   const enterWithFirebaseId = async (firebaseId: string, nickname: string) => {
     const getUserRes = await userService.getUser(firebaseId)
 
     if (getUserRes.status) {
-      userContectActions.initUser(getUserRes.payload)
+      userContectActions.initUser(await withLocationConsent(getUserRes.payload))
       return navigation.replace('Home')
     }
 
@@ -91,7 +122,9 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       Alert.alert(createUserRes.message)
       return setLoading(false)
     }
-    userContectActions.initUser(createUserRes.payload)
+    userContectActions.initUser(
+      await withLocationConsent(createUserRes.payload),
+    )
     return navigation.replace('Init')
   }
 
@@ -113,7 +146,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const kakaoLoginPress = async () => {
-    if (!allConfirm) return
+    if (!requiredConfirm) return
     if (loading) return
 
     setLoading(true)
@@ -136,7 +169,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const appleLoginPress = async () => {
-    if (!allConfirm) return
+    if (!requiredConfirm) return
     if (loading) return
     setLoading(true)
 
@@ -151,7 +184,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   }
 
   const googleLoginPress = async () => {
-    if (!allConfirm) return
+    if (!requiredConfirm) return
     if (loading) return
     setLoading(true)
 
@@ -171,10 +204,13 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
         state: {
           loading,
           allConfirm,
+          requiredConfirm,
           ageConfirm,
           termConfirm,
           consentConfirm,
           thirdConsentConfirm,
+          locationTermsConfirm,
+          locationConsentConfirm,
           modalRef,
           docType,
           confirmSheetRef,
@@ -182,10 +218,13 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
         actions: {
           kakaoLoginPress,
           allConfirmPress,
+          agreeAndContinuePress,
           ageConfirmPress,
           termConfirmPress,
           consentConfirmPress,
           thirdConsentConfirmPress,
+          locationTermsConfirmPress,
+          locationConsentConfirmPress,
           showDocPress,
           appleLoginPress,
           googleLoginPress,

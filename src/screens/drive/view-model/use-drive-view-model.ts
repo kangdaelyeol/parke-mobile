@@ -11,7 +11,8 @@ import {
 import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
 import { DriveStackNavigationProp } from '@/navigation/types'
-import { driveSessionService, permissionService } from '@/services'
+import { driveSessionService, permissionService, userService } from '@/services'
+import { useTermBottomSheet } from '@/hooks'
 import { DriveSessionStatus } from '@/services/types'
 import { getDistanceMeters, toKmh } from '@/utils'
 import {
@@ -55,11 +56,20 @@ const round = (n: number, d = 1) => Math.round(n * 10 ** d) / 10 ** d
 
 export const useDriveViewModel = (cardId: string): DriveViewModel => {
   const navigation = useNavigation<DriveStackNavigationProp>()
-  const { cards, user } = useUserContext()
+  const { cards, user, actions: userContextActions } = useUserContext()
+  const {
+    modalRef: termModalRef,
+    docType,
+    showBottomSheet,
+  } = useTermBottomSheet()
+  const [agreeing, setAgreeing] = useState(false)
   const card = cards.find(c => c.id === cardId)
 
-  const [phase, setPhase] = useState<DrivePhase>('driving')
-  const [startAt] = useState(() => Date.now())
+  // 위치 동의 기록이 없으면(기존 가입자, 로그인 때 선택 동의 안 함) 동의부터 받는다
+  const [phase, setPhase] = useState<DrivePhase>(() =>
+    user?.locationConsentAgreedAt ? 'driving' : 'consent',
+  )
+  const [startAt, setStartAt] = useState(() => Date.now())
   const [endAt, setEndAt] = useState<number | null>(null)
   const [now, setNow] = useState(() => Date.now())
   const [points, setPoints] = useState<GeoPoint[]>([])
@@ -362,8 +372,28 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
       maxSpeed,
       gps,
       mapRef,
+      agreeing,
+      docType,
+      termModalRef,
     },
     actions: {
+      agreeLocationPress: async () => {
+        if (!user || agreeing) return
+        setAgreeing(true)
+        const res = await userService.agreeLocation(user.id)
+        setAgreeing(false)
+        if (!res.status) {
+          Alert.alert(res.message)
+          return
+        }
+        userContextActions.setLocationConsent(Date.now())
+        // 주행 시작 시각은 동의한 순간부터
+        const start = Date.now()
+        setStartAt(start)
+        setNow(start)
+        setPhase('driving')
+      },
+      showDocPress: showBottomSheet,
       endPress,
       recenterPress: () => mapRef.current?.recenter(),
       // TODO: 운행일지 이메일 발송 (백엔드 설계 후 연결)

@@ -4,11 +4,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { RootStackParamList } from '@/navigation/types'
 import {
   DriveMap,
+  DriveConsent,
   DriveSummary,
   DrivingPanel,
 } from '@/screens/drive/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { formatClock } from '@/utils'
+import { TermBottomSheet } from '@/components'
 import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 
@@ -35,7 +37,7 @@ export default function DriveScreen({ route }: DriveScreenProps) {
           <View style={styles.chip}>
             <View style={[styles.dot, { backgroundColor: state.accent }]} />
             <Text style={styles.chipTitle}>
-              {isDriving ? state.cardTitle : '주행 요약'}
+              {state.phase === 'summary' ? '주행 요약' : state.cardTitle}
             </Text>
           </View>
           {isDriving && (
@@ -58,11 +60,14 @@ export default function DriveScreen({ route }: DriveScreenProps) {
           </View>
         )}
       </View>
-      {isDriving ? (
+      {state.phase === 'consent' ? (
+        <DriveConsent state={state} actions={actions} />
+      ) : isDriving ? (
         <DrivingPanel state={state} actions={actions} />
       ) : (
         <DriveSummary state={state} actions={actions} />
       )}
+      <TermBottomSheet modalRef={state.termModalRef} docState={state.docType} />
     </View>
   )
 }

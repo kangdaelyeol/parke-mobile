@@ -1,5 +1,6 @@
 import { RefObject } from 'react'
-import { ViewModel } from '@/types/common'
+import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { DocType, ViewModel } from '@/types/common'
 
 export interface GeoPoint {
   latitude: number
@@ -8,7 +9,8 @@ export interface GeoPoint {
   speed: number | null // m/s
 }
 
-export type DrivePhase = 'driving' | 'summary'
+// consent: 위치 동의 전 (동의해야 기록을 시작한다)
+export type DrivePhase = 'consent' | 'driving' | 'summary'
 
 export interface DriveMapHandle {
   recenter: () => void
@@ -40,9 +42,14 @@ interface DriveState {
     error: string
   }
   mapRef: RefObject<DriveMapHandle | null>
+  agreeing: boolean
+  docType: DocType
+  termModalRef: RefObject<BottomSheetModal | null>
 }
 
 interface DriveActions {
+  agreeLocationPress: () => Promise<void>
+  showDocPress: (type: DocType) => void
   endPress: () => void
   recenterPress: () => void
   emailPress: () => void

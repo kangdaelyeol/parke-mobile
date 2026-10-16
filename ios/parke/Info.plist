@@ -69,11 +69,11 @@
 	<key>NSCameraUsageDescription</key>
 	<string>QR 코드를 스캔하기 위해 카메라 접근이 필요합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>주행 모드에서 이동 경로와 거리를 기록하기 위해 위치 정보를 사용합니다.</string>
+	<string>주행 모드에서 이동 경로와 주행 거리를 기록해 운행일지를 작성하기 위해 위치 정보를 사용합니다. 주행 모드를 켜 두면 화면이 꺼져 있어도 주행이 끝날 때까지 기록됩니다.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>NSUserNotificationUsageDescription</key>
-	<string>BLE 기기 상태를 알려드리기 위해 알림 권한이 필요합니다.</string>
+	<string>Parké 기기의 번호 변경 확인과 주행 기록 상태를 알려드리기 위해 알림 권한이 필요합니다.</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>

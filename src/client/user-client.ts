@@ -38,6 +38,19 @@ export const userClient: UserClient = {
       return clientFail(e)
     }
   },
+  // 위치 동의 시각은 서버 시각으로 남긴다 (동의 사실 확인 자료)
+  agreeLocation: async id => {
+    try {
+      await update(ref(db, `user/${id}`), {
+        locationTermsAgreedAt: serverTimestamp(),
+        locationConsentAgreedAt: serverTimestamp(),
+      })
+      return clientOk(true)
+    } catch (e) {
+      console.log(e)
+      return clientFail(e)
+    }
+  },
   getById: async id => {
     try {
       const key = id

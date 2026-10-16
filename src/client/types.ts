@@ -41,6 +41,7 @@ export interface UserClient {
     dto: { id: string } & Partial<UserDto>,
   ): Promise<FirebaseResult<boolean>>
   getById(id: string): Promise<FirebaseResult<UserDto | null>>
+  agreeLocation(id: string): Promise<FirebaseResult<boolean>>
 }
 
 export interface CacheClient {

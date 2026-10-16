@@ -17,6 +17,7 @@ interface Props {
   label: string
   top?: boolean
   required?: boolean
+  optional?: boolean
   docPress?: () => void
 }
 
@@ -25,6 +26,7 @@ export const CheckBoxLine = ({
   confirmPress,
   top,
   required,
+  optional,
   docPress,
   label,
 }: Props) => {
@@ -71,6 +73,11 @@ export const CheckBoxLine = ({
         {required && (
           <View style={styles.requiredBox}>
             <Text style={styles.requiredText}>필수</Text>
+          </View>
+        )}
+        {optional && (
+          <View style={styles.optionalBox}>
+            <Text style={styles.optionalText}>선택</Text>
           </View>
         )}
         <Text style={[styles.label, top && styles.topLabel]}>{label}</Text>
@@ -123,6 +130,16 @@ const styles = StyleSheet.create({
   },
   requiredText: {
     color: '#7777ff',
+    fontSize: 12,
+  },
+  optionalBox: {
+    paddingHorizontal: 7,
+    paddingVertical: 3,
+    backgroundColor: '#ffffff14',
+    borderRadius: 3,
+  },
+  optionalText: {
+    color: GRAY_LIGHT,
     fontSize: 12,
   },
   docsBtn: {

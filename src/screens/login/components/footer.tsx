@@ -20,7 +20,7 @@ export const Footer = () => {
         >
           <CheckBoxLine
             label="이용약관 및 개인정보 처리 동의"
-            confirm={state.allConfirm}
+            confirm={state.requiredConfirm}
             confirmPress={actions.termsAndConsentConfirmPress}
           />
           <FontAwesome6
@@ -37,7 +37,7 @@ export const Footer = () => {
               cornerRadius={13}
               style={[
                 styles.appleButton,
-                !state.allConfirm && styles.loginDisabled,
+                !state.requiredConfirm && styles.loginDisabled,
               ]}
               buttonStyle={AppleButton.Style.WHITE}
               buttonType={AppleButton.Type.SIGN_IN}
@@ -49,8 +49,8 @@ export const Footer = () => {
               <View
                 style={[
                   styles.kakaoLogin,
-                  !state.allConfirm && styles.loginDisabled,
-                  state.allConfirm && pressed && styles.kakaoLoginPressed,
+                  !state.requiredConfirm && styles.loginDisabled,
+                  state.requiredConfirm && pressed && styles.kakaoLoginPressed,
                 ]}
               >
                 <Text style={styles.loginBtnText}>카카오로 시작하기</Text>
@@ -63,8 +63,8 @@ export const Footer = () => {
               <View
                 style={[
                   styles.googleLogin,
-                  !state.allConfirm && styles.loginDisabled,
-                  state.allConfirm && pressed && styles.googleLoginPressed,
+                  !state.requiredConfirm && styles.loginDisabled,
+                  state.requiredConfirm && pressed && styles.googleLoginPressed,
                 ]}
               >
                 <Text style={styles.loginBtnText}>Google로 계속하기</Text>
