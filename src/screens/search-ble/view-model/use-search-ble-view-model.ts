@@ -17,8 +17,6 @@ export const useSearchBleViewModel = () => {
 
   useEffect(() => {
     let sub: { remove: () => void } | undefined
-    bleService.updateSession()
-    const nowSession = bleService.getSession()
     ;(async () => {
       const bluetoothPermission =
         await permissionService.ensureBluetoothPermission()
@@ -34,7 +32,7 @@ export const useSearchBleViewModel = () => {
         return navigation.goBack()
       }
 
-      sub = bleService.getManager()?.onStateChange(state => {
+      sub = bleService.getManager().onStateChange(state => {
         if (state === 'PoweredOn') {
           bleService.startSearchBle({
             cards,
@@ -61,7 +59,7 @@ export const useSearchBleViewModel = () => {
 
     return () => {
       sub?.remove()
-      bleService.stopScan(nowSession)
+      bleService.stopSearchBle()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cards])

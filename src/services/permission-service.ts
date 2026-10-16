@@ -3,7 +3,7 @@ import notifee, {
   AuthorizationStatus,
 } from '@notifee/react-native'
 import { PermissionsAndroid, Platform } from 'react-native'
-import { PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import {
   NOTIFICATION_CHANNEL_ID,
   PHONE_CHANGE_ACTION,
@@ -56,6 +56,24 @@ export const permissionService: PermissionService = {
       const res = await request(PERMISSIONS.IOS.BLUETOOTH)
       return res === RESULTS.GRANTED
     }
+  },
+  // 권한 팝업을 띄우지 않고 허용 여부만 확인한다
+  isBluetoothGranted: async () => {
+    if (Platform.OS === 'ios')
+      return (await check(PERMISSIONS.IOS.BLUETOOTH)) === RESULTS.GRANTED
+
+    if (Number(Platform.Version) >= 31) {
+      const scan = await PermissionsAndroid.check(
+        'android.permission.BLUETOOTH_SCAN' as any,
+      )
+      const connect = await PermissionsAndroid.check(
+        'android.permission.BLUETOOTH_CONNECT' as any,
+      )
+      return scan && connect
+    }
+    return PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+    )
   },
   ensureCameraPermission: async () => {
     const permission =

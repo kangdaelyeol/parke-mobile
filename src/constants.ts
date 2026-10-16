@@ -4,6 +4,8 @@ export const CHAR_UUID = 'abcd1234-1234-1234-1234-1234567890ab'
 export const DEFAULT_DEVICE_ID = 'default'
 export const BLE_DEVICE_NAME = 'Parke'
 export const SCAN_COOLDOWN_MS = 5 * 1000
+// iOS 백그라운드 스캔은 같은 기기를 스캔 세션당 한 번만 알려주므로, 이 간격으로 스캔을 재시작한다
+export const BACKGROUND_SCAN_RESTART_MS = 30 * 1000
 export const RENEW_INTERVAL_MS = 30 * 60 * 1000
 export const SIMULTANEOUS_INTERVAL_MS = 60 * 60 * 1000
 // 번호 변경을 거절하거나 직접 변경한 뒤, 다시 묻지 않는 시간

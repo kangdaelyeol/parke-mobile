@@ -106,6 +106,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
               }
               await authService.firebaseDeleteUser()
               await authService.signOut()
+              setCards([])
               return navigation.replace('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')

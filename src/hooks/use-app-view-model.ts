@@ -11,10 +11,12 @@ import {
 } from '@/services'
 import { useUserContext } from '@/contexts'
 import { usePhoneChangePrompt } from './use-phone-change-prompt'
+import { useBackgroundScan } from './use-background-scan'
 
 export const useAppViewModel = () => {
   const { actions: userContextActions } = useUserContext()
   const promptPhoneChange = usePhoneChangePrompt()
+  useBackgroundScan()
 
   useEffect(() => {
     ;(async () => {

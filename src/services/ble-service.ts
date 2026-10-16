@@ -1,9 +1,10 @@
-import { BleManager, Device } from 'react-native-ble-plx'
+import { BleManager, Device, Subscription } from 'react-native-ble-plx'
 import {
   BLE_DEVICE_NAME,
   CHAR_UUID,
   GATT_SERVICE_UUID,
   ADV_SERVICE_UUID,
+  BACKGROUND_SCAN_RESTART_MS,
 } from '@/constants'
 import {
   generateSerialNumber,
@@ -16,29 +17,46 @@ import {
   isOwnCard,
   canRenewPhoneNumber,
 } from '@/helpers'
-import { bleCacheService, cardService, settingService } from '@/services'
+import {
+  bleCacheService,
+  cardService,
+  permissionService,
+  settingService,
+} from '@/services'
 import {
   extractNumber,
   showPhoneChangeConfirmNotification,
   showPhoneChangedNotification,
 } from '@/utils'
-import { BleService, StartBackgroundScanProps } from './types'
-
-const g = globalThis as any
-
-let scanSession = 0
-
-let isBackgroundScanning = false
-let isSearching = false
+import { BackgroundScanContext, BleService } from './types'
 
 const isCandidate = (dev: Device) =>
   !!dev && (dev.localName ?? '').startsWith(BLE_DEVICE_NAME)
 
-const isBleManager = (manager: any): manager is BleManager => {
-  return manager instanceof BleManager
-}
+let bleManager: BleManager | null = null
 
-let bleManager: null | BleManager = null
+// 백그라운드 스캔 상태
+let backgroundContext: BackgroundScanContext | null = null
+let backgroundWanted = false // 조건상 스캔이 켜져 있어야 하는가
+let isBackgroundScanning = false // 실제로 스캔 중인가
+let restartTimer: ReturnType<typeof setInterval> | null = null
+let powerSub: Subscription | null = null
+
+let isSearching = false
+
+const listeners = new Set<() => void>()
+const notifyListeners = () => listeners.forEach(listener => listener())
+
+const getManager = () => {
+  if (!bleManager)
+    bleManager = new BleManager({
+      restoreStateIdentifier: 'com.app.ble',
+      // iOS가 BLE 이벤트로 앱을 백그라운드에서 다시 띄운 경우.
+      // 로그인이 복원되면 useBackgroundScan이 스캔을 다시 시작한다.
+      restoreStateFunction: () => console.log('BLE state restored'),
+    })
+  return bleManager
+}
 
 // 백그라운드 스캔 중 Parke 장치가 감지됐을 때의 처리
 const handleBackgroundDevice = async (
@@ -50,7 +68,7 @@ const handleBackgroundDevice = async (
     onDBError,
     onCardPhoneChange,
     onPhoneChangeRequest,
-  }: Omit<StartBackgroundScanProps, 'onError'>,
+  }: BackgroundScanContext,
 ) => {
   if (!isCandidate(device)) return
 
@@ -137,60 +155,92 @@ const handleBackgroundDevice = async (
   }
 }
 
+const startBackgroundDeviceScan = (manager: BleManager) => {
+  manager.startDeviceScan(
+    [ADV_SERVICE_UUID],
+    { allowDuplicates: true },
+    async (err, device) => {
+      const context = backgroundContext
+      try {
+        if (err || !device || !context) return
+        await handleBackgroundDevice(device, context)
+      } catch (e) {
+        context?.onError(e)
+      } finally {
+        try {
+          await device?.cancelConnection()
+        } catch {}
+      }
+    },
+  )
+}
+
+// 블루투스가 켜지면 스캔을 시작하고, 주기적으로 재시작한다
+const runBackgroundScan = () => {
+  if (isBackgroundScanning || isSearching) return
+  const manager = getManager()
+
+  powerSub?.remove()
+  powerSub = manager.onStateChange(state => {
+    if (state !== 'PoweredOn') return
+    powerSub?.remove()
+    powerSub = null
+    if (!backgroundWanted || isSearching || isBackgroundScanning) return
+
+    isBackgroundScanning = true
+    startBackgroundDeviceScan(manager)
+    restartTimer = setInterval(async () => {
+      await manager.stopDeviceScan()
+      if (isBackgroundScanning) startBackgroundDeviceScan(manager)
+    }, BACKGROUND_SCAN_RESTART_MS)
+    notifyListeners()
+  }, true)
+}
+
+const haltBackgroundScan = async () => {
+  powerSub?.remove()
+  powerSub = null
+  if (restartTimer) clearInterval(restartTimer)
+  restartTimer = null
+
+  if (!isBackgroundScanning) return
+  isBackgroundScanning = false
+  await bleManager?.stopDeviceScan()
+  notifyListeners()
+}
+
 export const bleService: BleService = {
   initManager: () => {
-    bleManager = new BleManager({
-      restoreStateIdentifier: 'com.app.ble',
-      restoreStateFunction: async _restored => {
-        try {
-          g.__BLE_SHOULD_START_SCAN__ = true
-        } catch (err) {
-          console.warn('Restore callback before JS ready:', err)
-        }
-      },
-    })
+    getManager()
   },
-  getManager: () => {
-    if (!bleManager) bleService.initManager()
-    return bleManager
+  getManager,
+  setBackgroundContext: context => {
+    backgroundContext = context
   },
-  getSession: () => scanSession,
-  updateSession: () => scanSession++,
-  stopScan: async (capturedSession: number) => {
-    if (bleService.getSession() !== capturedSession) return
-    console.log('stopScanning')
-    if (!bleManager) bleService.initManager()
-    if (!isBleManager(bleManager)) return
-    await bleManager.stopDeviceScan()
-    isSearching = false
-    isBackgroundScanning = false
-  },
-  startBackgroundScan: async ({ onError, ...scanProps }) => {
-    if (!bleManager) bleService.initManager()
-    if (!isBleManager(bleManager)) return
-    console.log('try background scan')
-    if (isBackgroundScanning) return
-    isBackgroundScanning = true
-    console.log('startBackground')
+  refreshBackgroundScan: async () => {
+    const context = backgroundContext
+    backgroundWanted =
+      !!context &&
+      context.user.phone.trim() !== '' &&
+      context.cards.length > 0 &&
+      settingService.getSettings().active
 
-    await bleManager.stopDeviceScan()
+    if (!backgroundWanted) return haltBackgroundScan()
 
-    bleManager.startDeviceScan(
-      [ADV_SERVICE_UUID],
-      { allowDuplicates: true },
-      async (err, device) => {
-        try {
-          if (err || !device) return
-          await handleBackgroundDevice(device, scanProps)
-        } catch (e) {
-          onError(e)
-        } finally {
-          try {
-            await device?.cancelConnection()
-          } catch {}
-        }
-      },
-    )
+    if (!(await permissionService.ensureBluetoothPermission())) {
+      backgroundWanted = false
+      context?.onPermissionDenied()
+      return haltBackgroundScan()
+    }
+
+    runBackgroundScan()
+  },
+  isBackgroundScanning: () => isBackgroundScanning,
+  subscribe: listener => {
+    listeners.add(listener)
+    return () => {
+      listeners.delete(listener)
+    }
   },
   startSearchBle: async ({
     cards,
@@ -199,16 +249,15 @@ export const bleService: BleService = {
     onDeviceFound,
     onRssiChange,
   }) => {
-    if (!bleManager) bleService.initManager()
-    if (!isBleManager(bleManager)) return
-    console.log('try search ble')
     if (isSearching) return
+    // 기기 등록 검색 중에는 백그라운드 스캔을 잠시 멈춘다
+    await haltBackgroundScan()
     isSearching = true
-    console.log('startSearchBle')
 
-    await bleManager.stopDeviceScan()
+    const manager = getManager()
+    await manager.stopDeviceScan()
 
-    bleManager.startDeviceScan(
+    manager.startDeviceScan(
       [ADV_SERVICE_UUID],
       { allowDuplicates: true },
       async (error, device) => {
@@ -216,14 +265,13 @@ export const bleService: BleService = {
         console.log(device)
 
         if (!isCandidate(device)) return
-        if (!isBleManager(bleManager)) return
 
         onRssiChange(String(device.rssi))
 
         if (!device.rssi || device.rssi < -55) return
 
         try {
-          await bleManager.stopDeviceScan()
+          await manager.stopDeviceScan()
 
           const deviceId = getDeviceId(device.manufacturerData as string)
 
@@ -257,8 +305,10 @@ export const bleService: BleService = {
       },
     )
   },
-  getState: () => {
-    if (!bleManager) bleService.initManager()
-    return { isBackgroundScanning, isSearching }
+  stopSearchBle: async () => {
+    if (!isSearching) return
+    isSearching = false
+    await bleManager?.stopDeviceScan()
+    if (backgroundWanted) runBackgroundScan()
   },
 }

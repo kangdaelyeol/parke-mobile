@@ -24,8 +24,6 @@ interface TitleAnimated {
   scanContainerStyle: StyleProp<ViewStyle>
 }
 
-
-
 export type SearchBleHeaderViewModel = ViewModel<{}, HeaderActions>
 
 export type SearchBleRaderViewModel = AnimatedViewModel<{}, {}, RaderAnimated>
@@ -35,4 +33,3 @@ export type SearchBleTitleViewModel = AnimatedViewModel<
   TitleActions,
   TitleAnimated
 >
-

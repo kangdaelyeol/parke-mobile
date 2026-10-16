@@ -1,9 +1,5 @@
 import { StyleSheet, View } from 'react-native'
-import {
-  CardSettingProvider,
-  SliderContextProvider,
-  HomeProvider,
-} from '@home/contexts'
+import { CardSettingProvider, SliderContextProvider } from '@home/contexts'
 import { Header, Footer, Main } from '@home/components'
 import { useHomeViewModel } from '@home/view-model'
 import { Loading } from '@/components'
@@ -23,13 +19,11 @@ const HomeScreenContent = () => {
 
 export default function HomeScreen() {
   return (
-    <HomeProvider>
-      <CardSettingProvider>
-        <SliderContextProvider>
-          <HomeScreenContent />
-        </SliderContextProvider>
-      </CardSettingProvider>
-    </HomeProvider>
+    <CardSettingProvider>
+      <SliderContextProvider>
+        <HomeScreenContent />
+      </SliderContextProvider>
+    </CardSettingProvider>
   )
 }
 

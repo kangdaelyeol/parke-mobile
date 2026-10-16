@@ -1,13 +1,13 @@
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
-import { useHomeContext } from '@home/contexts'
+import { useBackgroundScanning } from '@/hooks'
 import { useUserContext } from '@/contexts'
 import { GRAY, GREEN, RED, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
 export const Header = () => {
-  const { scanning } = useHomeContext()
+  const scanning = useBackgroundScanning()
   const { user } = useUserContext()
   const { width } = useWindowDimensions()
   const isSmall = width < 400

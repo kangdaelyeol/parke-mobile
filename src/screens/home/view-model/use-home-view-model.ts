@@ -1,22 +1,12 @@
 import { useCallback, useState } from 'react'
-import { Alert, AppState, Linking } from 'react-native'
+import { Alert, AppState } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
-import { useHomeContext } from '@home/contexts'
-import { bleService, settingService, permissionService } from '@/services'
 import { HomeStackNavigationProp } from '@/navigation/types'
-import { usePhoneChangePrompt } from '@/hooks'
 
 export const useHomeViewModel = () => {
-  const {
-    cards,
-    user,
-    syncCardList,
-    actions: userContextActions,
-  } = useUserContext()
-  const promptPhoneChange = usePhoneChangePrompt()
+  const { user, syncCardList } = useUserContext()
   const [loading, setLoading] = useState(false)
-  const { setScanning } = useHomeContext()
   const navigation = useNavigation<HomeStackNavigationProp>()
 
   // 앱 화면 전환시(다른 스크린에서 Home스크린으로 가는 경우 카드 상태 갱신 및 로그인 상태 체크)
@@ -35,69 +25,16 @@ export const useHomeViewModel = () => {
     }, [syncCardList, user?.id, navigation]),
   )
 
+  // 전화번호가 없으면 백그라운드 스캔이 켜지지 않으므로 안내한다
   useFocusEffect(
     useCallback(() => {
       if (!user?.id) return
-
-      if (user.phone.trim() === '') {
+      if (user.phone.trim() === '')
         Alert.alert(
           '전화번호 등록 필요',
           '백그라운드 장치 스캔을 위해서는 전화번호 등록이 필요합니다.',
         )
-        return
-      }
-
-      bleService.updateSession()
-      const nowSession = bleService.getSession()
-      let sub: { remove: () => void } | undefined
-      ;(async () => {
-        const settings = settingService.getSettings()
-        if (!settings.active || cards.length === 0) return setScanning(false)
-
-        const bluetoothPermission =
-          await permissionService.ensureBluetoothPermission()
-
-        if (!bluetoothPermission) {
-          Alert.alert(
-            'Bluetooth 권한 필요',
-            'Parke 백그라운드 스캔을 위해 블루투스 권한을 허용해주세요',
-            [
-              { text: '취소', style: 'destructive' },
-              { text: '설정으로 이동', onPress: () => Linking.openSettings() },
-            ],
-          )
-          return setScanning(false)
-        }
-
-        sub = bleService.getManager()?.onStateChange(state => {
-          if (state === 'PoweredOn') {
-            bleService.startBackgroundScan({
-              cards,
-              user,
-              refreshStateSession: userContextActions.refreshStateSession,
-              onCardPhoneChange: userContextActions.updateCardPhone,
-              onPhoneChangeRequest: promptPhoneChange,
-              onDBError: (message: string) => {
-                Alert.alert(message)
-              },
-              onError: (e: any) => {
-                console.log(e)
-                Alert.alert(`[BLE] scan handler error: ${e}`)
-              },
-            })
-            setScanning(true)
-
-            sub?.remove()
-          }
-        }, true)
-      })()
-
-      return () => {
-        sub?.remove()
-        bleService.stopScan(nowSession)
-        setScanning(false)
-      }
-    }, [user, cards, setScanning, userContextActions, promptPhoneChange]),
+    }, [user]),
   )
 
   // active 포그라운드로 돌아오는 경우 카드 상태 갱신

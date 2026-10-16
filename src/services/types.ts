@@ -69,40 +69,29 @@ interface StartSearchBleProps {
   onRssiChange: (val: string) => void
 }
 
-export interface StartBackgroundScanProps {
+// 백그라운드 스캔이 기기를 감지했을 때 쓰는 최신 상태와 콜백
+export interface BackgroundScanContext {
   readonly cards: CardState[]
   readonly user: UserDto
   refreshStateSession: () => void
   onCardPhoneChange: (cardId: string, phone: string) => void
   // 자동변경이 꺼져 있을 때, 앱 화면에서 변경 여부를 묻는다
   onPhoneChangeRequest: (pending: PhoneChangePending) => void
+  onPermissionDenied: () => void
   onDBError: (message: string) => void
   onError: (e: any) => void
 }
 
 export interface BleService {
   initManager: () => void
-  getManager: () => BleManager | null
-  getSession: () => number
-  updateSession: () => number
-  getState: () => { isBackgroundScanning: boolean; isSearching: boolean }
-  stopScan: (capturedSession: number) => Promise<void>
-  startBackgroundScan: ({
-    cards,
-    user,
-    refreshStateSession,
-    onCardPhoneChange,
-    onPhoneChangeRequest,
-    onDBError,
-    onError,
-  }: StartBackgroundScanProps) => Promise<void>
-  startSearchBle: ({
-    cards,
-    onError,
-    onDuplicated,
-    onDeviceFound,
-    onRssiChange,
-  }: StartSearchBleProps) => Promise<void>
+  getManager: () => BleManager
+  setBackgroundContext: (context: BackgroundScanContext | null) => void
+  // 현재 컨텍스트와 설정을 보고 백그라운드 스캔을 켜거나 끈다
+  refreshBackgroundScan: () => Promise<void>
+  isBackgroundScanning: () => boolean
+  subscribe: (listener: () => void) => () => void
+  startSearchBle: (props: StartSearchBleProps) => Promise<void>
+  stopSearchBle: () => Promise<void>
 }
 
 export type LoginProvider = 'apple' | 'kakao' | 'google'
@@ -174,6 +163,7 @@ export interface PhoneChangeService {
 export interface PermissionService {
   setupNotifications: () => Promise<void>
   ensureBluetoothPermission: () => Promise<boolean>
+  isBluetoothGranted: () => Promise<boolean>
   ensureCameraPermission: () => Promise<boolean>
   ensureNotificationPermission: () => Promise<boolean>
 }

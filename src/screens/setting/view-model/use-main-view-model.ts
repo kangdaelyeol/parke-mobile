@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
-import { cacheService, settingService } from '@/services'
+import { bleService, cacheService, settingService } from '@/services'
 import { SettingMainViewModel } from '@setting/types'
 import { useSettingContext } from '@setting/contexts'
 import { useUserContext } from '@/contexts'
@@ -63,6 +63,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
     activeChange: (val: boolean) => {
       setActive(val)
       settingService.setActive(val)
+      bleService.refreshBackgroundScan()
     },
 
     noticeChange: (val: boolean) => {
