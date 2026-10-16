@@ -21,7 +21,8 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
   const [loading, setLoading] = useState(false)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
-  const selectedCard = cards[selectedCardIdx]
+  // 이 뷰모델이 담당하는 카드 (바텀시트는 선택되지 않은 카드에서도 열 수 있다)
+  const card = cards[idx]
   const isSelected = idx === selectedCardIdx
 
   const cardOpacity = useSharedValue(isSelected ? 1 : 0)
@@ -67,9 +68,10 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       if (!isSelected) sliderController.goToIdx(idx)
     },
     editPress: () => {
-      cardSettingController.showSetting(selectedCardIdx)
+      if (!isSelected) sliderController.goToIdx(idx)
+      cardSettingController.showSetting(idx)
     },
-    deletePress: () => {
+    deletePress: (onDeleted?: () => void) => {
       if (!user) return
       Alert.alert('Parke 삭제', '삭제하시겠습니까? - (재등록 가능)', [
         {
@@ -77,17 +79,15 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
           onPress: async () => {
             setLoading(true)
 
-            const cardDeleteRes = await cardService.deleteCard(
-              selectedCard.id,
-              user.id,
-            )
+            const cardDeleteRes = await cardService.deleteCard(card.id, user.id)
 
             if (!cardDeleteRes.status) {
               Alert.alert(cardDeleteRes.message)
               return setLoading(false)
             }
 
-            userContextActions.deleteCard(selectedCard.id)
+            onDeleted?.()
+            userContextActions.deleteCard(card.id)
             setLoading(false)
           },
         },
@@ -95,7 +95,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       ])
     },
     previewPress: async () => {
-      const url = PARKE_WEB_URL + selectedCard.id
+      const url = PARKE_WEB_URL + card.id
 
       const supported = await Linking.canOpenURL(url)
       if (!supported)
@@ -103,20 +103,20 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       await Linking.openURL(url)
     },
     scanChangePress: () => {
-      cardService.updateScan(selectedCard.deviceId, !selectedCard.scan)
-      userContextActions.setCardScan(selectedCard.id, !selectedCard.scan)
+      cardService.updateScan(card.deviceId, !card.scan)
+      userContextActions.setCardScan(card.id, !card.scan)
     },
     changePhonePress: async () => {
       if (!user) return
       const { phone } = user
       setLoading(true)
-      const res = await cardService.updatePhone(selectedCard.id, phone)
+      const res = await cardService.updatePhone(card.id, phone)
       if (!res.status) {
         Alert.alert(res.message)
         return setLoading(false)
       }
       setLoading(false)
-      userContextActions.updateCardPhone(selectedCard.id, phone)
+      userContextActions.updateCardPhone(card.id, phone)
     },
     morePress: () => {
       bottomSheetModalRef.current?.present()

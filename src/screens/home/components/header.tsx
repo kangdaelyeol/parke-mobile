@@ -12,7 +12,7 @@ export const Header = () => {
   const { width } = useWindowDimensions()
   const isSmall = width < 400
   const iconSize = isSmall ? 28 : 35
-  
+
   return (
     <View style={styles.header}>
       <View

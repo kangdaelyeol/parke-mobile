@@ -7,15 +7,7 @@ import { HomeCardProps } from '@home/types'
 import { Loading } from '@/components'
 import { CardBottomSheet } from '@home/components'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
-import {
-  GRAY,
-  WHITE,
-  DARK,
-  DARK_LIGHT,
-  GREEN,
-  RED,
-  RED_LIGHT,
-} from '@/theme/color'
+import { GRAY, WHITE, DARK, DARK_LIGHT, GREEN, RED } from '@/theme/color'
 
 const BOTTOM_HEIGHT = 60
 const TOP_HEIGHT = CARD_HEIGHT - BOTTOM_HEIGHT
@@ -62,19 +54,6 @@ export const Card = ({ card, idx }: HomeCardProps) => {
           {state.settingCard === -1 && (
             <View style={styles.bottomSection}>
               <View style={styles.bottomLeft}>
-                <Pressable onPress={actions.editPress}>
-                  {({ pressed }) => (
-                    <Text
-                      style={[
-                        styles.btn,
-                        styles.optionBtn,
-                        pressed && styles.optionBtnPressed,
-                      ]}
-                    >
-                      수정
-                    </Text>
-                  )}
-                </Pressable>
                 <Pressable onPress={actions.previewPress}>
                   {({ pressed }) => (
                     <Text
@@ -85,21 +64,6 @@ export const Card = ({ card, idx }: HomeCardProps) => {
                       ]}
                     >
                       미리보기
-                    </Text>
-                  )}
-                </Pressable>
-              </View>
-              <View style={styles.bottomRight}>
-                <Pressable onPress={actions.deletePress}>
-                  {({ pressed }) => (
-                    <Text
-                      style={[
-                        styles.btn,
-                        styles.deleteBtn,
-                        pressed && styles.deleteBtnPressed,
-                      ]}
-                    >
-                      삭제
                     </Text>
                   )}
                 </Pressable>
@@ -264,21 +228,5 @@ const styles = StyleSheet.create({
   optionBtnPressed: {
     color: WHITE,
     borderColor: GRAY,
-  },
-  bottomRight: {
-    flexDirection: 'row',
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  deleteBtn: {
-    color: RED_LIGHT,
-    right: 15,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: DARK,
-  },
-  deleteBtnPressed: {
-    borderColor: RED_LIGHT,
-    backgroundColor: 'rgba(224,85,85,0.1)',
   },
 })

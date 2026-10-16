@@ -6,11 +6,13 @@ import {
   BottomSheetModal,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
+import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { Toggle } from '@home/components'
 import { useCardViewModel } from '@home/view-model'
 import { Loading } from '@/components'
 import { formatPhone } from '@/utils'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
+import { RED_LIGHT } from '@/theme/color'
 import { BluetoothIllustration, PhoneIllustration } from './illustrations'
 
 interface BottomSheetProps {
@@ -44,6 +46,16 @@ export const CardBottomSheet = ({
   modalRef,
 }: BottomSheetProps) => {
   const { actions, state } = useCardViewModel(idx)
+
+  const editPress = () => {
+    modalRef.current?.dismiss()
+    actions.editPress()
+  }
+
+  // 삭제가 끝날 때까지 시트를 열어 두고 로딩을 보여준다
+  const deletePress = () => {
+    actions.deletePress(() => modalRef.current?.dismiss())
+  }
 
   return (
     <BottomSheetModal
@@ -115,6 +127,59 @@ export const CardBottomSheet = ({
             )}
           </Pressable>
         </View>
+        <View style={[styles.optionContainer, styles.manageContainer]}>
+          <Pressable onPress={editPress}>
+            {({ pressed }) => (
+              <View style={[styles.option, pressed && styles.optionPressed]}>
+                <View style={styles.optionLeft}>
+                  <View style={[styles.optionIcon, styles.editIcon]}>
+                    <FontAwesome6
+                      iconStyle="solid"
+                      name="pen"
+                      size={17}
+                      color="#9db4ff"
+                    />
+                  </View>
+                  <View style={styles.descriptionSection}>
+                    <Text style={styles.descriptionTitle}>카드 수정</Text>
+                    <Text style={styles.description}>
+                      이름·번호·메시지·테마 변경
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.optionRight}>
+                  <Text style={styles.changeArrow}>›</Text>
+                </View>
+              </View>
+            )}
+          </Pressable>
+          <Pressable onPress={deletePress}>
+            {({ pressed }) => (
+              <View
+                style={[styles.option, pressed && styles.deleteOptionPressed]}
+              >
+                <View style={styles.optionLeft}>
+                  <View style={[styles.optionIcon, styles.deleteIcon]}>
+                    <FontAwesome6
+                      iconStyle="solid"
+                      name="trash-can"
+                      size={17}
+                      color={RED_LIGHT}
+                    />
+                  </View>
+                  <View style={styles.descriptionSection}>
+                    <Text style={[styles.descriptionTitle, styles.deleteTitle]}>
+                      카드 삭제
+                    </Text>
+                    <Text style={styles.description}>
+                      내 목록에서 삭제 (재등록 가능)
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            )}
+          </Pressable>
+        </View>
       </BottomSheetView>
     </BottomSheetModal>
   )
@@ -173,8 +238,12 @@ const styles = StyleSheet.create({
   },
   optionContainer: {
     width: '100%',
-    paddingVertical: 30,
+    paddingTop: 30,
     gap: 10,
+  },
+  manageContainer: {
+    paddingTop: 20,
+    paddingBottom: 30,
   },
   option: {
     width: '100%',
@@ -209,6 +278,18 @@ const styles = StyleSheet.create({
   },
   changePhoneIcon: {
     backgroundColor: 'rgba(232,240,96,0.1)',
+  },
+  editIcon: {
+    backgroundColor: 'rgba(56,59,249,0.15)',
+  },
+  deleteIcon: {
+    backgroundColor: 'rgba(224,85,85,0.1)',
+  },
+  deleteTitle: {
+    color: RED_LIGHT,
+  },
+  deleteOptionPressed: {
+    borderColor: RED_LIGHT,
   },
   descriptionSection: {
     gap: 2,

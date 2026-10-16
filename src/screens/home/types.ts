@@ -36,7 +36,7 @@ interface CardAnimated {
 interface CardActions {
   cardPress: () => void
   editPress: () => void
-  deletePress: () => void
+  deletePress: (onDeleted?: () => void) => void
   previewPress: () => Promise<void>
   scanChangePress: () => void
   changePhonePress: () => Promise<void>
