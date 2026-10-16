@@ -12,6 +12,10 @@ export const SIMULTANEOUS_INTERVAL_MS = 60 * 60 * 1000
 export const CONFIRM_COOLDOWN_MS = 60 * 60 * 1000
 // 번호 변경 확인 알림 (permission-service에서 등록, 알림 표시/응답 처리에서 사용)
 export const NOTIFICATION_CHANNEL_ID = 'ble-device'
+// 주행 기록 중 상시 알림 (Android 포그라운드 서비스). 소리 없이 조용히 표시한다
+export const DRIVE_NOTIFICATION_CHANNEL_ID = 'drive-session'
+export const DRIVE_NOTIFICATION_ID = 'drive-session'
+export const DRIVE_END_ACTION = 'drive-end'
 export const PHONE_CHANGE_CATEGORY_ID = 'CONFIRM_PHONE'
 export const PHONE_CHANGE_ACTION = {
   CONFIRM: 'confirm',

@@ -5,6 +5,7 @@ import notifee, {
 import { PermissionsAndroid, Platform } from 'react-native'
 import { check, PERMISSIONS, request, RESULTS } from 'react-native-permissions'
 import {
+  DRIVE_NOTIFICATION_CHANNEL_ID,
   NOTIFICATION_CHANNEL_ID,
   PHONE_CHANGE_ACTION,
   PHONE_CHANGE_CATEGORY_ID,
@@ -34,6 +35,11 @@ export const permissionService: PermissionService = {
       id: NOTIFICATION_CHANNEL_ID,
       name: 'BLE Device Notifications',
       importance: AndroidImportance.HIGH,
+    })
+    await notifee.createChannel({
+      id: DRIVE_NOTIFICATION_CHANNEL_ID,
+      name: '주행 기록',
+      importance: AndroidImportance.LOW,
     })
   },
   ensureBluetoothPermission: async () => {

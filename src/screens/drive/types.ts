@@ -22,6 +22,7 @@ interface DriveState {
   points: GeoPoint[]
   current: GeoPoint | null
   hasLocation: boolean
+  weakSignal: boolean
   now: number
   startAt: number
   endAt: number | null

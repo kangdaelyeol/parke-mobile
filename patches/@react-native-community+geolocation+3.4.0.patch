@@ -1,8 +1,8 @@
 diff --git a/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm b/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
-index 03df64d..dcb00b6 100644
+index 03df64d..b2ee15d 100644
 --- a/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
 +++ b/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
-@@ -186,6 +186,11 @@ RCT_EXPORT_MODULE()
+@@ -186,6 +186,18 @@ RCT_EXPORT_MODULE()
  
    _locationManager.distanceFilter  = distanceFilter;
    _locationManager.desiredAccuracy = desiredAccuracy;
@@ -11,66 +11,13 @@ index 03df64d..dcb00b6 100644
 +  // (일시정지되면 앱이 다시 시작하기 전까지 갱신이 재개되지 않는다)
 +  _locationManager.activityType = CLActivityTypeAutomotiveNavigation;
 +  _locationManager.pausesLocationUpdatesAutomatically = NO;
++  // [parke] 백그라운드 위치 허용은 위치 매니저가 만들어진 뒤에 설정해야 적용된다.
++  // (원본은 매니저 생성 전에 호출해서 첫 주행에서는 적용되지 않는다)
++  // '앱 사용 중' 권한이어도 포그라운드에서 시작한 추적은 백그라운드에서 이어진다 (상단 파란 표시)
++  if (_locationConfiguration.enableBackgroundLocationUpdates) {
++    [self enableBackgroundLocationUpdates];
++    _locationManager.showsBackgroundLocationIndicator = YES;
++  }
    _usingSignificantChanges = useSignificantChanges;
  
    if (@available(iOS 14.0, *)) {
-@@ -204,6 +209,9 @@ RCT_EXPORT_MODULE()
- 
- - (void)startMonitoring
- {
-+  NSLog(@"[RNCGeolocation] startMonitoring (significant=%d, accuracy=%f, distanceFilter=%f, pausesAuto=%d)",
-+        _usingSignificantChanges, _locationManager.desiredAccuracy, _locationManager.distanceFilter,
-+        _locationManager.pausesLocationUpdatesAutomatically);
- #if !TARGET_OS_VISION
-    _usingSignificantChanges
-      ? [_locationManager startMonitoringSignificantLocationChanges]
-@@ -215,6 +223,7 @@ RCT_EXPORT_MODULE()
- 
- - (void)stopMonitoring
- {
-+  NSLog(@"[RNCGeolocation] stopMonitoring");
- #if !TARGET_OS_VISION
-    _usingSignificantChanges
-      ? [_locationManager stopMonitoringSignificantLocationChanges]
-@@ -423,6 +432,9 @@ RCT_REMAP_METHOD(getCurrentPosition, getCurrentPosition:(RNCGeolocationOptions)o
- {
-   // Create event
-   CLLocation *location = locations.lastObject;
-+  NSLog(@"[RNCGeolocation] didUpdateLocations count=%lu acc=%.1f speed=%.2f age=%.1fs observing=%d",
-+        (unsigned long)locations.count, location.horizontalAccuracy, location.speed,
-+        -[location.timestamp timeIntervalSinceNow], _observingLocation);
- 
-   BOOL mocked = NO;
-   if (@available(iOS 15.0, *)) {
-@@ -462,6 +474,16 @@ RCT_REMAP_METHOD(getCurrentPosition, getCurrentPosition:(RNCGeolocationOptions)o
- 
- }
- 
-+- (void)locationManagerDidPauseLocationUpdates:(CLLocationManager *)manager
-+{
-+  NSLog(@"[RNCGeolocation] iOS PAUSED location updates");
-+}
-+
-+- (void)locationManagerDidResumeLocationUpdates:(CLLocationManager *)manager
-+{
-+  NSLog(@"[RNCGeolocation] iOS RESUMED location updates");
-+}
-+
- - (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager
- {
-   CLAuthorizationStatus currentStatus;
-@@ -517,12 +539,14 @@ RCT_REMAP_METHOD(getCurrentPosition, getCurrentPosition:(RNCGeolocationOptions)o
-     [self stopMonitoring];
-   }
- 
-+  NSLog(@"[RNCGeolocation] authorization changed: %d", (int)currentStatus);
-   _lastUpdatedAuthorizationStatus = currentStatus;
- 
- }
- 
- - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error
- {
-+  NSLog(@"[RNCGeolocation] didFailWithError: %@", error);
-   // Check error type
-   NSDictionary<NSString *, id> *jsError = nil;
-   switch (error.code) {

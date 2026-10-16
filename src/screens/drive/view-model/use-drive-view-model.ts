@@ -1,13 +1,17 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, AppState, BackHandler, Linking } from 'react-native'
 import Geolocation, {
   GeolocationResponse,
 } from '@react-native-community/geolocation'
 import { useNavigation } from '@react-navigation/native'
+import {
+  activateKeepAwake,
+  deactivateKeepAwake,
+} from '@sayem314/react-native-keep-awake'
 import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
 import { DriveStackNavigationProp } from '@/navigation/types'
-import { permissionService } from '@/services'
+import { driveSessionService, permissionService } from '@/services'
 import { getDistanceMeters } from '@/utils'
 import {
   DriveMapHandle,
@@ -28,6 +32,9 @@ const MAX_SPEED_MPS = 70
 const MIN_SPEED_SAMPLE_S = 2
 // 이 시간 동안 위치가 갱신되지 않으면 멈춘 것으로 보고 현재 속도를 0으로 표시한다
 const SPEED_STALE_MS = 5 * 1000
+// 위치가 이 시간 동안 안 오거나 정확도가 이보다 나쁘면 'GPS 신호 약함'을 표시한다
+const WEAK_SIGNAL_STALE_MS = 10 * 1000
+const WEAK_SIGNAL_ACCURACY_M = 30
 
 type Anchor = GeoPoint & { accuracy: number }
 
@@ -69,6 +76,9 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
   const anchor = useRef<Anchor | null>(null)
   const lastFixAt = useRef(0)
   const mapRef = useRef<DriveMapHandle>(null)
+  // 위치 추적 effect가 카드 정보 변경으로 다시 실행되지 않도록 ref로 읽는다
+  const cardTitleRef = useRef(card?.title ?? 'Parke')
+  cardTitleRef.current = card?.title ?? 'Parke'
 
   // 현재 시각 / 주행 시간 갱신
   const received = useRef(0)
@@ -133,6 +143,8 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
         accuracy: coords.accuracy,
         rawSpeed: coords.speed ?? -1,
         received: g.received + 1,
+        // 위치가 다시 들어오면 이전 오류는 지난 일이므로 지운다
+        error: '',
       }))
       lastFixAt.current = Date.now()
 
@@ -221,6 +233,8 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
 
       Geolocation.setRNConfiguration({
         skipPermissionRequests: true,
+        // 화면을 꺼도 이어서 기록 (iOS 위치 백그라운드 모드)
+        enableBackgroundLocationUpdates: true,
         authorizationLevel: 'whenInUse',
         locationProvider: 'auto',
       })
@@ -232,38 +246,53 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
         },
         {
           enableHighAccuracy: true,
-          // 거리 필터는 위에서 직접 하므로 위치는 자주 받는다 (속도/정지 판단용)
-          distanceFilter: 2,
+          // 거리 필터는 위에서 직접 하므로 움직임과 관계없이 계속 받는다 (속도/정지 판단용).
+          // 0이면 iOS는 거리 필터 없음(kCLDistanceFilterNone)으로 약 1초마다 보낸다.
+          distanceFilter: 0,
           interval: 1000,
           fastestInterval: 1000,
         },
       )
       log('watchPosition started', { watchId })
+      // Android는 포그라운드 서비스가 있어야 백그라운드에서도 위치가 계속 온다
+      driveSessionService.start(cardTitleRef.current)
     })()
 
     return () => {
       log('tracking cleanup', { watchId })
       cancelled = true
       if (watchId !== null) Geolocation.clearWatch(watchId)
+      driveSessionService.stop()
     }
   }, [phase, navigation])
+
+  // 주행 중에는 화면이 꺼지지 않게 한다 (거치해 두고 보는 용도)
+  useEffect(() => {
+    if (phase !== 'driving') return
+    activateKeepAwake()
+    return () => deactivateKeepAwake()
+  }, [phase])
+
+  const finishDrive = useCallback(() => {
+    const end = Date.now()
+    log('drive finished')
+    setEndAt(end)
+    setNow(end)
+    setPhase('summary')
+  }, [])
 
   const endPress = () => {
     Alert.alert('주행 종료', '주행을 종료하고 기록을 확인할까요?', [
       { text: '계속 주행', style: 'cancel' },
-      {
-        text: '종료',
-        style: 'destructive',
-        onPress: () => {
-          const end = Date.now()
-          log('drive end pressed')
-          setEndAt(end)
-          setNow(end)
-          setPhase('summary')
-        },
-      },
+      { text: '종료', style: 'destructive', onPress: finishDrive },
     ])
   }
+
+  // Android 상시 알림의 [주행 종료] (잠금화면에서도 누를 수 있다)
+  useEffect(() => {
+    if (phase !== 'driving') return
+    return driveSessionService.onEndRequest(finishDrive)
+  }, [phase, finishDrive])
 
   // Android 뒤로가기로 주행이 끊기지 않게, 주행 중에는 종료 확인을 띄운다
   useEffect(() => {
@@ -276,7 +305,13 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
   })
 
   const elapsed = (endAt ?? now) - startAt
-  const isStale = now - lastFixAt.current > SPEED_STALE_MS
+  const sinceLastFix = now - lastFixAt.current
+  const isStale = sinceLastFix > SPEED_STALE_MS
+  const weakSignal =
+    phase === 'driving' &&
+    current !== null &&
+    (sinceLastFix > WEAK_SIGNAL_STALE_MS ||
+      gps.accuracy > WEAK_SIGNAL_ACCURACY_M)
   const averageSpeed = elapsed > 0 ? distance / (elapsed / 1000) : 0
 
   return {
@@ -288,6 +323,7 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
       points,
       current,
       hasLocation: current !== null,
+      weakSignal,
       now,
       startAt,
       endAt,

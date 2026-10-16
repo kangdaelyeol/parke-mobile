@@ -6,6 +6,7 @@ import notifee from '@notifee/react-native'
 import {
   cacheService,
   bleCacheService,
+  driveSessionService,
   permissionService,
   phoneChangeService,
 } from '@/services'
@@ -35,6 +36,7 @@ export const useAppViewModel = () => {
   useEffect(() => {
     // 앱이 켜져 있을 때 알림 응답 (백그라운드 응답은 index.js)
     const unsub = notifee.onForegroundEvent(async event => {
+      if (driveSessionService.handleNotificationEvent(event)) return
       const result = await phoneChangeService.handleNotificationEvent(event)
       if (result?.type === 'confirmed')
         userContextActions.updateCardPhone(result.cardId, result.phone)

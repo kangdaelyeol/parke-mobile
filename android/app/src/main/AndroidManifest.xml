@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission
     android:name="android.permission.BLUETOOTH_SCAN"
@@ -7,6 +8,9 @@
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <!-- 주행 중 백그라운드 위치 기록용 포그라운드 서비스 (notifee) -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
 
   <uses-permission
     android:name="android.permission.BLUETOOTH"
@@ -30,6 +34,11 @@
     android:theme="@style/AppTheme"
     android:usesCleartextTraffic="${usesCleartextTraffic}"
     android:supportsRtl="true">
+    <service
+      android:name="app.notifee.core.ForegroundService"
+      android:foregroundServiceType="location"
+      tools:replace="android:foregroundServiceType" />
+
     <activity
       android:name=".MainActivity"
       android:label="@string/app_name"

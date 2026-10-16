@@ -160,6 +160,14 @@ export interface PhoneChangeService {
   ) => Promise<PhoneChangeEventResult | null>
 }
 
+export interface DriveSessionService {
+  registerForegroundService: () => void
+  start: (cardTitle: string) => Promise<void>
+  stop: () => Promise<void>
+  onEndRequest: (listener: () => void) => () => void
+  handleNotificationEvent: (event: Event) => boolean
+}
+
 export interface PermissionService {
   setupNotifications: () => Promise<void>
   ensureBluetoothPermission: () => Promise<boolean>

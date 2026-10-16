@@ -49,6 +49,14 @@ export default function DriveScreen({ route }: DriveScreenProps) {
             <Text style={styles.searchingText}>GPS 신호를 찾는 중…</Text>
           </View>
         )}
+        {state.weakSignal && (
+          <View style={[styles.weakSignal, { top: top + 60 }]}>
+            <View style={styles.weakDot} />
+            <Text style={styles.weakSignalText}>
+              GPS 신호 약함 · 위치가 정확하지 않을 수 있어요
+            </Text>
+          </View>
+        )}
       </View>
       {isDriving ? (
         <DrivingPanel state={state} actions={actions} />
@@ -108,6 +116,30 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 8,
+  },
+  weakSignal: {
+    position: 'absolute',
+    alignSelf: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: DARK,
+    borderWidth: 1,
+    borderColor: '#5a4a1a',
+    borderRadius: 16,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+  weakDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ffb300',
+  },
+  weakSignalText: {
+    color: '#ffcf5a',
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 13,
   },
   searchingText: {
     color: GRAY,
