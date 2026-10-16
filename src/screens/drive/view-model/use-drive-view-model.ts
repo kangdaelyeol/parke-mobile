@@ -12,7 +12,8 @@ import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
 import { DriveStackNavigationProp } from '@/navigation/types'
 import { driveSessionService, permissionService } from '@/services'
-import { getDistanceMeters } from '@/utils'
+import { DriveSessionStatus } from '@/services/types'
+import { getDistanceMeters, toKmh } from '@/utils'
 import {
   DriveMapHandle,
   DrivePhase,
@@ -35,6 +36,8 @@ const SPEED_STALE_MS = 5 * 1000
 // 위치가 이 시간 동안 안 오거나 정확도가 이보다 나쁘면 'GPS 신호 약함'을 표시한다
 const WEAK_SIGNAL_STALE_MS = 10 * 1000
 const WEAK_SIGNAL_ACCURACY_M = 30
+// 잠금화면(Live Activity) / Android 상시 알림 갱신 간격
+const LOCK_SCREEN_UPDATE_MS = 5 * 1000
 
 type Anchor = GeoPoint & { accuracy: number }
 
@@ -77,8 +80,11 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
   const lastFixAt = useRef(0)
   const mapRef = useRef<DriveMapHandle>(null)
   // 위치 추적 effect가 카드 정보 변경으로 다시 실행되지 않도록 ref로 읽는다
-  const cardTitleRef = useRef(card?.title ?? 'Parke')
-  cardTitleRef.current = card?.title ?? 'Parke'
+  const cardRef = useRef({ title: 'Parke', accent: DEFAULT_CARD_CUSTOM.accent })
+  cardRef.current = {
+    title: card?.title ?? 'Parke',
+    accent: card?.custom.accent ?? DEFAULT_CARD_CUSTOM.accent,
+  }
 
   // 현재 시각 / 주행 시간 갱신
   const received = useRef(0)
@@ -254,8 +260,13 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
         },
       )
       log('watchPosition started', { watchId })
+      // 잠금화면 표시(iOS Live Activity / Android 상시 알림) 시작.
       // Android는 포그라운드 서비스가 있어야 백그라운드에서도 위치가 계속 온다
-      driveSessionService.start(cardTitleRef.current)
+      driveSessionService.start({
+        cardTitle: cardRef.current.title,
+        accent: cardRef.current.accent,
+        startAt,
+      })
     })()
 
     return () => {
@@ -264,7 +275,7 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
       if (watchId !== null) Geolocation.clearWatch(watchId)
       driveSessionService.stop()
     }
-  }, [phase, navigation])
+  }, [phase, navigation, startAt])
 
   // 주행 중에는 화면이 꺼지지 않게 한다 (거치해 두고 보는 용도)
   useEffect(() => {
@@ -313,6 +324,23 @@ export const useDriveViewModel = (cardId: string): DriveViewModel => {
     (sinceLastFix > WEAK_SIGNAL_STALE_MS ||
       gps.accuracy > WEAK_SIGNAL_ACCURACY_M)
   const averageSpeed = elapsed > 0 ? distance / (elapsed / 1000) : 0
+
+  // 잠금화면 / 상시 알림 내용은 몇 초마다만 갱신한다 (iOS 갱신 횟수 제한, 배터리)
+  const statusRef = useRef<DriveSessionStatus | null>(null)
+  statusRef.current = {
+    distance,
+    elapsed,
+    speedKmh: toKmh(isStale || currentSpeed === null ? 0 : currentSpeed),
+    averageSpeedKmh: toKmh(averageSpeed),
+    weakSignal,
+  }
+  useEffect(() => {
+    if (phase !== 'driving') return
+    const id = setInterval(() => {
+      if (statusRef.current) driveSessionService.update(statusRef.current)
+    }, LOCK_SCREEN_UPDATE_MS)
+    return () => clearInterval(id)
+  }, [phase])
 
   return {
     state: {

@@ -160,9 +160,23 @@ export interface PhoneChangeService {
   ) => Promise<PhoneChangeEventResult | null>
 }
 
+export interface DriveSessionStatus {
+  distance: number // m
+  elapsed: number // ms
+  speedKmh: number
+  averageSpeedKmh: number
+  weakSignal: boolean
+}
+
 export interface DriveSessionService {
   registerForegroundService: () => void
-  start: (cardTitle: string) => Promise<void>
+  start: (params: {
+    cardTitle: string
+    accent: string
+    startAt: number
+  }) => Promise<void>
+  // 잠금화면 / 상시 알림 내용 갱신
+  update: (status: DriveSessionStatus) => void
   stop: () => Promise<void>
   onEndRequest: (listener: () => void) => () => void
   handleNotificationEvent: (event: Event) => boolean
