@@ -19,7 +19,7 @@ export const Footer = () => {
         {state.currentStep !== 1 ? (
           <PressableButton
             title="다음"
-            onPress={actions.nextPress}
+            onPress={actions.verifyPress}
             background={[BLUE_PRIMARY, '#1820ff']}
           />
         ) : (

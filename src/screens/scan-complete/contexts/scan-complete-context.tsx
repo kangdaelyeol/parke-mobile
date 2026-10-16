@@ -30,13 +30,63 @@ export const ScanCompleteContextProvider = ({
   const [loading, setLoading] = useState(false)
   const [scanPage, setScanPage] = useState(false)
   const [serialInput, setSerialInput] = useState(false)
-  const [serialScanned, setSerialScanned] = useState(false)
+  const [existingCard, setExistingCard] = useState(false)
   const [deviceId, setDeviceId] = useState('')
 
   const navigation = useNavigation<ScanCompleteStackNavigationProp>()
 
-  const actions = useMemo(
-    () => ({
+  const actions = useMemo(() => {
+    // 새 기기일 때 기본값
+    const fillDefaults = () => {
+      setExistingCard(false)
+      setName(`Parke${cards.length + 1}`)
+      setPhone(user?.phone ?? '')
+      setMessage('')
+    }
+
+    // 시리얼로 기기를 확인하고, 이미 등록된 카드면 기존 정보를 불러온다
+    const verifySerial = async (serialNum: string) => {
+      if (!user) return
+      const target = serialNum.trim()
+      if (target === '')
+        return Alert.alert('QR코드를 스캔하거나 시리얼 번호를 입력해주세요.')
+
+      if (user.cardIdList.includes(target))
+        return Alert.alert('이미 내 기기로 등록된 Parke입니다.')
+
+      setLoading(true)
+
+      const allowRes = await cardService.getAllow(target)
+      if (!allowRes.status) {
+        Alert.alert(allowRes.message)
+        return setLoading(false)
+      }
+      if (allowRes.payload === null) {
+        Alert.alert('시리얼 번호 입력 오류', '시리얼 번호를 확인해주세요.')
+        return setLoading(false)
+      }
+
+      const cardRes = await cardService.findCard(target)
+      if (!cardRes.status) {
+        Alert.alert(cardRes.message)
+        return setLoading(false)
+      }
+
+      const card = cardRes.payload
+      if (card) {
+        setExistingCard(true)
+        setName(card.title)
+        setPhone(card.phone)
+        setMessage(card.custom.message)
+      } else {
+        fillDefaults()
+      }
+
+      setLoading(false)
+      setCurrentStep(1)
+    }
+
+    return {
       phoneInput: (v: string) => {
         setPhone(extractNumber(v))
       },
@@ -49,39 +99,23 @@ export const ScanCompleteContextProvider = ({
       serialInput: (v: string) => {
         setSerial(v)
       },
-      nextPress: () => {
-        setCurrentStep(prev => prev + 1)
-      },
+      verifyPress: () => verifySerial(serial),
       prevPress: () => {
         setCurrentStep(prev => prev - 1)
       },
       savePress: async () => {
         if (!user) return
-        if (serial.trim() === '')
-          return Alert.alert('시리얼 번호를 입력해주세요.')
         setLoading(true)
 
-        const allowRes = await cardService.getAllow(serial.trim())
-        if (!allowRes.status) {
-          Alert.alert(allowRes.message)
-          return setLoading(false)
-        }
-
-        if (allowRes.payload === null) {
-          Alert.alert('시리얼 번호 입력 오류', '시리얼 번호를 확인해주세요.')
-          return setLoading(false)
-        }
-
-        const newCardIdList = [...user.cardIdList, serial]
-
+        const id = serial.trim()
         const createRes = await cardService.createCard({
-          id: serial,
+          id,
           phone,
           message,
           title: name,
           deviceId,
           userId: user.id,
-          newCardIdList: newCardIdList,
+          newCardIdList: [...user.cardIdList, id],
         })
 
         if (!createRes.status) {
@@ -89,7 +123,7 @@ export const ScanCompleteContextProvider = ({
           return setLoading(false)
         }
 
-        userContextActions.addCardId(serial)
+        userContextActions.addCardId(id)
 
         Alert.alert('저장 성공!')
         navigation.reset({ index: 0, routes: [{ name: 'Home' }] })
@@ -103,29 +137,25 @@ export const ScanCompleteContextProvider = ({
       serialInputPress: () => {
         setSerialInput(true)
       },
+      // QR 스캔이 끝나면 바로 기기 확인까지 진행한다
       serialScan: (serialNum: string) => {
         setSerial(serialNum)
         setScanPage(false)
-        setSerialScanned(true)
+        verifySerial(serialNum)
       },
       setDeviceId,
-    }),
-    [
-      user,
-      serial,
-      phone,
-      message,
-      name,
-      deviceId,
-      userContextActions,
-      navigation,
-    ],
-  )
-
-  useEffect(() => {
-    if (!serialScanned) return
-    actions.savePress()
-  }, [actions, serialScanned])
+    }
+  }, [
+    user,
+    cards,
+    serial,
+    phone,
+    message,
+    name,
+    deviceId,
+    userContextActions,
+    navigation,
+  ])
 
   const state = {
     phone,
@@ -136,13 +166,15 @@ export const ScanCompleteContextProvider = ({
     loading,
     scanPage,
     serialInput,
+    existingCard,
   }
 
+  // 기기 확인 전 미리보기 카드에 보일 기본값. 기존 카드를 불러온 뒤에는 덮어쓰지 않는다.
   useEffect(() => {
-    if (!user || !cards) return
+    if (!user || existingCard) return
     setPhone(user.phone)
     setName(`Parke${cards.length + 1}`)
-  }, [user, cards, setPhone])
+  }, [user, cards, existingCard])
 
   return (
     <ScanCompleteContext.Provider value={{ state, actions }}>

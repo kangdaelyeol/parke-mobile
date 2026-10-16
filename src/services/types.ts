@@ -1,5 +1,6 @@
 import { BleManager } from 'react-native-ble-plx'
-import { AlertPending } from '@/client'
+import { Event } from '@notifee/react-native'
+import { PhoneChangePending } from '@/client'
 import { CardDto, CardInfo } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 
@@ -43,23 +44,16 @@ export interface AuthService {
   clearAuth: () => Promise<void>
 }
 
-interface pushAlertPendingProp {
-  readonly phone: string
-  readonly cardId: string
-  readonly cardName: string
-}
-
 export interface BleCacheService {
   markDeviceSeenAt: (deviceId: string) => void
   getDeviceSeenAt: (deviceId: string) => number
-  getAlertPendingList: () => AlertPending[]
+  getAlertPendingList: () => PhoneChangePending[]
+  hasAlertPending: (cardId: string) => boolean
   getSimultaneousConnectionAlertAt: () => number
   markSimultaneousConnectionAlertAt: () => void
-  pushAlertPending: ({ phone, cardId, cardName }: pushAlertPendingProp) => void
+  pushAlertPending: (pending: PhoneChangePending) => void
   deleteAlertPending: (cardId: string) => void
-  clearAlertPending: () => void
   markAlertLastDeniedAt: () => void
-  clearAlertLastDeniedAt: () => void
   getAlertLastDeniedAt: () => number
   markBleScan: (deviceName: string, batteryLevel: string) => void
   increasePhoneChangeCount: () => void
@@ -80,6 +74,8 @@ export interface StartBackgroundScanProps {
   readonly user: UserDto
   refreshStateSession: () => void
   onCardPhoneChange: (cardId: string, phone: string) => void
+  // 자동변경이 꺼져 있을 때, 앱 화면에서 변경 여부를 묻는다
+  onPhoneChangeRequest: (pending: PhoneChangePending) => void
   onDBError: (message: string) => void
   onError: (e: any) => void
 }
@@ -96,6 +92,7 @@ export interface BleService {
     user,
     refreshStateSession,
     onCardPhoneChange,
+    onPhoneChangeRequest,
     onDBError,
     onError,
   }: StartBackgroundScanProps) => Promise<void>
@@ -144,6 +141,7 @@ export type CardState = CardDto & { scan: boolean }
 
 export interface CardService {
   getCard: (id: string) => Promise<ServiceResponse<CardState>>
+  findCard: (id: string) => Promise<ServiceResponse<CardDto | null>>
   getList: (idList: string[]) => Promise<ServiceResponse<CardState[] | null>>
   getAllow: (serial: string) => Promise<ServiceResponse<Boolean | null>>
   updateCardInfo: (
@@ -158,6 +156,19 @@ export interface CardService {
   updateScan: (deviceId: string, scan: boolean) => void
   updatePhone: (id: string, phone: string) => Promise<ServiceResponse<boolean>>
   updateUpdatedAt: (id: string) => Promise<ServiceResponse<boolean>>
+}
+
+export type PhoneChangeEventResult =
+  | { type: 'confirmed'; cardId: string; phone: string }
+  | { type: 'rejected'; cardId: string }
+  | { type: 'failed'; message: string }
+
+export interface PhoneChangeService {
+  confirm: (cardId: string, phone: string) => Promise<ServiceResponse<boolean>>
+  reject: (cardId: string) => void
+  handleNotificationEvent: (
+    event: Event,
+  ) => Promise<PhoneChangeEventResult | null>
 }
 
 export interface PermissionService {

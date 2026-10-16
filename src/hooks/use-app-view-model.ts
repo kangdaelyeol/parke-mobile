@@ -2,18 +2,19 @@ import { useEffect } from 'react'
 import { Alert, AppState } from 'react-native'
 import Orientation from 'react-native-orientation-locker'
 import DeviceInfo from 'react-native-device-info'
-import notifee, { EventType } from '@notifee/react-native'
+import notifee from '@notifee/react-native'
 import {
-  cardService,
   cacheService,
   bleCacheService,
   permissionService,
+  phoneChangeService,
 } from '@/services'
-import { notifyChangePhoneOnScreen } from '@/utils'
 import { useUserContext } from '@/contexts'
+import { usePhoneChangePrompt } from './use-phone-change-prompt'
 
 export const useAppViewModel = () => {
   const { actions: userContextActions } = useUserContext()
+  const promptPhoneChange = usePhoneChangePrompt()
 
   useEffect(() => {
     ;(async () => {
@@ -27,34 +28,19 @@ export const useAppViewModel = () => {
     } else {
       Orientation.lockToPortrait()
     }
+  }, [])
 
-    const unsub = notifee.onForegroundEvent(async ({ type, detail }) => {
-      if (type !== EventType.ACTION_PRESS && type !== EventType.PRESS) return
-
-      const actionId = detail.pressAction?.id
-      const { cardId, newPhone } = detail.notification?.data || {}
-
-      if (actionId === 'cancel') {
-        bleCacheService.markAlertLastDeniedAt()
-        bleCacheService.deleteAlertPending(String(cardId))
-        return
-      }
-
-      if (actionId !== 'confirm' || !newPhone || !cardId) return
-
-      const res = await cardService.updatePhone(
-        String(cardId),
-        String(newPhone),
-      )
-      if (!res.status) {
-        return Alert.alert(res.message)
-      }
-      bleCacheService.markAlertLastDeniedAt()
-      bleCacheService.clearAlertPending()
+  useEffect(() => {
+    // 앱이 켜져 있을 때 알림 응답 (백그라운드 응답은 index.js)
+    const unsub = notifee.onForegroundEvent(async event => {
+      const result = await phoneChangeService.handleNotificationEvent(event)
+      if (result?.type === 'confirmed')
+        userContextActions.updateCardPhone(result.cardId, result.phone)
+      if (result?.type === 'failed') Alert.alert(result.message)
     })
 
     return () => unsub()
-  }, [])
+  }, [userContextActions])
 
   // 외부에서 포그라운드로 다시 들어가는 경우
   useEffect(() => {
@@ -62,20 +48,10 @@ export const useAppViewModel = () => {
       if (state !== 'active') return
       cacheService.ensureTodayDashBoardCache()
 
-      const pendingList = bleCacheService.getAlertPendingList()
-      pendingList.forEach(pending => {
-        if (pending)
-          notifyChangePhoneOnScreen(
-            pending.cardName,
-            pending.cardId,
-            pending.phone,
-            userContextActions.updateCardPhone,
-          )
-      })
-
-      bleCacheService.clearAlertPending()
+      // 응답을 기다리는 요청은 응답할 때 대기 목록에서 지워진다
+      bleCacheService.getAlertPendingList().forEach(promptPhoneChange)
     })
 
     return () => sub.remove()
-  }, [userContextActions])
+  }, [promptPhoneChange])
 }

@@ -1,5 +1,5 @@
 import { MMKV } from 'react-native-mmkv'
-import { AlertPending, CacheClient } from '@/client'
+import { CacheClient, PhoneChangePending } from '@/client'
 import { LoginProvider } from '@/services/types'
 export const kv = new MMKV()
 
@@ -23,7 +23,10 @@ export const cacheClient: CacheClient = {
   setAlertDeniedAt: time => kv.set('ble:lastDenied', time),
   getAlertPendingList: () => {
     const pending = kv.getString('ble:pending')
-    return pending ? JSON.parse(pending) : ([] as AlertPending[])
+    if (!pending) return []
+    return (JSON.parse(pending) as (PhoneChangePending | null)[]).filter(
+      (p): p is PhoneChangePending => !!p,
+    )
   },
   setAlertPending: pendingList =>
     kv.set('ble:pending', JSON.stringify(pendingList)),

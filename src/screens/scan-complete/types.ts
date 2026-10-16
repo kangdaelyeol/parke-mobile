@@ -29,7 +29,7 @@ export interface ScanCompleteContextValue {
     nameInput: (v: string) => void
     messageInput: (v: string) => void
     serialInput: (v: string) => void
-    nextPress: () => void
+    verifyPress: () => Promise<void>
     savePress: () => Promise<void>
     prevPress: () => void
     scanPress: () => void
@@ -47,6 +47,7 @@ export interface ScanCompleteContextValue {
     loading: boolean
     scanPage: boolean
     serialInput: boolean
+    existingCard: boolean
   }
 }
 

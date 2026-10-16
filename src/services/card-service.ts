@@ -23,6 +23,13 @@ export const cardService: CardService = {
     const scan = bleCacheService.getDeviceScan(cardDto.deviceId)
     return serviceOk({ ...cardDto, scan })
   },
+  // 카드가 없으면 null (getCard는 없는 카드를 실패로 처리한다)
+  findCard: async id => {
+    const res = await cardClient.getById(id)
+    if (!res.status) return serviceFail(getFirebaseErrorMessage(res.error))
+    if (res.payload === null) return serviceOk(null)
+    return serviceOk(Card.fromDto(res.payload).toDto())
+  },
   getList: async idList => {
     const resList = await Promise.allSettled(idList.map(cardService.getCard))
 

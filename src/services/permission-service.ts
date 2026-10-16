@@ -4,24 +4,34 @@ import notifee, {
 } from '@notifee/react-native'
 import { PermissionsAndroid, Platform } from 'react-native'
 import { PERMISSIONS, request, RESULTS } from 'react-native-permissions'
+import {
+  NOTIFICATION_CHANNEL_ID,
+  PHONE_CHANGE_ACTION,
+  PHONE_CHANGE_CATEGORY_ID,
+} from '@/constants'
 import { PermissionService } from './types'
 
 export const permissionService: PermissionService = {
   setupNotifications: async () => {
     await notifee.setNotificationCategories([
       {
-        id: 'CONFIRM_PHONE',
+        id: PHONE_CHANGE_CATEGORY_ID,
         actions: [
           // iOS에서 백그라운드 처리하려면 foreground: false 권장
-          { id: 'confirm', title: '변경', foreground: false },
-          { id: 'cancel', title: '취소', destructive: true, foreground: false },
+          { id: PHONE_CHANGE_ACTION.CONFIRM, title: '변경', foreground: false },
+          {
+            id: PHONE_CHANGE_ACTION.CANCEL,
+            title: '취소',
+            destructive: true,
+            foreground: false,
+          },
         ],
       },
     ])
 
     // 안드 채널도 여기서 1회
     await notifee.createChannel({
-      id: 'ble-device',
+      id: NOTIFICATION_CHANNEL_ID,
       name: 'BLE Device Notifications',
       importance: AndroidImportance.HIGH,
     })

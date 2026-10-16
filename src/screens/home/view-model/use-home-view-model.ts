@@ -5,6 +5,7 @@ import { useUserContext } from '@/contexts'
 import { useHomeContext } from '@home/contexts'
 import { bleService, settingService, permissionService } from '@/services'
 import { HomeStackNavigationProp } from '@/navigation/types'
+import { usePhoneChangePrompt } from '@/hooks'
 
 export const useHomeViewModel = () => {
   const {
@@ -13,6 +14,7 @@ export const useHomeViewModel = () => {
     syncCardList,
     actions: userContextActions,
   } = useUserContext()
+  const promptPhoneChange = usePhoneChangePrompt()
   const [loading, setLoading] = useState(false)
   const { setScanning } = useHomeContext()
   const navigation = useNavigation<HomeStackNavigationProp>()
@@ -32,7 +34,6 @@ export const useHomeViewModel = () => {
       })()
     }, [syncCardList, user?.id, navigation]),
   )
-
 
   useFocusEffect(
     useCallback(() => {
@@ -75,6 +76,7 @@ export const useHomeViewModel = () => {
               user,
               refreshStateSession: userContextActions.refreshStateSession,
               onCardPhoneChange: userContextActions.updateCardPhone,
+              onPhoneChangeRequest: promptPhoneChange,
               onDBError: (message: string) => {
                 Alert.alert(message)
               },
@@ -95,7 +97,7 @@ export const useHomeViewModel = () => {
         bleService.stopScan(nowSession)
         setScanning(false)
       }
-    }, [user, cards, setScanning, userContextActions]),
+    }, [user, cards, setScanning, userContextActions, promptPhoneChange]),
   )
 
   // active 포그라운드로 돌아오는 경우 카드 상태 갱신

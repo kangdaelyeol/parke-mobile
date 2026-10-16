@@ -4,7 +4,8 @@ import { useScanCompleteContext } from '@scan-complete/contexts'
 import { DM_SANS } from '@/theme/fonts'
 import { WHITE } from '@/theme/color'
 
-export const Step2 = () => {
+// 1단계: QR/시리얼로 기기를 확인한다
+export const StepDevice = () => {
   const { actions, state } = useScanCompleteContext()
   return (
     <View style={styles.container}>

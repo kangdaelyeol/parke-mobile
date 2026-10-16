@@ -6,21 +6,23 @@ export const bleCacheService: BleCacheService = {
     cacheClient.setDeviceSeenAt(deviceId, Date.now()),
   getDeviceSeenAt: deviceId => cacheClient.getDeviceSeenAt(deviceId),
   getAlertPendingList: () => cacheClient.getAlertPendingList(),
-  pushAlertPending: ({ phone, cardId, cardName }) => {
-    const pendingList = cacheClient.getAlertPendingList()
-    pendingList.push({ phone, cardId, cardName })
-    cacheClient.setAlertPending(pendingList)
+  hasAlertPending: cardId =>
+    cacheClient.getAlertPendingList().some(p => p.cardId === cardId),
+  // 카드당 하나만 유지한다 (같은 카드의 이전 요청은 교체)
+  pushAlertPending: pending => {
+    const pendingList = cacheClient
+      .getAlertPendingList()
+      .filter(p => p.cardId !== pending.cardId)
+    cacheClient.setAlertPending([...pendingList, pending])
   },
   deleteAlertPending: cardId => {
     const pendingList = cacheClient.getAlertPendingList()
     const newPendingList = pendingList.filter(
-      pending => pending?.cardId !== cardId,
+      pending => pending.cardId !== cardId,
     )
     cacheClient.setAlertPending(newPendingList)
   },
-  clearAlertPending: () => cacheClient.setAlertPending([]),
   markAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(Date.now()),
-  clearAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(0),
   getAlertLastDeniedAt: () => cacheClient.getAlertDeniedAt(),
   markBleScan: (deviceName, batteryLevel) => {
     const bleScanCount = cacheClient.getBleScanCount()

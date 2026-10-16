@@ -1,3 +1,3 @@
-export * from './notify-change-phone-on-screen'
-export * from './notify-change-phone-on-background'
-export * from './notify-change-phone-message'
+export * from './show-phone-change-confirm-notification'
+export * from './show-phone-change-confirm-alert'
+export * from './show-phone-changed-notification'

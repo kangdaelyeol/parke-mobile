@@ -1,5 +1,5 @@
 import { View } from 'react-native'
-import { Step1, Step2 } from '@scan-complete/components'
+import { StepDevice, StepInfo } from '@scan-complete/components'
 import { useMainViewModel } from '@scan-complete/view-model'
 
 type MainProps = {
@@ -12,8 +12,8 @@ export const Main = ({ deviceId }: MainProps) => {
   } = useMainViewModel({ deviceId })
   return (
     <View>
-      {currentStep === 0 && <Step1 />}
-      {currentStep === 1 && <Step2 />}
+      {currentStep === 0 && <StepDevice />}
+      {currentStep === 1 && <StepInfo />}
     </View>
   )
 }

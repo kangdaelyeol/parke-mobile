@@ -20,10 +20,11 @@ export type FirebaseResult<T> = ClientResult<
   ReactNativeFirebase.NativeFirebaseError
 >
 
-export type AlertPending = null | {
-  phone: string
+// 사용자 응답을 기다리는 번호 변경 요청
+export interface PhoneChangePending {
   cardId: string
   cardName: string
+  phone: string
 }
 
 export interface CardClient {
@@ -55,8 +56,8 @@ export interface CacheClient {
   setDeviceSeenAt(deviceId: string, time: number): void
   getAlertDeniedAt(): number
   setAlertDeniedAt(time: number): void
-  getAlertPendingList(): AlertPending[]
-  setAlertPending(pendingList: AlertPending[]): void
+  getAlertPendingList(): PhoneChangePending[]
+  setAlertPending(pendingList: PhoneChangePending[]): void
   markSimultaneousConnectionAlertAt: () => void
   getSimultaneousConnectionAlertAt: () => number
   setActive(setting: boolean): void

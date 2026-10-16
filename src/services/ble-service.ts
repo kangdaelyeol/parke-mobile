@@ -11,7 +11,7 @@ import {
   getDeviceId,
   getBatteryLevel,
   canNotifySimultaneousConnection,
-  isAlertDeniedCooldownActive,
+  isConfirmCooldownActive,
   isScanCooldownActive,
   isOwnCard,
   canRenewPhoneNumber,
@@ -19,9 +19,8 @@ import {
 import { bleCacheService, cardService, settingService } from '@/services'
 import {
   extractNumber,
-  notifyChangePhoneOnBackground,
-  notifyChangePhoneOnScreen,
-  nofifyChangePhoneMessage,
+  showPhoneChangeConfirmNotification,
+  showPhoneChangedNotification,
 } from '@/utils'
 import { BleService, StartBackgroundScanProps } from './types'
 
@@ -50,13 +49,14 @@ const handleBackgroundDevice = async (
     refreshStateSession,
     onDBError,
     onCardPhoneChange,
+    onPhoneChangeRequest,
   }: Omit<StartBackgroundScanProps, 'onError'>,
 ) => {
   if (!isCandidate(device)) return
 
   const deviceId = getDeviceId(device.manufacturerData as string)
 
-  if (isScanCooldownActive(deviceId)) return
+  if (isScanCooldownActive(bleCacheService.getDeviceSeenAt(deviceId))) return
 
   bleCacheService.markDeviceSeenAt(deviceId)
 
@@ -85,8 +85,14 @@ const handleBackgroundDevice = async (
 
   const settings = settingService.getSettings()
 
-  if (canNotifySimultaneousConnection(card)) {
-    notifyChangePhoneOnBackground(card.phone, user.phone, card.id)
+  if (
+    canNotifySimultaneousConnection(
+      card,
+      settings.notice,
+      bleCacheService.getSimultaneousConnectionAlertAt(),
+    )
+  ) {
+    showPhoneChangeConfirmNotification(card.phone, user.phone, card.id)
     bleCacheService.markSimultaneousConnectionAlertAt()
     return
   }
@@ -94,25 +100,20 @@ const handleBackgroundDevice = async (
   if (!canRenewPhoneNumber(card)) return
 
   if (!settings.autoSet) {
-    if (isAlertDeniedCooldownActive()) return
+    if (isConfirmCooldownActive(bleCacheService.getAlertLastDeniedAt())) return
 
-    // 백그라운드로부터 포그라운드 알림 저장(pending...)
-    bleCacheService.pushAlertPending({
-      cardId: card.id,
-      phone: user.phone,
-      cardName: card.title,
-    })
+    // 이미 응답을 기다리는 요청이 있으면 다시 묻지 않는다
+    if (bleCacheService.hasAlertPending(card.id)) return
+
+    // 응답할 때까지 대기 목록에 남겨, 앱이 다시 열릴 때도 묻는다
+    const pending = { cardId: card.id, cardName: card.title, phone: user.phone }
+    bleCacheService.pushAlertPending(pending)
 
     if (settings.notice)
-      notifyChangePhoneOnBackground(card.phone, user.phone, card.id)
+      showPhoneChangeConfirmNotification(card.phone, user.phone, card.id)
 
-    // 앱이 실행중이면 앱 스크린에서 알림
-    notifyChangePhoneOnScreen(
-      card.title,
-      card.id,
-      user.phone,
-      onCardPhoneChange,
-    )
+    // 앱이 실행 중이면 앱 화면에서도 묻는다
+    onPhoneChangeRequest(pending)
     refreshStateSession()
   } else {
     // 자동변경 설정이면 알림 확인 없이 바로 자동 변경
@@ -130,7 +131,7 @@ const handleBackgroundDevice = async (
     onCardPhoneChange(card.id, user.phone)
 
     // 알림 설정이 On이면 백그라운드로부터 변경 알림 해주기
-    if (settings.notice) nofifyChangePhoneMessage(user.phone)
+    if (settings.notice) showPhoneChangedNotification(card.title, user.phone)
 
     refreshStateSession()
   }
