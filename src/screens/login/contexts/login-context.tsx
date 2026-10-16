@@ -73,20 +73,8 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     confirmSheetRef.current?.present()
   }
 
-  // provider 로그인 이후 공통 흐름: firebase 로그인 -> 유저 조회(없으면 생성) -> 화면 이동
-  const loginWithIdentifier = async (
-    identifier: string,
-    nickname: string,
-    providerLogout: () => void,
-  ) => {
-    const firebaseId = await authService.signInOrLogin(identifier)
-
-    if (!firebaseId) {
-      Alert.alert('로그인에 실패하였습니다')
-      providerLogout()
-      return setLoading(false)
-    }
-
+  // firebase 로그인 이후 공통 흐름: 유저 조회(없으면 생성) -> 화면 이동
+  const enterWithFirebaseId = async (firebaseId: string, nickname: string) => {
     const getUserRes = await userService.getUser(firebaseId)
 
     if (getUserRes.status) {
@@ -105,6 +93,23 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     }
     userContectActions.initUser(createUserRes.payload)
     return navigation.replace('Init')
+  }
+
+  // 카카오/애플: 식별자로 firebase 이메일 계정 로그인 후 공통 흐름
+  const loginWithIdentifier = async (
+    identifier: string,
+    nickname: string,
+    providerLogout: () => void,
+  ) => {
+    const firebaseId = await authService.signInOrLogin(identifier)
+
+    if (!firebaseId) {
+      Alert.alert('로그인에 실패하였습니다')
+      providerLogout()
+      return setLoading(false)
+    }
+
+    return enterWithFirebaseId(firebaseId, nickname)
   }
 
   const kakaoLoginPress = async () => {
@@ -145,6 +150,21 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     return loginWithIdentifier(appleUserId, '', authService.appleLogout)
   }
 
+  const googleLoginPress = async () => {
+    if (!allConfirm) return
+    if (loading) return
+    setLoading(true)
+
+    const googleUser = await authService.googleLogin()
+
+    if (!googleUser) {
+      Alert.alert('로그인에 실패하였습니다')
+      return setLoading(false)
+    }
+
+    return enterWithFirebaseId(googleUser.uid, googleUser.nickname)
+  }
+
   return (
     <LoginContext.Provider
       value={{
@@ -168,6 +188,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           thirdConsentConfirmPress,
           showDocPress,
           appleLoginPress,
+          googleLoginPress,
           termsAndConsentConfirmPress,
         },
       }}

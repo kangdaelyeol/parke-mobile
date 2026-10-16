@@ -34,6 +34,8 @@ export interface AuthService {
   appleLogout: () => void
   kakaoLogin: () => Promise<kakaoProfile | null>
   kakaoLogout: () => Promise<void>
+  googleLogin: () => Promise<{ uid: string; nickname: string } | null>
+  googleLogout: () => Promise<void>
   getKakaoProfile: () => Promise<kakaoProfile | null>
   autoLogin: () => Promise<string | null>
   signInOrLogin: (identifier: string) => Promise<string | null>
@@ -106,7 +108,7 @@ export interface BleService {
   }: StartSearchBleProps) => Promise<void>
 }
 
-export type LoginProvider = 'apple' | 'kakao'
+export type LoginProvider = 'apple' | 'kakao' | 'google'
 
 export interface CacheService {
   ensureInitialized: () => void

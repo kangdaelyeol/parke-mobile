@@ -6,6 +6,7 @@ import { useLoginContext } from '@login/contexts'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP } from '@/theme/color'
 import { CheckBoxLine } from '@login/components'
+import { GoogleIllustration } from '@login/components/illustrations'
 import { OriginalsLogoText } from '@/assets/illustrations'
 export const Footer = () => {
   const { actions, state } = useLoginContext()
@@ -57,6 +58,22 @@ export const Footer = () => {
               </View>
             )}
           </Pressable>
+          <Pressable onPress={actions.googleLoginPress}>
+            {({ pressed }) => (
+              <View
+                style={[
+                  styles.googleLogin,
+                  !state.allConfirm && styles.loginDisabled,
+                  state.allConfirm && pressed && styles.googleLoginPressed,
+                ]}
+              >
+                <Text style={styles.loginBtnText}>Google로 계속하기</Text>
+                <View style={styles.googleSymbol}>
+                  <GoogleIllustration size={20} />
+                </View>
+              </View>
+            )}
+          </Pressable>
         </View>
         <View style={styles.designCreditText}>
           <Text style={styles.credit}>Designed by</Text>
@@ -82,7 +99,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
   },
   kakaoLogin: {
-    marginBottom: 20,
     marginHorizontal: 'auto',
     width: '100%',
     height: 50,
@@ -93,6 +109,24 @@ const styles = StyleSheet.create({
   },
   kakaoLoginPressed: {
     backgroundColor: '#ffe600ab',
+  },
+  googleLogin: {
+    marginBottom: 20,
+    marginHorizontal: 'auto',
+    width: '100%',
+    height: 50,
+    backgroundColor: '#ffffff',
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  googleLoginPressed: {
+    backgroundColor: '#e8e8e8',
+  },
+  googleSymbol: {
+    position: 'absolute',
+    top: 15,
+    left: 90,
   },
   loginBtnText: {
     fontFamily: PRETENDARD.BOLD,

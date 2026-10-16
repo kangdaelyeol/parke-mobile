@@ -82,7 +82,7 @@ android {
 
     namespace "com.parke"
     defaultConfig {
-        applicationId "com.parke"
+        applicationId "com.originalshq.parke"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

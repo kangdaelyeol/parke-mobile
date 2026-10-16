@@ -4,6 +4,7 @@ import { DocType, ViewModel } from '@/types/common'
 interface LoginActions {
   kakaoLoginPress: () => Promise<void>
   appleLoginPress: () => Promise<void>
+  googleLoginPress: () => Promise<void>
   allConfirmPress: () => void
   ageConfirmPress: () => void
   termConfirmPress: () => void

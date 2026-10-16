@@ -2,6 +2,8 @@ import {
   createUserWithEmailAndPassword,
   deleteUser,
   getAuth,
+  GoogleAuthProvider,
+  signInWithCredential,
   signInWithEmailAndPassword,
   signOut,
 } from '@react-native-firebase/auth'
@@ -13,9 +15,16 @@ import {
   logout,
 } from '@react-native-seoul/kakao-login'
 import appleAuth from '@invertase/react-native-apple-authentication'
+import {
+  GoogleSignin,
+  isSuccessResponse,
+} from '@react-native-google-signin/google-signin'
+import { GOOGLE_WEB_CLIENT_ID } from '@/constants'
 import { AuthService } from './types'
 import { formatToAppleEmail, getHashedPassword } from '@/helpers'
 import { cacheService } from './cache-service'
+
+GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID })
 
 export const authService: AuthService = {
   getKakaoProfile: async () => {
@@ -57,6 +66,32 @@ export const authService: AuthService = {
       console.log(e)
       return null
     }
+  },
+  // 구글은 이메일/해시 비밀번호 방식이 아니라 Google ID 토큰으로 Firebase에 직접 로그인한다
+  googleLogin: async () => {
+    try {
+      await GoogleSignin.hasPlayServices({
+        showPlayServicesUpdateDialog: true,
+      })
+      const res = await GoogleSignin.signIn()
+      if (!isSuccessResponse(res)) return null
+
+      const { idToken, user } = res.data
+      if (!idToken) return null
+
+      const credential = GoogleAuthProvider.credential(idToken)
+      const cred = await signInWithCredential(getAuth(), credential)
+
+      cacheService.setLoginProvider('google')
+      return { uid: cred.user.uid, nickname: user.name ?? '' }
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  },
+  googleLogout: async () => {
+    await GoogleSignin.signOut()
+    cacheService.clearLoginProvider()
   },
   kakaoLogout: async () => {
     await logout()
@@ -116,6 +151,9 @@ export const authService: AuthService = {
         const kakaoRes = await authService.firebaseLogin(kakaoProfile.email)
         if (kakaoRes.status) return kakaoRes.payload
         break
+      case 'google':
+        // Firebase가 세션을 기기에 유지하므로 현재 로그인된 유저를 그대로 쓴다
+        return getAuth().currentUser?.uid ?? null
     }
 
     return null
@@ -158,6 +196,15 @@ export const authService: AuthService = {
           return false
         }
         return true
+      case 'google':
+        try {
+          await authService.firebaseSignOut()
+          await authService.googleLogout()
+        } catch (e) {
+          console.log(e)
+          return false
+        }
+        return true
     }
   },
   clearAuth: async () => {
@@ -165,6 +212,7 @@ export const authService: AuthService = {
       authService.kakaoLogout(),
       authService.firebaseSignOut(),
       authService.appleLogout(),
+      authService.googleLogout(),
     ])
     cacheService.clearLoginProvider()
   },
