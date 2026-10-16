@@ -43,6 +43,11 @@ export const useSettingCardViewModel = (
     opacity: opacityVal.value,
   }))
 
+  // 내려가는 탭 푸터 자리로 아래에서 올라온다
+  const buttonBarStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: (1 - opacityVal.value) * 100 }],
+  }))
+
   const actions = {
     savePress: async () => {
       if (!isCardAccent(accent))
@@ -85,6 +90,7 @@ export const useSettingCardViewModel = (
     actions,
     animated: {
       optionStyle,
+      buttonBarStyle,
     },
   }
 }

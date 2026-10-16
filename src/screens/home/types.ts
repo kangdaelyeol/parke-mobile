@@ -62,6 +62,7 @@ interface SettingCardState {
 
 interface SettingCardAnimated {
   optionStyle: StyleProp<ViewStyle>
+  buttonBarStyle: StyleProp<ViewStyle>
 }
 
 interface SettingCardActions {
