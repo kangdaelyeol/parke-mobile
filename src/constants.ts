@@ -23,7 +23,7 @@ export const PHONE_CHANGE_ACTION = {
 } as const
 // [임시] 등록된 기기 없이 주행모드를 테스트하는 홈 헤더 버튼. 개발 빌드에서만 보인다.
 // TestFlight 등 릴리스 빌드에서도 필요하면 true로 바꾸고, 출시 전에 버튼과 함께 제거할 것
-export const SHOW_DRIVE_TEST_BUTTON = __DEV__
+export const SHOW_DRIVE_TEST_BUTTON = true
 export const GOOGLE_WEB_CLIENT_ID =
   '1092969773825-bke8dokdo3cdfr2ribgavlc7lgkiev54.apps.googleusercontent.com'
 // 카카오맵 JavaScript 키 (카카오 개발자 콘솔 > 앱 키 > JavaScript 키)
