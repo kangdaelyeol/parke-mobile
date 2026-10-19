@@ -1,8 +1,19 @@
 diff --git a/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm b/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
-index 03df64d..b2ee15d 100644
+index 03df64d..c58356c 100644
 --- a/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
 +++ b/node_modules/@react-native-community/geolocation/ios/RNCGeolocation.mm
-@@ -186,6 +186,18 @@ RCT_EXPORT_MODULE()
+@@ -64,7 +64,9 @@ RCT_ENUM_CONVERTER(RNCGeolocationAuthorizationLevel, (@{
+ 
+   return (RNCGeolocationConfiguration) {
+     .skipPermissionRequests = [RCTConvert BOOL:options[@"skipPermissionRequests"]],
+-    .authorizationLevel = [RCTConvert RNCGeolocationAuthorizationLevel:options[@"authorizationLevel"]]
++    .authorizationLevel = [RCTConvert RNCGeolocationAuthorizationLevel:options[@"authorizationLevel"]],
++    // [parke] 원본은 이 값을 읽지 않아 항상 NO가 되고, 백그라운드에서 위치 갱신이 끊긴다
++    .enableBackgroundLocationUpdates = [RCTConvert BOOL:options[@"enableBackgroundLocationUpdates"]]
+   };
+ }
+ 
+@@ -186,6 +188,18 @@ RCT_EXPORT_MODULE()
  
    _locationManager.distanceFilter  = distanceFilter;
    _locationManager.desiredAccuracy = desiredAccuracy;
