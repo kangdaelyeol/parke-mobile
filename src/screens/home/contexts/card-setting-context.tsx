@@ -32,6 +32,8 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   }
 
   const sliderMarginTop = useSharedValue(sliderMargitTopInactive)
+  // 수정 모드에서는 카드가 위로 올라가며 사라지고, 그 자리를 '카드 수정' 막대가 대신한다
+  const sliderOpacity = useSharedValue(1)
 
   const [settingCard, setSettingCard] = useState(-1)
 
@@ -42,6 +44,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         duration: 400,
         easing: Easing.out(Easing.cubic),
       })
+      sliderOpacity.value = withTiming(0, { duration: 250 })
     },
     hideSetting: () => {
       setSettingCard(-1)
@@ -49,12 +52,14 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         duration: 400,
         easing: Easing.out(Easing.cubic),
       })
+      sliderOpacity.value = withTiming(1, { duration: 400 })
     },
   }
 
   const sliderStyle = useAnimatedStyle(() => {
     return {
       marginVertical: sliderMarginTop.value,
+      opacity: sliderOpacity.value,
     }
   })
 

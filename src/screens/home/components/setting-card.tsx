@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { StyleSheet, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useSettingCardViewModel } from '@home/view-model'
@@ -13,7 +13,15 @@ import {
   ThemeSelector,
 } from '@home/components'
 import { FocusableInput, PressableButton } from '@/components'
-import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
+import { DM_SANS, PRETENDARD } from '@/theme/fonts'
+import {
+  BLUE_PRIMARY,
+  DARK,
+  DARK_LIGHT,
+  GRAY,
+  GRAY_DEEP,
+  WHITE,
+} from '@/theme/color'
 import { formatPhone } from '@/utils'
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
@@ -47,6 +55,14 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   return (
     <>
       <Animated.View style={[styles.container, animated.optionStyle]}>
+        {/* 카드 대신 어떤 카드를 수정 중인지만 보여주는 막대 */}
+        <View style={styles.editBar}>
+          <View style={[styles.editDot, { backgroundColor: state.accent }]} />
+          <Text style={styles.editLabel}>카드 수정</Text>
+          <Text style={styles.editTitle} numberOfLines={1}>
+            {state.title || card.title}
+          </Text>
+        </View>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.wrapper}
           extraScrollHeight={15}
@@ -115,11 +131,40 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    top: 240,
+    top: 0,
     left: 0,
     right: 0,
     marginHorizontal: 'auto',
     bottom: 0,
+    backgroundColor: '#000000',
+  },
+  editBar: {
+    width: '100%',
+    maxWidth: 350,
+    marginHorizontal: 'auto',
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    paddingVertical: 14,
+    marginBottom: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: DARK_LIGHT,
+  },
+  editDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+  },
+  editLabel: {
+    color: GRAY,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 13,
+  },
+  editTitle: {
+    flex: 1,
+    color: WHITE,
+    fontFamily: DM_SANS.BOLD,
+    fontSize: 16,
   },
   wrapper: {
     width: '100%',
