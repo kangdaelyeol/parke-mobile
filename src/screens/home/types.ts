@@ -150,6 +150,12 @@ export interface IllustrationSizeProps {
   height?: number
 }
 
+export interface HomeCardWebPreviewProps {
+  cardId: string
+  // 수정 중인 값 (DB card/{cardId}와 같은 모양)
+  card: Pick<CardDto, 'title' | 'phone' | 'theme' | 'layout' | 'custom'>
+}
+
 export interface HomeLayoutSelectorProps {
   value: CardLayout
   onChange: (val: CardLayout) => void

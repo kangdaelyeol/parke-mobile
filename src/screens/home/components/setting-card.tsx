@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -6,6 +7,7 @@ import { HomeSettingCardProps } from '@home/types'
 import { FOOTER_HEIGHT, FOOTER_HEIGHT_SMALL } from '@home/constants'
 import {
   AccentPicker,
+  CardWebPreview,
   LayoutSelector,
   ScaleStepper,
   ThemeSelector,
@@ -18,6 +20,29 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions, animated } = useSettingCardViewModel(card)
   const { width } = useWindowDimensions()
   const isSmall = width < 400
+  // 수정 중인 값을 그대로 미리보기에 넘긴다 (값이 바뀔 때만 새 객체)
+  const previewCard = useMemo(
+    () => ({
+      title: state.title,
+      phone: state.phone,
+      theme: state.theme,
+      layout: state.layout,
+      custom: {
+        accent: state.accent,
+        scale: state.scale,
+        message: state.message,
+      },
+    }),
+    [
+      state.title,
+      state.phone,
+      state.theme,
+      state.layout,
+      state.accent,
+      state.scale,
+      state.message,
+    ],
+  )
 
   return (
     <>
@@ -27,6 +52,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
           extraScrollHeight={15}
           enableOnAndroid
         >
+          <CardWebPreview cardId={card.id} card={previewCard} />
           <FocusableInput
             title="Parke 이름"
             placeholder="Parke 이름"
