@@ -18,14 +18,14 @@ import { runOnJS } from 'react-native-worklets'
  *   카드/현황/점 ██████ 제자리에서 사라짐
  *   푸터→버튼 바      ████████
  *   배경                 ██████
- *   수정 막대/폼 항목          ██ ██ ██ ██ (위에서부터 차례로)
+ *   폼 항목                    ██ ██ ██ ██ (미리보기부터 위에서 차례로)
  */
 export const SETTING_RANGE = {
   homeFade: [0, 0.3],
   cardFade: [0, 0.3],
   backdrop: [0.2, 0.45],
   footer: [0.15, 0.45],
-  // 수정 막대(0번)부터 폼 항목이 이 간격으로 차례로 나타난다
+  // 폼 항목(0번: 미리보기)이 이 간격으로 차례로 나타난다
   staggerStart: 0.3,
   staggerStep: 0.04,
   staggerLength: 0.25,
@@ -60,6 +60,8 @@ interface CardSettingContext {
   }
   // 수정 중인 카드 (닫는 애니메이션이 끝날 때까지 유지된다)
   settingCard: number
+  // 여는 애니메이션이 끝났는지. 무거운 요소(웹뷰)는 이때 만든다
+  settingOpened: boolean
   setSettingCard: React.Dispatch<React.SetStateAction<number>>
 }
 
@@ -74,13 +76,20 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
 
   const settingProgress = useSharedValue(0)
   const [settingCard, setSettingCard] = useState(-1)
+  const [settingOpened, setSettingOpened] = useState(false)
 
   const cardSettingController = {
     showSetting: (idx: number) => {
       setSettingCard(idx)
-      settingProgress.value = withTiming(1, {
-        duration: OPEN_DURATION_MS,
-        easing: Easing.linear,
+      // 수정 화면을 처음 그리는 프레임과 애니메이션 첫 프레임이 겹치지 않도록 한 프레임 뒤에 시작
+      requestAnimationFrame(() => {
+        settingProgress.value = withTiming(
+          1,
+          { duration: OPEN_DURATION_MS, easing: Easing.linear },
+          finished => {
+            if (finished) runOnJS(setSettingOpened)(true)
+          },
+        )
       })
     },
     // 거꾸로 재생이 끝난 뒤에 수정 화면을 내린다 (중간에 다시 열면 내리지 않는다)
@@ -89,7 +98,9 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         0,
         { duration: CLOSE_DURATION_MS, easing: Easing.linear },
         finished => {
-          if (finished) runOnJS(setSettingCard)(-1)
+          if (!finished) return
+          runOnJS(setSettingCard)(-1)
+          runOnJS(setSettingOpened)(false)
         },
       )
     },
@@ -121,6 +132,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
       value={{
         cardSettingController,
         settingCard,
+        settingOpened,
         setSettingCard,
         sliderStyle,
         homeContentStyle,
@@ -134,7 +146,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
 
 export const useCardSettingContext = () => useContext(cardSettingContext)
 
-// 수정 화면의 index번째 요소가 차례로 나타나는 스타일 (0번: 수정 막대)
+// 수정 화면의 index번째 요소가 차례로 나타나는 스타일 (0번: 미리보기)
 export const useSettingStaggerStyle = (index: number, fromY = 16) => {
   const { settingProgress } = useCardSettingContext()
   return useAnimatedStyle(() => {

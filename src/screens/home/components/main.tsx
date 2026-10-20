@@ -1,28 +1,33 @@
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
-import Animated from 'react-native-reanimated'
+import Animated, { FadeIn } from 'react-native-reanimated'
 import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
 import {
   EmptyCard,
   SettingCard,
   Card,
+  CardSkeleton,
   EmptyView,
   PaginationDots,
   TodaySummary,
 } from '@home/components'
 import { useMainViewModel } from '@home/view-model'
+import { HomeMainProps } from '@home/types'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 
-export const Main = () => {
+export const Main = ({ loading }: HomeMainProps) => {
   const { state, actions, animated } = useMainViewModel()
+  // 카드를 아직 한 번도 못 불러온 상태에서만 뼈대를 보여준다.
+  // 이미 카드가 있으면 다시 동기화하는 동안에도 기존 카드를 그대로 둔다.
+  const showSkeleton = loading && state.cardLength === 0
   const { width } = useWindowDimensions()
   const isSmall = width < 400
 
   return (
     <View style={styles.container}>
       <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
-        {state.cardLength === 0 ? (
+        {state.cardLength === 0 && !showSkeleton ? (
           <EmptyView />
         ) : (
           <>
@@ -52,19 +57,31 @@ export const Main = () => {
                   <Animated.View
                     style={[animated.moverStyle, styles.cardSliderMover]}
                   >
-                    {state.cards &&
-                      state.cards.map((card, idx) => (
-                        <Card key={card.id} card={card} idx={idx} />
-                      ))}
-                    <EmptyCard idx={state.cardLength} />
+                    {showSkeleton ? (
+                      <CardSkeleton />
+                    ) : (
+                      <>
+                        {state.cards.map((card, idx) => (
+                          <Animated.View
+                            key={card.id}
+                            entering={FadeIn.duration(350)}
+                          >
+                            <Card card={card} idx={idx} />
+                          </Animated.View>
+                        ))}
+                        <EmptyCard idx={state.cardLength} />
+                      </>
+                    )}
                   </Animated.View>
                 </View>
-                <Animated.View
-                  pointerEvents={state.isSetting ? 'none' : 'auto'}
-                  style={animated.homeContentStyle}
-                >
-                  <PaginationDots />
-                </Animated.View>
+                {!showSkeleton && (
+                  <Animated.View
+                    pointerEvents={state.isSetting ? 'none' : 'auto'}
+                    style={animated.homeContentStyle}
+                  >
+                    <PaginationDots />
+                  </Animated.View>
+                )}
               </Animated.View>
             </GestureDetector>
           </>

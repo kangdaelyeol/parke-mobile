@@ -34,7 +34,11 @@ const buildPreviewUri = (
 
 // 카드 수정 중인 값을 웹 카드 화면으로 미리 보여준다 (저장 전).
 // 값이 바뀌면 바뀐 쿼리로 웹뷰를 다시 불러온다.
-export const CardWebPreview = ({ cardId, card }: HomeCardWebPreviewProps) => {
+export const CardWebPreview = ({
+  cardId,
+  card,
+  active,
+}: HomeCardWebPreviewProps) => {
   const [uri, setUri] = useState(() => buildPreviewUri(cardId, card))
   const [loading, setLoading] = useState(true)
   const [loadedOnce, setLoadedOnce] = useState(false)
@@ -51,20 +55,22 @@ export const CardWebPreview = ({ cardId, card }: HomeCardWebPreviewProps) => {
     <View style={styles.container}>
       <Text style={styles.title}>미리보기</Text>
       <View style={styles.frame}>
-        <RefWebView
-          source={{ uri }}
-          style={styles.webView}
-          nestedScrollEnabled
-          onLoadStart={() => {
-            setLoading(true)
-            setFailed(false)
-          }}
-          onLoadEnd={() => {
-            setLoading(false)
-            setLoadedOnce(true)
-          }}
-          onError={() => setFailed(true)}
-        />
+        {active && (
+          <RefWebView
+            source={{ uri }}
+            style={styles.webView}
+            nestedScrollEnabled
+            onLoadStart={() => {
+              setLoading(true)
+              setFailed(false)
+            }}
+            onLoadEnd={() => {
+              setLoading(false)
+              setLoadedOnce(true)
+            }}
+            onError={() => setFailed(true)}
+          />
+        )}
         {/* 처음에는 전체를 가리고, 다시 불러올 때는 이전 화면 위에 작게 표시한다 */}
         {loading && !loadedOnce && !failed && (
           <View style={styles.overlay}>
@@ -99,6 +105,7 @@ const styles = StyleSheet.create({
     color: GRAY,
     fontFamily: PRETENDARD.BOLD,
     fontSize: 13,
+    marginTop: 15,
   },
   frame: {
     height: PREVIEW_HEIGHT,

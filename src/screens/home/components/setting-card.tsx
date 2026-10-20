@@ -1,5 +1,5 @@
 import { PropsWithChildren, useMemo } from 'react'
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -22,18 +22,10 @@ import {
   ThemeSelector,
 } from '@home/components'
 import { FocusableInput, PressableButton } from '@/components'
-import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import {
-  BLUE_PRIMARY,
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_DEEP,
-  WHITE,
-} from '@/theme/color'
+import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
-// 수정 화면 요소를 순서대로 나타나게 하는 래퍼 (index가 클수록 늦게)
+// 수정 화면 요소를 순서대로 나타나게 하는 래퍼 (index가 클수록 늦게, 0번: 미리보기)
 const Stagger = ({
   index,
   fromY,
@@ -47,7 +39,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions } = useSettingCardViewModel(card)
   const { width } = useWindowDimensions()
   const isSmall = width < 400
-  const { settingProgress } = useCardSettingContext()
+  const { settingProgress, settingOpened } = useCardSettingContext()
 
   // 카드가 투명해지는 동안 배경이 어두워지며 덮는다
   const backdropStyle = useAnimatedStyle(() => ({
@@ -97,25 +89,19 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   return (
     <>
       <Animated.View style={[styles.container, backdropStyle]}>
-        {/* 카드 대신 어떤 카드를 수정 중인지만 보여주는 막대 (카드가 올라간 자리로 내려온다) */}
-        <Stagger index={0} fromY={-12}>
-          <View style={styles.editBar}>
-            <View style={[styles.editDot, { backgroundColor: state.accent }]} />
-            <Text style={styles.editLabel}>카드 수정</Text>
-            <Text style={styles.editTitle} numberOfLines={1}>
-              {state.title || card.title}
-            </Text>
-          </View>
-        </Stagger>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.wrapper}
           extraScrollHeight={15}
           enableOnAndroid
         >
-          <Stagger index={1}>
-            <CardWebPreview cardId={card.id} card={previewCard} />
+          <Stagger index={0}>
+            <CardWebPreview
+              cardId={card.id}
+              card={previewCard}
+              active={settingOpened}
+            />
           </Stagger>
-          <Stagger index={2}>
+          <Stagger index={1}>
             <FocusableInput
               title="Parke 이름"
               placeholder="Parke 이름"
@@ -124,7 +110,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
               iconName="card"
             />
           </Stagger>
-          <Stagger index={3}>
+          <Stagger index={2}>
             <FocusableInput
               title="전화번호"
               placeholder="전화번호"
@@ -133,7 +119,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
               iconName="phone"
             />
           </Stagger>
-          <Stagger index={4}>
+          <Stagger index={3}>
             <FocusableInput
               title="메시지"
               placeholder="메시지"
@@ -142,22 +128,22 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
               iconName="message"
             />
           </Stagger>
-          <Stagger index={5}>
+          <Stagger index={4}>
             <LayoutSelector
               value={state.layout}
               onChange={actions.layoutPress}
             />
           </Stagger>
-          <Stagger index={6}>
+          <Stagger index={5}>
             <ThemeSelector value={state.theme} onChange={actions.themePress} />
           </Stagger>
-          <Stagger index={7}>
+          <Stagger index={6}>
             <AccentPicker
               value={state.accent}
               onChangeText={actions.accentInput}
             />
           </Stagger>
-          <Stagger index={8}>
+          <Stagger index={7}>
             <ScaleStepper value={state.scale} onChange={actions.scaleChange} />
           </Stagger>
         </KeyboardAwareScrollView>
@@ -200,34 +186,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     bottom: 0,
     backgroundColor: '#000000',
-  },
-  editBar: {
-    width: '100%',
-    maxWidth: 350,
-    marginHorizontal: 'auto',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    paddingVertical: 14,
-    marginBottom: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: DARK_LIGHT,
-  },
-  editDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-  },
-  editLabel: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
-  editTitle: {
-    flex: 1,
-    color: WHITE,
-    fontFamily: DM_SANS.BOLD,
-    fontSize: 16,
   },
   wrapper: {
     width: '100%',

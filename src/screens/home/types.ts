@@ -149,8 +149,15 @@ export interface IllustrationSizeProps {
   height?: number
 }
 
+export interface HomeMainProps {
+  // 카드 목록 동기화 중
+  loading: boolean
+}
+
 export interface HomeCardWebPreviewProps {
   cardId: string
+  // false인 동안은 웹뷰를 만들지 않고 빈 틀만 보여준다 (여는 애니메이션이 끊기지 않도록)
+  active: boolean
   // 수정 중인 값 (DB card/{cardId}와 같은 모양)
   card: Pick<CardDto, 'title' | 'phone' | 'theme' | 'layout' | 'custom'>
 }
