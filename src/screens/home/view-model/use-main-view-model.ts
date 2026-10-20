@@ -12,7 +12,7 @@ import { HomeMainViewModel } from '@home/types'
 
 export const useMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext()
-  const { sliderStyle, settingCard } = useCardSettingContext()
+  const { sliderStyle, homeContentStyle, settingCard } = useCardSettingContext()
   const { cards } = useUserContext()
   const titleOpacity = useSharedValue(0)
 
@@ -24,9 +24,10 @@ export const useMainViewModel = (): HomeMainViewModel => {
 
   useEffect(() => {
     if (settingCard !== -1) titleOpacity.value = 0
+    // 수정 화면은 닫는 애니메이션이 끝난 뒤에 내려가므로 짧게만 기다린다
     else
       titleOpacity.value = withDelay(
-        600,
+        100,
         withTiming(1, {
           duration: 400,
           easing: Easing.out(Easing.cubic),
@@ -43,6 +44,7 @@ export const useMainViewModel = (): HomeMainViewModel => {
     },
     animated: {
       sliderStyle,
+      homeContentStyle,
       moverStyle,
       cardTitleStyle,
     },

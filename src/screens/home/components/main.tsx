@@ -26,7 +26,12 @@ export const Main = () => {
           <EmptyView />
         ) : (
           <>
-            {!state.isSetting && <TodaySummary />}
+            <Animated.View
+              pointerEvents={state.isSetting ? 'none' : 'auto'}
+              style={[StyleSheet.absoluteFill, animated.homeContentStyle]}
+            >
+              <TodaySummary />
+            </Animated.View>
             <GestureDetector gesture={actions.panGesture}>
               <Animated.View
                 style={[styles.cardContainer, animated.sliderStyle]}
@@ -54,7 +59,12 @@ export const Main = () => {
                     <EmptyCard idx={state.cardLength} />
                   </Animated.View>
                 </View>
-                {!state.isSetting && <PaginationDots />}
+                <Animated.View
+                  pointerEvents={state.isSetting ? 'none' : 'auto'}
+                  style={animated.homeContentStyle}
+                >
+                  <PaginationDots />
+                </Animated.View>
               </Animated.View>
             </GestureDetector>
           </>

@@ -1,10 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Alert } from 'react-native'
-import {
-  useAnimatedStyle,
-  useSharedValue,
-  withTiming,
-} from 'react-native-reanimated'
 import { useCardSettingContext, useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
 import { cardService } from '@/services'
@@ -33,23 +28,6 @@ export const useSettingCardViewModel = (
   const [layout, setLayout] = useState(card.layout)
   const [accent, setAccent] = useState(card.custom.accent)
   const [scale, setScale] = useState(card.custom.scale)
-  const opacityVal = useSharedValue(0)
-
-  useEffect(() => {
-    opacityVal.value = withTiming(1, {
-      duration: 400,
-    })
-  }, [opacityVal])
-
-  const optionStyle = useAnimatedStyle(() => ({
-    opacity: opacityVal.value,
-  }))
-
-  // 내려가는 탭 푸터 자리로 아래에서 올라온다
-  const buttonBarStyle = useAnimatedStyle(() => ({
-    transform: [{ translateY: (1 - opacityVal.value) * 100 }],
-  }))
-
   const actions = {
     savePress: async () => {
       if (!isCardAccent(accent))
@@ -98,9 +76,6 @@ export const useSettingCardViewModel = (
       scale,
     },
     actions,
-    animated: {
-      optionStyle,
-      buttonBarStyle,
-    },
+    animated: {},
   }
 }

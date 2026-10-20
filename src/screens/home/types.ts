@@ -14,6 +14,7 @@ interface MainState {
 
 interface MainAnimated {
   sliderStyle: StyleProp<ViewStyle>
+  homeContentStyle: StyleProp<ViewStyle>
   moverStyle: StyleProp<ViewStyle>
   cardTitleStyle: StyleProp<ViewStyle>
 }
@@ -62,10 +63,8 @@ interface SettingCardState {
   scale: number
 }
 
-interface SettingCardAnimated {
-  optionStyle: StyleProp<ViewStyle>
-  buttonBarStyle: StyleProp<ViewStyle>
-}
+// 수정 화면 애니메이션은 카드 설정 컨텍스트의 진행값이 담당한다
+type SettingCardAnimated = Record<string, never>
 
 interface SettingCardActions {
   savePress: () => Promise<void>
