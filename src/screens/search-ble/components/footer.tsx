@@ -1,5 +1,6 @@
 import { JSX } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import Animated, { FadeInDown } from 'react-native-reanimated'
 import { Item, ItemList } from '@/components'
 import { useSearchBleContext } from '@search-ble/contexts'
 import { BLUE_PRIMARY, GRAY_DEEP } from '@/theme/color'
@@ -22,7 +23,11 @@ export const Footer = () => {
   return (
     <View style={styles.container}>
       {state.detected && (
-        <View style={styles.detail}>
+        // 감지되는 순간 아래에서 떠오르며 나타난다
+        <Animated.View
+          entering={FadeInDown.duration(500).delay(150)}
+          style={styles.detail}
+        >
           <ItemList>
             <Item
               title="Parke"
@@ -31,7 +36,7 @@ export const Footer = () => {
               Right={Right(state.rssi)}
             />
           </ItemList>
-        </View>
+        </Animated.View>
       )}
       <Text style={styles.text}>
         장치에 가까이 다가가면 더 정확한 거리를 측정할 수 있어요

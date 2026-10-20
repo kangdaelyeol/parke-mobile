@@ -20,8 +20,6 @@ interface TitleActions {
 interface TitleAnimated {
   titleStyle: StyleProp<ViewStyle>
   subTitleStyle: StyleProp<ViewStyle>
-  dotStyle: StyleProp<ViewStyle>
-  scanContainerStyle: StyleProp<ViewStyle>
 }
 
 export type SearchBleHeaderViewModel = ViewModel<{}, HeaderActions>

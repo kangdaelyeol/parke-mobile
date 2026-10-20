@@ -5,7 +5,6 @@ import {
   useAnimatedStyle,
   useSharedValue,
   withDelay,
-  withRepeat,
   withTiming,
 } from 'react-native-reanimated'
 import { SearchBleTitleViewModel } from '@search-ble/types'
@@ -15,8 +14,6 @@ export const useTitleViewModel = (): SearchBleTitleViewModel => {
   const titleTransY = useSharedValue(0)
   const titleOpacity = useSharedValue(0)
   const subTitleOpacity = useSharedValue(0)
-  const dotOpacity = useSharedValue(1)
-  const scanContainerOpacity = useSharedValue(0)
 
   useEffect(() => {
     if (!titleHeight) return
@@ -32,32 +29,12 @@ export const useTitleViewModel = (): SearchBleTitleViewModel => {
     )
     titleOpacity.value = withDelay(400, withTiming(1, { duration: 500 }))
     subTitleOpacity.value = withDelay(2300, withTiming(1, { duration: 500 }))
-    dotOpacity.value = withRepeat(
-      withTiming(0.3, {
-        duration: 1000,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      }),
-      -1,
-      true,
-    )
-    scanContainerOpacity.value = withDelay(
-      1500,
-      withTiming(1, {
-        duration: 1000,
-        easing: Easing.bezier(0.33, 1, 0.68, 1),
-      }),
-    )
-  }, [
-    subTitleOpacity,
-    titleHeight,
-    titleOpacity,
-    titleTransY,
-    dotOpacity,
-    scanContainerOpacity,
-  ])
+  }, [subTitleOpacity, titleHeight, titleOpacity, titleTransY])
 
+  // 시작 애니메이션 위치 계산용이라 처음 한 번만 잰다 (문구가 바뀌어도 다시 시작하지 않도록)
   const titleLayout = (e: LayoutChangeEvent) => {
-    setTitleHeight(e.nativeEvent.layout.height)
+    const height = e.nativeEvent.layout.height
+    setTitleHeight(prev => prev || height)
   }
 
   const animated = {
@@ -71,12 +48,6 @@ export const useTitleViewModel = (): SearchBleTitleViewModel => {
     })),
     subTitleStyle: useAnimatedStyle(() => ({
       opacity: subTitleOpacity.value,
-    })),
-    dotStyle: useAnimatedStyle(() => ({
-      opacity: dotOpacity.value,
-    })),
-    scanContainerStyle: useAnimatedStyle(() => ({
-      opacity: scanContainerOpacity.value,
     })),
   }
 

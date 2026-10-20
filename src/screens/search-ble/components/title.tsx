@@ -1,17 +1,12 @@
-import { StyleSheet, Text } from 'react-native'
+import { StyleSheet } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { useSearchBleContext } from '@search-ble/contexts'
+import { SwapText } from '@search-ble/components/swap-text'
 import { useTitleViewModel } from '@search-ble/view-model'
 import { title, subTitle } from '@search-ble/constants'
 import { DM_SANS } from '@/theme/fonts'
-import {
-  BLUE_PRIMARY,
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_LIGHT,
-  WHITE,
-} from '@/theme/color'
+import { GRAY, WHITE } from '@/theme/color'
+
 export const Title = () => {
   const {
     state: { detected },
@@ -20,53 +15,27 @@ export const Title = () => {
 
   return (
     <>
-      <Animated.View
-        style={[styles.scanContainer, animated.scanContainerStyle]}
-      >
-        <Animated.View style={[styles.dot, animated.dotStyle]} />
-        <Text style={styles.scan}>스캔중</Text>
-      </Animated.View>
       <Animated.View style={[styles.titleContainer, animated.titleStyle]}>
-        <Text onLayout={actions.titleLayout} style={styles.title}>
-          {detected ? title.DETECT : title.SEARCH}
-        </Text>
+        <SwapText
+          text={detected ? title.DETECT : title.SEARCH}
+          style={styles.title}
+          onLayout={actions.titleLayout}
+        />
       </Animated.View>
       <Animated.View style={animated.subTitleStyle}>
-        <Text style={styles.subTitle}>
-          {detected ? subTitle.DETECT : subTitle.SEARCH}
-        </Text>
+        <SwapText
+          text={detected ? subTitle.DETECT : subTitle.SEARCH}
+          style={styles.subTitle}
+          delay={120}
+        />
       </Animated.View>
     </>
   )
 }
 
 const styles = StyleSheet.create({
-  scanContainer: {
-    flexDirection: 'row',
-    gap: 6,
-    paddingVertical: 7,
-    paddingHorizontal: 15,
-    borderRadius: 100,
-    marginTop: 20,
-    marginHorizontal: 'auto',
-    backgroundColor: DARK,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-  },
-  scan: {
-    color: GRAY_LIGHT,
-    fontFamily: DM_SANS.MEDIUM,
-    fontSize: 14,
-  },
-  dot: {
-    backgroundColor: BLUE_PRIMARY,
-    width: 8,
-    height: 8,
-    borderRadius: '50%',
-  },
   titleContainer: {
-    marginTop: 20,
+    marginTop: 35,
   },
   title: {
     color: WHITE,
