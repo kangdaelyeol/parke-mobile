@@ -52,12 +52,13 @@ export const cardService: CardService = {
     }
     return serviceOk(res.payload)
   },
-  updateCardInfo: async (cardId, { title, phone, theme, custom }) => {
+  updateCardInfo: async (cardId, { title, phone, theme, layout, custom }) => {
     const res = await cardClient.update({
       id: cardId,
       title,
       phone,
       theme,
+      layout,
       custom,
     })
     if (!res.status) {
@@ -82,6 +83,7 @@ export const cardService: CardService = {
       phone,
       title,
       theme: existing?.theme,
+      layout: existing?.layout,
       custom: { ...existing?.custom, message },
       updatedAt: serverTimestamp(),
       deviceId,

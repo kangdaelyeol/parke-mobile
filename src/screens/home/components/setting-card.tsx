@@ -4,7 +4,12 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { useSettingCardViewModel } from '@home/view-model'
 import { HomeSettingCardProps } from '@home/types'
 import { FOOTER_HEIGHT, FOOTER_HEIGHT_SMALL } from '@home/constants'
-import { AccentPicker, ScaleStepper, ThemeSelector } from '@home/components'
+import {
+  AccentPicker,
+  LayoutSelector,
+  ScaleStepper,
+  ThemeSelector,
+} from '@home/components'
 import { FocusableInput, PressableButton } from '@/components'
 import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
@@ -43,6 +48,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
             onChangeText={actions.messageInput}
             iconName="message"
           />
+          <LayoutSelector value={state.layout} onChange={actions.layoutPress} />
           <ThemeSelector value={state.theme} onChange={actions.themePress} />
           <AccentPicker
             value={state.accent}

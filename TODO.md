@@ -16,26 +16,32 @@
 ## 2. 외부 콘솔 설정
 
 ### 카카오 개발자 콘솔
+
 - [ ] 플랫폼 → Android에 패키지명 `com.originalshq.parke`, 키 해시 `Xo8WBi6jzSxKDVR4drqm84yr9iU=` 등록
 - [ ] JavaScript 키 → JavaScript SDK 도메인에 `https://localhost` 추가 (기존 `http://localhost`는 삭제 가능)
 - [ ] 제품 설정 → 카카오맵 사용 설정 ON 확인
 
 ### Firebase
+
 - [ ] Android 앱 `com.originalshq.parke` 등록
 - [ ] 위 앱에 디지털 지문(SHA-1) 등록: `5E:8F:16:06:2E:A3:CD:2C:4A:0D:54:78:76:BA:A6:F3:8C:AB:F6:25`
 - [ ] `google-services.json` 다시 받아 `android/app/`에 덮어쓰기
 - [ ] 예전 Android 앱 `com.originals.parke` 삭제
 - [ ] Authentication → 로그인 방법에서 Google 사용 설정 확인
 - [ ] Realtime Database 보안 규칙 1단계 적용 (`allow` 쓰기 차단, 개별 읽기만 허용, 카드 필드 검증)
+  - [ ] 카드 필드 검증에 `layout` 추가: `"layout": { ".validate": "newData.val() === 'a' || newData.val() === 'b' || newData.val() === 'c' || newData.val() === 'd'" }`
 
 ### Google Cloud (OAuth 동의 화면)
+
 - [ ] 테스트 중에는 테스트 사용자에 테스트 계정 추가
 - [ ] 출시 직전 "프로덕션으로 게시"
 
 ### Xcode
+
 - [ ] DriveActivityExtension 타깃 → Signing & Capabilities의 Team이 앱과 같은지 확인
 
 ### 출시 준비 (Google 개발자 계정 승인 후)
+
 - [ ] 릴리스 키스토어 생성 (`android/app/build.gradle`의 release가 지금은 debug 키로 서명됨)
 - [ ] Play Console 앱 서명 키의 SHA-1 → Firebase에 추가, 카카오용 키 해시로 변환해 등록
 - [ ] 릴리스 키스토어의 SHA-1 / 키 해시도 같은 방식으로 등록
@@ -43,6 +49,7 @@
 ## 3. 실기기 테스트
 
 ### 주행모드 (야외에서)
+
 - [ ] 위치 권한 요청 → 지도 표시 → 경로가 카드 강조색으로 그려짐
 - [ ] 거리, 현재·평균 속도, 주행 시간이 갱신됨
 - [ ] 주행 중 화면이 저절로 꺼지지 않음
@@ -54,6 +61,7 @@
 - [ ] 위치 미동의 계정으로 주행모드 진입 → 동의 패널 → 동의 후 주행 시작
 
 ### 그 외 기능
+
 - [ ] 구글 로그인 (첫 가입 → 초기설정, 재로그인 → 홈, 자동 로그인, 로그아웃)
 - [ ] Android 카카오 로그인 (새 패키지명 등록 후)
 - [ ] 로그인 동의: 필수 4개만으로 로그인 가능, 위치 선택 동의 시 DB에 동의 시각 기록
@@ -80,11 +88,13 @@
 ## 5. 스토어 제출
 
 ### App Store
+
 - [ ] 개인정보 라벨: 정확한 위치(앱 기능, 사용자와 연결됨), 이메일(로그인)
 - [ ] 심사 메모: 백그라운드 위치 = "사용자가 시작한 주행 모드 중 운행 경로 기록", Live Activity 사용
 - [ ] 주행 모드 시연 영상
 
 ### Google Play
+
 - [ ] 데이터 보안: 위치(정확한 위치), 앱 기능 목적
 - [ ] 포그라운드 서비스 권한 신고 (`FOREGROUND_SERVICE_LOCATION`) + 시연 영상
 

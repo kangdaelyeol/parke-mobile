@@ -1,10 +1,18 @@
-import { CARD_THEMES, CardCustom, CardDto, CardTheme } from './card-dto'
+import {
+  CARD_LAYOUTS,
+  CARD_THEMES,
+  CardCustom,
+  CardDto,
+  CardLayout,
+  CardTheme,
+} from './card-dto'
 import { serverTimestamp } from '@react-native-firebase/database'
 
 export const CARD_SCALE_MIN = 0.85
 export const CARD_SCALE_MAX = 1.3
 export const CARD_MESSAGE_MAX_LENGTH = 40
 export const DEFAULT_CARD_THEME: CardTheme = 'dark'
+export const DEFAULT_CARD_LAYOUT: CardLayout = 'a'
 export const DEFAULT_CARD_CUSTOM: CardCustom = {
   accent: '#383bf9',
   scale: 1,
@@ -17,9 +25,10 @@ export const isCardAccent = (v: unknown): v is string =>
 export const clampCardScale = (v: number) =>
   Math.min(CARD_SCALE_MAX, Math.max(CARD_SCALE_MIN, Math.round(v * 100) / 100))
 
-type CardProps = Omit<CardDto, 'id' | 'theme' | 'custom'> & {
+type CardProps = Omit<CardDto, 'id' | 'theme' | 'layout' | 'custom'> & {
   id?: string
   theme?: CardTheme
+  layout?: CardLayout
   custom?: Partial<CardCustom>
   // 스키마 변경 전 카드는 message가 최상위에 있다
   message?: string
@@ -31,6 +40,7 @@ export class Card {
     private title: string,
     private phone: string,
     private theme: CardTheme,
+    private layout: CardLayout,
     private custom: CardCustom,
     private updatedAt: object,
     private deviceId: string,
@@ -46,6 +56,10 @@ export class Card {
       props.theme && CARD_THEMES.includes(props.theme)
         ? props.theme
         : DEFAULT_CARD_THEME
+    const layout =
+      props.layout && CARD_LAYOUTS.includes(props.layout)
+        ? props.layout
+        : DEFAULT_CARD_LAYOUT
     const custom = {
       accent: isCardAccent(props.custom?.accent)
         ? props.custom.accent
@@ -69,6 +83,7 @@ export class Card {
       title,
       phone,
       theme,
+      layout,
       custom,
       updatedAt,
       deviceId,
@@ -86,6 +101,7 @@ export class Card {
       title: this.title,
       phone: this.phone,
       theme: this.theme,
+      layout: this.layout,
       custom: this.custom,
       updatedAt: this.updatedAt,
       deviceId: this.deviceId,

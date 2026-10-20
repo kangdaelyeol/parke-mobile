@@ -1,6 +1,4 @@
 import {
-  ComponentType,
-  Ref,
   useEffect,
   useImperativeHandle,
   useMemo,
@@ -8,11 +6,8 @@ import {
   useState,
 } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import {
-  WebView,
-  WebViewMessageEvent,
-  WebViewProps,
-} from 'react-native-webview'
+import { WebViewMessageEvent } from 'react-native-webview'
+import { RefWebView, WebViewHandle } from '@/components'
 import { KAKAO_MAP_BASE_URL, KAKAO_MAP_JS_KEY } from '@/constants'
 import { DriveMapProps } from '@/screens/drive/types'
 import { buildMapHtml } from '@/screens/drive/map-html'
@@ -20,14 +15,6 @@ import { DARK, GRAY } from '@/theme/color'
 import { PRETENDARD } from '@/theme/fonts'
 
 const MAP_LOAD_TIMEOUT_MS = 10 * 1000
-
-// 기본 타입 선언에 ref가 빠져 있어, 실제로 쓰는 메서드만 가진 ref 타입을 붙인다
-interface WebViewHandle {
-  injectJavaScript: (script: string) => void
-}
-const MapWebView = WebView as unknown as ComponentType<
-  WebViewProps & { ref?: Ref<WebViewHandle> }
->
 
 export const DriveMap = ({
   ref,
@@ -104,7 +91,7 @@ export const DriveMap = ({
   return (
     <View style={styles.container}>
       {!!KAKAO_MAP_JS_KEY && (
-        <MapWebView
+        <RefWebView
           ref={webViewRef}
           source={{ html, baseUrl: KAKAO_MAP_BASE_URL }}
           originWhitelist={['*']}

@@ -11,6 +11,7 @@ import { cardService } from '@/services'
 import {
   CARD_MESSAGE_MAX_LENGTH,
   CardDto,
+  CardLayout,
   CardTheme,
   clampCardScale,
   isCardAccent,
@@ -29,6 +30,7 @@ export const useSettingCardViewModel = (
   const [phone, setPhone] = useState(card.phone)
   const [message, setMessage] = useState(card.custom.message)
   const [theme, setTheme] = useState(card.theme)
+  const [layout, setLayout] = useState(card.layout)
   const [accent, setAccent] = useState(card.custom.accent)
   const [scale, setScale] = useState(card.custom.scale)
   const opacityVal = useSharedValue(0)
@@ -54,7 +56,13 @@ export const useSettingCardViewModel = (
         return Alert.alert('강조 색상을 #RRGGBB 형식으로 입력해주세요.')
 
       const cardId = cards[selectedCardIdx].id
-      const info = { title, phone, theme, custom: { accent, scale, message } }
+      const info = {
+        title,
+        phone,
+        theme,
+        layout,
+        custom: { accent, scale, message },
+      }
 
       cardSettingController.hideSetting()
       const res = await cardService.updateCardInfo(cardId, info)
@@ -73,6 +81,7 @@ export const useSettingCardViewModel = (
       setMessage(val.slice(0, CARD_MESSAGE_MAX_LENGTH)),
     phoneInput: (val: string) => setPhone(extractNumber(val)),
     themePress: (val: CardTheme) => setTheme(val),
+    layoutPress: (val: CardLayout) => setLayout(val),
     accentInput: (val: string) =>
       setAccent('#' + val.replace(/[^0-9a-fA-F]/g, '').slice(0, 6)),
     scaleChange: (val: number) => setScale(clampCardScale(val)),
@@ -84,6 +93,7 @@ export const useSettingCardViewModel = (
       message,
       phone,
       theme,
+      layout,
       accent,
       scale,
     },
