@@ -6,6 +6,7 @@ import {
   DriveMap,
   DriveConsent,
   DriveSummary,
+  EmailReportSheet,
   DrivingPanel,
 } from '@/screens/drive/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
@@ -68,6 +69,13 @@ export default function DriveScreen({ route }: DriveScreenProps) {
         <DriveSummary state={state} actions={actions} />
       )}
       <TermBottomSheet modalRef={state.termModalRef} docState={state.docType} />
+      <EmailReportSheet
+        visible={state.emailSheetVisible}
+        initialEmail={state.lastReportEmail}
+        sending={state.sendingReport}
+        onClose={actions.closeEmailSheet}
+        onSend={actions.sendReport}
+      />
     </View>
   )
 }

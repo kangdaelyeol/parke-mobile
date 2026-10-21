@@ -14,6 +14,8 @@ export type DrivePhase = 'consent' | 'driving' | 'summary'
 
 export interface DriveMapHandle {
   recenter: () => void
+  // 요약 지도를 JPEG(base64)로 캡처. 지도를 못 불러왔으면 null
+  captureSummary: () => Promise<string | null>
 }
 
 interface DriveState {
@@ -43,6 +45,10 @@ interface DriveState {
   }
   mapRef: RefObject<DriveMapHandle | null>
   agreeing: boolean
+  // 운행 기록 이메일
+  emailSheetVisible: boolean
+  sendingReport: boolean
+  lastReportEmail: string
   docType: DocType
   termModalRef: RefObject<BottomSheetModal | null>
 }
@@ -53,6 +59,8 @@ interface DriveActions {
   endPress: () => void
   recenterPress: () => void
   emailPress: () => void
+  closeEmailSheet: () => void
+  sendReport: (email: string) => Promise<void>
   donePress: () => void
 }
 
@@ -70,4 +78,13 @@ export interface DriveStatProps {
   label: string
   value: string
   unit?: string
+}
+
+export interface DriveEmailSheetProps {
+  visible: boolean
+  // 마지막으로 보낸 주소 (처음이면 빈 문자열)
+  initialEmail: string
+  sending: boolean
+  onClose: () => void
+  onSend: (email: string) => void
 }

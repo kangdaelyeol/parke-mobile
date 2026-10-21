@@ -49,6 +49,8 @@ export interface CacheClient {
   getLoginProvider: () => LoginProvider | ''
   setAppleUser: (v: string) => void
   getAppleUser: () => string | null
+  getLastReportEmail: () => string
+  setLastReportEmail: (email: string) => void
   getHasInitializedCache(): boolean
   setHasInitializedCache(setting: boolean): void
   getHasSeenOnBoarding(): boolean

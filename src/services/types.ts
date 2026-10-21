@@ -182,6 +182,26 @@ export interface DriveSessionService {
   handleNotificationEvent: (event: Event) => boolean
 }
 
+export interface DriveReportInput {
+  email: string
+  cardTitle: string
+  driverName: string
+  startAt: number // ms
+  endAt: number // ms
+  distanceMeters: number
+  averageSpeedKmh: number
+  maxSpeedKmh: number
+  startPoint: { lat: number; lng: number } | null
+  endPoint: { lat: number; lng: number } | null
+  // 요약 지도 캡처 (JPEG base64). 지도를 못 불러왔으면 null
+  mapImage: string | null
+}
+
+export interface DriveReportService {
+  send: (input: DriveReportInput) => Promise<ServiceResponse<boolean>>
+  getLastEmail: () => string
+}
+
 export interface PermissionService {
   setupNotifications: () => Promise<void>
   ensureBluetoothPermission: () => Promise<boolean>

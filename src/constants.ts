@@ -32,4 +32,18 @@ export const KAKAO_MAP_JS_KEY = '63bb3baacd0d6aa1b792cac97459eabf'
 // 반드시 https: 카카오 로더가 이 주소의 프로토콜로 지도 엔진을 받는데,
 // http면 iOS(ATS)/Android(cleartext 차단)에서 막혀 지도가 뜨지 않는다
 export const KAKAO_MAP_BASE_URL = 'https://localhost'
+// Firebase Functions 지역 (backend/functions와 같아야 한다)
+export const FUNCTIONS_REGION = 'asia-northeast3'
+// 이메일 입력 자동완성 도메인 (자주 쓰는 순)
+export const EMAIL_DOMAINS = [
+  'gmail.com',
+  'naver.com',
+  'daum.net',
+  'hanmail.net',
+  'kakao.com',
+  'nate.com',
+  'icloud.com',
+  'outlook.com',
+  'hotmail.com',
+]
 export const PARKE_WEB_URL = 'https://parke-web.netlify.app/parke/'

@@ -46,6 +46,18 @@
 - [ ] Play Console 앱 서명 키의 SHA-1 → Firebase에 추가, 카카오용 키 해시로 변환해 등록
 - [ ] 릴리스 키스토어의 SHA-1 / 키 해시도 같은 방식으로 등록
 
+### 운행 기록 이메일 (Firebase Functions)
+
+자세한 명령어는 `backend/README.md` 참고
+
+- [O] Firebase 요금제를 **Blaze(종량제)**로 변경 (Functions 사용 조건, 이 사용량이면 대부분 무료 한도 안)
+- [O] 메일 발송 서비스 가입 (추천: Resend)
+- [ ] 보내는 도메인 인증: Resend에서 `originalshq.com` 추가 → 안내하는 DNS 레코드(SPF/DKIM 등)를 도메인 DNS(Squarespace 또는 Google Cloud DNS)에 등록
+- [ ] API 키 발급 후 `firebase functions:secrets:set SMTP_PASS`
+- [ ] `cd backend && firebase deploy --only functions`
+- [ ] 주행모드 요약 → [이메일로 보내기]로 실제 수신 확인 (스팸함도 확인)
+- [ ] DB 보안 규칙에 `reportQuota`는 앱에서 읽기·쓰기 금지 (서버만 사용, 기본 거부 규칙이면 추가 작업 없음)
+
 ## 3. 실기기 테스트
 
 ### 주행모드 (야외에서)

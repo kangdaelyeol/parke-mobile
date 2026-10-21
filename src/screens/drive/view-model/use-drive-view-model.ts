@@ -11,7 +11,12 @@ import {
 import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
 import { DriveStackNavigationProp } from '@/navigation/types'
-import { driveSessionService, permissionService, userService } from '@/services'
+import {
+  driveReportService,
+  driveSessionService,
+  permissionService,
+  userService,
+} from '@/services'
 import { useTermBottomSheet } from '@/hooks'
 import { DriveSessionStatus } from '@/services/types'
 import { getDistanceMeters, toKmh } from '@/utils'
@@ -63,6 +68,8 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
     showBottomSheet,
   } = useTermBottomSheet()
   const [agreeing, setAgreeing] = useState(false)
+  const [emailSheetVisible, setEmailSheetVisible] = useState(false)
+  const [sendingReport, setSendingReport] = useState(false)
   const card = cards.find(c => c.id === cardId)
 
   // 위치 동의 기록이 없으면(기존 가입자, 로그인 때 선택 동의 안 함) 동의부터 받는다
@@ -373,6 +380,9 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       gps,
       mapRef,
       agreeing,
+      emailSheetVisible,
+      sendingReport,
+      lastReportEmail: driveReportService.getLastEmail(),
       docType,
       termModalRef,
     },
@@ -396,9 +406,42 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       showDocPress: showBottomSheet,
       endPress,
       recenterPress: () => mapRef.current?.recenter(),
-      // TODO: 운행일지 이메일 발송 (백엔드 설계 후 연결)
-      emailPress: () =>
-        Alert.alert('준비 중', '운행일지 이메일 발송은 곧 지원될 예정입니다.'),
+      emailPress: () => setEmailSheetVisible(true),
+      closeEmailSheet: () => {
+        if (!sendingReport) setEmailSheetVisible(false)
+      },
+      sendReport: async (email: string) => {
+        if (sendingReport) return
+        setSendingReport(true)
+
+        // 요약 지도(카카오맵)를 이미지로 담아 보낸다. 실패하면 지도 없이 보낸다
+        const mapImage = (await mapRef.current?.captureSummary()) ?? null
+        const first = points[0]
+        const last = points[points.length - 1]
+        const res = await driveReportService.send({
+          email,
+          cardTitle: card?.title ?? 'Parke',
+          driverName: user?.nickname || '운전자',
+          startAt,
+          endAt: endAt ?? now,
+          distanceMeters: distance,
+          averageSpeedKmh: toKmh(averageSpeed),
+          maxSpeedKmh: toKmh(maxSpeed),
+          startPoint: first
+            ? { lat: first.latitude, lng: first.longitude }
+            : null,
+          endPoint: last ? { lat: last.latitude, lng: last.longitude } : null,
+          mapImage,
+        })
+
+        setSendingReport(false)
+        if (!res.status) {
+          Alert.alert('보내지 못했어요', res.message)
+          return
+        }
+        setEmailSheetVisible(false)
+        Alert.alert('보냈어요', `${email}으로 운행 기록을 보냈습니다.`)
+      },
       donePress: () => navigation.goBack(),
     },
   }

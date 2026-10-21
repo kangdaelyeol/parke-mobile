@@ -1018,3 +1018,5 @@ iOSInjectionProject/
 
 
 # End of https://www.toptal.com/developers/gitignore/api/macos,reactnative,android,swift,xcode,xcodeinjection,intellij,node,test
+# Firebase Functions
+backend/.firebase/

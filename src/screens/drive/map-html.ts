@@ -84,6 +84,11 @@ export const buildMapHtml = (accent: string) => `<!DOCTYPE html>
         content: '<div class="pin start">출발</div>' });
       new kakao.maps.CustomOverlay({ map: map, position: path[path.length - 1], yAnchor: 1.4,
         content: '<div class="pin end">도착</div>' });
+      // 경로에 맞춰 이동한 뒤 지도 타일까지 다 그려지면 캡처할 수 있다고 알린다
+      kakao.maps.event.addListener(map, 'tilesloaded', function onTiles() {
+        kakao.maps.event.removeListener(map, 'tilesloaded', onTiles);
+        post({ type: 'summaryReady' });
+      });
       var bounds = new kakao.maps.LatLngBounds();
       path.forEach(function (p) { bounds.extend(p); });
       map.setBounds(bounds, 60, 40, 60, 40);

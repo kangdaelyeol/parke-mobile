@@ -7,6 +7,7 @@ import {
 } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { WebViewMessageEvent } from 'react-native-webview'
+import { captureRef } from 'react-native-view-shot'
 import { RefWebView, WebViewHandle } from '@/components'
 import { KAKAO_MAP_BASE_URL, KAKAO_MAP_JS_KEY } from '@/constants'
 import { DriveMapProps } from '@/screens/drive/types'
@@ -15,6 +16,8 @@ import { DARK, GRAY } from '@/theme/color'
 import { PRETENDARD } from '@/theme/fonts'
 
 const MAP_LOAD_TIMEOUT_MS = 10 * 1000
+// 요약 지도 캡처 전, 경로에 맞춰 지도가 다 그려지기를 기다리는 최대 시간
+const SUMMARY_CAPTURE_WAIT_MS = 3 * 1000
 
 export const DriveMap = ({
   ref,
@@ -35,8 +38,35 @@ export const DriveMap = ({
   const run = (script: string) =>
     webViewRef.current?.injectJavaScript(`${script};true;`)
 
+  // 요약 지도 캡처 (이메일 보고서용). 지도가 다 그려질 때까지 최대 몇 초 기다린다
+  const containerRef = useRef<View>(null)
+  const summaryReady = useRef(false)
+  const summaryWaiters = useRef<(() => void)[]>([])
+
+  const waitForSummary = () =>
+    new Promise<void>(resolve => {
+      if (summaryReady.current) return resolve()
+      summaryWaiters.current.push(resolve)
+      setTimeout(resolve, SUMMARY_CAPTURE_WAIT_MS)
+    })
+
   useImperativeHandle(ref, () => ({
     recenter: () => run('window.recenter && window.recenter()'),
+    captureSummary: async () => {
+      // 지도 키가 없거나 불러오지 못했으면 이미지 없이 보낸다
+      if (!ready || error || !containerRef.current) return null
+      await waitForSummary()
+      try {
+        return await captureRef(containerRef, {
+          format: 'jpg',
+          quality: 0.7,
+          result: 'base64',
+        })
+      } catch (e) {
+        console.log('[DriveMap] capture failed', e)
+        return null
+      }
+    },
   }))
 
   // 키나 도메인 등록이 잘못되면 지도 스크립트가 조용히 실패하므로 시간 제한을 둔다
@@ -81,6 +111,11 @@ export const DriveMap = ({
     try {
       const msg = JSON.parse(e.nativeEvent.data)
       if (msg.type === 'ready') setReady(true)
+      if (msg.type === 'summaryReady') {
+        summaryReady.current = true
+        summaryWaiters.current.forEach(resolve => resolve())
+        summaryWaiters.current = []
+      }
       if (msg.type === 'error') {
         console.log('[DriveMap]', msg.message, msg.detail ?? '')
         setError(msg.message)
@@ -89,7 +124,7 @@ export const DriveMap = ({
   }
 
   return (
-    <View style={styles.container}>
+    <View ref={containerRef} collapsable={false} style={styles.container}>
       {!!KAKAO_MAP_JS_KEY && (
         <RefWebView
           ref={webViewRef}

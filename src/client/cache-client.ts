@@ -10,6 +10,9 @@ export const cacheClient: CacheClient = {
   // apple login
   setAppleUser: v => kv.set('apple:user', v),
   getAppleUser: () => kv.getString('apple:user') ?? null,
+  // 운행 기록 이메일
+  getLastReportEmail: () => kv.getString('report:lastEmail') ?? '',
+  setLastReportEmail: email => kv.set('report:lastEmail', email),
   // global
   getHasInitializedCache: () => kv.getBoolean('initialized') ?? false,
   setHasInitializedCache: setting => kv.set('initialized', setting),
