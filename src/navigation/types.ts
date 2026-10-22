@@ -9,6 +9,8 @@ export type RootStackParamList = {
   SearchBLE: undefined
   ScanComplete: { value: string }
   Setting: undefined
+  // 선택 동의 관리 (설정 → 위치정보)
+  ConsentSetting: undefined
   Profile: undefined
   Permission: undefined
   // cardId가 없으면 카드 없이 주행 (테스트용)
@@ -27,6 +29,8 @@ export type ProfileStackNavigationProp = RootNavigationProp<'Profile'>
 export type ScanCompleteStackNavigationProp = RootNavigationProp<'ScanComplete'>
 export type SearchBleStackNavigationProp = RootNavigationProp<'SearchBLE'>
 export type SettingStackNavigationProp = RootNavigationProp<'Setting'>
+export type ConsentSettingStackNavigationProp =
+  RootNavigationProp<'ConsentSetting'>
 export type PermissionStackNavigationProp = RootNavigationProp<'Permission'>
 export type DriveStackNavigationProp = RootNavigationProp<'Drive'>
 export type LegalDocStackNavigationProp = RootNavigationProp<'LegalDoc'>

@@ -7,11 +7,10 @@ import {
 } from '@gorhom/bottom-sheet'
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types'
 import { useLoginContext } from '@login/contexts'
-import { CheckBoxLine } from '@login/components'
 import { DocIllustration } from '@login/components/illustrations'
 import { DARK, GRAY_DEEP } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
-import { PressableButton } from '@/components'
+import { PressableButton, CheckBoxLine } from '@/components'
 
 const renderBackdrop = (
   props: JSX.IntrinsicAttributes & BottomSheetDefaultBackdropProps,

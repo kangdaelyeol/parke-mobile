@@ -19,6 +19,8 @@ interface Props {
   required?: boolean
   optional?: boolean
   docPress?: () => void
+  // 체크 상태만 보여주고 누를 수 없음 (철회할 수 없는 필수 동의 등)
+  disabled?: boolean
 }
 
 export const CheckBoxLine = ({
@@ -29,6 +31,7 @@ export const CheckBoxLine = ({
   optional,
   docPress,
   label,
+  disabled,
 }: Props) => {
   const progress = useSharedValue(0)
 
@@ -64,7 +67,11 @@ export const CheckBoxLine = ({
 
   return (
     <View style={styles.container}>
-      <Pressable style={styles.row} onPress={confirmPress}>
+      <Pressable
+        style={[styles.row, disabled && styles.disabled]}
+        onPress={confirmPress}
+        disabled={disabled}
+      >
         <Animated.View style={[styles.checkbox, checkBoxStyle]}>
           <Animated.View style={checkIconStyle}>
             <CheckIllustration size={12} />
@@ -141,6 +148,9 @@ const styles = StyleSheet.create({
   optionalText: {
     color: GRAY_LIGHT,
     fontSize: 12,
+  },
+  disabled: {
+    opacity: 0.5,
   },
   docsBtn: {
     color: GRAY_DEEP,

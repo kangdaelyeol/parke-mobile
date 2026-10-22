@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, Pressable, ScrollView } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { useMainViewModel } from '@setting/view-model'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY, GRAY_DEEP } from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP } from '@/theme/color'
 import { Item, ItemDivider, ItemList } from '@/components'
 import { LEGAL_DOCS } from '@/constants'
 import { DocType } from '@/types/common'
@@ -66,27 +66,16 @@ export const Main = () => {
               </Text>
             </View>
             <Pressable
-              onPress={
-                state.locationAgreed
-                  ? actions.withdrawLocationPress
-                  : actions.agreeLocationPress
-              }
-              disabled={state.updatingConsent}
+              onPress={actions.consentSettingPress}
               style={styles.termLine}
             >
-              <Text
-                style={[
-                  styles.termText,
-                  state.locationAgreed ? styles.withdrawText : styles.agreeText,
-                  state.updatingConsent && styles.disabledText,
-                ]}
-              >
-                {state.updatingConsent
-                  ? '처리 중…'
-                  : state.locationAgreed
-                  ? '위치정보 동의 철회'
-                  : '위치정보 동의하기'}
-              </Text>
+              <Text style={styles.termText}>선택 동의 관리</Text>
+              <FontAwesome6
+                name="angle-right"
+                size={14}
+                iconStyle="solid"
+                style={styles.angle}
+              />
             </Pressable>
           </View>
         </View>
@@ -175,15 +164,6 @@ const styles = StyleSheet.create({
   statusText: {
     color: '#888',
     fontSize: 14,
-  },
-  withdrawText: {
-    color: '#e05555',
-  },
-  agreeText: {
-    color: BLUE_PRIMARY,
-  },
-  disabledText: {
-    color: '#444',
   },
   termText: {
     color: GRAY_DEEP,

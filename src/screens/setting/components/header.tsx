@@ -4,7 +4,7 @@ import { useHeaderViewModel } from '@setting/view-model'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 
-export const Header = () => {
+export const Header = ({ title = '설정' }: { title?: string }) => {
   const { actions } = useHeaderViewModel()
   return (
     <View style={styles.container}>
@@ -19,7 +19,7 @@ export const Header = () => {
             />
           )}
         </Pressable>
-        <Text style={styles.title}>설정</Text>
+        <Text style={styles.title}>{title}</Text>
       </View>
     </View>
   )

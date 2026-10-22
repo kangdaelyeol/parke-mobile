@@ -6,6 +6,7 @@ import {
   LoginScreen,
   ProfileScreen,
   SettingScreen,
+  ConsentSettingScreen,
   SearchBleScreen,
   ScanCompleteScreen,
   PermissionScreen,
@@ -27,6 +28,7 @@ export default function RootNavigator() {
       <Stack.Screen name="Init" component={InitScreen} />
       <Stack.Screen name="Profile" component={ProfileScreen} />
       <Stack.Screen name="Setting" component={SettingScreen} />
+      <Stack.Screen name="ConsentSetting" component={ConsentSettingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="SearchBLE" component={SearchBleScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />

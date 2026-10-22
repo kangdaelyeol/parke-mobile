@@ -1,3 +1,4 @@
+import { CheckBoxLine } from '@/components'
 import { View, StyleSheet, Text, Pressable, Platform } from 'react-native'
 import { AppleButton } from '@invertase/react-native-apple-authentication'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
@@ -5,7 +6,6 @@ import { KakaoLogo } from '@/assets/logo'
 import { useLoginContext } from '@login/contexts'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP } from '@/theme/color'
-import { CheckBoxLine } from '@login/components'
 import { GoogleIllustration } from '@login/components/illustrations'
 import { OriginalsLogoText } from '@/assets/illustrations'
 export const Footer = () => {
