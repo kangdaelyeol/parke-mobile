@@ -3,7 +3,7 @@ import { Event } from '@notifee/react-native'
 import { PhoneChangePending } from '@/client'
 import { CardDto, CardInfo } from '@/domain/card'
 import { UserDto } from '@/domain/user'
-import { ConsentRecord, DocType } from '@/types/common'
+import { ConsentKey, ConsentMap, ConsentRecord, DocType } from '@/types/common'
 
 interface kakaoProfile {
   email: string
@@ -212,14 +212,12 @@ export interface LegalService {
   getEffectiveDate: (docType: DocType) => string
   recordConsents: (
     uid: string,
-    docTypes: readonly DocType[],
+    keys: readonly ConsentKey[],
     agreed: boolean,
-  ) => Promise<ServiceResponse<Partial<Record<DocType, ConsentRecord>>>>
+  ) => Promise<ServiceResponse<ConsentMap>>
   needsReconsent: (record: ConsentRecord | undefined) => boolean
   // 위치기반서비스 약관 + 개인위치정보 동의가 현재 시행일 기준으로 모두 유효한지
-  hasLocationConsent: (
-    consents: Partial<Record<DocType, ConsentRecord>> | undefined,
-  ) => boolean
+  hasLocationConsent: (consents: ConsentMap | undefined) => boolean
 }
 
 export interface LocationLogService {

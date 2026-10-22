@@ -9,26 +9,31 @@ import { formatDateTime } from '@/utils'
 export const ConsentMain = () => {
   const { state, actions } = useConsentViewModel()
 
-  const renderItem = (item: ConsentItem, required: boolean) => (
-    <View key={item.docType} style={styles.item}>
-      <CheckBoxLine
-        confirm={item.agreed}
-        confirmPress={() => actions.togglePress(item.docType)}
-        label={item.label}
-        required={required}
-        optional={!required}
-        disabled={required || !!state.updating}
-        docPress={() => actions.docPress(item.docType)}
-      />
-      <Text style={styles.statusText}>
-        {state.updating === item.docType
-          ? '처리 중…'
-          : item.agreedAt
-          ? `${formatDateTime(item.agreedAt)} 동의`
-          : '동의하지 않음'}
-      </Text>
-    </View>
-  )
+  const renderItem = (item: ConsentItem, required: boolean) => {
+    const { docType } = item
+    return (
+      <View key={item.key} style={styles.item}>
+        <CheckBoxLine
+          confirm={item.agreed}
+          confirmPress={() => docType && actions.togglePress(docType)}
+          label={item.label}
+          required={required}
+          optional={!required}
+          disabled={required || !!state.updating}
+          docPress={docType ? () => actions.docPress(docType) : undefined}
+        />
+        <Text style={styles.statusText}>
+          {state.updating === item.key
+            ? '처리 중…'
+            : item.agreedAt
+            ? `${formatDateTime(item.agreedAt)} 동의${
+                item.outdated ? ' · 개정 전 약관' : ''
+              }`
+            : '동의하지 않음'}
+        </Text>
+      </View>
+    )
+  }
 
   return (
     <ScrollView>

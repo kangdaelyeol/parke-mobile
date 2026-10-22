@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react'
 import { CardInfo } from '@/domain/card'
-import { ConsentRecord, DocType } from '@/types/common'
+import { ConsentMap } from '@/types/common'
 import { UserDto } from '@/domain/user/user-dto'
 import { authService, cardService, userService } from '@/services'
 import { CardState, ServiceResponse } from '@/services/types'
@@ -28,7 +28,7 @@ interface UserContextValue {
     updateCardInfo: (cardId: string, info: CardInfo) => void
     initUser: (dto: UserDto) => void
     // 동의 기록 반영 (legalService.recordConsents 결과)
-    setConsents: (records: Partial<Record<DocType, ConsentRecord>>) => void
+    setConsents: (records: ConsentMap) => void
     refreshStateSession: () => void
   }
 }
@@ -135,7 +135,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       initUser: (dto: UserDto) => {
         setUser(dto)
       },
-      setConsents: (records: Partial<Record<DocType, ConsentRecord>>) => {
+      setConsents: (records: ConsentMap) => {
         setUser(prev =>
           prev ? { ...prev, consents: { ...prev.consents, ...records } } : prev,
         )

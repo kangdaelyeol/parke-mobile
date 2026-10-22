@@ -5,7 +5,7 @@ import {
   LEGAL_EFFECTIVE_DATE,
   LOCATION_CONSENT_DOCS,
 } from '@/constants'
-import { ConsentRecord, DocType } from '@/types/common'
+import { ConsentMap, DocType } from '@/types/common'
 import { userClient } from '@/client'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
 import { LegalService } from './types'
@@ -33,19 +33,20 @@ export const legalService: LegalService = {
   // 문서 화면을 열지 않고 동의한 경우에는 앱에 둔 현재 시행일을 쓴다
   getEffectiveDate: docType =>
     seenEffectiveDates[docType] ?? LEGAL_EFFECTIVE_DATE,
-  recordConsents: async (uid, docTypes, agreed) => {
-    const consents = docTypes.map(docType => ({
-      docType,
+  recordConsents: async (uid, keys, agreed) => {
+    const consents = keys.map(key => ({
+      key,
       agreed,
-      effectiveDate: legalService.getEffectiveDate(docType),
+      // 만 14세 이상 확인은 문서가 없다
+      effectiveDate: key === 'age' ? '' : legalService.getEffectiveDate(key),
     }))
     const res = await userClient.recordConsents(uid, consents)
     if (!res.status) return serviceFail(getFirebaseErrorMessage(res.error))
 
     // 서버 시각과 거의 같은 값으로 화면 상태를 바로 갱신할 수 있게 돌려준다
-    const records: Partial<Record<DocType, ConsentRecord>> = {}
-    consents.forEach(({ docType, effectiveDate }) => {
-      records[docType] = { agreed, agreedAt: Date.now(), effectiveDate }
+    const records: ConsentMap = {}
+    consents.forEach(({ key, effectiveDate }) => {
+      records[key] = { agreed, agreedAt: Date.now(), effectiveDate }
     })
     return serviceOk(records)
   },

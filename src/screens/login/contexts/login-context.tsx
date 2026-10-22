@@ -106,12 +106,13 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     confirmSheetRef.current?.present()
   }
 
-  // 동의한 문서별로 { agreed, agreedAt, effectiveDate }를 남긴다.
-  // 필수 3종은 항상, 위치 2종은 선택 동의했을 때만 (실패해도 로그인은 진행, 위치는 주행 시작 때 다시 묻는다)
+  // 동의 항목별로 { agreed, agreedAt, effectiveDate }를 남긴다.
+  // 만 14세 확인·필수 3종은 항상, 위치 2종은 선택 동의했을 때만 (실패해도 로그인은 진행, 위치는 주행 시작 때 다시 묻는다)
   const withConsents = async (dto: UserDto): Promise<UserDto> => {
+    const required = ['age', ...REQUIRED_CONSENT_DOCS] as const
     const docs = locationConfirm
-      ? [...REQUIRED_CONSENT_DOCS, ...LOCATION_CONSENT_DOCS]
-      : [...REQUIRED_CONSENT_DOCS]
+      ? [...required, ...LOCATION_CONSENT_DOCS]
+      : [...required]
     const res = await legalService.recordConsents(dto.id, docs, true)
     if (!res.status) {
       console.log('[Login] consent record failed', res.message)

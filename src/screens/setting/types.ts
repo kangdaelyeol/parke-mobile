@@ -1,4 +1,4 @@
-import { DocType, ViewModel } from '@/types/common'
+import { ConsentKey, DocType, ViewModel } from '@/types/common'
 
 interface HeaderActions {
   backPress: () => void
@@ -24,11 +24,15 @@ interface MainState {
 }
 
 export interface ConsentItem {
-  docType: DocType
+  key: ConsentKey
+  // 볼 문서 (만 14세 확인은 없음)
+  docType: DocType | null
   label: string
   agreed: boolean
-  // 유효한 동의의 동의 시각 (ms)
+  // 동의 시각 (ms)
   agreedAt: number | null
+  // 개정 전 문서에 동의함 (선택 동의는 다시 동의해야 유효)
+  outdated: boolean
 }
 
 interface ConsentActions {
@@ -40,7 +44,7 @@ interface ConsentState {
   requiredItems: ConsentItem[]
   optionalItems: ConsentItem[]
   // 동의/철회 처리 중인 항목
-  updating: DocType | null
+  updating: ConsentKey | null
 }
 
 export type SettingConsentViewModel = ViewModel<ConsentState, ConsentActions>

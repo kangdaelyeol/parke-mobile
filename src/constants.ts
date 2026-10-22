@@ -65,6 +65,8 @@ export const LEGAL_DOCS = {
 } as const
 // 현재 문서 시행일. 문서 화면을 열지 않고 동의한 경우 이 값으로 기록한다
 export const LEGAL_EFFECTIVE_DATE = '2026-10-22'
+// 개정 전 앱 내 약관(시행일 표기 없음)에 동의한 기록. 현재 시행일보다 이전으로 취급된다
+export const LEGACY_CONSENT_EFFECTIVE_DATE = '0000-00-00'
 // 회원가입 필수 동의 / 주행 모드(운행일지) 선택 동의
 export const REQUIRED_CONSENT_DOCS = [
   'terms',
