@@ -10,6 +10,7 @@ import {
   ScanCompleteScreen,
   PermissionScreen,
   DriveScreen,
+  LegalDocScreen,
 } from '@/screens'
 import { RootStackParamList } from '@/navigation/types'
 
@@ -30,6 +31,12 @@ export default function RootNavigator() {
       <Stack.Screen name="SearchBLE" component={SearchBleScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />
       <Stack.Screen name="Drive" component={DriveScreen} />
+      {/* 법률 문서: 동의 시트·주행 화면 위로 뜨도록 모달로 표시 */}
+      <Stack.Screen
+        name="LegalDoc"
+        component={LegalDocScreen}
+        options={{ presentation: 'fullScreenModal' }}
+      />
     </Stack.Navigator>
   )
 }

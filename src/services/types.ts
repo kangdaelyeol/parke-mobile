@@ -3,6 +3,7 @@ import { Event } from '@notifee/react-native'
 import { PhoneChangePending } from '@/client'
 import { CardDto, CardInfo } from '@/domain/card'
 import { UserDto } from '@/domain/user'
+import { ConsentRecord, DocType } from '@/types/common'
 
 interface kakaoProfile {
   email: string
@@ -30,7 +31,6 @@ export interface AuthService {
   firebaseLogin: (email: string) => Promise<AuthResponse>
   firebaseSignUp: (email: string) => Promise<AuthResponse>
   firebaseSignOut: () => Promise<void>
-  firebaseDeleteUser: () => Promise<void>
   appleLogin: () => Promise<string | null>
   appleLogout: () => void
   kakaoLogin: () => Promise<kakaoProfile | null>
@@ -53,6 +53,7 @@ export interface BleCacheService {
   markSimultaneousConnectionAlertAt: () => void
   pushAlertPending: (pending: PhoneChangePending) => void
   deleteAlertPending: (cardId: string) => void
+  clearDevice: (deviceId: string, cardId: string) => void
   markAlertLastDeniedAt: () => void
   getAlertLastDeniedAt: () => number
   markBleScan: (deviceName: string, batteryLevel: string) => void
@@ -97,6 +98,7 @@ export interface BleService {
 export type LoginProvider = 'apple' | 'kakao' | 'google'
 
 export interface CacheService {
+  clearUserData: () => void
   ensureInitialized: () => void
   setHasSeenOnBoarding: (value: boolean) => void
   getHasSeenOnBoarding: () => boolean
@@ -138,10 +140,7 @@ export interface CardService {
     info: CardInfo,
   ) => Promise<ServiceResponse<boolean>>
   createCard: (input: CreateCardInput) => Promise<ServiceResponse<CardState>>
-  deleteCard: (
-    cardId: string,
-    userId: string,
-  ) => Promise<ServiceResponse<boolean>>
+  leaveCard: (card: CardState) => Promise<ServiceResponse<boolean>>
   updateScan: (deviceId: string, scan: boolean) => void
   updatePhone: (id: string, phone: string) => Promise<ServiceResponse<boolean>>
   updateUpdatedAt: (id: string) => Promise<ServiceResponse<boolean>>
@@ -178,6 +177,7 @@ export interface DriveSessionService {
   // 잠금화면 / 상시 알림 내용 갱신
   update: (status: DriveSessionStatus) => void
   stop: () => Promise<void>
+  requestEnd: () => void
   onEndRequest: (listener: () => void) => () => void
   handleNotificationEvent: (event: Event) => boolean
 }
@@ -200,6 +200,31 @@ export interface DriveReportInput {
 export interface DriveReportService {
   send: (input: DriveReportInput) => Promise<ServiceResponse<boolean>>
   getLastEmail: () => string
+  clearLastEmail: () => void
+}
+
+export interface LegalService {
+  getDocUrl: (docType: DocType) => string
+  // 앱 안에서 열어도 되는 문서 주소인지 (나머지는 외부 브라우저로)
+  isLegalDocUrl: (url: string) => boolean
+  // 문서 화면이 보내 준 시행일 텍스트를 기억 (YYYY-MM-DD로 변환해 돌려줌)
+  rememberEffectiveDate: (docType: DocType, text: string) => string | null
+  getEffectiveDate: (docType: DocType) => string
+  recordConsents: (
+    uid: string,
+    docTypes: readonly DocType[],
+    agreed: boolean,
+  ) => Promise<ServiceResponse<Partial<Record<DocType, ConsentRecord>>>>
+  needsReconsent: (record: ConsentRecord | undefined) => boolean
+  // 위치기반서비스 약관 + 개인위치정보 동의가 현재 시행일 기준으로 모두 유효한지
+  hasLocationConsent: (
+    consents: Partial<Record<DocType, ConsentRecord>> | undefined,
+  ) => boolean
+}
+
+export interface LocationLogService {
+  logCollect: (type: 'collect_start' | 'collect_end') => void
+  deleteMine: () => Promise<ServiceResponse<unknown>>
 }
 
 export interface PermissionService {
@@ -240,9 +265,5 @@ export interface UserService {
     id: string,
     cardIdList: string[],
   ) => Promise<ServiceResponse<boolean>>
-  deleteUser: (
-    id: string,
-    cardList: CardState[],
-  ) => Promise<ServiceResponse<boolean>>
-  agreeLocation: (id: string) => Promise<ServiceResponse<boolean>>
+  deleteAccount: () => Promise<ServiceResponse<boolean>>
 }

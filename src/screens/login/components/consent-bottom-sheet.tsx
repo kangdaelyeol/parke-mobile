@@ -75,7 +75,7 @@ export const ConsentBottomSheet = () => {
             confirmPress={actions.locationTermsConfirmPress}
             label="위치기반서비스 이용약관 동의"
             optional
-            docPress={() => actions.showDocPress('location-terms')}
+            docPress={() => actions.showDocPress('location')}
           />
           <CheckBoxLine
             confirm={state.locationConsentConfirm}

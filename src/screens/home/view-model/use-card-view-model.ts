@@ -86,7 +86,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
           onPress: async () => {
             setLoading(true)
 
-            const cardDeleteRes = await cardService.deleteCard(card.id, user.id)
+            const cardDeleteRes = await cardService.leaveCard(card)
 
             if (!cardDeleteRes.status) {
               Alert.alert(cardDeleteRes.message)

@@ -46,4 +46,30 @@ export const EMAIL_DOMAINS = [
   'outlook.com',
   'hotmail.com',
 ]
+// 법률 문서 (웹이 유일한 원본, 앱은 LegalDocScreen에서 WebView로 띄운다)
+export const LEGAL_DOC_BASE_URL = 'https://originalshq.com'
+export const LEGAL_DOC_PATH_PREFIX = '/privacy/parke/'
+export const LEGAL_DOCS = {
+  privacy: { path: 'privacy', title: '개인정보 처리방침' },
+  terms: { path: 'terms', title: '서비스 이용약관' },
+  location: { path: 'location', title: '위치기반서비스 이용약관' },
+  consent: { path: 'consent', title: '개인정보 수집·이용 동의서' },
+  'location-consent': {
+    path: 'location-consent',
+    title: '개인위치정보 수집·이용 동의서',
+  },
+  'consent-third': {
+    path: 'consent-third',
+    title: '개인정보 제3자 제공 동의서',
+  },
+} as const
+// 현재 문서 시행일. 문서 화면을 열지 않고 동의한 경우 이 값으로 기록한다
+export const LEGAL_EFFECTIVE_DATE = '2026-10-22'
+// 회원가입 필수 동의 / 주행 모드(운행일지) 선택 동의
+export const REQUIRED_CONSENT_DOCS = [
+  'terms',
+  'consent',
+  'consent-third',
+] as const
+export const LOCATION_CONSENT_DOCS = ['location', 'location-consent'] as const
 export const PARKE_WEB_URL = 'https://parke-web.netlify.app/parke/'

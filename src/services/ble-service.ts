@@ -233,6 +233,9 @@ export const bleService: BleService = {
       return haltBackgroundScan()
     }
 
+    // 번호 변경 확인/완료 알림용. 자동 감지를 처음 시작할 때 요청하고, 거부해도 감지는 계속한다
+    await permissionService.ensureNotificationPermission()
+
     runBackgroundScan()
   },
   isBackgroundScanning: () => isBackgroundScanning,

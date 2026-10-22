@@ -14,12 +14,14 @@ import { DriveStackNavigationProp } from '@/navigation/types'
 import {
   driveReportService,
   driveSessionService,
+  legalService,
+  locationLogService,
   permissionService,
-  userService,
 } from '@/services'
-import { useTermBottomSheet } from '@/hooks'
+import { LOCATION_CONSENT_DOCS } from '@/constants'
+import { DocType } from '@/types/common'
 import { DriveSessionStatus } from '@/services/types'
-import { getDistanceMeters, toKmh } from '@/utils'
+import { formatDateTime, getDistanceMeters, toKmh } from '@/utils'
 import {
   DriveMapHandle,
   DrivePhase,
@@ -62,19 +64,18 @@ const round = (n: number, d = 1) => Math.round(n * 10 ** d) / 10 ** d
 export const useDriveViewModel = (cardId?: string): DriveViewModel => {
   const navigation = useNavigation<DriveStackNavigationProp>()
   const { cards, user, actions: userContextActions } = useUserContext()
-  const {
-    modalRef: termModalRef,
-    docType,
-    showBottomSheet,
-  } = useTermBottomSheet()
   const [agreeing, setAgreeing] = useState(false)
   const [emailSheetVisible, setEmailSheetVisible] = useState(false)
   const [sendingReport, setSendingReport] = useState(false)
   const card = cards.find(c => c.id === cardId)
 
-  // 위치 동의 기록이 없으면(기존 가입자, 로그인 때 선택 동의 안 함) 동의부터 받는다
+  // 위치기반서비스 약관 + 개인위치정보 동의가 없거나 예전 시행일 기준이면 동의부터 받는다.
+  // 동의하지 않으면 주행 모드를 시작할 수 없다
   const [phase, setPhase] = useState<DrivePhase>(() =>
-    user?.locationConsentAgreedAt ? 'driving' : 'consent',
+    legalService.hasLocationConsent(user?.consents) ? 'driving' : 'consent',
+  )
+  const [lastReportEmail, setLastReportEmail] = useState(() =>
+    driveReportService.getLastEmail(),
   )
   const [startAt, setStartAt] = useState(() => Date.now())
   const [endAt, setEndAt] = useState<number | null>(null)
@@ -277,6 +278,12 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
         },
       )
       log('watchPosition started', { watchId })
+      // 위치정보 수집 사실 기록 (확인자료, 서버가 6개월 보관)
+      locationLogService.logCollect('collect_start')
+      // 주행 기록 상태 알림을 위해 알림 권한은 여기서(처음 주행할 때) 요청한다.
+      // 거부해도 기록은 계속된다
+      await permissionService.ensureNotificationPermission()
+      if (cancelled) return
       // 잠금화면 표시(iOS Live Activity / Android 상시 알림) 시작.
       // Android는 포그라운드 서비스가 있어야 백그라운드에서도 위치가 계속 온다
       driveSessionService.start({
@@ -289,7 +296,10 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
     return () => {
       log('tracking cleanup', { watchId })
       cancelled = true
-      if (watchId !== null) Geolocation.clearWatch(watchId)
+      if (watchId !== null) {
+        Geolocation.clearWatch(watchId)
+        locationLogService.logCollect('collect_end')
+      }
       driveSessionService.stop()
     }
   }, [phase, navigation, startAt])
@@ -382,28 +392,35 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       agreeing,
       emailSheetVisible,
       sendingReport,
-      lastReportEmail: driveReportService.getLastEmail(),
-      docType,
-      termModalRef,
+      lastReportEmail,
     },
     actions: {
       agreeLocationPress: async () => {
         if (!user || agreeing) return
         setAgreeing(true)
-        const res = await userService.agreeLocation(user.id)
+        const res = await legalService.recordConsents(
+          user.id,
+          LOCATION_CONSENT_DOCS,
+          true,
+        )
         setAgreeing(false)
         if (!res.status) {
           Alert.alert(res.message)
           return
         }
-        userContextActions.setLocationConsent(Date.now())
+        userContextActions.setConsents(res.payload)
         // 주행 시작 시각은 동의한 순간부터
         const start = Date.now()
         setStartAt(start)
         setNow(start)
         setPhase('driving')
       },
-      showDocPress: showBottomSheet,
+      showDocPress: (docType: DocType) =>
+        navigation.navigate('LegalDoc', { docType }),
+      clearSavedEmail: () => {
+        driveReportService.clearLastEmail()
+        setLastReportEmail('')
+      },
       endPress,
       recenterPress: () => mapRef.current?.recenter(),
       emailPress: () => setEmailSheetVisible(true),
@@ -440,7 +457,16 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
           return
         }
         setEmailSheetVisible(false)
-        Alert.alert('보냈어요', `${email}으로 운행 기록을 보냈습니다.`)
+        setLastReportEmail(email)
+        // 위치정보법 제19조: 이용자가 지정한 제3자에게 개인위치정보를 제공할 때마다 즉시 통보
+        Alert.alert(
+          '운행 기록을 보냈어요',
+          [
+            `제공받는 자: ${email}`,
+            `제공 일시: ${formatDateTime(Date.now())}`,
+            '제공 목적: 운행 기록 보고서 전달',
+          ].join('\n'),
+        )
       },
       donePress: () => navigation.goBack(),
     },

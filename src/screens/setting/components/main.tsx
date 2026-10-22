@@ -4,6 +4,18 @@ import { useMainViewModel } from '@setting/view-model'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP } from '@/theme/color'
 import { Item, ItemDivider, ItemList } from '@/components'
+import { LEGAL_DOCS } from '@/constants'
+import { DocType } from '@/types/common'
+
+// 설정 화면에 보여줄 법률 문서 순서
+const DOC_MENU: DocType[] = [
+  'privacy',
+  'terms',
+  'location',
+  'consent',
+  'location-consent',
+  'consent-third',
+]
 
 export const Main = () => {
   const { state, actions } = useMainViewModel()
@@ -45,49 +57,49 @@ export const Main = () => {
           </ItemList>
         </View>
         <View style={styles.section}>
-          <Text style={styles.title}>약관 및 정책</Text>
+          <Text style={styles.title}>위치정보</Text>
           <View style={styles.termSection}>
-            <Pressable onPress={actions.privacyPress} style={styles.termLine}>
-              <Text style={styles.termText}>개인정보 처리방침</Text>
-              <FontAwesome6
-                name="angle-right"
-                size={14}
-                iconStyle="solid"
-                style={styles.angle}
-              />
-            </Pressable>
-            <Pressable onPress={actions.termsPress} style={styles.termLine}>
-              <Text style={styles.termText}>서비스 이용약관</Text>
-              <FontAwesome6
-                name="angle-right"
-                size={14}
-                iconStyle="solid"
-                style={styles.angle}
-              />
-            </Pressable>
-
-            <Pressable onPress={actions.consentPress} style={styles.termLine}>
-              <Text style={styles.termText}>개인정보 수집·이용</Text>
-              <FontAwesome6
-                name="angle-right"
-                size={14}
-                iconStyle="solid"
-                style={styles.angle}
-              />
-            </Pressable>
-
+            <View style={styles.termLine}>
+              <Text style={styles.termText}>주행 모드 위치정보 동의</Text>
+              <Text style={styles.statusText}>
+                {state.locationAgreed ? '동의함' : '동의하지 않음'}
+              </Text>
+            </View>
             <Pressable
-              onPress={actions.consentThirdPress}
+              onPress={actions.withdrawLocationPress}
+              disabled={!state.locationAgreed || state.withdrawing}
               style={styles.termLine}
             >
-              <Text style={styles.termText}>개인정보 제3자 제공</Text>
-              <FontAwesome6
-                name="angle-right"
-                size={14}
-                iconStyle="solid"
-                style={styles.angle}
-              />
+              <Text
+                style={[
+                  styles.termText,
+                  styles.withdrawText,
+                  !state.locationAgreed && styles.disabledText,
+                ]}
+              >
+                {state.withdrawing ? '처리 중…' : '위치정보 동의 철회'}
+              </Text>
             </Pressable>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <Text style={styles.title}>약관 및 정책</Text>
+          <View style={styles.termSection}>
+            {DOC_MENU.map(docType => (
+              <Pressable
+                key={docType}
+                onPress={() => actions.docPress(docType)}
+                style={styles.termLine}
+              >
+                <Text style={styles.termText}>{LEGAL_DOCS[docType].title}</Text>
+                <FontAwesome6
+                  name="angle-right"
+                  size={14}
+                  iconStyle="solid"
+                  style={styles.angle}
+                />
+              </Pressable>
+            ))}
           </View>
         </View>
         <View style={styles.section}>
@@ -151,6 +163,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 8,
+  },
+  statusText: {
+    color: '#888',
+    fontSize: 14,
+  },
+  withdrawText: {
+    color: '#e05555',
+  },
+  disabledText: {
+    color: '#444',
   },
   termText: {
     color: GRAY_DEEP,

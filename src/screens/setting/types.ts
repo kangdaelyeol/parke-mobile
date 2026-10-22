@@ -1,4 +1,4 @@
-import { ViewModel } from '@/types/common'
+import { DocType, ViewModel } from '@/types/common'
 
 interface HeaderActions {
   backPress: () => void
@@ -8,14 +8,15 @@ interface MainActions {
   autoSetChange: (val: boolean) => void
   activeChange: (val: boolean) => void
   noticeChange: (val: boolean) => void
-  privacyPress: () => void
-  termsPress: () => void
-  consentPress: () => void
-  consentThirdPress: () => void
+  docPress: (docType: DocType) => void
+  withdrawLocationPress: () => void
   onBoardingPress: () => void
 }
 
 interface MainState {
+  // 위치기반서비스 약관 + 개인위치정보 동의가 유효한지
+  locationAgreed: boolean
+  withdrawing: boolean
   noticeDisabled: boolean
   autoSetDisabled: boolean
   notice: boolean

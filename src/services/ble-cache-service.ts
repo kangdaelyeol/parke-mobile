@@ -22,6 +22,11 @@ export const bleCacheService: BleCacheService = {
     )
     cacheClient.setAlertPending(newPendingList)
   },
+  // 카드(기기) 연결 해제 시 그 기기의 감지 기록과 대기 중인 번호 변경 요청을 지운다
+  clearDevice: (deviceId, cardId) => {
+    cacheClient.clearDeviceRecords(deviceId)
+    bleCacheService.deleteAlertPending(cardId)
+  },
   markAlertLastDeniedAt: () => cacheClient.setAlertDeniedAt(Date.now()),
   getAlertLastDeniedAt: () => cacheClient.getAlertDeniedAt(),
   markBleScan: (deviceName, batteryLevel) => {

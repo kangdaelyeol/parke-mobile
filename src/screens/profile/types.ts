@@ -6,12 +6,14 @@ interface MainActions {
   savePress: () => Promise<void>
   logoutPress: () => Promise<void>
   deletePress: () => Promise<void>
+  clearReportEmailPress: () => void
 }
 
 interface MainState {
   loading: boolean
   nickname: string
   phone: string
+  reportEmail: string
 }
 
 interface HeaderActions {

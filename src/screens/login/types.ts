@@ -27,8 +27,6 @@ interface LoginState {
   termConfirm: boolean
   consentConfirm: boolean
   thirdConsentConfirm: boolean
-  modalRef: React.RefObject<BottomSheetModal | null>
-  docType: DocType
   confirmSheetRef: React.RefObject<BottomSheetModal | null>
 }
 

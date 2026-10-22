@@ -1,6 +1,5 @@
 import {
   createUserWithEmailAndPassword,
-  deleteUser,
   getAuth,
   GoogleAuthProvider,
   signInWithCredential,
@@ -127,10 +126,6 @@ export const authService: AuthService = {
   },
   firebaseSignOut: async () => {
     await signOut(getAuth())
-  },
-  firebaseDeleteUser: async () => {
-    const user = getAuth().currentUser
-    if (user) await deleteUser(user)
   },
   autoLogin: async () => {
     const loginProvider = cacheService.getLoginProvider()

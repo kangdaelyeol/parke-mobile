@@ -1,4 +1,5 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { DocType } from '@/types/common'
 
 export type RootStackParamList = {
   Home: undefined
@@ -12,6 +13,7 @@ export type RootStackParamList = {
   Permission: undefined
   // cardId가 없으면 카드 없이 주행 (테스트용)
   Drive: { cardId?: string }
+  LegalDoc: { docType: DocType }
 }
 
 type RootNavigationProp<T extends keyof RootStackParamList> =
@@ -27,3 +29,4 @@ export type SearchBleStackNavigationProp = RootNavigationProp<'SearchBLE'>
 export type SettingStackNavigationProp = RootNavigationProp<'Setting'>
 export type PermissionStackNavigationProp = RootNavigationProp<'Permission'>
 export type DriveStackNavigationProp = RootNavigationProp<'Drive'>
+export type LegalDocStackNavigationProp = RootNavigationProp<'LegalDoc'>

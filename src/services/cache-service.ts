@@ -17,6 +17,8 @@ export const cacheService: CacheService = {
     cacheClient.setPhoneChangeCount(0)
     cacheClient.setToday(new Date().toISOString().slice(0, 10))
   },
+  // 로그아웃·탈퇴 시 기기에 남은 사용자별 기록(BLE 감지, 오늘의 현황, 수신 이메일)을 지운다
+  clearUserData: () => cacheClient.clearUserRecords(),
   setHasSeenOnBoarding: value => cacheClient.setHasSeenOnBoarding(value),
   getHasSeenOnBoarding: () => cacheClient.getHasSeenOnBoarding(),
   ensureTodayDashBoardCache: () => {

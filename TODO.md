@@ -56,7 +56,13 @@
 - [ ] API 키 발급 후 `firebase functions:secrets:set SMTP_PASS`
 - [ ] `cd backend && firebase deploy --only functions`
 - [ ] 주행모드 요약 → [이메일로 보내기]로 실제 수신 확인 (스팸함도 확인)
-- [ ] DB 보안 규칙에 `reportQuota`는 앱에서 읽기·쓰기 금지 (서버만 사용, 기본 거부 규칙이면 추가 작업 없음)
+- [ ] DB 보안 규칙에 `reportQuota`, `locationLog`는 앱에서 읽기·쓰기 금지 (서버만 사용, 기본 거부 규칙이면 추가 작업 없음)
+- [ ] **앱 출시 전에 함수 먼저 배포** (카드 삭제·회원 탈퇴·위치정보 철회가 서버 함수를 부르도록 바뀜. 배포 전 앱에서는 이 기능들이 실패함)
+- [ ] 배포 후 Google Cloud 콘솔 → Cloud Scheduler에 `purgeExpiredLocationLogs` 작업이 생겼는지 확인
+- [ ] 확인: 주행 시작/종료 → DB `locationLog/{uid}`에 `collect_start`/`collect_end`, 이메일 발송 → `provide` 기록
+- [ ] 확인: 설정 → 위치정보 동의 철회 → `locationLog/{uid}` 삭제
+- [ ] 확인: 공동 소유 카드에서 번호 주인이 카드 삭제 → 카드 번호가 남은 소유자 번호로 바뀜
+- [ ] 확인: 회원 탈퇴 → `user/{uid}`, `reportQuota/{uid}`, `locationLog/{uid}`, Authentication 사용자 모두 삭제
 
 ## 3. 실기기 테스트
 
@@ -119,5 +125,5 @@
   - [ ] 이메일 발송 단위: 운행마다 / 월간 운행기록부만
   - [ ] 계기판 주행거리 입력 방식 (국세청 양식용)
   - [ ] 기기 펌웨어가 운행 중 BLE 연결을 계속 유지할 수 있는지 확인
-- [ ] 서버(Firebase Functions) 도입 시점: 카카오 로그인 커스텀 토큰 전환, 카드 등록·삭제·탈퇴 서버 처리
+- [ ] 서버(Firebase Functions) 도입 시점: 카카오 로그인 커스텀 토큰 전환, 카드 등록 서버 처리 (삭제·탈퇴는 서버로 옮김)
 - [ ] DB 소유자 구조 변경(`ownerList` 배열 → 맵) 및 "소유자만 수정" 규칙 적용 시점

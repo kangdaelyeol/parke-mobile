@@ -1,5 +1,4 @@
 import { RefObject } from 'react'
-import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { DocType, ViewModel } from '@/types/common'
 
 export interface GeoPoint {
@@ -49,8 +48,6 @@ interface DriveState {
   emailSheetVisible: boolean
   sendingReport: boolean
   lastReportEmail: string
-  docType: DocType
-  termModalRef: RefObject<BottomSheetModal | null>
 }
 
 interface DriveActions {
@@ -61,6 +58,8 @@ interface DriveActions {
   emailPress: () => void
   closeEmailSheet: () => void
   sendReport: (email: string) => Promise<void>
+  // 저장된 수신 이메일 주소 삭제
+  clearSavedEmail: () => void
   donePress: () => void
 }
 
@@ -87,4 +86,5 @@ export interface DriveEmailSheetProps {
   sending: boolean
   onClose: () => void
   onSend: (email: string) => void
+  onClearSaved: () => void
 }

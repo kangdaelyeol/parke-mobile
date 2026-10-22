@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useState,
   createContext,
@@ -7,15 +8,15 @@ import {
   useRef,
 } from 'react'
 import { Alert } from 'react-native'
-import { useNavigation } from '@react-navigation/native'
+import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { LoginStackNavigationProp } from '@/navigation/types'
 import { LoginContextValue } from '@login/types'
-import { userService, authService } from '@/services'
+import { userService, authService, legalService } from '@/services'
 import { useUserContext } from '@/contexts'
-import { useTermBottomSheet } from '@/hooks'
 import { DocType } from '@/types/common'
 import { UserDto } from '@/domain/user'
+import { LOCATION_CONSENT_DOCS, REQUIRED_CONSENT_DOCS } from '@/constants'
 
 const LoginContext = createContext({} as LoginContextValue)
 
@@ -36,9 +37,17 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
   const locationConfirm = locationTermsConfirm && locationConsentConfirm
   const allConfirm = requiredConfirm && locationConfirm
 
-  const { modalRef, docType, showBottomSheet } = useTermBottomSheet()
-
   const confirmSheetRef = useRef<BottomSheetModal | null>(null)
+  // 문서를 보러 갔다가 돌아오면 동의 시트를 다시 연다
+  const reopenSheetOnFocus = useRef(false)
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!reopenSheetOnFocus.current) return
+      reopenSheetOnFocus.current = false
+      confirmSheetRef.current?.present()
+    }, []),
+  )
 
   useEffect(() => {
     ;(async () => {
@@ -97,11 +106,18 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     confirmSheetRef.current?.present()
   }
 
-  // 위치 선택 동의를 했으면 동의 시각을 남긴다 (실패해도 로그인은 진행, 주행 시작 때 다시 묻는다)
-  const withLocationConsent = async (dto: UserDto): Promise<UserDto> => {
-    if (!locationConfirm || dto.locationConsentAgreedAt) return dto
-    const res = await userService.agreeLocation(dto.id)
-    return res.status ? { ...dto, locationConsentAgreedAt: Date.now() } : dto
+  // 동의한 문서별로 { agreed, agreedAt, effectiveDate }를 남긴다.
+  // 필수 3종은 항상, 위치 2종은 선택 동의했을 때만 (실패해도 로그인은 진행, 위치는 주행 시작 때 다시 묻는다)
+  const withConsents = async (dto: UserDto): Promise<UserDto> => {
+    const docs = locationConfirm
+      ? [...REQUIRED_CONSENT_DOCS, ...LOCATION_CONSENT_DOCS]
+      : [...REQUIRED_CONSENT_DOCS]
+    const res = await legalService.recordConsents(dto.id, docs, true)
+    if (!res.status) {
+      console.log('[Login] consent record failed', res.message)
+      return dto
+    }
+    return { ...dto, consents: { ...dto.consents, ...res.payload } }
   }
 
   // firebase 로그인 이후 공통 흐름: 유저 조회(없으면 생성) -> 화면 이동
@@ -109,7 +125,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     const getUserRes = await userService.getUser(firebaseId)
 
     if (getUserRes.status) {
-      userContectActions.initUser(await withLocationConsent(getUserRes.payload))
+      userContectActions.initUser(await withConsents(getUserRes.payload))
       return navigation.replace('Home')
     }
 
@@ -122,9 +138,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       Alert.alert(createUserRes.message)
       return setLoading(false)
     }
-    userContectActions.initUser(
-      await withLocationConsent(createUserRes.payload),
-    )
+    userContectActions.initUser(await withConsents(createUserRes.payload))
     return navigation.replace('Init')
   }
 
@@ -164,8 +178,11 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
     return loginWithIdentifier(email, nickname, authService.kakaoLogout)
   }
 
+  // 동의 시트가 문서 화면을 덮지 않도록 잠시 닫고, 돌아오면 다시 연다
   const showDocPress = (type: DocType) => {
-    showBottomSheet(type)
+    reopenSheetOnFocus.current = true
+    confirmSheetRef.current?.dismiss()
+    navigation.navigate('LegalDoc', { docType: type })
   }
 
   const appleLoginPress = async () => {
@@ -211,8 +228,6 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
           thirdConsentConfirm,
           locationTermsConfirm,
           locationConsentConfirm,
-          modalRef,
-          docType,
           confirmSheetRef,
         },
         actions: {

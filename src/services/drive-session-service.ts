@@ -118,6 +118,8 @@ export const driveSessionService: DriveSessionService = {
     endPollTimer = null
     liveActivity?.endActivity()
   },
+  // 앱 다른 곳에서 진행 중인 주행을 끝내야 할 때 (예: 위치정보 동의 철회)
+  requestEnd: () => notifyEnd(),
   onEndRequest: listener => {
     endListeners.add(listener)
     return () => {

@@ -3,14 +3,18 @@ import { useCallback, useEffect, useState } from 'react'
 import { Alert } from 'react-native'
 import { useUserContext } from '@/contexts'
 import { ProfileStackNavigationProp } from '@/navigation/types'
-import { authService, userService } from '@/services'
+import {
+  authService,
+  cacheService,
+  driveReportService,
+  userService,
+} from '@/services'
 import { extractNumber } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
   const {
     user,
-    cards,
     actions: userContextActions,
     validateUser,
     setCards,
@@ -18,6 +22,10 @@ export const useMainViewModel = (): ProfileMainViewModel => {
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
+  // 운행 기록 이메일을 받을 주소 (기기에만 저장)
+  const [reportEmail, setReportEmail] = useState(() =>
+    driveReportService.getLastEmail(),
+  )
 
   const navigation = useNavigation<ProfileStackNavigationProp>()
 
@@ -76,6 +84,8 @@ export const useMainViewModel = (): ProfileMainViewModel => {
             setLoading(true)
             try {
               await authService.signOut()
+              // 기기에 남은 사용자별 기록(BLE 감지, 오늘의 현황, 수신 이메일)을 지운다
+              cacheService.clearUserData()
               setCards([])
               return navigation.navigate('Login')
             } catch (e) {
@@ -90,6 +100,19 @@ export const useMainViewModel = (): ProfileMainViewModel => {
         },
       ])
     },
+    clearReportEmailPress: () => {
+      Alert.alert('저장된 이메일 삭제', `${reportEmail}을(를) 삭제할까요?`, [
+        { text: '취소', style: 'cancel' },
+        {
+          text: '삭제',
+          style: 'destructive',
+          onPress: () => {
+            driveReportService.clearLastEmail()
+            setReportEmail('')
+          },
+        },
+      ])
+    },
     deletePress: async () => {
       if (!user) return
       Alert.alert('Delete User', '회원탈퇴 하시겠습니까?', [
@@ -98,14 +121,16 @@ export const useMainViewModel = (): ProfileMainViewModel => {
           onPress: async () => {
             try {
               setLoading(true)
-              const res = await userService.deleteUser(user.id, cards)
+              // 카드·회원 정보·동의 기록·확인자료·로그인 계정은 서버가 지운다
+              const res = await userService.deleteAccount()
 
               if (!res.status) {
                 Alert.alert(res.message)
                 return setLoading(false)
               }
-              await authService.firebaseDeleteUser()
               await authService.signOut()
+              // 기기에 남은 개인정보도 지운다
+              cacheService.clearUserData()
               setCards([])
               return navigation.replace('Login')
             } catch (e) {
@@ -121,6 +146,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
 
   return {
     state: {
+      reportEmail,
       loading,
       nickname,
       phone,

@@ -11,7 +11,6 @@ import {
 } from '@/screens/drive/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { formatClock } from '@/utils'
-import { TermBottomSheet } from '@/components'
 import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 
@@ -68,13 +67,13 @@ export default function DriveScreen({ route }: DriveScreenProps) {
       ) : (
         <DriveSummary state={state} actions={actions} />
       )}
-      <TermBottomSheet modalRef={state.termModalRef} docState={state.docType} />
       <EmailReportSheet
         visible={state.emailSheetVisible}
         initialEmail={state.lastReportEmail}
         sending={state.sendingReport}
         onClose={actions.closeEmailSheet}
         onSend={actions.sendReport}
+        onClearSaved={actions.clearSavedEmail}
       />
     </View>
   )

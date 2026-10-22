@@ -32,6 +32,7 @@ export const EmailReportSheet = ({
   sending,
   onClose,
   onSend,
+  onClearSaved,
 }: DriveEmailSheetProps) => {
   const { bottom } = useSafeAreaInsets()
   const [email, setEmail] = useState(initialEmail)
@@ -117,6 +118,21 @@ export const EmailReportSheet = ({
               </View>
             )}
           </View>
+
+          {!!initialEmail && (
+            <Pressable
+              hitSlop={8}
+              disabled={sending}
+              onPress={() => {
+                onClearSaved()
+                setEmail('')
+              }}
+            >
+              <Text style={styles.clearSaved}>
+                저장된 주소 삭제 ({initialEmail})
+              </Text>
+            </Pressable>
+          )}
 
           <View style={styles.buttonRow}>
             <PressableButton
@@ -215,6 +231,12 @@ const styles = StyleSheet.create({
   suggestionDomain: {
     color: WHITE,
     fontFamily: PRETENDARD.BOLD,
+  },
+  clearSaved: {
+    color: GRAY,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 13,
+    textDecorationLine: 'underline',
   },
   buttonRow: {
     flexDirection: 'row',

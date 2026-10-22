@@ -20,7 +20,7 @@ type DriveConsentProps = Pick<
 >
 
 const DOCS: { type: DocType; label: string }[] = [
-  { type: 'location-terms', label: '위치기반서비스 이용약관' },
+  { type: 'location', label: '위치기반서비스 이용약관' },
   { type: 'location-consent', label: '개인위치정보 수집·이용 동의' },
 ]
 

@@ -2,14 +2,7 @@ import { db } from '@/firebaseApp'
 import { ref, update } from '@react-native-firebase/database'
 import { FirebaseResult } from './types'
 import { CardDto } from '@/domain/card'
-import { UserDto } from '@/domain/user'
 import { clientFail, clientOk } from '@/utils'
-
-interface DeleteCardTransactionProps {
-  user: UserDto
-  card: CardDto | null
-  cardId: string
-}
 
 export const createCardTransaction = async (
   card: CardDto,
@@ -20,22 +13,6 @@ export const createCardTransaction = async (
     await update(ref(db), {
       [`card/${card.id}`]: card,
       [`user/${userId}/cardIdList`]: newCardList,
-    })
-    return clientOk(true)
-  } catch (e) {
-    return clientFail(e)
-  }
-}
-
-export const deleteCardTransaction = async ({
-  user,
-  cardId,
-  card,
-}: DeleteCardTransactionProps): Promise<FirebaseResult<boolean>> => {
-  try {
-    await update(ref(db), {
-      [`user/${user.id}`]: user,
-      [`card/${cardId}`]: card,
     })
     return clientOk(true)
   } catch (e) {

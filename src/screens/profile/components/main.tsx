@@ -1,4 +1,5 @@
-import { StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { PRETENDARD } from '@/theme/fonts'
 import { FocusableInput, Loading, PressableButton } from '@/components'
 import { useMainViewModel } from '@profile/view-model'
 import {
@@ -33,6 +34,19 @@ export const Main = () => {
             value={formatPhone(state.phone)}
             iconName="phone"
           />
+        </View>
+        <View style={styles.reportEmail}>
+          <Text style={styles.reportEmailTitle}>운행 기록 수신 이메일</Text>
+          <View style={styles.reportEmailRow}>
+            <Text style={styles.reportEmailValue} numberOfLines={1}>
+              {state.reportEmail || '저장된 주소 없음'}
+            </Text>
+            {!!state.reportEmail && (
+              <Pressable hitSlop={8} onPress={actions.clearReportEmailPress}>
+                <Text style={styles.reportEmailDelete}>삭제</Text>
+              </Pressable>
+            )}
+          </View>
         </View>
         <View style={styles.divider} />
         <View style={styles.buttonSection}>
@@ -74,6 +88,37 @@ const styles = StyleSheet.create({
   inputSection: {
     marginTop: 20,
     gap: 15,
+  },
+  reportEmail: {
+    marginTop: 24,
+    gap: 10,
+  },
+  reportEmailTitle: {
+    color: GRAY,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 13,
+  },
+  reportEmailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    height: 55,
+    paddingHorizontal: 16,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: DARK_LIGHT,
+    backgroundColor: DARK,
+  },
+  reportEmailValue: {
+    flex: 1,
+    color: WHITE,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 16,
+  },
+  reportEmailDelete: {
+    color: RED_LIGHT,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 14,
   },
   buttonSection: {
     gap: 15,

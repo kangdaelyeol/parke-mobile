@@ -3,7 +3,28 @@ import { CacheClient, PhoneChangePending } from '@/client'
 import { LoginProvider } from '@/services/types'
 export const kv = new MMKV()
 
+// 로그아웃·탈퇴 시 지우는 사용자별 기록 (ble:* 키 + 아래 키). 앱 설정·온보딩 여부는 남긴다
+const USER_RECORD_KEYS = [
+  'report:lastEmail',
+  'today',
+  'bleScanCount',
+  'phoneChangeCount',
+  'battery',
+  'bleLastScan',
+  'bleLastScanTime',
+]
+
 export const cacheClient: CacheClient = {
+  // 기기 감지 기록 (카드 연결 해제 시)
+  clearDeviceRecords: deviceId => {
+    kv.delete(`ble:lastSeen-${deviceId}`)
+    kv.delete(`ble:scan-${deviceId}`)
+  },
+  clearUserRecords: () => {
+    kv.getAllKeys()
+      .filter(key => key.startsWith('ble:') || USER_RECORD_KEYS.includes(key))
+      .forEach(key => kv.delete(key))
+  },
   setLoginProvider: v => kv.set('auth:loginProvider', v),
   getLoginProvider: () =>
     (kv.getString('auth:loginProvider') as LoginProvider) ?? '',

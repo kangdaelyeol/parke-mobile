@@ -2,6 +2,7 @@ import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
 import { LoginProvider } from '@/services/types'
+import { DocType } from '@/types/common'
 
 export interface ClientSuccess<T> {
   status: true
@@ -41,10 +42,16 @@ export interface UserClient {
     dto: { id: string } & Partial<UserDto>,
   ): Promise<FirebaseResult<boolean>>
   getById(id: string): Promise<FirebaseResult<UserDto | null>>
-  agreeLocation(id: string): Promise<FirebaseResult<boolean>>
+  // 문서별 동의 기록을 한 번에 저장 (agreedAt은 서버 시각)
+  recordConsents(
+    id: string,
+    consents: { docType: DocType; agreed: boolean; effectiveDate: string }[],
+  ): Promise<FirebaseResult<boolean>>
 }
 
 export interface CacheClient {
+  clearDeviceRecords: (deviceId: string) => void
+  clearUserRecords: () => void
   setLoginProvider: (v: string) => void
   getLoginProvider: () => LoginProvider | ''
   setAppleUser: (v: string) => void

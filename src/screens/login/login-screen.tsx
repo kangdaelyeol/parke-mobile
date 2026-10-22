@@ -1,5 +1,5 @@
 import { View, StyleSheet } from 'react-native'
-import { Loading, TermBottomSheet } from '@/components'
+import { Loading } from '@/components'
 import { LoginContextProvider, useLoginContext } from '@login/contexts'
 import { ConsentBottomSheet, Footer, Main } from '@login/components'
 
@@ -10,7 +10,6 @@ const LoginContent = () => {
       {state.loading && <Loading />}
       <Main />
       <Footer />
-      <TermBottomSheet docState={state.docType} modalRef={state.modalRef} />
       <ConsentBottomSheet />
     </View>
   )

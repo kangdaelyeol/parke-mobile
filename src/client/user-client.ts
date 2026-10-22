@@ -38,13 +38,18 @@ export const userClient: UserClient = {
       return clientFail(e)
     }
   },
-  // 위치 동의 시각은 서버 시각으로 남긴다 (동의 사실 확인 자료)
-  agreeLocation: async id => {
+  // 동의 사실 확인 자료로 쓰이므로 동의 시각은 서버 시각으로 남긴다
+  recordConsents: async (id, consents) => {
     try {
-      await update(ref(db, `user/${id}`), {
-        locationTermsAgreedAt: serverTimestamp(),
-        locationConsentAgreedAt: serverTimestamp(),
+      const updates: Record<string, unknown> = {}
+      consents.forEach(({ docType, agreed, effectiveDate }) => {
+        updates[`user/${id}/consents/${docType}`] = {
+          agreed,
+          agreedAt: serverTimestamp(),
+          effectiveDate,
+        }
       })
+      await update(ref(db), updates)
       return clientOk(true)
     } catch (e) {
       console.log(e)

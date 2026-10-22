@@ -1,5 +1,5 @@
-import { CardUpdates, deleteUserTransaction, userClient } from '@/client'
-import { Card } from '@/domain/card'
+import { userClient } from '@/client'
+import { callFunction } from './functions-client'
 import { User } from '@/domain/user'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
 import { UserService } from './types'
@@ -29,27 +29,13 @@ export const userService: UserService = {
     if (res.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(res.error))
   },
-  agreeLocation: async id => {
-    const res = await userClient.agreeLocation(id)
-    if (res.status) return serviceOk(true)
-    else return serviceFail(getFirebaseErrorMessage(res.error))
-  },
-  deleteUser: async (userId, cardList) => {
-    const cardUpdates = {} as CardUpdates
-
-    cardList.forEach(card => {
-      const cardDto = Card.create({ ...card }).toDto()
-      const newOwnerList = cardDto.ownerList.filter(
-        ownerId => ownerId !== userId,
-      )
-
-      cardDto.ownerList = newOwnerList
-      cardUpdates[`card/${cardDto.id}`] =
-        newOwnerList.length === 0 ? null : cardDto
-    })
-
-    const deleteRes = await deleteUserTransaction({ userId, cardUpdates })
-    if (deleteRes.status) return serviceOk(true)
-    else return serviceFail(getFirebaseErrorMessage(deleteRes.error))
+  // 회원 탈퇴: 서버가 카드·회원 정보·동의 기록·확인자료·로그인 계정을 모두 정리한다
+  deleteAccount: async () => {
+    const res = await callFunction(
+      'deleteAccount',
+      undefined,
+      '회원 탈퇴를 처리하지 못했습니다. 잠시 후 다시 시도해주세요.',
+    )
+    return res.status ? serviceOk(true) : res
   },
 }

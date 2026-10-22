@@ -1,12 +1,8 @@
 import { serverTimestamp } from '@react-native-firebase/database'
-import {
-  cardClient,
-  userClient,
-  createCardTransaction,
-  deleteCardTransaction,
-} from '@/client'
+import { cardClient, createCardTransaction } from '@/client'
 import { Card } from '@/domain/card'
 import { bleCacheService } from '@/services'
+import { callFunction } from './functions-client'
 import { CardService, CardState, ServiceSuccess } from '@/services/types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'
 
@@ -99,33 +95,15 @@ export const cardService: CardService = {
     const cardState = { ...cardDto, scan: true }
     return serviceOk(cardState)
   },
-  deleteCard: async (cardId, userId) => {
-    const userRes = await userClient.getById(userId)
-    if (!userRes.status)
-      return serviceFail(getFirebaseErrorMessage(userRes.error))
-    const cardRes = await cardClient.getById(cardId)
-    if (!cardRes.status)
-      return serviceFail(getFirebaseErrorMessage(cardRes.error))
-    const { payload: user } = userRes
-    const { payload: card } = cardRes
-
-    if (user === null || card === null)
-      return serviceFail('정보를 찾을 수 없습니다.')
-
-    const newCardIdList = user.cardIdList.filter(id => id !== cardId)
-
-    const newUser = { ...user, cardIdList: newCardIdList }
-
-    const newOwnerList = card.ownerList.filter(id => id !== userId)
-
-    const newCard =
-      newOwnerList.length === 0 ? null : { ...card, ownerList: newOwnerList }
-    const res = await deleteCardTransaction({
-      user: newUser,
-      cardId: card.id,
-      card: newCard,
-    })
-    if (!res.status) return serviceFail(getFirebaseErrorMessage(res.error))
+  // 카드(기기) 연결 해제. 공동 소유 카드의 번호 정리는 서버가 한다
+  leaveCard: async card => {
+    const res = await callFunction(
+      'leaveCard',
+      { cardId: card.id },
+      '카드를 삭제하지 못했습니다. 잠시 후 다시 시도해주세요.',
+    )
+    if (!res.status) return res
+    bleCacheService.clearDevice(card.deviceId, card.id)
     return serviceOk(true)
   },
   updateScan: (deviceId, scan) => bleCacheService.setDeviceScan(deviceId, scan),

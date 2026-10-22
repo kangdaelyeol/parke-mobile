@@ -21,3 +21,11 @@ export const formatKm = (meters: number) =>
 
 // m/s → km/h
 export const toKmh = (mps: number) => Math.round(mps * 3.6)
+
+// 2026년 10월 22일 14:05
+export const formatDateTime = (timestamp: number) => {
+  const date = new Date(timestamp)
+  return `${date.getFullYear()}년 ${
+    date.getMonth() + 1
+  }월 ${date.getDate()}일 ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
