@@ -72,8 +72,10 @@ export const deleteAccount = onCall(async request => {
   for (const cardId of user.cardIdList ?? [])
     await collectCardLeave(uid, user.phone ?? '', cardId, updates)
 
-  // 회원 정보(동의 기록 포함), 발송 횟수, 위치정보 확인자료
+  // 회원 정보(동의 기록 포함), 주행 기록, 발송 횟수, 위치정보 확인자료
   updates[`user/${uid}`] = null
+  updates[`drive/${uid}`] = null
+  updates[`drivePath/${uid}`] = null
   updates[`reportQuota/${uid}`] = null
   updates[`locationLog/${uid}`] = null
   await db().ref().update(updates)

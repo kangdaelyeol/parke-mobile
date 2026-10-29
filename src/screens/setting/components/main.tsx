@@ -69,7 +69,8 @@ export const Main = () => {
               onPress={actions.consentSettingPress}
               style={styles.termLine}
             >
-              <Text style={styles.termText}>선택 동의 관리</Text>
+              {/* 법률 문서의 철회 안내("앱 설정 → 위치정보 동의 철회")와 같은 이름을 쓴다 */}
+              <Text style={styles.termText}>위치정보 동의 철회</Text>
               <FontAwesome6
                 name="angle-right"
                 size={14}

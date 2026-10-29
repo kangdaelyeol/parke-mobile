@@ -38,6 +38,7 @@ interface CardActions {
   drivePress: () => void
   cardPress: () => void
   editPress: () => void
+  recordsPress: () => void
   deletePress: (onDeleted?: () => void) => void
   previewPress: () => Promise<void>
   scanChangePress: () => void
@@ -61,6 +62,8 @@ interface SettingCardState {
   layout: CardLayout
   accent: string
   scale: number
+  // 운행 기록 이메일 (내 계정에 카드별로 저장)
+  email: string
 }
 
 // 수정 화면 애니메이션은 카드 설정 컨텍스트의 진행값이 담당한다
@@ -76,6 +79,7 @@ interface SettingCardActions {
   layoutPress: (val: CardLayout) => void
   accentInput: (val: string) => void
   scaleChange: (val: number) => void
+  emailInput: (val: string) => void
 }
 
 interface TodaySummaryState {

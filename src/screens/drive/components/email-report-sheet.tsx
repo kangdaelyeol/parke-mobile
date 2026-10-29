@@ -29,6 +29,7 @@ import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 export const EmailReportSheet = ({
   visible,
   initialEmail,
+  fromCard,
   sending,
   onClose,
   onSend,
@@ -38,7 +39,7 @@ export const EmailReportSheet = ({
   const [email, setEmail] = useState(initialEmail)
   const [focused, setFocused] = useState(false)
 
-  // 열 때마다 마지막으로 보낸 주소로 채운다
+  // 열 때마다 카드에 설정한 주소(없으면 마지막으로 보낸 주소)로 채운다
   useEffect(() => {
     if (visible) setEmail(initialEmail)
   }, [visible, initialEmail])
@@ -119,19 +120,25 @@ export const EmailReportSheet = ({
             )}
           </View>
 
-          {!!initialEmail && (
-            <Pressable
-              hitSlop={8}
-              disabled={sending}
-              onPress={() => {
-                onClearSaved()
-                setEmail('')
-              }}
-            >
-              <Text style={styles.clearSaved}>
-                저장된 주소 삭제 ({initialEmail})
-              </Text>
-            </Pressable>
+          {fromCard ? (
+            <Text style={styles.cardEmailHint}>
+              카드에 설정된 주소예요. 카드 수정에서 바꿀 수 있어요.
+            </Text>
+          ) : (
+            !!initialEmail && (
+              <Pressable
+                hitSlop={8}
+                disabled={sending}
+                onPress={() => {
+                  onClearSaved()
+                  setEmail('')
+                }}
+              >
+                <Text style={styles.clearSaved}>
+                  저장된 주소 삭제 ({initialEmail})
+                </Text>
+              </Pressable>
+            )
           )}
 
           <View style={styles.buttonRow}>
@@ -237,6 +244,11 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 13,
     textDecorationLine: 'underline',
+  },
+  cardEmailHint: {
+    color: GRAY,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 13,
   },
   buttonRow: {
     flexDirection: 'row',

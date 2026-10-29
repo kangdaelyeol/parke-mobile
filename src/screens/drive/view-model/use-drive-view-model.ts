@@ -12,6 +12,7 @@ import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
 import { DriveStackNavigationProp } from '@/navigation/types'
 import {
+  driveRecordService,
   driveReportService,
   driveSessionService,
   legalService,
@@ -68,6 +69,7 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
   const [emailSheetVisible, setEmailSheetVisible] = useState(false)
   const [sendingReport, setSendingReport] = useState(false)
   const card = cards.find(c => c.id === cardId)
+  const cardReportEmail = (card && user?.reportEmails?.[card.id]) || ''
 
   // 위치기반서비스 약관 + 개인위치정보 동의가 없거나 예전 시행일 기준이면 동의부터 받는다.
   // 동의하지 않으면 주행 모드를 시작할 수 없다
@@ -352,6 +354,39 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       gps.accuracy > WEAK_SIGNAL_ACCURACY_M)
   const averageSpeed = elapsed > 0 ? distance / (elapsed / 1000) : 0
 
+  // 주행이 끝나면 카드에 주행 기록을 한 번 저장한다.
+  // 카드 없이 시작한 테스트 주행이나 위치를 한 번도 받지 못한 주행은 저장하지 않는다
+  const recordRef = useRef({ points, distance, averageSpeed, maxSpeed })
+  recordRef.current = { points, distance, averageSpeed, maxSpeed }
+  const recordSaved = useRef(false)
+  useEffect(() => {
+    if (phase !== 'summary' || recordSaved.current) return
+    recordSaved.current = true
+    const record = recordRef.current
+    if (!user || !card || record.points.length === 0) {
+      log('record not saved', {
+        hasCard: !!card,
+        points: record.points.length,
+      })
+      return
+    }
+    driveRecordService
+      .save(user.id, {
+        cardId: card.id,
+        cardTitle: card.title,
+        startAt,
+        endAt: endAt ?? Date.now(),
+        distance: record.distance,
+        averageSpeed: record.averageSpeed,
+        maxSpeed: record.maxSpeed,
+        points: record.points,
+      })
+      .then(res => {
+        if (!res.status)
+          Alert.alert('주행 기록을 저장하지 못했어요', res.message)
+      })
+  }, [phase, user, card, startAt, endAt])
+
   // 잠금화면 / 상시 알림 내용은 몇 초마다만 갱신한다 (iOS 갱신 횟수 제한, 배터리)
   const statusRef = useRef<DriveSessionStatus | null>(null)
   statusRef.current = {
@@ -393,6 +428,7 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       emailSheetVisible,
       sendingReport,
       lastReportEmail,
+      cardReportEmail,
     },
     actions: {
       agreeLocationPress: async () => {

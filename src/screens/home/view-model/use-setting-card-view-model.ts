@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useCardSettingContext, useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
-import { cardService } from '@/services'
+import { cardService, userService } from '@/services'
 import {
   CARD_MESSAGE_MAX_LENGTH,
   CardDto,
@@ -12,14 +12,16 @@ import {
   isCardAccent,
 } from '@/domain/card'
 import { HomeSettingCardViewModel } from '@home/types'
-import { extractNumber } from '@/utils'
+import { extractNumber, isEmail } from '@/utils'
 
 export const useSettingCardViewModel = (
   card: CardDto,
 ): HomeSettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()
   const { selectedCardIdx } = useCardSliderContext()
-  const { cards, actions: userContextActions } = useUserContext()
+  const { user, cards, actions: userContextActions } = useUserContext()
+  // 운행 기록 이메일은 카드가 아닌 내 계정에 카드별로 저장한다 (공동 소유자끼리 공유하지 않음)
+  const savedEmail = user?.reportEmails?.[card.id] ?? ''
 
   const [title, setTitle] = useState(card.title)
   const [phone, setPhone] = useState(card.phone)
@@ -28,10 +30,14 @@ export const useSettingCardViewModel = (
   const [layout, setLayout] = useState(card.layout)
   const [accent, setAccent] = useState(card.custom.accent)
   const [scale, setScale] = useState(card.custom.scale)
+  const [email, setEmail] = useState(savedEmail)
   const actions = {
     savePress: async () => {
       if (!isCardAccent(accent))
         return Alert.alert('강조 색상을 #RRGGBB 형식으로 입력해주세요.')
+      const nextEmail = email.trim()
+      if (nextEmail && !isEmail(nextEmail))
+        return Alert.alert('이메일 주소를 확인해주세요.')
 
       const cardId = cards[selectedCardIdx].id
       const info = {
@@ -50,6 +56,15 @@ export const useSettingCardViewModel = (
         return
       }
       userContextActions.updateCardInfo(cardId, info)
+
+      if (!user || nextEmail === savedEmail) return
+      const emailRes = await userService.updateReportEmail(
+        user.id,
+        cardId,
+        nextEmail,
+      )
+      if (!emailRes.status) return Alert.alert(emailRes.message)
+      userContextActions.setReportEmail(cardId, nextEmail)
     },
     cancelPress: () => {
       cardSettingController.hideSetting()
@@ -58,6 +73,7 @@ export const useSettingCardViewModel = (
     messageInput: (val: string) =>
       setMessage(val.slice(0, CARD_MESSAGE_MAX_LENGTH)),
     phoneInput: (val: string) => setPhone(extractNumber(val)),
+    emailInput: (val: string) => setEmail(val),
     themePress: (val: CardTheme) => setTheme(val),
     layoutPress: (val: CardLayout) => setLayout(val),
     accentInput: (val: string) =>
@@ -74,6 +90,7 @@ export const useSettingCardViewModel = (
       layout,
       accent,
       scale,
+      email,
     },
     actions,
     animated: {},

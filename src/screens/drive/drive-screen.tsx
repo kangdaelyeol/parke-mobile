@@ -69,7 +69,8 @@ export default function DriveScreen({ route }: DriveScreenProps) {
       )}
       <EmailReportSheet
         visible={state.emailSheetVisible}
-        initialEmail={state.lastReportEmail}
+        initialEmail={state.cardReportEmail || state.lastReportEmail}
+        fromCard={!!state.cardReportEmail}
         sending={state.sendingReport}
         onClose={actions.closeEmailSheet}
         onSend={actions.sendReport}

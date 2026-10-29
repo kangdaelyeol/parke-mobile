@@ -77,7 +77,7 @@ export const useConsentViewModel = (): SettingConsentViewModel => {
   const withdraw = ({ docType, label }: ConsentItem) =>
     Alert.alert(
       '동의 철회',
-      `${label}을(를) 철회할까요?\n\n철회하면 주행 모드(운행일지)를 사용할 수 없고, 진행 중인 주행은 바로 종료됩니다. 위치정보 수집·이용·제공사실 확인자료도 함께 삭제됩니다.`,
+      `${label}을(를) 철회할까요?\n\n철회하면 주행 모드(운행일지)를 사용할 수 없고, 진행 중인 주행은 바로 종료됩니다. 저장된 주행 기록과 위치정보 수집·이용·제공사실 확인자료도 함께 삭제됩니다.`,
       [
         { text: '취소', style: 'cancel' },
         {
@@ -87,7 +87,7 @@ export const useConsentViewModel = (): SettingConsentViewModel => {
             // 진행 중인 주행이 있으면 즉시 종료 (위치 수집 중단)
             driveSessionService.requestEnd()
             if (!docType || !(await record(docType, false))) return
-            // 철회 시 확인자료 즉시 파기 (운행 기록은 서버에 저장하지 않음)
+            // 철회 시 주행 기록·확인자료 즉시 파기
             const res = await locationLogService.deleteMine()
             if (!res.status) {
               Alert.alert(

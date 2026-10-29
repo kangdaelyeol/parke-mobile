@@ -29,6 +29,11 @@ export const userService: UserService = {
     if (res.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(res.error))
   },
+  updateReportEmail: async (id, cardId, email) => {
+    const res = await userClient.setReportEmail(id, cardId, email.trim())
+    if (res.status) return serviceOk(true)
+    else return serviceFail(getFirebaseErrorMessage(res.error))
+  },
   // 회원 탈퇴: 서버가 카드·회원 정보·동의 기록·확인자료·로그인 계정을 모두 정리한다
   deleteAccount: async () => {
     const res = await callFunction(

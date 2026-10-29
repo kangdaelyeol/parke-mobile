@@ -74,6 +74,10 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
 
       if (!isSelected) sliderController.goToIdx(idx)
     },
+    recordsPress: () => {
+      if (!card) return
+      navigation.navigate('DriveRecords', { cardId: card.id })
+    },
     editPress: () => {
       if (!isSelected) sliderController.goToIdx(idx)
       cardSettingController.showSetting(idx)

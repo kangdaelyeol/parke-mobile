@@ -52,6 +52,11 @@ export const CardBottomSheet = ({
     actions.editPress()
   }
 
+  const recordsPress = () => {
+    modalRef.current?.dismiss()
+    actions.recordsPress()
+  }
+
   // 삭제가 끝날 때까지 시트를 열어 두고 로딩을 보여준다
   const deletePress = () => {
     actions.deletePress(() => modalRef.current?.dismiss())
@@ -128,6 +133,31 @@ export const CardBottomSheet = ({
           </Pressable>
         </View>
         <View style={[styles.optionContainer, styles.manageContainer]}>
+          <Pressable onPress={recordsPress}>
+            {({ pressed }) => (
+              <View style={[styles.option, pressed && styles.optionPressed]}>
+                <View style={styles.optionLeft}>
+                  <View style={[styles.optionIcon, styles.recordsIcon]}>
+                    <FontAwesome6
+                      iconStyle="solid"
+                      name="route"
+                      size={17}
+                      color="#ffcf5a"
+                    />
+                  </View>
+                  <View style={styles.descriptionSection}>
+                    <Text style={styles.descriptionTitle}>주행 기록 보기</Text>
+                    <Text style={styles.description}>
+                      이 카드로 주행한 기록
+                    </Text>
+                  </View>
+                </View>
+                <View style={styles.optionRight}>
+                  <Text style={styles.changeArrow}>›</Text>
+                </View>
+              </View>
+            )}
+          </Pressable>
           <Pressable onPress={editPress}>
             {({ pressed }) => (
               <View style={[styles.option, pressed && styles.optionPressed]}>
@@ -278,6 +308,9 @@ const styles = StyleSheet.create({
   },
   changePhoneIcon: {
     backgroundColor: 'rgba(232,240,96,0.1)',
+  },
+  recordsIcon: {
+    backgroundColor: 'rgba(255,179,0,0.1)',
   },
   editIcon: {
     backgroundColor: 'rgba(56,59,249,0.15)',

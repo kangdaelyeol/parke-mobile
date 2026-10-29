@@ -21,7 +21,7 @@ import {
   ScaleStepper,
   ThemeSelector,
 } from '@home/components'
-import { FocusableInput, PressableButton } from '@/components'
+import { EmailDomainInput, FocusableInput, PressableButton } from '@/components'
 import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
@@ -129,21 +129,28 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
             />
           </Stagger>
           <Stagger index={4}>
+            <EmailDomainInput
+              title="운행 기록 이메일"
+              value={state.email}
+              onChangeText={actions.emailInput}
+            />
+          </Stagger>
+          <Stagger index={5}>
             <LayoutSelector
               value={state.layout}
               onChange={actions.layoutPress}
             />
           </Stagger>
-          <Stagger index={5}>
+          <Stagger index={6}>
             <ThemeSelector value={state.theme} onChange={actions.themePress} />
           </Stagger>
-          <Stagger index={6}>
+          <Stagger index={7}>
             <AccentPicker
               value={state.accent}
               onChangeText={actions.accentInput}
             />
           </Stagger>
-          <Stagger index={7}>
+          <Stagger index={8}>
             <ScaleStepper value={state.scale} onChange={actions.scaleChange} />
           </Stagger>
         </KeyboardAwareScrollView>

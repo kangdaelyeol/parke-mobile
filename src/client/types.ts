@@ -1,6 +1,7 @@
 import { ReactNativeFirebase } from '@react-native-firebase/app'
 import { CardDto } from '@/domain/card'
 import { UserDto } from '@/domain/user'
+import { DrivePathDto, DriveRecordDto } from '@/domain/drive'
 import { LoginProvider } from '@/services/types'
 import { ConsentKey } from '@/types/common'
 
@@ -42,10 +43,34 @@ export interface UserClient {
     dto: { id: string } & Partial<UserDto>,
   ): Promise<FirebaseResult<boolean>>
   getById(id: string): Promise<FirebaseResult<UserDto | null>>
+  // 빈 문자열이면 삭제
+  setReportEmail(
+    id: string,
+    cardId: string,
+    email: string,
+  ): Promise<FirebaseResult<boolean>>
   // 동의 기록을 한 번에 저장 (agreedAt은 서버 시각)
   recordConsents(
     id: string,
     consents: { key: ConsentKey; agreed: boolean; effectiveDate: string }[],
+  ): Promise<FirebaseResult<boolean>>
+}
+
+export interface DriveClient {
+  create(
+    uid: string,
+    record: Omit<DriveRecordDto, 'id'>,
+    path: DrivePathDto,
+  ): Promise<FirebaseResult<string>>
+  listByCard(
+    uid: string,
+    cardId: string,
+  ): Promise<FirebaseResult<DriveRecordDto[]>>
+  getPath(uid: string, driveId: string): Promise<FirebaseResult<DrivePathDto>>
+  remove(
+    uid: string,
+    cardId: string,
+    driveId: string,
   ): Promise<FirebaseResult<boolean>>
 }
 

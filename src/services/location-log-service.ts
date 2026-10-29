@@ -9,7 +9,7 @@ export const locationLogService: LocationLogService = {
       if (!res.status) console.log('[LocationLog] failed', type, res.message)
     })
   },
-  // 위치정보 동의 철회 시 확인자료 즉시 파기
+  // 위치정보 동의 철회 시 주행 기록·확인자료 즉시 파기
   deleteMine: () =>
     callFunction(
       'deleteLocationData',

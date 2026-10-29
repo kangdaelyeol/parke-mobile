@@ -10,3 +10,5 @@ export { default as ScanCompleteScreen } from './scan-complete/scan-complete-scr
 export { default as PermissionScreen } from './permission/permission-screen'
 export { default as DriveScreen } from './drive/drive-screen'
 export { default as LegalDocScreen } from './legal-doc/legal-doc-screen'
+export { default as DriveRecordsScreen } from './drive-record/drive-records-screen'
+export { default as DriveRecordScreen } from './drive-record/drive-record-screen'

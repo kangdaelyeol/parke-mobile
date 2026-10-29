@@ -39,11 +39,16 @@ export const logLocationAccess = onCall(async request => {
   return { ok: true }
 })
 
-// 위치정보 동의 철회 시: 확인자료를 지체 없이 파기한다 (위치정보법 제24조)
-// TODO: 운행 기록을 서버에 저장하게 되면 여기서 함께 삭제한다
+// 위치정보 동의 철회 시: 주행 기록(경로 포함)과 확인자료를 지체 없이 파기한다 (위치정보법 제24조)
 export const deleteLocationData = onCall(async request => {
   const uid = requireUid(request)
-  await db().ref(`locationLog/${uid}`).remove()
+  await db()
+    .ref()
+    .update({
+      [`drive/${uid}`]: null,
+      [`drivePath/${uid}`]: null,
+      [`locationLog/${uid}`]: null,
+    })
   logger.info('deleteLocationData', { uid })
   return { ok: true }
 })

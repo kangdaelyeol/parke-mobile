@@ -48,6 +48,8 @@ interface DriveState {
   emailSheetVisible: boolean
   sendingReport: boolean
   lastReportEmail: string
+  // 카드에 설정한 운행 기록 이메일 (있으면 보내기 창을 이 주소로 채운다)
+  cardReportEmail: string
 }
 
 interface DriveActions {
@@ -81,8 +83,10 @@ export interface DriveStatProps {
 
 export interface DriveEmailSheetProps {
   visible: boolean
-  // 마지막으로 보낸 주소 (처음이면 빈 문자열)
+  // 카드에 설정한 주소, 없으면 마지막으로 보낸 주소 (처음이면 빈 문자열)
   initialEmail: string
+  // initialEmail이 카드에 설정한 주소인지 (기기에 저장된 주소 삭제 대신 안내를 보여준다)
+  fromCard: boolean
   sending: boolean
   onClose: () => void
   onSend: (email: string) => void

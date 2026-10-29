@@ -1,3 +1,4 @@
+import { DrivePathDto, DriveRecordDto } from '@/domain/drive'
 import { BleManager } from 'react-native-ble-plx'
 import { Event } from '@notifee/react-native'
 import { PhoneChangePending } from '@/client'
@@ -220,6 +221,29 @@ export interface LegalService {
   hasLocationConsent: (consents: ConsentMap | undefined) => boolean
 }
 
+export interface DriveRecordService {
+  // 저장된 기록의 id를 돌려준다
+  save: (
+    uid: string,
+    input: Omit<DriveRecordDto, 'id'> & {
+      points: { latitude: number; longitude: number }[]
+    },
+  ) => Promise<ServiceResponse<string>>
+  listByCard: (
+    uid: string,
+    cardId: string,
+  ) => Promise<ServiceResponse<DriveRecordDto[]>>
+  getPath: (
+    uid: string,
+    driveId: string,
+  ) => Promise<ServiceResponse<DrivePathDto>>
+  remove: (
+    uid: string,
+    cardId: string,
+    driveId: string,
+  ) => Promise<ServiceResponse<boolean>>
+}
+
 export interface LocationLogService {
   logCollect: (type: 'collect_start' | 'collect_end') => void
   deleteMine: () => Promise<ServiceResponse<unknown>>
@@ -262,6 +286,12 @@ export interface UserService {
   updateCardIdList: (
     id: string,
     cardIdList: string[],
+  ) => Promise<ServiceResponse<boolean>>
+  // 카드별 운행 기록 이메일 (빈 문자열이면 삭제)
+  updateReportEmail: (
+    id: string,
+    cardId: string,
+    email: string,
   ) => Promise<ServiceResponse<boolean>>
   deleteAccount: () => Promise<ServiceResponse<boolean>>
 }
