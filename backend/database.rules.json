@@ -1,0 +1,62 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "user": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "drive": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "drivePath": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "card": {
+      "$cardId": {
+        ".read": true,
+        ".write": "auth != null"
+      }
+    },
+    "allow": {
+      ".read": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists()",
+      "$serial": {
+        ".read": "auth != null",
+        ".write": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists()",
+        ".validate": "newData.val() === true"
+      }
+    },
+    "admin": {
+      ".read": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists()",
+      "$emailKey": {
+        ".write": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists() && $emailKey !== auth.token.email.toLowerCase().replace('.', ',')",
+        ".validate": "newData.hasChildren(['email', 'addedAt', 'addedBy']) && newData.child('email').isString() && newData.child('email').val().toLowerCase().replace('.', ',') === $emailKey"
+      }
+    },
+    "adminLog": {
+      ".read": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists()",
+      "deletions": {
+        "$logId": {
+          ".write": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists() && newData.exists()",
+          ".validate": "newData.hasChildren(['serial', 'deletedAt', 'deletedBy'])"
+        }
+      }
+    },
+    "locationLog": {
+      ".read": false,
+      ".write": false
+    },
+    "reportQuota": {
+      ".read": false,
+      ".write": false
+    }
+  }
+}
