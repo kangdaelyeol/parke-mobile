@@ -9,7 +9,7 @@ import {
   driveReportService,
   userService,
 } from '@/services'
-import { extractNumber } from '@/utils'
+import { extractNumber, isEmail } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
@@ -22,10 +22,11 @@ export const useMainViewModel = (): ProfileMainViewModel => {
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
-  // 운행 기록 이메일을 받을 주소 (기기에만 저장)
+  // 이 기기에서 마지막으로 운행 기록을 보낸 주소
   const [reportEmail, setReportEmail] = useState(() =>
     driveReportService.getLastEmail(),
   )
+  const [email, setEmail] = useState(user?.email ?? '')
 
   const navigation = useNavigation<ProfileStackNavigationProp>()
 
@@ -33,6 +34,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     if (!user) return
     setPhone(user.phone)
     setNickname(user.nickname)
+    setEmail(user.email ?? '')
   }, [user])
 
   // validate user
@@ -61,6 +63,10 @@ export const useMainViewModel = (): ProfileMainViewModel => {
 
       if (phone.trim() === '') return Alert.alert('휴대폰 번호를 입력해주세요.')
 
+      const nextEmail = email.trim()
+      if (nextEmail && !isEmail(nextEmail))
+        return Alert.alert('이메일 주소를 확인해주세요.')
+
       setLoading(true)
       const res = await userService.updateNicknameAndPhone(
         user.id,
@@ -73,6 +79,15 @@ export const useMainViewModel = (): ProfileMainViewModel => {
       }
 
       userContextActions.setUserNicknameAndPhone(nickname, phone)
+
+      if (nextEmail !== (user.email ?? '')) {
+        const emailRes = await userService.updateEmail(user.id, nextEmail)
+        if (!emailRes.status) {
+          Alert.alert(emailRes.message)
+          return setLoading(false)
+        }
+        userContextActions.setUserEmail(nextEmail)
+      }
       navigation.goBack()
     },
 
@@ -100,6 +115,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
         },
       ])
     },
+    emailInput: (v: string) => setEmail(v),
     clearReportEmailPress: () => {
       Alert.alert('저장된 이메일 삭제', `${reportEmail}을(를) 삭제할까요?`, [
         { text: '취소', style: 'cancel' },
@@ -147,6 +163,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
   return {
     state: {
       reportEmail,
+      email,
       loading,
       nickname,
       phone,

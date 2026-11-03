@@ -1,16 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { FocusableInput, Loading, PressableButton } from '@/components'
-import { useMainViewModel } from '@profile/view-model'
 import {
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_LIGHT,
-  RED,
-  RED_LIGHT,
-  WHITE,
-} from '@/theme/color'
+  EmailDomainInput,
+  FocusableInput,
+  Loading,
+  PressableButton,
+} from '@/components'
+import { useMainViewModel } from '@profile/view-model'
+import { DARK, GRAY, RED_LIGHT } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
 export const Main = () => {
@@ -34,39 +31,37 @@ export const Main = () => {
             value={formatPhone(state.phone)}
             iconName="phone"
           />
+          <EmailDomainInput
+            title="이메일"
+            value={state.email}
+            onChangeText={actions.emailInput}
+          />
+          <Text style={styles.emailHint}>
+            카드에 이메일이 없으면 주행 기록을 보낼 때 이 주소가 미리 채워져요.
+          </Text>
         </View>
-        <View style={styles.reportEmail}>
-          <Text style={styles.reportEmailTitle}>운행 기록 수신 이메일</Text>
-          <View style={styles.reportEmailRow}>
-            <Text style={styles.reportEmailValue} numberOfLines={1}>
-              {state.reportEmail || '저장된 주소 없음'}
+        {!!state.reportEmail && (
+          <View style={styles.lastEmailRow}>
+            <Text style={styles.lastEmail} numberOfLines={1}>
+              이 기기에서 최근 보낸 주소: {state.reportEmail}
             </Text>
-            {!!state.reportEmail && (
-              <Pressable hitSlop={8} onPress={actions.clearReportEmailPress}>
-                <Text style={styles.reportEmailDelete}>삭제</Text>
-              </Pressable>
-            )}
+            <Pressable hitSlop={8} onPress={actions.clearReportEmailPress}>
+              <Text style={styles.reportEmailDelete}>삭제</Text>
+            </Pressable>
           </View>
-        </View>
+        )}
         <View style={styles.divider} />
         <View style={styles.buttonSection}>
+          <PressableButton title="저장" onPress={actions.savePress} />
           <PressableButton
-            title="저장"
-            onPress={actions.savePress}
-            background={['#3B3BF9', '#4b4bff']}
-          />
-          <PressableButton
+            variant="secondary"
             title="로그아웃"
             onPress={actions.logoutPress}
-            background={[DARK, DARK]}
-            text={[GRAY_LIGHT, WHITE]}
-            border={[DARK_LIGHT, GRAY]}
           />
           <PressableButton
+            variant="danger"
             title="회원탈퇴"
             onPress={actions.deletePress}
-            border={[RED, RED_LIGHT]}
-            text={[RED, RED_LIGHT]}
           />
         </View>
       </View>
@@ -89,31 +84,24 @@ const styles = StyleSheet.create({
     marginTop: 20,
     gap: 15,
   },
-  reportEmail: {
-    marginTop: 24,
-    gap: 10,
-  },
-  reportEmailTitle: {
+  emailHint: {
+    marginTop: -5,
     color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 12,
   },
-  reportEmailRow: {
+  lastEmailRow: {
+    marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    height: 55,
-    paddingHorizontal: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
+    paddingHorizontal: 4,
   },
-  reportEmailValue: {
+  lastEmail: {
     flex: 1,
-    color: WHITE,
+    color: GRAY,
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 16,
+    fontSize: 12,
   },
   reportEmailDelete: {
     color: RED_LIGHT,

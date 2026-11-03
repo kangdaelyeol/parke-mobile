@@ -35,6 +35,10 @@ export interface CardClient {
   update(
     dto: { id: string } & Partial<CardDto>,
   ): Promise<FirebaseResult<boolean>>
+  // 카드 이메일 (cardPrivate/{cardId}/email, 그 카드 소유자만 읽고 쓸 수 있다)
+  getEmail(id: string): Promise<FirebaseResult<string>>
+  // 빈 문자열이면 삭제
+  setEmail(id: string, email: string): Promise<FirebaseResult<boolean>>
 }
 
 export interface UserClient {
@@ -43,12 +47,6 @@ export interface UserClient {
     dto: { id: string } & Partial<UserDto>,
   ): Promise<FirebaseResult<boolean>>
   getById(id: string): Promise<FirebaseResult<UserDto | null>>
-  // 빈 문자열이면 삭제
-  setReportEmail(
-    id: string,
-    cardId: string,
-    email: string,
-  ): Promise<FirebaseResult<boolean>>
   // 동의 기록을 한 번에 저장 (agreedAt은 서버 시각)
   recordConsents(
     id: string,

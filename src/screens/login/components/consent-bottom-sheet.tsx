@@ -101,7 +101,6 @@ export const ConsentBottomSheet = () => {
           <PressableButton
             onPress={actions.agreeAndContinuePress}
             title="동의하고 계속하기"
-            background={['#5555ff', '#4c4cdb']}
           />
         </View>
       </BottomSheetView>

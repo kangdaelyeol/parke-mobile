@@ -4,14 +4,7 @@ import { PressableButton } from '@/components'
 import { DriveStat } from '@/screens/drive/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { formatClock, formatDuration, formatKm, toKmh } from '@/utils'
-import {
-  BLUE_PRIMARY,
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_DEEP,
-  WHITE,
-} from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 
 type DriveSummaryProps = Pick<
@@ -55,18 +48,14 @@ export const DriveSummary = ({ state, actions }: DriveSummaryProps) => {
       </View>
       <View style={styles.buttonRow}>
         <PressableButton
+          variant="secondary"
           title="완료"
           onPress={actions.donePress}
-          background={[DARK, DARK_LIGHT]}
-          border={[DARK_LIGHT, GRAY_DEEP]}
-          text={[WHITE, WHITE]}
           pressableStyle={styles.button}
         />
         <PressableButton
           title="이메일로 보내기"
           onPress={actions.emailPress}
-          background={[BLUE_PRIMARY, '#1732ff']}
-          text={[WHITE, WHITE]}
           pressableStyle={styles.button}
         />
       </View>

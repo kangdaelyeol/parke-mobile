@@ -17,7 +17,8 @@ export const cardService: CardService = {
     // 구 스키마(custom 없음)로 저장된 카드도 현재 형태로 맞춘다
     const cardDto = Card.fromDto(getCardRes.payload).toDto()
     const scan = bleCacheService.getDeviceScan(cardDto.deviceId)
-    return serviceOk({ ...cardDto, scan })
+    const email = await cardService.getEmail(id)
+    return serviceOk({ ...cardDto, scan, email })
   },
   // 카드가 없으면 null (getCard는 없는 카드를 실패로 처리한다)
   findCard: async id => {
@@ -92,8 +93,20 @@ export const cardService: CardService = {
     }
 
     bleCacheService.setDeviceScan(deviceId, true)
-    const cardState = { ...cardDto, scan: true }
+    // 공동 소유로 등록했으면 기존 카드 이메일을 이어받는다
+    const email = await cardService.getEmail(id)
+    const cardState = { ...cardDto, scan: true, email }
     return serviceOk(cardState)
+  },
+  // 카드 이메일을 못 읽어도 카드는 보여준다
+  getEmail: async id => {
+    const res = await cardClient.getEmail(id)
+    return res.status ? res.payload : ''
+  },
+  updateEmail: async (id, email) => {
+    const res = await cardClient.setEmail(id, email.trim())
+    if (!res.status) return serviceFail(getFirebaseErrorMessage(res.error))
+    return serviceOk(true)
   },
   // 카드(기기) 연결 해제. 공동 소유 카드의 번호 정리는 서버가 한다
   leaveCard: async card => {

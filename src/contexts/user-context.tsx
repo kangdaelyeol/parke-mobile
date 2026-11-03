@@ -23,7 +23,8 @@ interface UserContextValue {
     addCardId: (serial: string) => void
     deleteCard: (cardId: string) => void
     setUserNicknameAndPhone: (nickname: string, phone: string) => void
-    setReportEmail: (cardId: string, email: string) => void
+    setUserEmail: (email: string) => void
+    updateCardEmail: (cardId: string, email: string) => void
     updateCardPhone: (cardId: string, phone: string) => void
     setCardScan: (cardId: string, scan: boolean) => void
     updateCardInfo: (cardId: string, info: CardInfo) => void
@@ -118,14 +119,13 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
       setUserNicknameAndPhone: (nickname: string, phone: string) => {
         setUser(prev => (prev ? { ...prev, nickname, phone } : prev))
       },
-      setReportEmail: (cardId: string, email: string) => {
-        setUser(prev => {
-          if (!prev) return prev
-          const reportEmails = { ...prev.reportEmails }
-          if (email) reportEmails[cardId] = email
-          else delete reportEmails[cardId]
-          return { ...prev, reportEmails }
-        })
+      setUserEmail: (email: string) => {
+        setUser(prev => (prev ? { ...prev, email } : prev))
+      },
+      updateCardEmail: (cardId: string, email: string) => {
+        setCards(prev =>
+          prev.map(card => (card.id !== cardId ? card : { ...card, email })),
+        )
       },
       updateCardPhone: (cardId: string, phone: string) => {
         setCards(prev =>

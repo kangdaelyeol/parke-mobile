@@ -3,15 +3,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { PressableButton } from '@/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { DocType } from '@/types/common'
-import {
-  BLUE_PRIMARY,
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_DEEP,
-  GRAY_LIGHT,
-  WHITE,
-} from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 
 type DriveConsentProps = Pick<
@@ -52,18 +44,14 @@ export const DriveConsent = ({ state, actions }: DriveConsentProps) => {
       </View>
       <View style={styles.buttonRow}>
         <PressableButton
+          variant="secondary"
           title="취소"
           onPress={actions.donePress}
-          background={[DARK, DARK_LIGHT]}
-          border={[DARK_LIGHT, GRAY_DEEP]}
-          text={[WHITE, WHITE]}
           pressableStyle={styles.cancelButton}
         />
         <PressableButton
           title={state.agreeing ? '처리 중…' : '동의하고 주행 시작'}
           onPress={actions.agreeLocationPress}
-          background={[BLUE_PRIMARY, '#1732ff']}
-          text={[WHITE, WHITE]}
           pressableStyle={styles.agreeButton}
         />
       </View>

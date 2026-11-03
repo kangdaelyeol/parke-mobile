@@ -22,7 +22,7 @@ import {
   ThemeSelector,
 } from '@home/components'
 import { EmailDomainInput, FocusableInput, PressableButton } from '@/components'
-import { BLUE_PRIMARY, DARK, DARK_LIGHT, GRAY_DEEP, WHITE } from '@/theme/color'
+import { DARK } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
 // 수정 화면 요소를 순서대로 나타나게 하는 래퍼 (index가 클수록 늦게, 0번: 미리보기)
@@ -164,17 +164,13 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
       >
         <View style={styles.btnWrapper}>
           <PressableButton
+            variant="secondary"
             title="취소"
-            background={[DARK, DARK_LIGHT]}
-            border={[DARK_LIGHT, GRAY_DEEP]}
-            text={[WHITE, WHITE]}
             onPress={actions.cancelPress}
             pressableStyle={styles.pressable}
           />
           <PressableButton
             title="저장"
-            background={[BLUE_PRIMARY, '#1732ff']}
-            text={[WHITE, WHITE]}
             onPress={actions.savePress}
             pressableStyle={styles.pressable}
           />

@@ -3,7 +3,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { isCardAccent } from '@/domain/card'
 import { HomeAccentPickerProps } from '@home/types'
 import { DM_MONO, PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { glassStyles } from '@/theme/glass'
 
 const ACCENT_PRESETS = [
   '#383bf9',
@@ -42,10 +43,15 @@ export const AccentPicker = ({
         <TextInput
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
-          style={[styles.input, focus && styles.inputFocused]}
+          style={[
+            glassStyles.field,
+            styles.input,
+            focus && glassStyles.fieldFocused,
+          ]}
           value={value}
           onChangeText={onChangeText}
           placeholder="#RRGGBB"
+          placeholderTextColor={GRAY_DEEP}
           autoCapitalize="none"
           autoCorrect={false}
           maxLength={7}
@@ -90,19 +96,12 @@ const styles = StyleSheet.create({
     borderColor: WHITE,
   },
   input: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
     paddingLeft: 40,
     fontSize: 17,
     height: 55,
     color: WHITE,
     fontFamily: DM_MONO.MEDIUM,
     maxWidth: 400,
-    backgroundColor: DARK,
-  },
-  inputFocused: {
-    borderColor: GRAY,
   },
   icon: {
     position: 'absolute',

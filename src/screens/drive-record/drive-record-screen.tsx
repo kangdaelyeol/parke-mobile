@@ -13,14 +13,7 @@ import {
   formatKm,
   toKmh,
 } from '@/utils'
-import {
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_DEEP,
-  RED_LIGHT,
-  WHITE,
-} from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 
 type DriveRecordScreenProps = {
@@ -93,11 +86,9 @@ export default function DriveRecordScreen({ route }: DriveRecordScreenProps) {
           />
         </View>
         <PressableButton
+          variant="danger"
           title={state.deleting ? '삭제 중…' : '기록 삭제'}
           onPress={actions.deletePress}
-          background={[DARK, DARK_LIGHT]}
-          border={[DARK_LIGHT, GRAY_DEEP]}
-          text={[RED_LIGHT, RED_LIGHT]}
         />
       </View>
     </View>

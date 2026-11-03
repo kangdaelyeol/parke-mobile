@@ -2,10 +2,10 @@ import { useState } from 'react'
 import { Alert } from 'react-native'
 import { useCardSettingContext, useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
-import { cardService, userService } from '@/services'
+import { cardService } from '@/services'
+import { CardState } from '@/services/types'
 import {
   CARD_MESSAGE_MAX_LENGTH,
-  CardDto,
   CardLayout,
   CardTheme,
   clampCardScale,
@@ -15,13 +15,13 @@ import { HomeSettingCardViewModel } from '@home/types'
 import { extractNumber, isEmail } from '@/utils'
 
 export const useSettingCardViewModel = (
-  card: CardDto,
+  card: CardState,
 ): HomeSettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()
   const { selectedCardIdx } = useCardSliderContext()
-  const { user, cards, actions: userContextActions } = useUserContext()
-  // 운행 기록 이메일은 카드가 아닌 내 계정에 카드별로 저장한다 (공동 소유자끼리 공유하지 않음)
-  const savedEmail = user?.reportEmails?.[card.id] ?? ''
+  const { cards, actions: userContextActions } = useUserContext()
+  // 카드 이메일: 공동 소유자끼리 공유하지만 공개 카드 노드가 아닌 cardPrivate에 저장된다
+  const savedEmail = card.email
 
   const [title, setTitle] = useState(card.title)
   const [phone, setPhone] = useState(card.phone)
@@ -57,14 +57,10 @@ export const useSettingCardViewModel = (
       }
       userContextActions.updateCardInfo(cardId, info)
 
-      if (!user || nextEmail === savedEmail) return
-      const emailRes = await userService.updateReportEmail(
-        user.id,
-        cardId,
-        nextEmail,
-      )
+      if (nextEmail === savedEmail) return
+      const emailRes = await cardService.updateEmail(cardId, nextEmail)
       if (!emailRes.status) return Alert.alert(emailRes.message)
-      userContextActions.setReportEmail(cardId, nextEmail)
+      userContextActions.updateCardEmail(cardId, nextEmail)
     },
     cancelPress: () => {
       cardSettingController.hideSetting()

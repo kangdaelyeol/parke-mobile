@@ -26,6 +26,12 @@
         ".write": "auth != null"
       }
     },
+    "cardPrivate": {
+      "$cardId": {
+        ".read": "auth != null && (root.child('card').child($cardId).child('ownerList').child('0').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('1').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('2').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('3').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('4').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('5').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('6').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('7').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('8').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('9').val() === auth.uid)",
+        ".write": "auth != null && (root.child('card').child($cardId).child('ownerList').child('0').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('1').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('2').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('3').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('4').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('5').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('6').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('7').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('8').val() === auth.uid || root.child('card').child($cardId).child('ownerList').child('9').val() === auth.uid)"
+      }
+    },
     "allow": {
       ".read": "auth != null && auth.token.email_verified === true && root.child('admin').child(auth.token.email.toLowerCase().replace('.', ',')).exists()",
       "$serial": {

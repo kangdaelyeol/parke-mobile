@@ -101,15 +101,6 @@ export const userClient: UserClient = {
       return clientFail(e)
     }
   },
-  setReportEmail: async (id, cardId, email) => {
-    try {
-      await set(ref(db, `user/${id}/reportEmails/${cardId}`), email || null)
-      return clientOk(true)
-    } catch (e) {
-      console.log(e)
-      return clientFail(e)
-    }
-  },
   getById: async id => {
     try {
       const key = id

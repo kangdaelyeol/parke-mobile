@@ -145,7 +145,7 @@ export interface HomeFooterIconProps {
 }
 
 export interface HomeSettingCardProps {
-  card: CardDto
+  card: CardState
 }
 
 export interface IllustrationSizeProps {

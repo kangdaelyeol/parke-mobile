@@ -29,8 +29,8 @@ export const userService: UserService = {
     if (res.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(res.error))
   },
-  updateReportEmail: async (id, cardId, email) => {
-    const res = await userClient.setReportEmail(id, cardId, email.trim())
+  updateEmail: async (id, email) => {
+    const res = await userClient.update({ id, email: email.trim() })
     if (res.status) return serviceOk(true)
     else return serviceFail(getFirebaseErrorMessage(res.error))
   },

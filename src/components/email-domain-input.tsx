@@ -3,7 +3,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { EMAIL_DOMAINS } from '@/constants'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { glassStyles } from '@/theme/glass'
 
 interface EmailDomainInputProps {
   title: string
@@ -76,7 +77,12 @@ export const EmailDomainInput = ({
       <Text style={[styles.title, active && styles.titleFocused]}>{title}</Text>
       <View style={styles.row}>
         <TextInput
-          style={[styles.box, styles.input, focus && styles.boxFocused]}
+          style={[
+            glassStyles.field,
+            styles.box,
+            styles.input,
+            focus && glassStyles.fieldFocused,
+          ]}
           value={local}
           onChangeText={localInput}
           onFocus={() => setFocus(true)}
@@ -88,7 +94,14 @@ export const EmailDomainInput = ({
           autoCorrect={false}
         />
         <Text style={styles.at}>@</Text>
-        <View style={[styles.box, styles.domainBox, open && styles.boxFocused]}>
+        <View
+          style={[
+            glassStyles.field,
+            styles.box,
+            styles.domainBox,
+            open && glassStyles.fieldFocused,
+          ]}
+        >
           {custom ? (
             <TextInput
               style={[styles.input, styles.domainText]}
@@ -125,15 +138,13 @@ export const EmailDomainInput = ({
         </View>
       </View>
       {open && (
-        <View style={styles.options}>
+        <View style={[glassStyles.field, styles.options]}>
           {[...EMAIL_DOMAINS, CUSTOM].map(option => {
             const selected = custom ? option === CUSTOM : option === domain
             return (
               <Pressable key={option} onPress={() => select(option)}>
                 {({ pressed }) => (
-                  <View
-                    style={[styles.option, pressed && styles.optionPressed]}
-                  >
+                  <View style={[styles.option, pressed && glassStyles.pressed]}>
                     <Text
                       style={[
                         styles.optionText,
@@ -181,13 +192,6 @@ const styles = StyleSheet.create({
   box: {
     flex: 1,
     height: 55,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
-  },
-  boxFocused: {
-    borderColor: GRAY,
   },
   input: {
     paddingHorizontal: 14,
@@ -221,10 +225,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   options: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
     overflow: 'hidden',
   },
   option: {
@@ -233,9 +233,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 13,
-  },
-  optionPressed: {
-    backgroundColor: DARK_LIGHT,
   },
   optionText: {
     color: GRAY,

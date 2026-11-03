@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Camera } from 'react-native-vision-camera'
 import { LogoText, PressableButton } from '@/components'
 import { useQrScanViewModel } from '@scan-complete/view-model'
-import { BLUE_PRIMARY, WHITE } from '@/theme/color'
+import { WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -14,7 +14,7 @@ export const QrScan = () => {
         <Text style={styles.waiting}>카메라를 찾는 중</Text>
         <PressableButton
           pressableStyle={styles.button}
-          background={['#202020', '#414141']}
+          variant="secondary"
           title="돌아가기"
           onPress={actions.scanBackPress}
         />
@@ -39,7 +39,6 @@ export const QrScan = () => {
           />
           <PressableButton
             pressableStyle={styles.button}
-            background={[BLUE_PRIMARY, '#1820ff']}
             title="돌아가기"
             onPress={actions.scanBackPress}
           />

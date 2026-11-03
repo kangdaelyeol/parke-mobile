@@ -60,10 +60,9 @@ export const DrivingPanel = ({ state, actions }: DrivingPanelProps) => {
         />
       </View>
       <PressableButton
+        tint={RED}
         title="주행 종료"
         onPress={actions.endPress}
-        background={[RED, '#c92f2f']}
-        text={[WHITE, WHITE]}
       />
     </View>
   )

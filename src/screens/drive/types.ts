@@ -48,8 +48,9 @@ interface DriveState {
   emailSheetVisible: boolean
   sendingReport: boolean
   lastReportEmail: string
-  // 카드에 설정한 운행 기록 이메일 (있으면 보내기 창을 이 주소로 채운다)
-  cardReportEmail: string
+  // 보내기 창을 미리 채울 주소: 카드 이메일 → 내 이메일 → 이 기기에서 최근 보낸 주소
+  reportEmail: string
+  reportEmailSource: ReportEmailSource
 }
 
 interface DriveActions {
@@ -75,6 +76,8 @@ export interface DriveMapProps {
   accent: string
 }
 
+export type ReportEmailSource = 'card' | 'user' | 'recent'
+
 export interface DriveStatProps {
   label: string
   value: string
@@ -83,10 +86,10 @@ export interface DriveStatProps {
 
 export interface DriveEmailSheetProps {
   visible: boolean
-  // 카드에 설정한 주소, 없으면 마지막으로 보낸 주소 (처음이면 빈 문자열)
+  // 미리 채울 주소 (없으면 빈 문자열)
   initialEmail: string
-  // initialEmail이 카드에 설정한 주소인지 (기기에 저장된 주소 삭제 대신 안내를 보여준다)
-  fromCard: boolean
+  // 어디서 가져온 주소인지 (최근 보낸 주소일 때만 [저장된 주소 삭제]를 보여준다)
+  source: ReportEmailSource
   sending: boolean
   onClose: () => void
   onSend: (email: string) => void

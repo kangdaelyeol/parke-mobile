@@ -129,9 +129,12 @@ interface CreateCardInput {
   newCardIdList: string[]
 }
 
-export type CardState = CardDto & { scan: boolean }
+// email: 카드 이메일 (cardPrivate/{cardId}/email). 공개 노드인 card/에는 쓰지 않는다
+export type CardState = CardDto & { scan: boolean; email: string }
 
 export interface CardService {
+  getEmail: (id: string) => Promise<string>
+  updateEmail: (id: string, email: string) => Promise<ServiceResponse<boolean>>
   getCard: (id: string) => Promise<ServiceResponse<CardState>>
   findCard: (id: string) => Promise<ServiceResponse<CardDto | null>>
   getList: (idList: string[]) => Promise<ServiceResponse<CardState[] | null>>
@@ -287,11 +290,7 @@ export interface UserService {
     id: string,
     cardIdList: string[],
   ) => Promise<ServiceResponse<boolean>>
-  // 카드별 운행 기록 이메일 (빈 문자열이면 삭제)
-  updateReportEmail: (
-    id: string,
-    cardId: string,
-    email: string,
-  ) => Promise<ServiceResponse<boolean>>
+  // 내 이메일 (빈 문자열이면 삭제)
+  updateEmail: (id: string, email: string) => Promise<ServiceResponse<boolean>>
   deleteAccount: () => Promise<ServiceResponse<boolean>>
 }

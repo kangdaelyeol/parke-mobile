@@ -19,7 +19,7 @@ import {
   RootStackParamList,
 } from '@/navigation/types'
 import { legalService } from '@/services'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { DARK, GRAY, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { EXTRACT_DOC_JS, HIDE_UNTIL_READY_JS } from './legal-doc-scripts'
 
@@ -115,11 +115,9 @@ export default function LegalDocScreen({ route }: LegalDocScreenProps) {
             <Text style={styles.failedText}>문서를 불러오지 못했습니다</Text>
             <Text style={styles.failedSub}>네트워크 연결을 확인해주세요</Text>
             <PressableButton
+              variant="secondary"
               title="다시 시도"
               onPress={retry}
-              background={[DARK, DARK_LIGHT]}
-              border={[DARK_LIGHT, GRAY]}
-              text={[WHITE, WHITE]}
               pressableStyle={styles.retry}
             />
           </View>

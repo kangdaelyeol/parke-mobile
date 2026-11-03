@@ -1,34 +1,24 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { PressableButton } from '@/components'
-import {
-  BLUE_PRIMARY,
-  DARK,
-  DARK_LIGHT,
-  GRAY_DEEP,
-  GRAY_LIGHT,
-} from '@/theme/color'
+import { GRAY_DEEP } from '@/theme/color'
 import { useInitContext } from '@/screens/init/contexts'
 
 export const Footer = () => {
   const { actions } = useInitContext()
   return (
     <View style={styles.container}>
-      
       <View style={styles.wrapper}>
         <View style={styles.buttonSection}>
           <PressableButton
             title="저장"
             onPress={actions.savePress}
-            background={[BLUE_PRIMARY, '#272bff']}
             pressableStyle={styles.pressable}
           />
           <PressableButton
+            variant="secondary"
             title="건너뛰기"
             onPress={actions.skipPress}
-            background={[DARK, DARK_LIGHT]}
             pressableStyle={styles.pressable}
-            border={[DARK_LIGHT, GRAY_DEEP]}
-            text={[GRAY_LIGHT, GRAY_LIGHT]}
           />
         </View>
         <Text style={styles.desc}>나중에 프로필에서 변경할 수 있어요</Text>

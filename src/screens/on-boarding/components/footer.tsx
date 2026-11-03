@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { useFooterViewModel } from '@on-boarding/view-model'
 import { PAGE_COUNT } from '@on-boarding/constants'
 import { PressableButton } from '@/components'
-import { BLUE_PRIMARY, GRAY, WHITE } from '@/theme/color'
+import { GRAY, WHITE } from '@/theme/color'
 
 export const Footer = () => {
   const { state, actions } = useFooterViewModel()
@@ -32,15 +32,13 @@ export const Footer = () => {
             <PressableButton
               title="다음"
               onPress={actions.nextPress}
-              background={[BLUE_PRIMARY, '#2530ff']}
               style={styles.btn}
-              text={[WHITE, WHITE]}
             />
           ) : (
             <PressableButton
+              tint="#53c79c"
               title="시작하기"
               onPress={actions.startPress}
-              background={['#53c79c', '#5cdeae']}
               textStyle={styles.startBtnText}
               style={[styles.startBtn, styles.btn]}
             />

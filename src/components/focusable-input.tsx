@@ -1,7 +1,8 @@
 import { JSX, useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { glassStyles } from '@/theme/glass'
 import {
   CardIllustration,
   MessageIllustration,
@@ -45,10 +46,15 @@ export const FocusableInput = ({
         <TextInput
           onFocus={onFocus}
           onBlur={offFocus}
-          style={[styles.input, focus && styles.inputFocused]}
+          style={[
+            glassStyles.field,
+            styles.input,
+            focus && glassStyles.fieldFocused,
+          ]}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
+          placeholderTextColor={GRAY_DEEP}
         />
         <View style={styles.icon}>
           <Icon />
@@ -63,17 +69,12 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    borderBottomWidth: 1,
     paddingLeft: 40,
     fontSize: 17,
     height: 55,
     color: WHITE,
     fontFamily: PRETENDARD.MEDIUM,
     maxWidth: 400,
-    backgroundColor: DARK,
   },
   title: {
     color: GRAY,
@@ -82,9 +83,6 @@ const styles = StyleSheet.create({
   },
   titleFocused: {
     color: WHITE,
-  },
-  inputFocused: {
-    borderColor: GRAY,
   },
   icon: {
     position: 'absolute',

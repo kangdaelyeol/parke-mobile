@@ -69,7 +69,6 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
   const [emailSheetVisible, setEmailSheetVisible] = useState(false)
   const [sendingReport, setSendingReport] = useState(false)
   const card = cards.find(c => c.id === cardId)
-  const cardReportEmail = (card && user?.reportEmails?.[card.id]) || ''
 
   // 위치기반서비스 약관 + 개인위치정보 동의가 없거나 예전 시행일 기준이면 동의부터 받는다.
   // 동의하지 않으면 주행 모드를 시작할 수 없다
@@ -428,7 +427,8 @@ export const useDriveViewModel = (cardId?: string): DriveViewModel => {
       emailSheetVisible,
       sendingReport,
       lastReportEmail,
-      cardReportEmail,
+      reportEmail: card?.email || user?.email || lastReportEmail,
+      reportEmailSource: card?.email ? 'card' : user?.email ? 'user' : 'recent',
     },
     actions: {
       agreeLocationPress: async () => {

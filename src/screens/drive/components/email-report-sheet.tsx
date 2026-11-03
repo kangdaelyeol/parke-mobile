@@ -15,7 +15,6 @@ import { PressableButton } from '@/components'
 import { getEmailSuggestions, isEmail } from '@/utils'
 import { DriveEmailSheetProps } from '@/screens/drive/types'
 import {
-  BLUE_PRIMARY,
   DARK,
   DARK_LIGHT,
   GRAY,
@@ -24,12 +23,13 @@ import {
   WHITE,
 } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
+import { glassStyles } from '@/theme/glass'
 
 // 운행 기록을 받을 이메일 입력. '@' 뒤 도메인은 목록에서 골라 완성할 수 있다
 export const EmailReportSheet = ({
   visible,
   initialEmail,
-  fromCard,
+  source,
   sending,
   onClose,
   onSend,
@@ -39,7 +39,7 @@ export const EmailReportSheet = ({
   const [email, setEmail] = useState(initialEmail)
   const [focused, setFocused] = useState(false)
 
-  // 열 때마다 카드에 설정한 주소(없으면 마지막으로 보낸 주소)로 채운다
+  // 열 때마다 카드 이메일 → 내 이메일 → 최근 보낸 주소 순으로 채운다
   useEffect(() => {
     if (visible) setEmail(initialEmail)
   }, [visible, initialEmail])
@@ -84,10 +84,14 @@ export const EmailReportSheet = ({
               returnKeyType="send"
               onSubmitEditing={() => valid && onSend(email.trim())}
               editable={!sending}
-              style={[styles.input, focused && styles.inputFocused]}
+              style={[
+                glassStyles.field,
+                styles.input,
+                focused && glassStyles.fieldFocused,
+              ]}
             />
             {suggestions.length > 0 && (
-              <View style={styles.suggestions}>
+              <View style={[glassStyles.field, styles.suggestions]}>
                 {suggestions.map(suggestion => {
                   const at = suggestion.indexOf('@')
                   return (
@@ -99,7 +103,7 @@ export const EmailReportSheet = ({
                         <View
                           style={[
                             styles.suggestion,
-                            pressed && styles.suggestionPressed,
+                            pressed && glassStyles.pressed,
                           ]}
                         >
                           <Text
@@ -120,9 +124,11 @@ export const EmailReportSheet = ({
             )}
           </View>
 
-          {fromCard ? (
+          {source !== 'recent' ? (
             <Text style={styles.cardEmailHint}>
-              카드에 설정된 주소예요. 카드 수정에서 바꿀 수 있어요.
+              {source === 'card'
+                ? '카드에 설정된 주소예요. 카드 수정에서 바꿀 수 있어요.'
+                : '내 이메일이에요. 프로필에서 바꿀 수 있어요.'}
             </Text>
           ) : (
             !!initialEmail && (
@@ -143,21 +149,16 @@ export const EmailReportSheet = ({
 
           <View style={styles.buttonRow}>
             <PressableButton
+              variant="secondary"
               title="취소"
               onPress={sending ? () => {} : onClose}
-              background={[DARK, DARK_LIGHT]}
-              border={[DARK_LIGHT, GRAY_DEEP]}
-              text={[WHITE, WHITE]}
               pressableStyle={styles.cancelButton}
             />
             <View style={styles.sendButton}>
               <PressableButton
+                disabled={!valid}
                 title={sending ? '' : '보내기'}
                 onPress={() => valid && !sending && onSend(email.trim())}
-                background={
-                  valid ? [BLUE_PRIMARY, '#1732ff'] : [DARK_LIGHT, DARK_LIGHT]
-                }
-                text={valid ? [WHITE, WHITE] : [GRAY, GRAY]}
               />
               {sending && (
                 <View style={styles.sendingOverlay} pointerEvents="none">
@@ -203,32 +204,18 @@ const styles = StyleSheet.create({
   },
   input: {
     height: 55,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: '#141414',
     paddingHorizontal: 16,
     color: WHITE,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 17,
   },
-  inputFocused: {
-    borderColor: GRAY,
-  },
   suggestions: {
     marginTop: 6,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: '#141414',
     overflow: 'hidden',
   },
   suggestion: {
     paddingHorizontal: 16,
     paddingVertical: 12,
-  },
-  suggestionPressed: {
-    backgroundColor: DARK_LIGHT,
   },
   suggestionLocal: {
     color: GRAY,

@@ -15,7 +15,7 @@ interface UserRecord {
 
 /**
  * uid가 카드에서 빠질 때의 변경 내용을 updates에 담는다.
- *  - 남은 소유자가 없으면 카드를 삭제한다.
+ *  - 남은 소유자가 없으면 카드와 카드 비공개 정보(cardPrivate, 이메일)를 삭제한다.
  *  - 남은 소유자가 있으면 소유자 목록에서만 빠지고,
  *    카드(QR 화면)에 떠나는 사람의 번호가 남아 있으면 남은 소유자 번호로 바꾼다.
  *    (기기 감지 기록 = 카드의 번호·감지 시각은 연결 해제·탈퇴 시까지만 보관)
@@ -32,6 +32,7 @@ const collectCardLeave = async (
   const owners = (card.ownerList ?? []).filter(id => id !== uid)
   if (owners.length === 0) {
     updates[`card/${cardId}`] = null
+    updates[`cardPrivate/${cardId}`] = null
     return
   }
 
