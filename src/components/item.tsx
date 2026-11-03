@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
+import { withAlpha } from '@/theme/glass'
 import { Toggle } from '@/components'
 import {
   ActiveIllustration,
@@ -49,14 +50,15 @@ const ICONS: Record<ItemOption, () => JSX.Element> = {
   location: LocationIllustration,
 }
 
-const ICON_BG_COLORS: Record<ItemOption, string> = {
-  bluetooth: '#1a1a3a',
-  notify: '#1a2a1a',
-  active: '#2a1a1a',
-  camera: '#19192a',
-  qr: '#1a1a2a',
-  serial: '#1a2a1a',
-  location: '#2a221a',
+// 아이콘 선 색. 아이콘 타일은 이 색을 옅게 깐 유리로 만든다
+const ICON_COLORS: Record<ItemOption, string> = {
+  bluetooth: '#92b3ff',
+  notify: '#34d399',
+  active: '#F87171',
+  camera: '#6e70ff',
+  qr: '#3b3bf9',
+  serial: '#34d399',
+  location: '#ffb84d',
 }
 
 export const Item = ({
@@ -73,7 +75,7 @@ export const Item = ({
   const isSmall = width < 400
 
   const Icon = ICONS[option]
-  const backgroundColor = ICON_BG_COLORS[option]
+  const iconColor = ICON_COLORS[option]
   return (
     <Pressable
       onPress={onPress}
@@ -81,9 +83,15 @@ export const Item = ({
     >
       <View style={styles.left}>
         <View
-          style={[styles.iconContainer, isSmall && styles.iconContainerSmall]}
+          style={[
+            styles.iconContainer,
+            isSmall && styles.iconContainerSmall,
+            {
+              backgroundColor: withAlpha(iconColor, 0.14),
+              borderColor: withAlpha(iconColor, 0.28),
+            },
+          ]}
         >
-          <View style={[styles.iconBackground, { backgroundColor }]} />
           <Icon />
         </View>
         <View style={styles.descSection}>
@@ -134,6 +142,7 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 9,
+    borderWidth: 1,
     padding: 8,
   },
   iconContainerSmall: {
@@ -141,9 +150,6 @@ const styles = StyleSheet.create({
     height: 30,
     padding: 5,
     borderRadius: 5,
-  },
-  iconBackground: {
-    ...StyleSheet.absoluteFillObject,
   },
   descSection: {
     marginLeft: 13,

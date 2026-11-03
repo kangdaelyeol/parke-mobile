@@ -36,9 +36,12 @@ export const Main = () => {
             value={state.email}
             onChangeText={actions.emailInput}
           />
-          <Text style={styles.emailHint}>
-            카드에 이메일이 없으면 주행 기록을 보낼 때 이 주소가 미리 채워져요.
-          </Text>
+          {!state.email && (
+            <Text style={styles.emailHint}>
+              카드에 이메일이 없으면 주행 기록을 보낼 때 이 주소가 미리
+              채워져요.
+            </Text>
+          )}
         </View>
         {!!state.reportEmail && (
           <View style={styles.lastEmailRow}>

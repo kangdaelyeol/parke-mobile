@@ -1,11 +1,17 @@
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
-import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
+import {
+  CARD_DETAIL_DROPDOWN,
+  CARD_HEIGHT,
+  CARD_WIDTH,
+  SLIDER_GAP,
+} from '@home/constants'
 import {
   EmptyCard,
   SettingCard,
   Card,
+  GlassCard,
   CardSkeleton,
   EmptyView,
   PaginationDots,
@@ -23,16 +29,21 @@ export const Main = ({ loading }: HomeMainProps) => {
   const showSkeleton = loading && state.cardLength === 0
   const { width } = useWindowDimensions()
   const isSmall = width < 400
+  // 수정 화면이나 카드 상세가 열리면 오늘의 현황·페이지 점은 사라지고 터치도 받지 않는다
+  const hideHomeContent = state.isSetting || state.isDetail
 
   return (
-    <View style={styles.container}>
+    <View
+      style={styles.container}
+      onLayout={e => actions.mainLayout(e.nativeEvent.layout.height)}
+    >
       <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
         {state.cardLength === 0 && !showSkeleton ? (
           <EmptyView />
         ) : (
           <>
             <Animated.View
-              pointerEvents={state.isSetting ? 'none' : 'auto'}
+              pointerEvents={hideHomeContent ? 'none' : 'auto'}
               style={[StyleSheet.absoluteFill, animated.homeContentStyle]}
             >
               <TodaySummary />
@@ -66,7 +77,11 @@ export const Main = ({ loading }: HomeMainProps) => {
                             key={card.id}
                             entering={FadeIn.duration(350)}
                           >
-                            <Card card={card} idx={idx} />
+                            {CARD_DETAIL_DROPDOWN ? (
+                              <GlassCard card={card} idx={idx} />
+                            ) : (
+                              <Card card={card} idx={idx} />
+                            )}
                           </Animated.View>
                         ))}
                         <EmptyCard idx={state.cardLength} />
@@ -76,7 +91,7 @@ export const Main = ({ loading }: HomeMainProps) => {
                 </View>
                 {!showSkeleton && (
                   <Animated.View
-                    pointerEvents={state.isSetting ? 'none' : 'auto'}
+                    pointerEvents={hideHomeContent ? 'none' : 'auto'}
                     style={animated.homeContentStyle}
                   >
                     <PaginationDots />
@@ -116,9 +131,12 @@ const styles = StyleSheet.create({
   },
   cardSlider: {
     width: CARD_WIDTH,
+    // 상세 패널이 아래 페이지 점보다 위에 그려지도록
+    zIndex: 1,
   },
   cardSliderMover: {
     flexDirection: 'row',
+    alignItems: 'flex-start',
     gap: SLIDER_GAP,
   },
   title: {

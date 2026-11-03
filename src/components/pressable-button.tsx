@@ -10,7 +10,7 @@ import {
 } from 'react-native'
 import { DM_SANS } from '@/theme/fonts'
 import { BLUE_PRIMARY, GRAY, RED_LIGHT, WHITE } from '@/theme/color'
-import { GLASS } from '@/theme/glass'
+import { GLASS, withAlpha } from '@/theme/glass'
 
 // primary: 색이 채워진 유리 (기본 파랑, tint로 색 변경)
 // secondary: 투명한 유리 (취소·완료 등)
@@ -28,11 +28,6 @@ interface PressableButtonProps {
   style?: StyleProp<ViewStyle>
   textStyle?: StyleProp<TextStyle>
   pressableStyle?: StyleProp<ViewStyle>
-}
-
-const withAlpha = (hex: string, alpha: number) => {
-  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16))
-  return `rgba(${r},${g},${b},${alpha})`
 }
 
 // 위쪽이 살짝 밝은 광택 (유리 표면에 빛이 닿는 느낌)

@@ -1,6 +1,15 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react'
+import {
+  createContext,
+  PropsWithChildren,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 import { StyleProp, ViewStyle } from 'react-native'
 import {
+  cancelAnimation,
   clamp,
   Easing,
   useAnimatedStyle,
@@ -13,9 +22,20 @@ import { CARD_WIDTH, SLIDER_GAP } from '@home/constants'
 import { useUserContext } from '@/contexts'
 import { useCardSettingContext } from '@home/contexts'
 
+/**
+ * 카드 슬라이더: 카드들 + 맨 끝 카드 추가 칸을 가로로 넘긴다.
+ * 위치는 translateX 하나로만 움직이고, 선택한 칸(selectedCardIdx)은 손을 뗀 뒤에 정해진다.
+ */
+const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP
+// 가로로 이만큼 움직여야 넘기기가 시작된다. 그 전에 손을 떼면 카드 터치로 처리된다
+const ACTIVE_OFFSET = 10
+// 이보다 빠르게 밀면 거리가 짧아도 민 방향으로 한 칸 넘긴다
+const FLING_VELOCITY = 500
+// 처음/마지막 칸에서 더 밀면 손가락을 이 비율만큼만 따라간다
+const EDGE_RESISTANCE = 0.3
+const SNAP = { duration: 300, easing: Easing.out(Easing.cubic) }
+
 interface SliderController {
-  goToNext: () => void
-  goToPrev: () => void
   goToIdx: (idx: number) => void
 }
 
@@ -30,82 +50,71 @@ const sliderContext = createContext({} as SliderContextValue)
 
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const { cards } = useUserContext()
-  const { settingCard } = useCardSettingContext()
-  const CARD_LEN = cards && cards.length
-
-  const prevSliderTranslatedX = useSharedValue(0)
-
-  const sliderTranslatedX = useSharedValue(0)
+  const { settingCard, detailCard, detailProgress, detailController } =
+    useCardSettingContext()
+  // 마지막 칸은 카드 추가(EmptyCard)
+  const lastIdx = cards?.length ?? 0
 
   const [selectedCardIdx, setSelectedCard] = useState(0)
+  const translateX = useSharedValue(0)
+  const dragStartX = useSharedValue(0)
 
-  const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP
-
-  const sliderController = {
-    goToNext: () => {
-      'worklet'
-      const idx = Math.min(CARD_LEN, selectedCardIdx + 1)
-      prevSliderTranslatedX.value = sliderTranslatedX.value =
-        -idx * SLIDER_INTERVAL
-      runOnJS(setSelectedCard)(idx)
+  const goToIdx = useCallback(
+    (idx: number) => {
+      // 다른 카드로 옮기면 열려 있던 상세는 접는다
+      if (detailCard !== -1 && detailCard !== idx) detailController.close()
+      translateX.value = withTiming(-idx * SLIDER_INTERVAL, SNAP)
+      setSelectedCard(idx)
     },
-    goToPrev: () => {
-      'worklet'
-      const idx = Math.max(0, selectedCardIdx - 1)
-      prevSliderTranslatedX.value = sliderTranslatedX.value =
-        -idx * SLIDER_INTERVAL
-      runOnJS(setSelectedCard)(idx)
-    },
-    goToIdx: (idx: number) => {
-      'worklet'
-      const translateX = -idx * SLIDER_INTERVAL
-      prevSliderTranslatedX.value = sliderTranslatedX.value = translateX
-      runOnJS(setSelectedCard)(idx)
-    },
-  }
+    [detailCard, detailController, translateX],
+  )
 
-  const panGesture =
-    settingCard === -1
-      ? Gesture.Pan()
-          .onBegin(() => {
-            sliderTranslatedX.value = prevSliderTranslatedX.value
-          })
-          .onUpdate(e => {
-            const translatedX = prevSliderTranslatedX.value + e.translationX
-            sliderTranslatedX.value = translatedX
-          })
-          .onEnd(e => {
-            if (e.velocityX > 800) {
-              sliderController.goToPrev()
-              return
-            } else if (e.velocityX < -800) {
-              sliderController.goToNext()
-              return
-            }
+  // 카드가 줄어 선택한 칸이 없어지면 마지막 칸으로 옮긴다
+  useEffect(() => {
+    if (selectedCardIdx > lastIdx) goToIdx(lastIdx)
+  }, [selectedCardIdx, lastIdx, goToIdx])
 
-            if (sliderTranslatedX.value > 0) {
-              sliderController.goToIdx(0)
-            } else {
-              const idx = clamp(
-                Math.round(-sliderTranslatedX.value / SLIDER_INTERVAL),
-                0,
-                CARD_LEN,
-              )
-              sliderController.goToIdx(idx)
-            }
-          })
-      : Gesture.Pan()
+  const closeDetail = detailController.close
+
+  // 수정 화면에서는 넘기지 않는다. 상세가 열려 있으면 넘기기 시작할 때 접는다
+  const panGesture = useMemo(
+    () =>
+      Gesture.Pan()
+        .enabled(settingCard === -1)
+        .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
+        .onStart(() => {
+          cancelAnimation(translateX)
+          dragStartX.value = translateX.value
+          if (detailProgress.value > 0) runOnJS(closeDetail)()
+        })
+        .onUpdate(e => {
+          const minX = -lastIdx * SLIDER_INTERVAL
+          const x = dragStartX.value + e.translationX
+          if (x > 0) translateX.value = x * EDGE_RESISTANCE
+          else if (x < minX)
+            translateX.value = minX + (x - minX) * EDGE_RESISTANCE
+          else translateX.value = x
+        })
+        .onEnd(e => {
+          const position = -translateX.value / SLIDER_INTERVAL
+          let target = Math.round(position)
+          // 빠르게 밀었으면 지금 위치에서 민 방향의 칸으로
+          if (e.velocityX < -FLING_VELOCITY) target = Math.ceil(position)
+          else if (e.velocityX > FLING_VELOCITY) target = Math.floor(position)
+          target = clamp(target, 0, lastIdx)
+
+          translateX.value = withTiming(-target * SLIDER_INTERVAL, SNAP)
+          runOnJS(setSelectedCard)(target)
+        }),
+    [settingCard, lastIdx, closeDetail, detailProgress, translateX, dragStartX],
+  )
 
   const moverStyle = useAnimatedStyle(() => ({
-    transform: [
-      {
-        translateX: withTiming(sliderTranslatedX.value, {
-          duration: 300,
-          easing: Easing.out(Easing.cubic),
-        }),
-      },
-    ],
+    transform: [{ translateX: translateX.value }],
   }))
+
+  const sliderController = useMemo(() => ({ goToIdx }), [goToIdx])
+
   return (
     <sliderContext.Provider
       value={{

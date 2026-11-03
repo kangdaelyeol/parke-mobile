@@ -1,3 +1,4 @@
+import { SharedValue } from 'react-native-reanimated'
 import { CardDto, CardLayout, CardTheme } from '@/domain/card'
 import { CardState } from '@/services/types'
 import { AnimatedViewModel } from '@/types/common'
@@ -8,6 +9,8 @@ import { PanGesture } from 'react-native-gesture-handler'
 interface MainState {
   selectedCardIdx: number
   isSetting: boolean
+  // 카드 상세(드롭다운)가 열려 있는지
+  isDetail: boolean
   cards: CardState[]
   cardLength: number
 }
@@ -21,6 +24,8 @@ interface MainAnimated {
 
 interface MainActions {
   panGesture: PanGesture
+  // 카드 영역 높이 (상세를 열 때 카드를 얼마나 올릴지 계산)
+  mainLayout: (height: number) => void
 }
 
 interface CardComponentState {
@@ -104,6 +109,47 @@ export type HomeCardViewModel = AnimatedViewModel<
   CardComponentState,
   CardActions,
   CardAnimated
+>
+
+// 유리 카드의 상세(드롭다운) 탭
+export type CardDetailTab = 'info' | 'manage'
+
+interface CardDetailState {
+  // 이 카드의 상세가 열려 있는지
+  open: boolean
+  tab: CardDetailTab
+  loading: boolean
+}
+
+interface CardDetailActions {
+  // 선택된 카드면 상세를 열고 닫고, 아니면 그 카드로 넘긴다
+  togglePress: () => void
+  tabPress: (tab: CardDetailTab) => void
+  previewPress: () => void
+  drivePress: () => void
+  scanChange: (val: boolean) => void
+  changePhonePress: () => void
+  recordsPress: () => void
+  editPress: () => void
+  deletePress: () => void
+  // 펼쳐질 패널 높이 / 탭 영역 너비 측정
+  panelLayout: (height: number) => void
+  segmentLayout: (width: number) => void
+}
+
+interface CardDetailAnimated {
+  cardStyle: StyleProp<ViewStyle>
+  scanOnDotStyle: StyleProp<ViewStyle>
+  panelStyle: StyleProp<ViewStyle>
+  indicatorStyle: StyleProp<ViewStyle>
+  // 이 카드의 상세 진행값 (항목이 차례로 나타나는 데 쓴다)
+  progress: SharedValue<number>
+}
+
+export type HomeCardDetailViewModel = AnimatedViewModel<
+  CardDetailState,
+  CardDetailActions,
+  CardDetailAnimated
 >
 
 export type HomeEmptyCardViewModel = AnimatedViewModel<

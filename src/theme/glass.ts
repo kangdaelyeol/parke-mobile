@@ -11,6 +11,12 @@ export const GLASS = {
   glow: '0px 0px 14px rgba(255,255,255,0.08)',
 }
 
+// '#RRGGBB' → 'rgba(r,g,b,alpha)'
+export const withAlpha = (hex: string, alpha: number) => {
+  const [r, g, b] = [1, 3, 5].map(i => parseInt(hex.slice(i, i + 2), 16))
+  return `rgba(${r},${g},${b},${alpha})`
+}
+
 // 입력칸·선택 목록 공통 스타일
 export const glassStyles = StyleSheet.create({
   field: {
