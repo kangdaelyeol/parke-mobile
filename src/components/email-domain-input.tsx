@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { EMAIL_DOMAINS } from '@/constants'
+import { DEFAULT_EMAIL_DOMAIN, EMAIL_DOMAINS } from '@/constants'
 import { PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
 import { glassStyles, glassText, TEXT } from '@/theme/glass'
@@ -34,7 +34,7 @@ export const EmailDomainInput = ({
 }: EmailDomainInputProps) => {
   const initial = split(value)
   const [local, setLocal] = useState(initial.local)
-  const [domain, setDomain] = useState(initial.domain || EMAIL_DOMAINS[0])
+  const [domain, setDomain] = useState(initial.domain || DEFAULT_EMAIL_DOMAIN)
   const [custom, setCustom] = useState(
     !!initial.domain && !EMAIL_DOMAINS.includes(initial.domain),
   )

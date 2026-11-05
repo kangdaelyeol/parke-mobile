@@ -15,7 +15,7 @@ export const useFooterViewModel = ({
 }: Pick<BottomTabBarProps, 'state' | 'navigation'>): HomeFooterViewModel => {
   const { isSetting, settingProgress } = useCardSettingContext()
   const { height, bottom } = useTabBarLayout()
-  const focusedName = state.routes[state.index].name
+  const focusedName = state.routes[state.index]?.name ?? ''
   // 그림자까지 화면 밖으로 내려가도록
   const hiddenY = height + bottom + 30
 

@@ -7,7 +7,12 @@ import { ChangelogViewModel } from '../types'
 export const useChangelogViewModel = (): ChangelogViewModel => {
   const navigation = useNavigation<ChangelogStackNavigationProp>()
   return {
-    state: { entries: CHANGELOG, version: APP_VERSION, stage: APP_STAGE },
+    state: {
+      entries: CHANGELOG,
+      current: CHANGELOG[0],
+      version: APP_VERSION,
+      stage: APP_STAGE,
+    },
     actions: { backPress: () => navigation.goBack() },
   }
 }

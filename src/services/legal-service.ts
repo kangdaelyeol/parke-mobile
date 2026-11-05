@@ -15,9 +15,10 @@ const seenEffectiveDates: Partial<Record<DocType, string>> = {}
 
 // "시행일: 2026년 10월 22일" → "2026-10-22"
 const parseEffectiveDate = (text: string) => {
-  const m = text.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/)
-  if (!m) return null
-  return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`
+  const [, year, month, day] =
+    text.match(/(\d{4})\s*년\s*(\d{1,2})\s*월\s*(\d{1,2})\s*일/) ?? []
+  if (!year || !month || !day) return null
+  return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
 }
 
 export const legalService: LegalService = {

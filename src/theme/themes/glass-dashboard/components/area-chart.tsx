@@ -29,12 +29,14 @@ type Point = [number, number]
 
 // 점들을 지나는 부드러운 곡선 (Catmull-Rom → 베지어)
 const smoothPath = (points: Point[]) => {
-  if (points.length === 0) return ''
-  let d = `M${points[0][0]},${points[0][1]}`
+  const [first] = points
+  if (!first) return ''
+  let d = `M${first[0]},${first[1]}`
   for (let i = 0; i < points.length - 1; i++) {
-    const p0 = points[i - 1] ?? points[i]
     const p1 = points[i]
     const p2 = points[i + 1]
+    if (!p1 || !p2) break
+    const p0 = points[i - 1] ?? p1
     const p3 = points[i + 2] ?? p2
     const c1x = p1[0] + (p2[0] - p0[0]) / 6
     const c1y = p1[1] + (p2[1] - p0[1]) / 6
@@ -58,19 +60,20 @@ export const AreaChart = memo(
       const max = Math.max(...values)
       const min = Math.min(0, ...values)
       const range = max - min || 1
-      return series
-        .filter(s => s.data.length > 0)
-        .map(s => {
-          const step = (width - PAD_X * 2) / Math.max(1, s.data.length - 1)
-          const points: Point[] = s.data.map((v, i) => [
-            PAD_X + i * step,
-            PAD_Y + (1 - (v - min) / range) * (height - PAD_Y * 2),
-          ])
-          const line = smoothPath(points)
-          const last = points[points.length - 1]
-          const area = `${line} L${last[0]},${height} L${points[0][0]},${height} Z`
-          return { ...s, line, area, points }
-        })
+      // 값이 없는 선은 건너뛴다
+      return series.flatMap(s => {
+        const step = (width - PAD_X * 2) / Math.max(1, s.data.length - 1)
+        const points: Point[] = s.data.map((v, i) => [
+          PAD_X + i * step,
+          PAD_Y + (1 - (v - min) / range) * (height - PAD_Y * 2),
+        ])
+        const first = points[0]
+        const last = points[points.length - 1]
+        if (!first || !last) return []
+        const line = smoothPath(points)
+        const area = `${line} L${last[0]},${height} L${first[0]},${height} Z`
+        return [{ ...s, line, area, points }]
+      })
     }, [series, width, height])
 
     return (

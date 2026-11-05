@@ -22,7 +22,20 @@ export interface ChangelogEntry {
  * 기능 단위로 커밋할 때 여기에 항목을 하나 더하고 단위에 맞게 버전을 올린다.
  * 커밋 메시지 끝에도 같은 버전을 적는다 (예: "Feat: ... (v1.3.0)")
  */
-export const CHANGELOG: ChangelogEntry[] = [
+// 맨 위 항목이 현재 버전이므로 비어 있을 수 없다
+export const CHANGELOG: [ChangelogEntry, ...ChangelogEntry[]] = [
+  {
+    version: '1.5.6',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '빈 값 검사 강화',
+    changes: [
+      {
+        type: 'improve',
+        text: '목록에서 꺼낸 값이 비어 있을 수 있는 곳을 모두 확인하도록 바꿔, 카드가 없을 때 누른 버튼이 오류를 내지 않아요.',
+      },
+    ],
+  },
   {
     version: '1.5.5',
     date: '2026-11-05',

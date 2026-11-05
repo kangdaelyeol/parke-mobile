@@ -41,7 +41,7 @@ export const useCardActions = (idx: number): HomeCardActions => {
       cardSettingController.showSetting(idx)
     },
     deletePress: (onDeleted?: () => void) => {
-      if (!user) return
+      if (!user || !card) return
       Alert.alert('Parke 삭제', '삭제하시겠습니까? - (재등록 가능)', [
         {
           text: '삭제',
@@ -64,6 +64,7 @@ export const useCardActions = (idx: number): HomeCardActions => {
       ])
     },
     previewPress: async () => {
+      if (!card) return
       const url = PARKE_WEB_URL + card.id
 
       const supported = await Linking.canOpenURL(url)
@@ -72,11 +73,12 @@ export const useCardActions = (idx: number): HomeCardActions => {
       await Linking.openURL(url)
     },
     scanChangePress: () => {
+      if (!card) return
       cardService.updateScan(card.deviceId, !card.scan)
       userContextActions.setCardScan(card.id, !card.scan)
     },
     changePhonePress: async () => {
-      if (!user) return
+      if (!user || !card) return
       const { phone } = user
       setLoading(true)
       const res = await cardService.updatePhone(card.id, phone)

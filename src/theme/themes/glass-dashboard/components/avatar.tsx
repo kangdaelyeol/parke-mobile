@@ -12,11 +12,11 @@ interface AvatarProps {
 
 // 영문은 단어 첫 글자 두 개(Alex Rivera → AR), 한글은 첫 글자
 const initials = (name: string) => {
-  const words = name.trim().split(/\s+/).filter(Boolean)
-  if (words.length === 0) return '?'
-  if (/^[A-Za-z]/.test(words[0]))
-    return (words[0][0] + (words[1]?.[0] ?? '')).toUpperCase()
-  return words[0][0]
+  const [first, second] = name.trim().split(/\s+/).filter(Boolean)
+  if (!first) return '?'
+  if (/^[A-Za-z]/.test(first))
+    return (first.charAt(0) + (second?.charAt(0) ?? '')).toUpperCase()
+  return first.charAt(0)
 }
 
 // 이름 첫 글자를 얹은 둥근 사각 타일 (영상의 CX, AR)

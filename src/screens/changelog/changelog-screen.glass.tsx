@@ -26,7 +26,7 @@ const CHANGE_TONE: Record<ChangeType, Tone> = {
 // 변경 내역 (글래스): 현재 버전 판 + 버전마다 제목이 판 안에 들어간 묶음
 export const GlassChangelogScreen = () => {
   const { state, actions } = useChangelogViewModel()
-  const current = state.entries[0]
+  const { current } = state
 
   return (
     <GlassScreen

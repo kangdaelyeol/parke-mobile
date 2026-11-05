@@ -14,10 +14,13 @@ const toPath = (
 ): DrivePathDto => {
   if (points.length === 0) return []
   const step = Math.max(1, (points.length - 1) / (MAX_PATH_POINTS - 1))
-  const picked = []
-  for (let i = 0; i < points.length - 1; i += step)
-    picked.push(points[Math.floor(i)])
-  picked.push(points[points.length - 1])
+  const picked: typeof points = []
+  for (let i = 0; i < points.length - 1; i += step) {
+    const point = points[Math.floor(i)]
+    if (point) picked.push(point)
+  }
+  const last = points[points.length - 1]
+  if (last) picked.push(last)
   return picked.map(p => [round6(p.latitude), round6(p.longitude)])
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Alert } from 'react-native'
-import { useCardSettingContext, useCardSliderContext } from '@home/contexts'
+import { useCardSettingContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
 import { cardService } from '@/services'
 import { CardState } from '@/services/types'
@@ -18,8 +18,7 @@ export const useSettingCardViewModel = (
   card: CardState,
 ): HomeSettingCardViewModel => {
   const { cardSettingController } = useCardSettingContext()
-  const { selectedCardIdx } = useCardSliderContext()
-  const { cards, actions: userContextActions } = useUserContext()
+  const { actions: userContextActions } = useUserContext()
   // 카드 이메일: 공동 소유자끼리 공유하지만 공개 카드 노드가 아닌 cardPrivate에 저장된다
   const savedEmail = card.email
 
@@ -39,7 +38,7 @@ export const useSettingCardViewModel = (
       if (nextEmail && !isEmail(nextEmail))
         return Alert.alert('이메일 주소를 확인해주세요.')
 
-      const cardId = cards[selectedCardIdx].id
+      const cardId = card.id
       const info = {
         title,
         phone,

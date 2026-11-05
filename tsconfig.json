@@ -4,6 +4,7 @@
   "exclude": ["node_modules", "ios/Pods"],
   "compilerOptions": {
     "jsx": "react-jsx",
+    "noUncheckedIndexedAccess": true,
     "paths": {
       "@/*": ["./src/*"],
       "@home/*": ["./src/screens/home/*"],

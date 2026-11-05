@@ -37,9 +37,10 @@ export const KAKAO_MAP_JS_KEY = '63bb3baacd0d6aa1b792cac97459eabf'
 export const KAKAO_MAP_BASE_URL = 'https://localhost'
 // Firebase Functions 지역 (backend/functions와 같아야 한다)
 export const FUNCTIONS_REGION = 'asia-northeast3'
-// 이메일 입력 자동완성 도메인 (자주 쓰는 순)
+// 이메일 입력 자동완성 도메인 (자주 쓰는 순). 첫 번째가 처음 고른 도메인
+export const DEFAULT_EMAIL_DOMAIN = 'gmail.com'
 export const EMAIL_DOMAINS = [
-  'gmail.com',
+  DEFAULT_EMAIL_DOMAIN,
   'naver.com',
   'daum.net',
   'hanmail.net',

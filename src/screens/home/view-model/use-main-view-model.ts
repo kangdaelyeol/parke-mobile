@@ -12,11 +12,14 @@ import { HomeMainViewModel } from '@home/types'
 
 export const useMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext()
-  const { sliderStyle, homeContentStyle, isSetting } = useCardSettingContext()
+  const { sliderStyle, homeContentStyle, isSetting, settingCard } =
+    useCardSettingContext()
   const { cards } = useUserContext()
   const titleOpacity = useSharedValue(0)
 
   const cardLength = cards?.length ?? 1
+  // 수정 중인 카드 (수정 화면이 닫히는 동안에도 유지된다)
+  const editingCard = settingCard === null ? null : cards[settingCard] ?? null
   const cardTitleStyle = useAnimatedStyle(() => ({
     opacity: titleOpacity.value,
   }))
@@ -39,6 +42,7 @@ export const useMainViewModel = (): HomeMainViewModel => {
       selectedCardIdx,
       cardLength,
       isSetting,
+      editingCard,
       cards,
     },
     animated: {

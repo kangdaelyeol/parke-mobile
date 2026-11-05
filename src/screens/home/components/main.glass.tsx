@@ -82,9 +82,7 @@ export const GlassMain = ({ loading }: HomeMainProps) => {
           )}
         </Animated.View>
       </ScrollView>
-      {state.isSetting && (
-        <SettingCard card={state.cards[state.selectedCardIdx]} />
-      )}
+      {state.editingCard && <SettingCard card={state.editingCard} />}
     </View>
   )
 }

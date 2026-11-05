@@ -9,6 +9,8 @@ import { footerIconList } from '@home/config/footer.config'
 interface MainState {
   selectedCardIdx: number
   isSetting: boolean
+  // 수정 화면에 띄운 카드 (수정 중이 아니면 null)
+  editingCard: CardState | null
   cards: CardState[]
   cardLength: number
 }

@@ -92,9 +92,7 @@ export const ClassicMain = ({ loading }: HomeMainProps) => {
           </>
         )}
       </View>
-      {state.isSetting && (
-        <SettingCard card={state.cards[state.selectedCardIdx]} />
-      )}
+      {state.editingCard && <SettingCard card={state.editingCard} />}
     </View>
   )
 }
