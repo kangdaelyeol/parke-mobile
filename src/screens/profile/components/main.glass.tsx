@@ -4,16 +4,24 @@ import {
   Avatar,
   EmailDomainInput,
   FocusableInput,
-  GlassRow,
   GlassSurface,
   Loading,
   PressableButton,
+  StatusTile,
 } from '@/components'
 import { useMainViewModel } from '@profile/view-model'
-import { GLASS, glassText, TEXT } from '@/theme/glass'
+import { LoginProvider } from '@/services/types'
+import { GLASS, glassText, LINK, TEXT } from '@/theme/glass'
 import { formatPhone } from '@/utils'
 
-// My 본문 (글래스): 모든 요소를 유리 판 하나에 묶고, 구간 사이는 얇은 선으로 나눈다
+const PROVIDER_LABEL: Record<LoginProvider, string> = {
+  kakao: '카카오 계정',
+  google: 'Google 계정',
+  apple: 'Apple 계정',
+}
+
+// My 본문 (글래스): 영상 Users & Auth처럼 유리 판 하나에 사용자 줄 · 입력 폼 · 작은 버튼을 담고,
+// 구간 사이는 얇은 선으로 나눈다
 export const GlassMain = () => {
   const { state, actions } = useMainViewModel()
   return (
@@ -24,7 +32,7 @@ export const GlassMain = () => {
           {/* 페이지 제목도 판 안에 */}
           <Text style={styles.pageTitle}>프로필</Text>
 
-          {/* 프로필: 아바타 + 이름 + 번호 */}
+          {/* 사용자 줄: 아바타 + 이름 + 번호, 오른쪽에 로그인 방식 (영상 표의 2FA 방식처럼 파란 글씨) */}
           <View style={styles.profile}>
             <Avatar name={state.nickname} size={48} />
             <View style={styles.profileTexts}>
@@ -35,6 +43,11 @@ export const GlassMain = () => {
                 {formatPhone(state.phone) || '번호 없음'}
               </Text>
             </View>
+            {!!state.loginProvider && (
+              <Text style={styles.provider} numberOfLines={1}>
+                {PROVIDER_LABEL[state.loginProvider]}
+              </Text>
+            )}
           </View>
 
           <View style={styles.divider} />
@@ -80,41 +93,36 @@ export const GlassMain = () => {
             style={styles.saveButton}
           />
 
+          {/* 이 기기에 남은 주소: 영상 상태 목록처럼 한 겹 더 놓인 타일 */}
           {!!state.reportEmail && (
-            <>
-              <View style={styles.divider} />
-              <GlassRow
-                style={styles.flushRow}
-                icon="envelope"
-                iconVariant="glass"
-                tone="warning"
-                title="이 기기에서 최근 보낸 주소"
-                subtitle={state.reportEmail}
-                right={
-                  <PressableButton
-                    size="sm"
-                    variant="danger"
-                    title="삭제"
-                    onPress={actions.clearReportEmailPress}
-                  />
-                }
-              />
-            </>
+            <StatusTile
+              title="이 기기에서 최근 보낸 주소"
+              subtitle={state.reportEmail}
+              right={
+                <PressableButton
+                  size="sm"
+                  variant="danger"
+                  title="삭제"
+                  onPress={actions.clearReportEmailPress}
+                />
+              }
+            />
           )}
 
           <View style={styles.divider} />
 
-          {/* 계정 */}
-          <View style={styles.buttonSection}>
+          {/* 계정: 영상 표의 Reset 2FA · Logs처럼 작은 버튼 두 개 */}
+          <View style={styles.account}>
+            <Text style={[glassText.title, styles.accountTitle]}>계정</Text>
             <PressableButton
+              size="sm"
               variant="secondary"
-              icon="right-from-bracket"
               title="로그아웃"
               onPress={actions.logoutPress}
             />
             <PressableButton
+              size="sm"
               variant="danger"
-              icon="user-xmark"
               title="회원탈퇴"
               onPress={actions.deletePress}
             />
@@ -157,6 +165,12 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.BOLD,
     fontSize: 17,
   },
+  provider: {
+    maxWidth: '40%',
+    color: LINK,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 13,
+  },
   divider: {
     height: StyleSheet.hairlineWidth,
     backgroundColor: GLASS.divider,
@@ -173,13 +187,12 @@ const styles = StyleSheet.create({
   saveButton: {
     minHeight: 50,
   },
-  // 판 안쪽 여백에 맞춰 줄 좌우 여백은 없앤다
-  flushRow: {
-    minHeight: 0,
-    paddingHorizontal: 0,
-    paddingVertical: 0,
+  account: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
-  buttonSection: {
-    gap: 12,
+  accountTitle: {
+    flex: 1,
   },
 })

@@ -28,6 +28,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
     driveReportService.getLastEmail(),
   )
   const [email, setEmail] = useState(user?.email ?? '')
+  const [loginProvider] = useState(() => cacheService.getLoginProvider())
 
   const navigation = useNavigation<ProfileStackNavigationProp>()
 
@@ -169,6 +170,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
       loading,
       nickname,
       phone,
+      loginProvider,
     },
     actions: actions,
   }

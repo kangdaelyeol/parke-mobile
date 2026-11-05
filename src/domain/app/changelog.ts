@@ -24,6 +24,22 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.1',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '글래스 My 배치',
+    changes: [
+      {
+        type: 'improve',
+        text: '글래스 대시보드 My에서 어떤 계정(카카오 · Google · Apple)으로 로그인했는지 이름 옆에 보여줘요.',
+      },
+      {
+        type: 'improve',
+        text: '로그아웃 · 회원탈퇴를 계정 줄의 작은 버튼으로 모으고, 최근 보낸 주소는 따로 묶었어요.',
+      },
+    ],
+  },
+  {
     version: '1.4.0',
     date: '2026-11-05',
     bump: 'minor',
