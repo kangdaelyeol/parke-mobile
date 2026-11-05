@@ -6,6 +6,7 @@ import { useUserContext } from '@/contexts'
 import { useNavigation } from '@react-navigation/native'
 import { SearchBleStackNavigationProp } from '@/navigation/types'
 import { bleService } from '@/services'
+import { logger } from '@/utils'
 
 export const useSearchBleViewModel = () => {
   const {
@@ -36,9 +37,12 @@ export const useSearchBleViewModel = () => {
         if (state === 'PoweredOn') {
           bleService.startSearchBle({
             cards,
-            onError: (e: any) => {
-              console.log(e)
-              Alert.alert(e)
+            onError: e => {
+              logger.error('[SearchBLE] register failed', e)
+              Alert.alert(
+                '기기와 연결하지 못했어요',
+                '기기를 휴대폰 가까이 두고 다시 시도해주세요.',
+              )
               navigation.goBack()
             },
             onDuplicated: () => {

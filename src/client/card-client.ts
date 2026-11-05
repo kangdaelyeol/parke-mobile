@@ -8,7 +8,7 @@ import {
 } from '@react-native-firebase/database'
 import { CardDto } from '@/domain/card'
 import { CardClient } from './types'
-import { clientFail, clientOk } from '@/utils'
+import { clientFail, clientOk, logger } from '@/utils'
 
 export const cardClient: CardClient = {
   getEmail: async id => {
@@ -16,7 +16,7 @@ export const cardClient: CardClient = {
       const snapShot = await get(ref(db, `cardPrivate/${id}/email`))
       return clientOk((snapShot.val() as string | null) ?? '')
     } catch (e) {
-      console.log(e)
+      logger.error('[cardClient] getEmail failed', e)
       return clientFail(e)
     }
   },
@@ -25,7 +25,7 @@ export const cardClient: CardClient = {
       await set(ref(db, `cardPrivate/${id}/email`), email || null)
       return clientOk(true)
     } catch (e) {
-      console.log(e)
+      logger.error('[cardClient] setEmail failed', e)
       return clientFail(e)
     }
   },
@@ -37,7 +37,7 @@ export const cardClient: CardClient = {
       const card = snapShot.val() as CardDto
       return clientOk(card)
     } catch (e) {
-      console.log(e)
+      logger.error('[cardClient] getById failed', e)
       return clientFail(e)
     }
   },
@@ -47,7 +47,7 @@ export const cardClient: CardClient = {
       if (!snapShot.exists()) return clientOk(null)
       return clientOk(snapShot.val() as boolean)
     } catch (e) {
-      console.log(e)
+      logger.error('[cardClient] getAllowById failed', e)
       return clientFail(e)
     }
   },
@@ -64,7 +64,7 @@ export const cardClient: CardClient = {
         payload: true,
       }
     } catch (e) {
-      console.log(e)
+      logger.error('[cardClient] update failed', e)
       return clientFail(e)
     }
   },

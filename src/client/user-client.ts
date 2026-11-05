@@ -10,7 +10,7 @@ import { UserDto } from '@/domain/user'
 import { LEGACY_CONSENT_EFFECTIVE_DATE } from '@/constants'
 import { ConsentKey, ConsentMap, ConsentRecord } from '@/types/common'
 import { UserClient } from './types'
-import { clientFail, clientOk } from '@/utils'
+import { clientFail, clientOk, logger } from '@/utils'
 
 // 예전 스키마: 동의 시각을 user 바로 아래 필드로 저장했다
 const LEGACY_CONSENT_FIELDS = {
@@ -55,7 +55,7 @@ const migrateLegacyConsents = async (
     await update(ref(db), updates)
   } catch (e) {
     // 옮기지 못해도 이번 실행에서는 변환한 값으로 쓰고, 다음에 다시 시도한다
-    console.log('[userClient] consent migration failed', e)
+    logger.error('[userClient] consent migration failed', e)
   }
   return { ...(user as unknown as UserDto), consents }
 }
@@ -79,7 +79,7 @@ export const userClient: UserClient = {
       })
       return clientOk(true)
     } catch (e) {
-      console.log(e)
+      logger.error('[userClient] update failed', e)
       return clientFail(e)
     }
   },
@@ -97,7 +97,7 @@ export const userClient: UserClient = {
       await update(ref(db), updates)
       return clientOk(true)
     } catch (e) {
-      console.log(e)
+      logger.error('[userClient] recordConsents failed', e)
       return clientFail(e)
     }
   },
@@ -109,7 +109,7 @@ export const userClient: UserClient = {
       const userRaw = snapShot.val() as UserDto & LegacyConsentFields
       return clientOk(await migrateLegacyConsents(userRaw))
     } catch (e) {
-      console.log(e)
+      logger.error('[userClient] getById failed', e)
       return clientFail(e)
     }
   },

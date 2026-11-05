@@ -1,3 +1,4 @@
+import { logger } from '@/utils'
 import { callFunction } from './functions-client'
 import { LocationLogService } from './types'
 
@@ -6,7 +7,7 @@ export const locationLogService: LocationLogService = {
   // 주행 모드 위치 수집 시작/종료. 기록이 실패해도 주행은 막지 않는다
   logCollect: type => {
     callFunction('logLocationAccess', { type }).then(res => {
-      if (!res.status) console.log('[LocationLog] failed', type, res.message)
+      if (!res.status) logger.error('[LocationLog] failed', type, res.message)
     })
   },
   // 위치정보 동의 철회 시 주행 기록·확인자료 즉시 파기

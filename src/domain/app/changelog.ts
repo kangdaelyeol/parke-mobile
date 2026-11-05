@@ -24,6 +24,22 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.1',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '로그와 오류 안내 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '앱 기록(로그)을 개발 빌드에서만 남겨요. 로그인 정보나 전화번호가 기기 로그에 남지 않아요.',
+      },
+      {
+        type: 'fix',
+        text: '기기 등록이나 블루투스 감지 중 문제가 생기면 알기 쉬운 문구로 알려줘요. 감지 오류 안내는 앱 실행 중 한 번만 띄워요.',
+      },
+    ],
+  },
+  {
     version: '1.5.0',
     date: '2026-11-05',
     bump: 'minor',

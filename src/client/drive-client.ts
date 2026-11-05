@@ -7,7 +7,7 @@ import {
 } from '@react-native-firebase/database'
 import { db } from '@/firebaseApp'
 import { DrivePathDto, DriveRecordDto } from '@/domain/drive'
-import { clientFail, clientOk } from '@/utils'
+import { clientFail, clientOk, logger } from '@/utils'
 import { DriveClient } from './types'
 
 type StoredRecord = Omit<DriveRecordDto, 'id' | 'cardId'>
@@ -28,7 +28,7 @@ export const driveClient: DriveClient = {
       })
       return clientOk(id)
     } catch (e) {
-      console.log(e)
+      logger.error('[driveClient] create failed', e)
       return clientFail(e)
     }
   },
@@ -42,7 +42,7 @@ export const driveClient: DriveClient = {
         .sort((a, b) => b.startAt - a.startAt)
       return clientOk(records)
     } catch (e) {
-      console.log(e)
+      logger.error('[driveClient] listByCard failed', e)
       return clientFail(e)
     }
   },
@@ -51,7 +51,7 @@ export const driveClient: DriveClient = {
       const snapShot = await get(ref(db, `drivePath/${uid}/${driveId}`))
       return clientOk((snapShot.val() ?? []) as DrivePathDto)
     } catch (e) {
-      console.log(e)
+      logger.error('[driveClient] getPath failed', e)
       return clientFail(e)
     }
   },
@@ -63,7 +63,7 @@ export const driveClient: DriveClient = {
       })
       return clientOk(true)
     } catch (e) {
-      console.log(e)
+      logger.error('[driveClient] remove failed', e)
       return clientFail(e)
     }
   },

@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react'
 import { Alert, AppState, Linking } from 'react-native'
 import { useUserContext } from '@/contexts'
 import { bleService } from '@/services'
+import { logger } from '@/utils'
 import { usePhoneChangePrompt } from './use-phone-change-prompt'
 
 // 로그인 상태와 카드 목록에 맞춰 앱 전역에서 백그라운드 스캔을 켜고 끈다.
@@ -10,6 +11,7 @@ export const useBackgroundScan = () => {
   const { user, cards, actions: userContextActions } = useUserContext()
   const promptPhoneChange = usePhoneChangePrompt()
   const permissionAlerted = useRef(false)
+  const errorAlerted = useRef(false)
 
   useEffect(() => {
     if (!user?.id) {
@@ -38,9 +40,15 @@ export const useBackgroundScan = () => {
         )
       },
       onDBError: message => Alert.alert(message),
+      // 감지 신호마다 불릴 수 있어 안내는 앱 실행 중 한 번만 띄운다
       onError: e => {
-        console.log(e)
-        Alert.alert(`[BLE] scan handler error: ${e}`)
+        logger.error('[BLE] background handler failed', e)
+        if (errorAlerted.current) return
+        errorAlerted.current = true
+        Alert.alert(
+          '기기 감지 중 문제가 생겼어요',
+          '문제가 계속되면 앱을 다시 실행해주세요.',
+        )
       },
     })
     bleService.refreshBackgroundScan()

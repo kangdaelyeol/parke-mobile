@@ -73,8 +73,6 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
 
     const userNow = validationRes.payload
 
-    console.log(userNow)
-
     const cardIdList = userNow.cardIdList || []
 
     const isCardListSync =

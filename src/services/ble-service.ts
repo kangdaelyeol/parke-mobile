@@ -26,6 +26,7 @@ import {
 import {
   extractNumber,
   showPhoneChangeConfirmNotification,
+  logger,
   showPhoneChangedNotification,
 } from '@/utils'
 import { BackgroundScanContext, BleService } from './types'
@@ -53,7 +54,7 @@ const getManager = () => {
       restoreStateIdentifier: 'com.app.ble',
       // iOS가 BLE 이벤트로 앱을 백그라운드에서 다시 띄운 경우.
       // 로그인이 복원되면 useBackgroundScan이 스캔을 다시 시작한다.
-      restoreStateFunction: () => console.log('BLE state restored'),
+      restoreStateFunction: () => logger.log('[BLE] state restored'),
     })
   return bleManager
 }
@@ -78,7 +79,7 @@ const handleBackgroundDevice = async (
 
   bleCacheService.markDeviceSeenAt(deviceId)
 
-  console.log('deviceId:', deviceId)
+  logger.log('[BLE] device seen', deviceId)
 
   const cardState = cards.find(c => c.deviceId === deviceId)
   if (!cardState || !cardState.scan) return
@@ -88,9 +89,8 @@ const handleBackgroundDevice = async (
 
   const card = cardRes.payload
 
-  console.log('find:', card)
   const batteryLevel = getBatteryLevel(device.manufacturerData as string)
-  console.log('battery:', batteryLevel)
+  logger.log('[BLE] card found', card.id, 'battery', batteryLevel)
 
   bleCacheService.markBleScan(card.title, batteryLevel)
   refreshStateSession()
@@ -265,7 +265,7 @@ export const bleService: BleService = {
       { allowDuplicates: true },
       async (error, device) => {
         if (error || !device) return
-        console.log(device)
+        logger.log('[BLE] search: device', device.localName, device.rssi)
 
         if (!isCandidate(device)) return
 
@@ -295,12 +295,12 @@ export const bleService: BleService = {
             CHAR_UUID,
             base64Id,
           )
-          console.log('on disconnecting...')
+          logger.log('[BLE] search: disconnecting')
           await device.cancelConnection()
-          console.log('disconnecting succeed!')
+          logger.log('[BLE] search: disconnected')
           onDeviceFound(base64ToUtf(base64Id))
         } catch (e) {
-          console.log(e)
+          logger.error('[BLE] search: register failed', e)
           await device.cancelConnection()
           onError(e)
           return

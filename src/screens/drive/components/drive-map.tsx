@@ -13,6 +13,7 @@ import { KAKAO_MAP_BASE_URL, KAKAO_MAP_JS_KEY } from '@/constants'
 import { DriveMapProps } from '@/screens/drive/types'
 import { buildMapHtml } from '@/screens/drive/map-html'
 import { DARK, GRAY } from '@/theme/color'
+import { logger } from '@/utils'
 import { PRETENDARD } from '@/theme/fonts'
 
 const MAP_LOAD_TIMEOUT_MS = 10 * 1000
@@ -63,7 +64,7 @@ export const DriveMap = ({
           result: 'base64',
         })
       } catch (e) {
-        console.log('[DriveMap] capture failed', e)
+        logger.error('[DriveMap] capture failed', e)
         return null
       }
     },
@@ -117,7 +118,7 @@ export const DriveMap = ({
         summaryWaiters.current = []
       }
       if (msg.type === 'error') {
-        console.log('[DriveMap]', msg.message, msg.detail ?? '')
+        logger.error('[DriveMap]', msg.message, msg.detail ?? '')
         setError(msg.message)
       }
     } catch {}

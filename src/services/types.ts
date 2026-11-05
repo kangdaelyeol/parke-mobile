@@ -65,7 +65,7 @@ export interface BleCacheService {
 
 interface StartSearchBleProps {
   readonly cards: CardState[]
-  onError: (e: any) => void
+  onError: (e: unknown) => void
   onDuplicated: () => void
   onDeviceFound: (val: string) => void
   onRssiChange: (val: string) => void
@@ -81,7 +81,7 @@ export interface BackgroundScanContext {
   onPhoneChangeRequest: (pending: PhoneChangePending) => void
   onPermissionDenied: () => void
   onDBError: (message: string) => void
-  onError: (e: any) => void
+  onError: (e: unknown) => void
 }
 
 export interface BleService {

@@ -21,8 +21,9 @@ export const PHONE_CHANGE_ACTION = {
   CONFIRM: 'confirm',
   CANCEL: 'cancel',
 } as const
-// [임시] 등록된 기기 없이 주행모드를 테스트하는 홈 헤더 버튼. 개발 빌드에서만 보인다.
-// TestFlight 등 릴리스 빌드에서도 필요하면 true로 바꾸고, 출시 전에 버튼과 함께 제거할 것
+// [임시] 등록된 기기 없이 주행모드를 테스트하는 홈 헤더 버튼.
+// 지금은 TestFlight 테스트를 위해 릴리스 빌드에서도 보인다(true). 개발 빌드에서만 보이게 하려면 __DEV__로 바꾸고,
+// 출시 전에 버튼과 함께 제거할 것
 export const SHOW_DRIVE_TEST_BUTTON = true
 // [개발용] 설정 → 테마의 「구성 요소 보기」(테마에 담긴 컴포넌트 전체 미리보기). 출시 전에 false로
 export const SHOW_THEME_GALLERY = true

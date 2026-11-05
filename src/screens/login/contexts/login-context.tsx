@@ -17,6 +17,7 @@ import { useUserContext } from '@/contexts'
 import { DocType } from '@/types/common'
 import { UserDto } from '@/domain/user'
 import { LOCATION_CONSENT_DOCS, REQUIRED_CONSENT_DOCS } from '@/constants'
+import { logger } from '@/utils'
 
 const LoginContext = createContext({} as LoginContextValue)
 
@@ -115,7 +116,7 @@ export const LoginContextProvider = ({ children }: PropsWithChildren) => {
       : [...required]
     const res = await legalService.recordConsents(dto.id, docs, true)
     if (!res.status) {
-      console.log('[Login] consent record failed', res.message)
+      logger.error('[Login] consent record failed', res.message)
       return dto
     }
     return { ...dto, consents: { ...dto.consents, ...res.payload } }

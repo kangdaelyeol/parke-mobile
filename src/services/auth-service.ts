@@ -21,6 +21,7 @@ import {
 import { GOOGLE_WEB_CLIENT_ID } from '@/constants'
 import { AuthService } from './types'
 import { formatToAppleEmail, getHashedPassword } from '@/helpers'
+import { logger } from '@/utils'
 import { cacheService } from './cache-service'
 
 GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID })
@@ -53,7 +54,6 @@ export const authService: AuthService = {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       })
-      console.log(credential)
       if (!credential) return null
 
       const formattedEmail = formatToAppleEmail(credential.user)
@@ -62,7 +62,7 @@ export const authService: AuthService = {
       cacheService.setLoginProvider('apple')
       return formattedEmail
     } catch (e) {
-      console.log(e)
+      logger.error('[auth] appleLogin failed', e)
       return null
     }
   },
@@ -84,7 +84,7 @@ export const authService: AuthService = {
       cacheService.setLoginProvider('google')
       return { uid: cred.user.uid, nickname: user.name ?? '' }
     } catch (e) {
-      console.log(e)
+      logger.error('[auth] googleLogin failed', e)
       return null
     }
   },
@@ -106,7 +106,7 @@ export const authService: AuthService = {
       const cred = await signInWithEmailAndPassword(getAuth(), email, password)
       return { status: true, payload: cred.user.uid }
     } catch (e) {
-      console.log(e)
+      logger.error('[auth] firebaseLogin failed', e)
       return { status: false, payload: null }
     }
   },
@@ -120,7 +120,7 @@ export const authService: AuthService = {
       )
       return { status: true, payload: cred.user.uid }
     } catch (e) {
-      console.log(e)
+      logger.error('[auth] firebaseSignUp failed', e)
       return { status: false, payload: null }
     }
   },
@@ -178,7 +178,7 @@ export const authService: AuthService = {
           cacheService.clearLoginProvider()
           return true
         } catch (e) {
-          console.log(e)
+          logger.error('[auth] signOut (apple) failed', e)
           return false
         }
       case 'kakao':
@@ -187,7 +187,7 @@ export const authService: AuthService = {
           await authService.kakaoLogout()
           cacheService.clearLoginProvider()
         } catch (e) {
-          console.log(e)
+          logger.error('[auth] signOut (kakao) failed', e)
           return false
         }
         return true
@@ -196,7 +196,7 @@ export const authService: AuthService = {
           await authService.firebaseSignOut()
           await authService.googleLogout()
         } catch (e) {
-          console.log(e)
+          logger.error('[auth] signOut (google) failed', e)
           return false
         }
         return true

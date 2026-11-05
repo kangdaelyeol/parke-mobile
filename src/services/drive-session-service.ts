@@ -9,6 +9,7 @@ import {
   DRIVE_NOTIFICATION_ID,
 } from '@/constants'
 import { formatDuration, formatKm } from '@/utils/format'
+import { logger } from '@/utils/logger'
 import { DriveSessionService } from './types'
 
 // iOS Live Activity 네이티브 모듈 (ios/DriveBridge)
@@ -88,7 +89,7 @@ export const driveSessionService: DriveSessionService = {
     try {
       await liveActivity?.start(title, accent, startAt)
     } catch (e) {
-      console.log('[DriveSession] live activity start failed', e)
+      logger.error('[DriveSession] live activity start failed', e)
     }
     if (endPollTimer) clearInterval(endPollTimer)
     endPollTimer = setInterval(async () => {

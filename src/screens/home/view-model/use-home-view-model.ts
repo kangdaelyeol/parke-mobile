@@ -43,7 +43,6 @@ export const useHomeViewModel = () => {
     useCallback(() => {
       const subScription = AppState.addEventListener('change', async state => {
         if (state === 'active') {
-          console.log('active')
           setLoading(true)
           const res = await syncCardList()
           if (!res.status) {

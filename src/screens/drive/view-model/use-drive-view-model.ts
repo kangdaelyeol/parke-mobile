@@ -22,7 +22,7 @@ import {
 import { LOCATION_CONSENT_DOCS } from '@/constants'
 import { DocType } from '@/types/common'
 import { DriveSessionStatus } from '@/services/types'
-import { formatDateTime, getDistanceMeters, toKmh } from '@/utils'
+import { formatDateTime, getDistanceMeters, logger, toKmh } from '@/utils'
 import {
   DriveMapHandle,
   DrivePhase,
@@ -58,7 +58,7 @@ const log = (...args: unknown[]) => {
   const text = args
     .map(a => (typeof a === 'object' ? JSON.stringify(a) : String(a)))
     .join(' ')
-  console.log(`[Drive ${t}] ${text}`)
+  logger.log(`[Drive ${t}] ${text}`)
 }
 const round = (n: number, d = 1) => Math.round(n * 10 ** d) / 10 ** d
 
