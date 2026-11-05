@@ -5,14 +5,17 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { CARD_FRAME_HEADER, CARD_FRAME_PADDING } from '@home/constants'
 import { useCardSize } from '@home/hooks'
 import { SectionLabel } from '@/components'
+import { useUserContext } from '@/contexts'
 import { useEmptyCardViewModel } from '@home/view-model'
 import { HomeEmptyCardProps } from '@home/types'
 import { PRETENDARD } from '@/theme/fonts'
 import { GLASS, glassStyles, TEXT } from '@/theme/glass'
+import { CardSlotDots } from './card-slot-dots'
 
 // 카드 추가 칸 (글래스): 유리 카드와 같은 테두리 안에 점선 빈자리를 둔다
 export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
   const { animated, actions } = useEmptyCardViewModel(idx)
+  const { cards } = useUserContext()
   // 유리 카드와 같은 크기
   const { width, height } = useCardSize()
   const slotHeight = height - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER
@@ -32,9 +35,10 @@ export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
               pressed && styles.pressed,
             ]}
           >
-            {/* 슬라이더 제목도 카드 유리 판 안에 (유리 카드와 같은 자리) */}
+            {/* 판 제목과 칸 표시도 유리 카드와 같은 자리 */}
             <View style={styles.frameHeader}>
               <SectionLabel>내 기기</SectionLabel>
+              <CardSlotDots count={cards.length + 1} index={idx} />
             </View>
             <View
               style={[
@@ -74,7 +78,9 @@ const styles = StyleSheet.create({
   frameHeader: {
     height: CARD_FRAME_HEADER,
     paddingHorizontal: 10,
-    justifyContent: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   slot: {
     borderRadius: 23,

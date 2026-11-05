@@ -23,6 +23,7 @@ import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
 import { useUserContext } from '@/contexts'
 import { useCardSettingContext } from '@home/contexts'
+import { useThemeId } from '@/theme/themed'
 
 /**
  * 카드 슬라이더: 카드들 + 맨 끝 카드 추가 칸을 가로로 넘긴다.
@@ -30,6 +31,8 @@ import { useCardSettingContext } from '@home/contexts'
  */
 // 가로로 이만큼 움직여야 넘기기가 시작된다. 그 전에 손을 떼면 카드 터치로 처리된다
 const ACTIVE_OFFSET = 10
+// 글래스 홈은 세로로 스크롤된다. 가로보다 세로로 먼저 이만큼 움직이면 넘기기를 그만두고 스크롤에 넘긴다
+const SCROLL_FAIL_OFFSET = 14
 // 이보다 빠르게 밀면 거리가 짧아도 민 방향으로 한 칸 넘긴다
 const FLING_VELOCITY = 500
 // 처음/마지막 칸에서 더 밀면 손가락을 이 비율만큼만 따라간다
@@ -57,8 +60,8 @@ const sliderContext = createContext({} as SliderContextValue)
 
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const { cards } = useUserContext()
-  const { settingCard, detailCard, detailProgress, detailController } =
-    useCardSettingContext()
+  const { settingCard } = useCardSettingContext()
+  const scrollable = useThemeId() === 'glass-dashboard'
   // 마지막 칸은 카드 추가(EmptyCard)
   const lastIdx = cards?.length ?? 0
 
@@ -88,12 +91,10 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
 
   const goToIdx = useCallback(
     (idx: number) => {
-      // 다른 카드로 옮기면 열려 있던 상세는 접는다
-      if (detailCard !== -1 && detailCard !== idx) detailController.close()
       translateX.value = withTiming(-idx * interval, SNAP)
       setSelectedCard(idx)
     },
-    [detailCard, detailController, translateX, interval],
+    [translateX, interval],
   )
 
   // 테마를 바꿔 카드 폭이 달라지면 지금 칸 위치로 바로 맞춘다
@@ -108,54 +109,50 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
     if (selectedCardIdx > lastIdx) goToIdx(lastIdx)
   }, [selectedCardIdx, lastIdx, goToIdx])
 
-  const closeDetail = detailController.close
+  // 수정 화면에서는 넘기지 않는다
+  const panGesture = useMemo(() => {
+    const pan = Gesture.Pan()
+      .enabled(settingCard === -1)
+      .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
+    if (scrollable) pan.failOffsetY([-SCROLL_FAIL_OFFSET, SCROLL_FAIL_OFFSET])
+    return pan
+      .onStart(() => {
+        runOnJS(markSlideStart)()
+        cancelAnimation(translateX)
+        dragStartX.value = translateX.value
+      })
+      .onUpdate(e => {
+        const minX = -lastIdx * interval
+        const x = dragStartX.value + e.translationX
+        if (x > 0) translateX.value = x * EDGE_RESISTANCE
+        else if (x < minX)
+          translateX.value = minX + (x - minX) * EDGE_RESISTANCE
+        else translateX.value = x
+      })
+      .onEnd(e => {
+        const position = -translateX.value / interval
+        let target = Math.round(position)
+        // 빠르게 밀었으면 지금 위치에서 민 방향의 칸으로
+        if (e.velocityX < -FLING_VELOCITY) target = Math.ceil(position)
+        else if (e.velocityX > FLING_VELOCITY) target = Math.floor(position)
+        target = clamp(target, 0, lastIdx)
 
-  // 수정 화면에서는 넘기지 않는다. 상세가 열려 있으면 넘기기 시작할 때 접는다
-  const panGesture = useMemo(
-    () =>
-      Gesture.Pan()
-        .enabled(settingCard === -1)
-        .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
-        .onStart(() => {
-          runOnJS(markSlideStart)()
-          cancelAnimation(translateX)
-          dragStartX.value = translateX.value
-          if (detailProgress.value > 0) runOnJS(closeDetail)()
-        })
-        .onUpdate(e => {
-          const minX = -lastIdx * interval
-          const x = dragStartX.value + e.translationX
-          if (x > 0) translateX.value = x * EDGE_RESISTANCE
-          else if (x < minX)
-            translateX.value = minX + (x - minX) * EDGE_RESISTANCE
-          else translateX.value = x
-        })
-        .onEnd(e => {
-          const position = -translateX.value / interval
-          let target = Math.round(position)
-          // 빠르게 밀었으면 지금 위치에서 민 방향의 칸으로
-          if (e.velocityX < -FLING_VELOCITY) target = Math.ceil(position)
-          else if (e.velocityX > FLING_VELOCITY) target = Math.floor(position)
-          target = clamp(target, 0, lastIdx)
-
-          translateX.value = withTiming(-target * interval, SNAP)
-          runOnJS(setSelectedCard)(target)
-        })
-        .onFinalize(() => {
-          runOnJS(markSlideEnd)()
-        }),
-    [
-      settingCard,
-      lastIdx,
-      interval,
-      closeDetail,
-      detailProgress,
-      translateX,
-      dragStartX,
-      markSlideStart,
-      markSlideEnd,
-    ],
-  )
+        translateX.value = withTiming(-target * interval, SNAP)
+        runOnJS(setSelectedCard)(target)
+      })
+      .onFinalize(() => {
+        runOnJS(markSlideEnd)()
+      })
+  }, [
+    settingCard,
+    scrollable,
+    lastIdx,
+    interval,
+    translateX,
+    dragStartX,
+    markSlideStart,
+    markSlideEnd,
+  ])
 
   const moverStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],

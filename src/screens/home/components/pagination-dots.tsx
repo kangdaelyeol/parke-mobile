@@ -2,48 +2,16 @@ import { StyleSheet, View } from 'react-native'
 import { useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
 import { DARK_LIGHT, GRAY } from '@/theme/color'
-import { useThemed } from '@/theme/themed'
 
 interface DotProps {
   selected: boolean
   key: number
 }
 
-const dotStyles = StyleSheet.create({
-  classicDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: DARK_LIGHT,
-  },
-  classicSelected: {
-    backgroundColor: GRAY,
-  },
-  glassDot: {
-    width: 5,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: 'rgba(255,255,255,0.16)',
-  },
-  glassSelected: {
-    width: 14,
-    backgroundColor: 'rgba(255,255,255,0.75)',
-  },
-})
-
-// 테마별 점 모양. 기본 테마: 같은 크기 회색 점 / 글래스: 고른 칸만 길쭉한 밝은 점
-const DOTS = {
-  classic: { dot: dotStyles.classicDot, selected: dotStyles.classicSelected },
-  'glass-dashboard': {
-    dot: dotStyles.glassDot,
-    selected: dotStyles.glassSelected,
-  },
-}
-
-const Dot = ({ selected }: DotProps) => {
-  const dots = useThemed(DOTS)
-  return <View style={[dots.dot, selected && dots.selected]} />
-}
+// 기본 테마 카드 아래의 페이지 점 (글래스는 내 기기 판 머리줄의 칸 표시를 쓴다)
+const Dot = ({ selected }: DotProps) => (
+  <View style={[styles.dot, selected && styles.selected]} />
+)
 
 export const PaginationDots = () => {
   const { cards } = useUserContext()
@@ -64,6 +32,15 @@ export const PaginationDots = () => {
 }
 
 const styles = StyleSheet.create({
+  dot: {
+    width: 5,
+    height: 5,
+    borderRadius: 3,
+    backgroundColor: DARK_LIGHT,
+  },
+  selected: {
+    backgroundColor: GRAY,
+  },
   container: {
     position: 'absolute',
     bottom: -20,

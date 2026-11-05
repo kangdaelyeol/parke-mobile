@@ -1,6 +1,5 @@
 import {
   createContext,
-  useEffect,
   PropsWithChildren,
   useContext,
   useMemo,
@@ -16,9 +15,6 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { runOnJS } from 'react-native-worklets'
-import { useCardSize } from '@home/hooks'
-import { useTabBarLayout } from '@/hooks'
-import { useThemeId } from '@/theme/themed'
 
 /**
  * 카드 → 수정 화면 전환은 진행값 하나(settingProgress, 0~1)로 연출한다.
@@ -44,15 +40,6 @@ export const SETTING_RANGE = {
 const OPEN_DURATION_MS = 900
 const CLOSE_DURATION_MS = 600
 
-// 카드 상세(드롭다운): 카드 아래로 패널이 펼쳐지고, 화면 아래가 모자라면 카드가 그만큼 올라간다
-const DETAIL_OPEN_MS = 480
-const DETAIL_CLOSE_MS = 340
-const DETAIL_EASING = Easing.bezier(0.22, 1, 0.36, 1)
-// 카드와 패널 사이 간격, 패널과 탭바 사이 여백, 카드가 올라가도 남길 위 여백
-export const DETAIL_GAP = 6
-const DETAIL_BOTTOM_SPACE = 16
-const DETAIL_TOP_SPACE = 12
-
 // 진행값 자체는 일정한 속도로 흐르고, 감속/가속은 각 구간 안에서만 준다.
 // (전체에 곡선을 걸면 앞 구간이 몇 분의 1초로 압축된다)
 export const settingSegment = (
@@ -70,7 +57,7 @@ export const settingSegment = (
 
 interface CardSettingContext {
   sliderStyle: StyleProp<ViewStyle>
-  // 오늘의 현황, 페이지 점처럼 수정 모드에서 먼저 사라지는 요소
+  // 오늘의 현황, 페이지 점처럼 수정 모드에서 먼저 사라지는 요소 (글래스 홈은 본문 전체)
   homeContentStyle: StyleProp<ViewStyle>
   settingProgress: SharedValue<number>
   cardSettingController: {
@@ -82,19 +69,6 @@ interface CardSettingContext {
   // 여는 애니메이션이 끝났는지. 무거운 요소(웹뷰)는 이때 만든다
   settingOpened: boolean
   setSettingCard: React.Dispatch<React.SetStateAction<number>>
-  // 상세가 열린 카드 (닫는 애니메이션이 끝날 때까지 유지된다, 없으면 -1)
-  detailCard: number
-  // 0: 닫힘 ~ 1: 열림
-  detailProgress: SharedValue<number>
-  detailController: {
-    // panelHeight: 펼쳐질 패널 높이 (카드를 얼마나 올릴지 계산에 쓴다)
-    open: (idx: number, panelHeight: number) => void
-    close: (onClosed?: () => void) => void
-    // 애니메이션 없이 바로 닫기 (카드 삭제 등)
-    reset: () => void
-  }
-  // 카드 영역 높이 (Main의 onLayout)
-  setMainHeight: (height: number) => void
 }
 
 const cardSettingContext = createContext<CardSettingContext>(
@@ -105,73 +79,8 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const { width } = useWindowDimensions()
   const isSmall = width < 400
   const sliderMargin = isSmall ? 250 : 300
-  // 카드 영역 아래를 덮는 탭바 몫
-  const { space: footerSpace } = useTabBarLayout()
-  const { height: cardHeight } = useCardSize()
 
   const settingProgress = useSharedValue(0)
-  const detailProgress = useSharedValue(0)
-  const detailLift = useSharedValue(0)
-  const [detailCard, setDetailCard] = useState(-1)
-
-  // 테마를 바꾸면 열려 있던 카드 상세를 닫는다 (기본 테마 카드에는 상세가 없어 닫을 수 없다)
-  const themeId = useThemeId()
-  useEffect(() => {
-    detailProgress.value = 0
-    setDetailCard(-1)
-  }, [themeId, detailProgress])
-  const [mainHeight, setMainHeight] = useState(0)
-
-  // 슬라이더 제스처가 close를 잡아 두므로 매 렌더마다 새로 만들지 않는다
-  const detailController = useMemo(
-    () => ({
-      open: (idx: number, panelHeight: number) => {
-        // 카드 아래 남은 공간(탭바 위까지)에 패널이 다 들어가지 않으면 모자란 만큼 올린다
-        const overflow =
-          sliderMargin +
-          cardHeight +
-          DETAIL_GAP +
-          panelHeight +
-          footerSpace +
-          DETAIL_BOTTOM_SPACE -
-          mainHeight
-        detailLift.value = Math.max(
-          0,
-          Math.min(overflow, sliderMargin - DETAIL_TOP_SPACE),
-        )
-        setDetailCard(idx)
-        detailProgress.value = withTiming(1, {
-          duration: DETAIL_OPEN_MS,
-          easing: DETAIL_EASING,
-        })
-      },
-      close: (onClosed?: () => void) => {
-        const finish = () => {
-          setDetailCard(-1)
-          onClosed?.()
-        }
-        detailProgress.value = withTiming(
-          0,
-          { duration: DETAIL_CLOSE_MS, easing: DETAIL_EASING },
-          finished => {
-            if (finished) runOnJS(finish)()
-          },
-        )
-      },
-      reset: () => {
-        detailProgress.value = 0
-        setDetailCard(-1)
-      },
-    }),
-    [
-      sliderMargin,
-      mainHeight,
-      footerSpace,
-      cardHeight,
-      detailLift,
-      detailProgress,
-    ],
-  )
   const [settingCard, setSettingCard] = useState(-1)
   const [settingOpened, setSettingOpened] = useState(false)
 
@@ -209,29 +118,23 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
     () => ({ marginVertical: sliderMargin }),
     [sliderMargin],
   )
-  const sliderMotionStyle = useAnimatedStyle(() => {
-    const p = settingProgress.value
-    return {
-      // 상세가 열리면 패널이 들어갈 만큼 올라간다
-      transform: [{ translateY: -detailProgress.value * detailLift.value }],
-      // 카드는 움직이지 않고 제자리에서 사라진다
-      opacity: interpolate(
-        settingSegment(p, SETTING_RANGE.cardFade),
-        [0, 1],
-        [1, 0],
-      ),
-    }
-  })
+  // 카드는 움직이지 않고 제자리에서 사라진다
+  const sliderMotionStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(
+      settingSegment(settingProgress.value, SETTING_RANGE.cardFade),
+      [0, 1],
+      [1, 0],
+    ),
+  }))
   const sliderStyle = [sliderMarginStyle, sliderMotionStyle]
 
-  // 수정 화면이 열리거나 카드 상세가 열리면 사라진다
+  // 수정 화면이 열리면 사라진다
   const homeContentStyle = useAnimatedStyle(() => ({
-    opacity:
-      interpolate(
-        settingSegment(settingProgress.value, SETTING_RANGE.homeFade),
-        [0, 1],
-        [1, 0],
-      ) * interpolate(detailProgress.value, [0, 0.6], [1, 0], 'clamp'),
+    opacity: interpolate(
+      settingSegment(settingProgress.value, SETTING_RANGE.homeFade),
+      [0, 1],
+      [1, 0],
+    ),
   }))
 
   return (
@@ -244,10 +147,6 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         sliderStyle,
         homeContentStyle,
         settingProgress,
-        detailCard,
-        detailProgress,
-        detailController,
-        setMainHeight,
       }}
     >
       {children}

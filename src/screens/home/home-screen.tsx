@@ -2,13 +2,16 @@ import { StyleSheet, View } from 'react-native'
 import { SliderContextProvider } from '@home/contexts'
 import { Header, Main } from '@home/components'
 import { useHomeViewModel } from '@home/view-model'
+import { useThemeId } from '@/theme/themed'
 
 const HomeScreenContent = () => {
   const { state } = useHomeViewModel()
+  // 글래스는 상단 바가 본문 안에서 같이 스크롤된다
+  const isGlass = useThemeId() === 'glass-dashboard'
 
   return (
     <View style={styles.container}>
-      <Header />
+      {!isGlass && <Header />}
       {/* 로딩은 화면 전체가 아니라 카드 영역에서만 보여준다 */}
       <Main loading={state.loading} />
     </View>

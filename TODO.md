@@ -11,7 +11,7 @@
 - [ ] Android 재빌드 (`npm run android`)
   - [ ] 예전 패키지 앱 삭제: `adb uninstall com.parke`, `adb uninstall com.originals.parke`
 - [ ] 코드를 고쳤는데 화면에 반영되지 않으면 `npm start -- --reset-cache`
-- [ ] 출시 전 홈 헤더의 [임시] "주행 테스트" 버튼 제거 (`SHOW_DRIVE_TEST_BUTTON`, `header.tsx`)
+- [ ] 출시 전 홈 헤더의 [임시] "주행 테스트" 버튼 제거 (`SHOW_DRIVE_TEST_BUTTON`, 기본 테마 `header.tsx` · 글래스 `glass-top-bar.tsx`의 자동차 버튼)
 - [ ] 출시 전 설정 → 테마의 [개발용] "구성 요소 보기" 끄기 (`SHOW_THEME_GALLERY = false`, `src/constants.ts`)
 - [ ] 버전 관리: 기능 단위로 커밋할 때마다 `src/domain/app/changelog.ts` 맨 위에 항목을 더하고 버전을 올린다 (메이저 x.0.0 / 마이너 1.x.0 새 기능 / 패치 1.2.x 수정·다듬기). 커밋 메시지 끝에도 `(v1.3.0)`처럼 같은 버전을 적는다
 - [ ] 스토어 출시 때 네이티브 버전을 앱 버전에 맞추기: iOS `MARKETING_VERSION`(지금 1.0.7) · Android `versionName`(지금 1.0)을 `APP_VERSION`과 같게 (빌드 번호 `CURRENT_PROJECT_VERSION` · `versionCode`는 올리기만)

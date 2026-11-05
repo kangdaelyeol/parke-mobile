@@ -12,13 +12,7 @@ import { HomeMainViewModel } from '@home/types'
 
 export const useMainViewModel = (): HomeMainViewModel => {
   const { panGesture, moverStyle, selectedCardIdx } = useCardSliderContext()
-  const {
-    sliderStyle,
-    homeContentStyle,
-    settingCard,
-    detailCard,
-    setMainHeight,
-  } = useCardSettingContext()
+  const { sliderStyle, homeContentStyle, settingCard } = useCardSettingContext()
   const { cards } = useUserContext()
   const titleOpacity = useSharedValue(0)
 
@@ -46,7 +40,6 @@ export const useMainViewModel = (): HomeMainViewModel => {
       selectedCardIdx,
       cardLength,
       isSetting,
-      isDetail: detailCard !== -1,
       cards,
     },
     animated: {
@@ -55,6 +48,6 @@ export const useMainViewModel = (): HomeMainViewModel => {
       moverStyle,
       cardTitleStyle,
     },
-    actions: { panGesture, mainLayout: setMainHeight },
+    actions: { panGesture },
   }
 }

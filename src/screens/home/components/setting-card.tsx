@@ -28,6 +28,7 @@ import {
 } from '@/components'
 import { glassStyles, glassText } from '@/theme/glass'
 import { useTabBarLayout } from '@/hooks'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useThemeId } from '@/theme/themed'
 import { DARK } from '@/theme/color'
 import { formatPhone } from '@/utils'
@@ -60,6 +61,8 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
   // 탭바와 같은 자리·크기의 바. 탭바가 내려가는 동안 그 자리로 올라온다
   const isGlass = useThemeId() === 'glass-dashboard'
   const { height: barHeight, bottom: barBottom } = useTabBarLayout()
+  // 글래스 홈은 머리 없이 화면 전체를 덮으므로 상태 표시줄만큼 내려서 시작한다
+  const { top } = useSafeAreaInsets()
   const barHiddenY = barHeight + barBottom + 30
   const buttonBarStyle = useAnimatedStyle(() => ({
     transform: [
@@ -100,7 +103,10 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
     <>
       <Animated.View style={[styles.container, backdropStyle]}>
         <KeyboardAwareScrollView
-          contentContainerStyle={styles.wrapper}
+          contentContainerStyle={[
+            styles.wrapper,
+            isGlass && { paddingTop: top + 8 },
+          ]}
           extraScrollHeight={15}
           enableOnAndroid
         >

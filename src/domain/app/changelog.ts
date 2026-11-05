@@ -24,6 +24,26 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.4.0',
+    date: '2026-11-05',
+    bump: 'minor',
+    title: '글래스 홈 대시보드 배치',
+    changes: [
+      {
+        type: 'improve',
+        text: '글래스 대시보드 홈을 판을 위에서 아래로 쌓는 대시보드 배치로 바꿨어요. 상단 바, 오늘의 현황, 내 기기, 카드 정보 순서이고 아래로 스크롤해요.',
+      },
+      {
+        type: 'improve',
+        text: '카드를 눌러 펼치던 상세가 카드 아래 카드 정보 판에 늘 펼쳐져 있어요. 카드를 넘기면 정보도 바로 바뀌어요.',
+      },
+      {
+        type: 'improve',
+        text: '오늘의 현황을 카드 네 장(BLE 감지 · 번호 변경 · 배터리 · 마지막 감지)으로 나눴어요. 마지막 감지는 오래되면 시간·일 단위로 보여줘요.',
+      },
+    ],
+  },
+  {
     version: '1.3.0',
     date: '2026-11-05',
     bump: 'minor',
