@@ -132,16 +132,14 @@ interface CardDetailActions {
   recordsPress: () => void
   editPress: () => void
   deletePress: () => void
-  // 펼쳐질 패널 높이 / 탭 영역 너비 측정
+  // 펼쳐질 패널 높이 측정
   panelLayout: (height: number) => void
-  segmentLayout: (width: number) => void
 }
 
 interface CardDetailAnimated {
   cardStyle: StyleProp<ViewStyle>
   scanOnDotStyle: StyleProp<ViewStyle>
   panelStyle: StyleProp<ViewStyle>
-  indicatorStyle: StyleProp<ViewStyle>
   // 이 카드의 상세 진행값 (항목이 차례로 나타나는 데 쓴다)
   progress: SharedValue<number>
 }
@@ -186,7 +184,9 @@ export interface HomeEmptyCardProps {
 export interface HomeFooterIconProps {
   iconSize: number
   label: string
-  iconName: 'user' | 'qrcode' | 'gear'
+  iconName: 'house' | 'user' | 'qrcode' | 'gear'
+  // 지금 보고 있는 탭
+  active: boolean
   onPress: () => void
 }
 
@@ -197,6 +197,8 @@ export interface HomeSettingCardProps {
 export interface IllustrationSizeProps {
   width?: number
   height?: number
+  // 선 색 (기본 흰색)
+  color?: string
 }
 
 export interface HomeMainProps {

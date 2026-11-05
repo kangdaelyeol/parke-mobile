@@ -19,7 +19,8 @@ import { PARKE_WEB_URL } from '@/constants'
 export const useCardViewModel = (idx: number): HomeCardViewModel => {
   const navigation = useNavigation<HomeStackNavigationProp>()
   const { settingCard, cardSettingController } = useCardSettingContext()
-  const { selectedCardIdx, sliderController } = useCardSliderContext()
+  const { selectedCardIdx, sliderController, isSliding } =
+    useCardSliderContext()
   const { user, cards, actions: userContextActions } = useUserContext()
   const [loading, setLoading] = useState(false)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
@@ -70,7 +71,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
       navigation.navigate('Drive', { cardId: card.id })
     },
     cardPress: () => {
-      if (settingCard !== -1) return
+      if (settingCard !== -1 || isSliding()) return
 
       if (!isSelected) sliderController.goToIdx(idx)
     },

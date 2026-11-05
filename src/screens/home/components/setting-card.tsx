@@ -13,7 +13,6 @@ import {
   useCardSettingContext,
   useSettingStaggerStyle,
 } from '@home/contexts'
-import { FOOTER_HEIGHT, FOOTER_HEIGHT_SMALL } from '@home/constants'
 import {
   AccentPicker,
   CardWebPreview,
@@ -22,7 +21,8 @@ import {
   ThemeSelector,
 } from '@home/components'
 import { EmailDomainInput, FocusableInput, PressableButton } from '@/components'
-import { DARK } from '@/theme/color'
+import { glassStyles } from '@/theme/glass'
+import { useTabBarLayout } from '@/hooks'
 import { formatPhone } from '@/utils'
 
 // 수정 화면 요소를 순서대로 나타나게 하는 래퍼 (index가 클수록 늦게, 0번: 미리보기)
@@ -50,14 +50,16 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
     ),
   }))
 
-  // 탭 푸터가 내려가는 동안 그 자리로 올라온다
+  // 탭바와 같은 자리·크기의 유리 바. 탭바가 내려가는 동안 그 자리로 올라온다
+  const { height: barHeight, bottom: barBottom } = useTabBarLayout()
+  const barHiddenY = barHeight + barBottom + 30
   const buttonBarStyle = useAnimatedStyle(() => ({
     transform: [
       {
         translateY: interpolate(
           settingSegment(settingProgress.value, SETTING_RANGE.footer),
           [0, 1],
-          [100, 0],
+          [barHiddenY, 0],
         ),
       },
     ],
@@ -156,23 +158,29 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
         </KeyboardAwareScrollView>
       </Animated.View>
       <Animated.View
-        style={[
-          styles.btnContainer,
-          isSmall && styles.btnContainerSmall,
-          buttonBarStyle,
-        ]}
+        pointerEvents="box-none"
+        style={[styles.btnContainer, { bottom: barBottom }, buttonBarStyle]}
       >
-        <View style={styles.btnWrapper}>
+        <View
+          style={[
+            glassStyles.surface,
+            styles.btnBar,
+            isSmall && styles.btnBarSmall,
+            { height: barHeight, borderRadius: barHeight / 2 },
+          ]}
+        >
           <PressableButton
             variant="secondary"
             title="취소"
             onPress={actions.cancelPress}
             pressableStyle={styles.pressable}
+            style={[styles.barButton, { minHeight: barHeight - 12 }]}
           />
           <PressableButton
             title="저장"
             onPress={actions.savePress}
             pressableStyle={styles.pressable}
+            style={[styles.barButton, { minHeight: barHeight - 12 }]}
           />
         </View>
       </Animated.View>
@@ -212,29 +220,28 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     fontWeight: 'bold',
   },
-  // 탭 푸터와 같은 자리·높이에 놓여 수정 중에는 푸터를 대신한다
+  // 탭바와 같은 자리에 떠 있는 유리 바. 수정 중에는 탭바를 대신한다
   btnContainer: {
     position: 'absolute',
-    backgroundColor: DARK,
-    bottom: 0,
     left: 0,
     right: 0,
-    height: FOOTER_HEIGHT,
-    paddingTop: 10,
-    borderTopColor: '#2d2d2d',
-    borderTopWidth: 1,
+    paddingHorizontal: 20,
+    alignItems: 'center',
   },
-  btnContainerSmall: {
-    height: FOOTER_HEIGHT_SMALL,
-    paddingTop: 5,
-  },
-  btnWrapper: {
-    flexDirection: 'row',
-    gap: 15,
+  btnBar: {
     width: '100%',
-    marginHorizontal: 'auto',
     maxWidth: 360,
-    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    padding: 5,
+    backgroundColor: 'rgba(24,24,26,0.86)',
+  },
+  btnBarSmall: {
+    maxWidth: 330,
+  },
+  barButton: {
+    borderRadius: 999,
   },
   btn: {
     paddingVertical: 20,

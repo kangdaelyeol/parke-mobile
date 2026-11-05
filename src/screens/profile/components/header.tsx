@@ -1,54 +1,30 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { useHeaderViewModel } from '@profile/view-model'
+import { StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { PRETENDARD } from '@/theme/fonts'
+import { TEXT } from '@/theme/glass'
 
+// 탭 화면이라 뒤로 가기 없이 제목만 둔다 (아래 탭바로 이동)
 export const Header = () => {
-  const { actions } = useHeaderViewModel()
+  const { top } = useSafeAreaInsets()
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Pressable style={styles.backBtn} onPress={actions.backPress}>
-          {({ pressed }) => (
-            <FontAwesome6
-              name="angle-left"
-              iconStyle="solid"
-              size={20}
-              style={[styles.btn, pressed && styles.btnPressed]}
-            />
-          )}
-        </Pressable>
-        <Text style={styles.title}>프로필</Text>
-      </View>
+    <View style={[styles.wrapper, { paddingTop: top + 14 }]}>
+      <Text style={styles.title}>프로필</Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {},
-  title: {
-    color: '#eeeeee',
-    fontSize: 20,
-    marginTop: 60,
-    fontFamily: PRETENDARD.BOLD,
-    textAlign: 'center',
-  },
-  backBtn: {
-    position: 'absolute',
-    top: 62,
-    left: 0,
-    zIndex: 3,
-  },
   wrapper: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: 380,
     marginHorizontal: 'auto',
-    paddingBottom: 15,
+    paddingHorizontal: 18,
+    paddingBottom: 14,
   },
-  btn: {
-    color: '#ebebeb',
-  },
-  btnPressed: {
-    color: '#666',
+  title: {
+    color: TEXT.primary,
+    fontSize: 26,
+    fontFamily: PRETENDARD.BOLD,
+    letterSpacing: -0.4,
   },
 })

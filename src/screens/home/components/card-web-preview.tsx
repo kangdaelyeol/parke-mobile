@@ -3,7 +3,8 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { RefWebView } from '@/components'
 import { PARKE_WEB_URL } from '@/constants'
 import { HomeCardWebPreviewProps } from '@home/types'
-import { DARK, DARK_LIGHT, GRAY } from '@/theme/color'
+import { GRAY } from '@/theme/color'
+import { GLASS, glassText, TEXT } from '@/theme/glass'
 import { PRETENDARD } from '@/theme/fonts'
 
 // 입력이 멈춘 뒤 이 시간이 지나면 새 값으로 다시 불러온다
@@ -97,33 +98,35 @@ export const CardWebPreview = ({
   )
 }
 
+// 미리보기를 불러오기 전 바탕 (카드 수정 화면의 검은 배경보다 살짝 밝게)
+const PREVIEW_BG = '#0b0b0d'
+
 const styles = StyleSheet.create({
   container: {
     gap: 10,
   },
   title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
+    ...glassText.label,
     marginTop: 15,
   },
   frame: {
     height: PREVIEW_HEIGHT,
-    borderRadius: 16,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: DARK_LIGHT,
+    borderColor: GLASS.border,
+    borderTopColor: GLASS.highlight,
     overflow: 'hidden',
-    backgroundColor: DARK,
+    backgroundColor: PREVIEW_BG,
   },
   webView: {
     flex: 1,
-    backgroundColor: DARK,
+    backgroundColor: PREVIEW_BG,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: DARK,
+    backgroundColor: PREVIEW_BG,
   },
   reloading: {
     position: 'absolute',
@@ -131,7 +134,7 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 6,
     borderRadius: 12,
-    backgroundColor: DARK,
+    backgroundColor: PREVIEW_BG,
   },
   failedText: {
     color: GRAY,
@@ -139,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   caption: {
-    color: GRAY,
+    color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },

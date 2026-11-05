@@ -1,4 +1,4 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import {
@@ -19,8 +19,7 @@ import {
 } from '@home/components'
 import { useMainViewModel } from '@home/view-model'
 import { HomeMainProps } from '@home/types'
-import { DM_SANS } from '@/theme/fonts'
-import { GRAY } from '@/theme/color'
+import { SectionLabel } from '@/components'
 
 export const Main = ({ loading }: HomeMainProps) => {
   const { state, actions, animated } = useMainViewModel()
@@ -53,16 +52,11 @@ export const Main = ({ loading }: HomeMainProps) => {
                 style={[styles.cardContainer, animated.sliderStyle]}
               >
                 <Animated.View style={animated.cardTitleStyle}>
-                  <View style={[styles.title, isSmall && styles.titleSmall]}>
-                    <Text
-                      style={[
-                        styles.titleText,
-                        isSmall && styles.titleTextSmall,
-                      ]}
-                    >
-                      내 기기
-                    </Text>
-                  </View>
+                  <SectionLabel
+                    style={[styles.title, isSmall && styles.titleSmall]}
+                  >
+                    내 기기
+                  </SectionLabel>
                 </Animated.View>
                 <View style={styles.cardSlider}>
                   <Animated.View
@@ -141,19 +135,10 @@ const styles = StyleSheet.create({
   },
   title: {
     position: 'absolute',
-    top: -40,
-    left: -10,
+    top: -30,
+    left: 4,
   },
   titleSmall: {
-    top: -25,
-    left: -5,
-  },
-  titleText: {
-    color: GRAY,
-    fontSize: 15,
-    fontFamily: DM_SANS.BOLD,
-  },
-  titleTextSmall: {
-    fontSize: 13,
+    top: -24,
   },
 })

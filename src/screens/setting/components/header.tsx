@@ -1,55 +1,57 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
+import { StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useHeaderViewModel } from '@setting/view-model'
+import { GlassIconButton } from '@/components'
 import { PRETENDARD } from '@/theme/fonts'
-import { GRAY } from '@/theme/color'
+import { TEXT } from '@/theme/glass'
 
-export const Header = ({ title = '설정' }: { title?: string }) => {
+// back: 뒤로 가기 버튼 (설정 탭 자체는 아래 탭바로 이동하므로 없음)
+export const Header = ({
+  title = '설정',
+  back = false,
+}: {
+  title?: string
+  back?: boolean
+}) => {
   const { actions } = useHeaderViewModel()
+  const { top } = useSafeAreaInsets()
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapper}>
-        <Pressable style={styles.backBtn} onPress={actions.backPress}>
-          {({ pressed }) => (
-            <FontAwesome6
-              name="angle-left"
-              iconStyle="solid"
-              size={20}
-              style={[styles.btn, pressed && styles.btnPressed]}
-            />
-          )}
-        </Pressable>
-        <Text style={styles.title}>{title}</Text>
-      </View>
+    <View style={[styles.wrapper, { paddingTop: top + 14 }]}>
+      {back && (
+        <GlassIconButton
+          round
+          size={36}
+          icon="chevron-left"
+          onPress={actions.backPress}
+        />
+      )}
+      <Text style={[styles.title, back && styles.titleSub]} numberOfLines={1}>
+        {title}
+      </Text>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {},
   wrapper: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: 400,
     marginHorizontal: 'auto',
-    paddingBottom: 15,
+    paddingHorizontal: 18,
+    paddingBottom: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   title: {
-    color: '#eeeeee',
-    fontSize: 20,
-    marginTop: 60,
+    flexShrink: 1,
+    color: TEXT.primary,
+    fontSize: 26,
     fontFamily: PRETENDARD.BOLD,
-    textAlign: 'center',
+    letterSpacing: -0.4,
   },
-  backBtn: {
-    position: 'absolute',
-    top: 62,
-    left: 0,
-    zIndex: 3,
-  },
-  btn: {
-    color: '#ebebeb',
-  },
-  btnPressed: {
-    color: GRAY,
+  // 하위 화면은 뒤로 가기 옆에 조금 작게
+  titleSub: {
+    fontSize: 20,
   },
 })

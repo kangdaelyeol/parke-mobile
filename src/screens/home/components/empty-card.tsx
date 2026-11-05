@@ -1,73 +1,97 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import { CARD_FRAME_PADDING, CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useEmptyCardViewModel } from '@home/view-model'
 import { HomeEmptyCardProps } from '@home/types'
-import { GRAY } from '@/theme/color'
+import { PRETENDARD } from '@/theme/fonts'
+import { GLASS, glassStyles, TEXT } from '@/theme/glass'
 
+// 슬라이더 맨 끝의 카드 추가 칸. 유리 카드와 같은 테두리 안에 점선 빈자리를 둔다
 export const EmptyCard = ({ idx }: HomeEmptyCardProps) => {
   const { animated, actions } = useEmptyCardViewModel(idx)
 
   return (
-    <Animated.View style={[styles.container, animated.cardStyle]}>
-      <View style={styles.iconContainer}>
-        <View style={styles.emptyCardIcon}>
-          <FontAwesome6
-            name="plus"
-            iconStyle="solid"
-            size={30}
-            color={'#282b39'}
-          />
-        </View>
-      </View>
-      <Pressable onPress={actions.cardPress}>
-        {({ pressed }) => {
-          pressed && ReactNativeHapticFeedback.trigger('selection')
-          return (
-            <View style={[styles.emptyCard, pressed && styles.cardPressed]} />
-          )
-        }}
+    <Animated.View style={animated.cardStyle}>
+      <Pressable
+        onPressIn={() => ReactNativeHapticFeedback.trigger('selection')}
+        onPress={actions.cardPress}
+      >
+        {({ pressed }) => (
+          <View
+            style={[
+              glassStyles.surface,
+              styles.frame,
+              pressed && styles.pressed,
+            ]}
+          >
+            <View style={[styles.slot, pressed && styles.slotPressed]}>
+              <View style={[styles.plus, pressed && styles.plusPressed]}>
+                <FontAwesome6
+                  name="plus"
+                  iconStyle="solid"
+                  size={20}
+                  color={TEXT.primary}
+                />
+              </View>
+              <Text style={styles.title}>카드 추가</Text>
+              <Text style={styles.description}>기기를 찾아 등록해요</Text>
+            </View>
+          </View>
+        )}
       </Pressable>
     </Animated.View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    position: 'relative',
+  frame: {
+    width: CARD_WIDTH,
     marginHorizontal: 'auto',
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
+    padding: CARD_FRAME_PADDING,
+    borderRadius: 28,
   },
-  emptyCard: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
-    borderRadius: 20,
-    backgroundColor: GRAY,
-    opacity: 0.15,
-    borderWidth: 1,
-    borderColor: 'white',
+  pressed: {
+    backgroundColor: GLASS.fillActive,
+    borderColor: GLASS.borderActive,
+  },
+  slot: {
+    height: CARD_HEIGHT - (CARD_FRAME_PADDING + 1) * 2,
+    borderRadius: 23,
+    borderWidth: 1.5,
     borderStyle: 'dashed',
-  },
-  iconContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
-    justifyContent: 'center',
+    borderColor: 'rgba(255,255,255,0.14)',
     alignItems: 'center',
-  },
-  emptyCardIcon: {
-    width: 30,
-    height: 30,
-    opacity: 0.9,
     justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: '50%',
-    margin: 'auto',
   },
-  cardPressed: { opacity: 0.4 },
+  slotPressed: {
+    borderColor: 'rgba(255,255,255,0.28)',
+  },
+  plus: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: GLASS.border,
+    borderTopColor: GLASS.highlight,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plusPressed: {
+    backgroundColor: 'rgba(255,255,255,0.18)',
+  },
+  title: {
+    color: TEXT.strong,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 15,
+  },
+  description: {
+    marginTop: 4,
+    color: TEXT.tertiary,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 12,
+  },
 })

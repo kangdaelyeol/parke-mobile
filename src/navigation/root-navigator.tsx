@@ -1,11 +1,8 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import {
-  HomeScreen,
   OnBoardingScreen,
   InitScreen,
   LoginScreen,
-  ProfileScreen,
-  SettingScreen,
   ConsentSettingScreen,
   SearchBleScreen,
   ScanCompleteScreen,
@@ -16,6 +13,7 @@ import {
   LegalDocScreen,
 } from '@/screens'
 import { RootStackParamList } from '@/navigation/types'
+import MainTabNavigator from '@/navigation/main-tab-navigator'
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -28,10 +26,9 @@ export default function RootNavigator() {
       <Stack.Screen name="Permission" component={PermissionScreen} />
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Init" component={InitScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Setting" component={SettingScreen} />
       <Stack.Screen name="ConsentSetting" component={ConsentSettingScreen} />
-      <Stack.Screen name="Home" component={HomeScreen} />
+      {/* 홈 · My · 설정 탭 */}
+      <Stack.Screen name="Home" component={MainTabNavigator} />
       <Stack.Screen name="SearchBLE" component={SearchBleScreen} />
       <Stack.Screen name="ScanComplete" component={ScanCompleteScreen} />
       <Stack.Screen name="Drive" component={DriveScreen} />

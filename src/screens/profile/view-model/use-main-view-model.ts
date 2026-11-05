@@ -11,6 +11,7 @@ import {
 } from '@/services'
 import { extractNumber, isEmail } from '@/utils'
 import { ProfileMainViewModel } from '@profile/types'
+import { resetRoot } from '@/navigation/actions'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
   const {
@@ -44,7 +45,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
         const res = await validateUser()
         if (!res.status) {
           Alert.alert(res.message)
-          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          navigation.dispatch(resetRoot('Login'))
         }
       })()
     }, [validateUser, navigation]),
@@ -88,7 +89,8 @@ export const useMainViewModel = (): ProfileMainViewModel => {
         }
         userContextActions.setUserEmail(nextEmail)
       }
-      navigation.goBack()
+      // 저장하면 예전처럼 홈으로 돌아간다 (이제는 홈 탭)
+      navigation.navigate('HomeTab')
     },
 
     logoutPress: async () => {

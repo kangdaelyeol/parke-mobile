@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { CARD_THEMES, CardTheme } from '@/domain/card'
 import { HomeThemeSelectorProps } from '@home/types'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { GLASS, glassText, TEXT } from '@/theme/glass'
 
 const THEME_LABEL: Record<CardTheme, string> = {
   dark: 'Dark',
@@ -50,11 +50,7 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
   },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
+  title: glassText.label,
   list: {
     flexDirection: 'row',
     gap: 8,
@@ -64,30 +60,34 @@ const styles = StyleSheet.create({
   },
   chip: {
     height: 55,
-    borderRadius: 16,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
+    borderColor: GLASS.border,
+    borderTopColor: GLASS.highlight,
+    backgroundColor: GLASS.fill,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
   },
+  // 고른 칸: 밝은 유리 + 뚜렷한 테두리
   chipSelected: {
-    borderColor: WHITE,
+    backgroundColor: GLASS.activeFill,
+    borderColor: 'rgba(255,255,255,0.55)',
+    borderTopColor: 'rgba(255,255,255,0.7)',
   },
   dot: {
     width: 14,
     height: 14,
     borderRadius: 7,
     borderWidth: 1,
-    borderColor: GRAY,
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   label: {
-    color: GRAY,
+    color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },
   labelSelected: {
-    color: WHITE,
+    color: TEXT.primary,
   },
 })

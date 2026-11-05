@@ -1,7 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { useCardSliderContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
-import { DARK_LIGHT, GRAY } from '@/theme/color'
 
 interface DotProps {
   selected: boolean
@@ -45,10 +44,12 @@ const styles = StyleSheet.create({
   dot: {
     width: 5,
     height: 5,
-    borderRadius: '50%',
-    backgroundColor: DARK_LIGHT,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.16)',
   },
+  // 고른 칸은 길쭉한 밝은 점
   dotSelected: {
-    backgroundColor: GRAY,
+    width: 14,
+    backgroundColor: 'rgba(255,255,255,0.75)',
   },
 })

@@ -11,7 +11,8 @@ import { HomeEmptyCardViewModel } from '@home/types'
 
 export const useEmptyCardViewModel = (idx: number): HomeEmptyCardViewModel => {
   const navigation = useNavigation<HomeStackNavigationProp>()
-  const { selectedCardIdx, sliderController } = useCardSliderContext()
+  const { selectedCardIdx, sliderController, isSliding } =
+    useCardSliderContext()
   const { settingCard } = useCardSettingContext()
   const isSelected = idx === selectedCardIdx
 
@@ -31,7 +32,8 @@ export const useEmptyCardViewModel = (idx: number): HomeEmptyCardViewModel => {
   })
 
   const cardPress = () => {
-    if (settingCard !== -1) return
+    // 넘기는 중(또는 막 넘긴 직후)의 누름은 무시한다
+    if (settingCard !== -1 || isSliding()) return
     if (selectedCardIdx === idx) navigation.navigate('SearchBLE')
     else {
       sliderController.goToIdx(idx)

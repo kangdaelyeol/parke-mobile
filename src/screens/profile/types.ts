@@ -20,10 +20,4 @@ interface MainState {
   reportEmail: string
 }
 
-interface HeaderActions {
-  backPress: () => void
-}
-
-export type ProfileHeaderViewModel = ViewModel<{}, HeaderActions>
-
 export type ProfileMainViewModel = ViewModel<MainState, MainActions>

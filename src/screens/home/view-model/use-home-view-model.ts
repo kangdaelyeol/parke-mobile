@@ -3,6 +3,7 @@ import { Alert, AppState } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { HomeStackNavigationProp } from '@/navigation/types'
+import { resetRoot } from '@/navigation/actions'
 
 export const useHomeViewModel = () => {
   const { user, syncCardList } = useUserContext()
@@ -18,7 +19,7 @@ export const useHomeViewModel = () => {
         const syncRes = await syncCardList()
         if (!syncRes.status) {
           Alert.alert(syncRes.message)
-          return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          return navigation.dispatch(resetRoot('Login'))
         }
         setLoading(false)
       })()
@@ -47,7 +48,7 @@ export const useHomeViewModel = () => {
           const res = await syncCardList()
           if (!res.status) {
             Alert.alert(res.message)
-            return navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+            return navigation.dispatch(resetRoot('Login'))
           }
           setLoading(false)
         }

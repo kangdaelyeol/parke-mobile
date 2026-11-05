@@ -11,6 +11,7 @@ import { SettingMainViewModel } from '@setting/types'
 import { useUserContext } from '@/contexts'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { SettingStackNavigationProp } from '@/navigation/types'
+import { resetRoot } from '@/navigation/actions'
 
 export const useMainViewModel = (): SettingMainViewModel => {
   const { user, validateUser } = useUserContext()
@@ -36,7 +37,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
         const res = await validateUser()
         if (!res.status) {
           Alert.alert(res.message)
-          navigation.reset({ index: 0, routes: [{ name: 'Login' }] })
+          navigation.dispatch(resetRoot('Login'))
         }
       })()
     }, [validateUser, navigation]),
@@ -83,7 +84,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
     consentSettingPress: () => navigation.navigate('ConsentSetting'),
     onBoardingPress: () => {
       cacheService.setHasSeenOnBoarding(false)
-      navigation.reset({ index: 0, routes: [{ name: 'OnBoarding' }] })
+      navigation.dispatch(resetRoot('OnBoarding'))
     },
   }
 

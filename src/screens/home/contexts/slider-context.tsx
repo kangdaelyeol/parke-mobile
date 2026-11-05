@@ -5,6 +5,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react'
 import { StyleProp, ViewStyle } from 'react-native'
@@ -44,7 +45,13 @@ interface SliderContextValue {
   moverStyle: StyleProp<ViewStyle>
   sliderController: SliderController
   selectedCardIdx: number
+  // 넘기는 중이거나 막 넘긴 직후인지. 카드 안의 버튼은 이때 누름을 무시한다
+  // (손을 뗄 때 넘기기와 카드 누름이 함께 일어나는 것을 막는다)
+  isSliding: () => boolean
 }
+
+// 넘기기가 끝난 뒤에도 이 시간 동안은 누름을 무시한다
+const PRESS_BLOCK_MS = 250
 
 const sliderContext = createContext({} as SliderContextValue)
 
@@ -58,6 +65,23 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const [selectedCardIdx, setSelectedCard] = useState(0)
   const translateX = useSharedValue(0)
   const dragStartX = useSharedValue(0)
+
+  const slidingRef = useRef(false)
+  const slideEndAtRef = useRef(0)
+  const markSlideStart = useCallback(() => {
+    slidingRef.current = true
+  }, [])
+  // 실제로 넘기기가 시작된 경우에만 끝난 시각을 남긴다 (그냥 탭은 막지 않는다)
+  const markSlideEnd = useCallback(() => {
+    if (!slidingRef.current) return
+    slidingRef.current = false
+    slideEndAtRef.current = Date.now()
+  }, [])
+  const isSliding = useCallback(
+    () =>
+      slidingRef.current || Date.now() - slideEndAtRef.current < PRESS_BLOCK_MS,
+    [],
+  )
 
   const goToIdx = useCallback(
     (idx: number) => {
@@ -83,6 +107,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
         .enabled(settingCard === -1)
         .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
         .onStart(() => {
+          runOnJS(markSlideStart)()
           cancelAnimation(translateX)
           dragStartX.value = translateX.value
           if (detailProgress.value > 0) runOnJS(closeDetail)()
@@ -105,8 +130,20 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
 
           translateX.value = withTiming(-target * SLIDER_INTERVAL, SNAP)
           runOnJS(setSelectedCard)(target)
+        })
+        .onFinalize(() => {
+          runOnJS(markSlideEnd)()
         }),
-    [settingCard, lastIdx, closeDetail, detailProgress, translateX, dragStartX],
+    [
+      settingCard,
+      lastIdx,
+      closeDetail,
+      detailProgress,
+      translateX,
+      dragStartX,
+      markSlideStart,
+      markSlideEnd,
+    ],
   )
 
   const moverStyle = useAnimatedStyle(() => ({
@@ -119,6 +156,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
     <sliderContext.Provider
       value={{
         selectedCardIdx,
+        isSliding,
         panGesture,
         moverStyle,
         sliderController,

@@ -4,7 +4,7 @@ import { ConsentMain, Header } from '@setting/components'
 export default function ConsentSettingScreen() {
   return (
     <View style={styles.container}>
-      <Header title="선택 동의 관리" />
+      <Header title="선택 동의 관리" back />
       <ConsentMain />
     </View>
   )

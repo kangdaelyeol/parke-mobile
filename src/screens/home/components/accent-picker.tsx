@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { isCardAccent } from '@/domain/card'
 import { HomeAccentPickerProps } from '@home/types'
-import { DM_MONO, PRETENDARD } from '@/theme/fonts'
-import { DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
-import { glassStyles } from '@/theme/glass'
+import { DM_MONO } from '@/theme/fonts'
+import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { GLASS, glassStyles, glassText, TEXT } from '@/theme/glass'
 
 const ACCENT_PRESETS = [
   '#383bf9',
@@ -73,13 +73,9 @@ const styles = StyleSheet.create({
   container: {
     gap: 10,
   },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
+  title: glassText.label,
   titleFocused: {
-    color: WHITE,
+    color: TEXT.primary,
   },
   presetList: {
     flexDirection: 'row',
@@ -90,10 +86,10 @@ const styles = StyleSheet.create({
     height: 32,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: DARK_LIGHT,
+    borderColor: GLASS.border,
   },
   presetSelected: {
-    borderColor: WHITE,
+    borderColor: TEXT.primary,
   },
   input: {
     paddingLeft: 40,

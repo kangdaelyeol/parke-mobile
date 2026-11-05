@@ -28,8 +28,9 @@ export const Toggle = ({ scan }: ToggleProps) => {
       })
   }, [scan, dotLeft])
 
+  // 위치만 움직인다 (left를 바꾸면 매 프레임 레이아웃을 다시 계산한다)
   const dotStyle = useAnimatedStyle(() => ({
-    left: dotLeft.value * 31 + 2,
+    transform: [{ translateX: dotLeft.value * 31 }],
   }))
 
   return (

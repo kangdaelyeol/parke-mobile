@@ -1,60 +1,100 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native'
+import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native'
+import Animated, {
+  interpolateColor,
+  useAnimatedStyle,
+} from 'react-native-reanimated'
 import { HomeFooterIconProps } from '@home/types'
-import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants'
+import { useSelectionProgress } from '@/components'
 import { DM_SANS } from '@/theme/fonts'
+import { GLASS, glassStyles, TEXT, TONE } from '@/theme/glass'
 import {
+  HomeIllustration,
   MyIllustration,
   QrIllustration,
   SettingIllustration,
 } from './illustrations'
 
 interface IconProps {
-  iconName: 'user' | 'qrcode' | 'gear'
+  iconName: HomeFooterIconProps['iconName']
   iconSize: number
+  color: string
 }
 
-const Icon = ({ iconName, iconSize }: IconProps) => {
+const Icon = ({ iconName, iconSize, color }: IconProps) => {
   switch (iconName) {
+    case 'house':
+      return (
+        <HomeIllustration width={iconSize} height={iconSize} color={color} />
+      )
     case 'user':
-      return <MyIllustration width={iconSize} height={iconSize} />
+      return <MyIllustration width={iconSize} height={iconSize} color={color} />
     case 'qrcode':
-      return <QrIllustration width={iconSize} height={iconSize} />
+      return <QrIllustration width={iconSize} height={iconSize} color={color} />
     case 'gear':
-      return <SettingIllustration width={iconSize} height={iconSize} />
+      return (
+        <SettingIllustration width={iconSize} height={iconSize} color={color} />
+      )
   }
 }
 
+// 흐린 아이콘의 밝기
+const IDLE_ICON_OPACITY = 0.5
+
+// 탭바 한 칸 (영상 사이드바 메뉴).
+// 보고 있는 탭: 밝은 유리 알약 + 강조색 아이콘이 150ms 동안 교차해 나타난다. 나머지는 흐리게.
+// 누르는 동안 칸 전체에 옅은 알약이 깔린다
 export const FooterIcon = ({
   label,
   iconName,
+  active,
   onPress,
   iconSize,
 }: HomeFooterIconProps) => {
   const { width } = useWindowDimensions()
   const isSmall = width < 400
+  const selected = useSelectionProgress(active)
+
+  const activeStyle = useAnimatedStyle(() => ({ opacity: selected.value }))
+  const idleIconStyle = useAnimatedStyle(() => ({
+    opacity: (1 - selected.value) * IDLE_ICON_OPACITY,
+  }))
+  const labelStyle = useAnimatedStyle(() => ({
+    color: interpolateColor(
+      selected.value,
+      [0, 1],
+      [TEXT.tertiary, TEXT.primary],
+    ),
+  }))
 
   return (
-    <Pressable onPress={onPress}>
+    <Pressable onPress={onPress} style={styles.pressable}>
       {({ pressed }) => (
-        <View style={styles.container}>
-          <Icon iconName={iconName} iconSize={iconSize} />
-          <Text
-            style={[
-              {
-                color: pressed ? ICON_COLOR_PRESSED : ICON_COLOR,
-              },
-              styles.title,
-              isSmall && styles.titleSmall,
-            ]}
+        <View style={[styles.container, pressed && !active && styles.pressed]}>
+          <Animated.View
+            pointerEvents="none"
+            style={[glassStyles.active, styles.activeLayer, activeStyle]}
+          />
+          <View style={{ width: iconSize, height: iconSize }}>
+            <Animated.View style={[styles.iconLayer, idleIconStyle]}>
+              <Icon
+                iconName={iconName}
+                iconSize={iconSize}
+                color={TEXT.primary}
+              />
+            </Animated.View>
+            <Animated.View style={[styles.iconLayer, activeStyle]}>
+              <Icon
+                iconName={iconName}
+                iconSize={iconSize}
+                color={TONE.accent}
+              />
+            </Animated.View>
+          </View>
+          <Animated.Text
+            style={[styles.title, isSmall && styles.titleSmall, labelStyle]}
           >
             {label}
-          </Text>
+          </Animated.Text>
         </View>
       )}
     </Pressable>
@@ -62,22 +102,37 @@ export const FooterIcon = ({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    width: 30,
-    marginTop: 5,
-    alignItems: 'center',
+  pressable: {
+    flex: 1,
+    alignSelf: 'stretch',
   },
-  icon: {
-    textAlign: 'center',
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 4,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  pressed: {
+    backgroundColor: GLASS.pressed,
+    borderColor: GLASS.border,
+  },
+  activeLayer: {
+    ...StyleSheet.absoluteFillObject,
+    margin: -1,
+    borderRadius: 999,
+  },
+  iconLayer: {
+    ...StyleSheet.absoluteFillObject,
   },
   title: {
     fontFamily: DM_SANS.BOLD,
     textAlign: 'center',
-    fontSize: 12,
-    marginTop: 8,
+    fontSize: 11,
   },
   titleSmall: {
     fontSize: 10,
-    marginTop: 4,
   },
 })
