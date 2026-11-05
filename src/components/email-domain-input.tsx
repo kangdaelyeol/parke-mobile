@@ -4,13 +4,15 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { EMAIL_DOMAINS } from '@/constants'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
-import { glassStyles } from '@/theme/glass'
+import { glassStyles, glassText, TEXT } from '@/theme/glass'
 
 interface EmailDomainInputProps {
   title: string
   value: string
   // 아이디가 비어 있으면 빈 문자열
   onChangeText: (email: string) => void
+  // 유리 판 안에 놓일 때: 판보다 어둡게 파인 입력칸
+  inset?: boolean
 }
 
 const CUSTOM = '직접 입력'
@@ -27,6 +29,7 @@ export const EmailDomainInput = ({
   title,
   value,
   onChangeText,
+  inset,
 }: EmailDomainInputProps) => {
   const initial = split(value)
   const [local, setLocal] = useState(initial.local)
@@ -71,18 +74,15 @@ export const EmailDomainInput = ({
   }
 
   const active = focus || open
+  const box = inset ? glassStyles.inset : glassStyles.field
+  const boxFocused = inset ? glassStyles.insetFocused : glassStyles.fieldFocused
 
   return (
     <View style={styles.container}>
       <Text style={[styles.title, active && styles.titleFocused]}>{title}</Text>
       <View style={styles.row}>
         <TextInput
-          style={[
-            glassStyles.field,
-            styles.box,
-            styles.input,
-            focus && glassStyles.fieldFocused,
-          ]}
+          style={[box, styles.box, styles.input, focus && boxFocused]}
           value={local}
           onChangeText={localInput}
           onFocus={() => setFocus(true)}
@@ -94,14 +94,7 @@ export const EmailDomainInput = ({
           autoCorrect={false}
         />
         <Text style={styles.at}>@</Text>
-        <View
-          style={[
-            glassStyles.field,
-            styles.box,
-            styles.domainBox,
-            open && glassStyles.fieldFocused,
-          ]}
-        >
+        <View style={[box, styles.box, styles.domainBox, open && boxFocused]}>
           {custom ? (
             <TextInput
               style={[styles.input, styles.domainText]}
@@ -174,15 +167,11 @@ export const EmailDomainInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 10,
+    gap: 8,
   },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
+  title: glassText.label,
   titleFocused: {
-    color: WHITE,
+    color: TEXT.primary,
   },
   row: {
     flexDirection: 'row',

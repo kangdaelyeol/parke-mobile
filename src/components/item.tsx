@@ -7,8 +7,7 @@ import {
   useWindowDimensions,
 } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { GRAY } from '@/theme/color'
-import { withAlpha } from '@/theme/glass'
+import { TEXT, withAlpha } from '@/theme/glass'
 import { Toggle } from '@/components'
 import {
   ActiveIllustration,
@@ -61,6 +60,17 @@ const ICON_COLORS: Record<ItemOption, string> = {
   location: '#ffb84d',
 }
 
+// 렌더할 때마다 색 문자열을 만들지 않도록 종류별 타일 색을 미리 만들어 둔다
+const ICON_TILES = Object.fromEntries(
+  Object.entries(ICON_COLORS).map(([option, color]) => [
+    option,
+    {
+      backgroundColor: withAlpha(color, 0.14),
+      borderColor: withAlpha(color, 0.28),
+    },
+  ]),
+) as Record<ItemOption, { backgroundColor: string; borderColor: string }>
+
 export const Item = ({
   option,
   title,
@@ -75,7 +85,6 @@ export const Item = ({
   const isSmall = width < 400
 
   const Icon = ICONS[option]
-  const iconColor = ICON_COLORS[option]
   return (
     <Pressable
       onPress={onPress}
@@ -86,10 +95,7 @@ export const Item = ({
           style={[
             styles.iconContainer,
             isSmall && styles.iconContainerSmall,
-            {
-              backgroundColor: withAlpha(iconColor, 0.14),
-              borderColor: withAlpha(iconColor, 0.28),
-            },
+            ICON_TILES[option],
           ]}
         >
           <Icon />
@@ -124,8 +130,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 18,
+    paddingHorizontal: 16,
+    paddingVertical: 15,
   },
   containerSmall: {
     paddingHorizontal: 10,
@@ -139,9 +145,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 42,
-    height: 42,
-    borderRadius: 9,
+    width: 38,
+    height: 38,
+    borderRadius: 11,
     borderWidth: 1,
     padding: 8,
   },
@@ -156,15 +162,15 @@ const styles = StyleSheet.create({
     gap: 3,
   },
   title: {
-    color: 'white',
+    color: TEXT.strong,
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 16,
+    fontSize: 15,
   },
   titleSmall: {
     fontSize: 14,
   },
   subTitle: {
-    color: GRAY,
+    color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },

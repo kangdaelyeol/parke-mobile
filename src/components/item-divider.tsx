@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
   divider: {
     width: '100%',
     alignSelf: 'center',
-    backgroundColor: GLASS.pressed,
-    height: 1,
+    backgroundColor: GLASS.divider,
+    height: StyleSheet.hairlineWidth,
   },
 })

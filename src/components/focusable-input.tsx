@@ -1,8 +1,8 @@
 import { JSX, useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
-import { glassStyles } from '@/theme/glass'
+import { GRAY_DEEP, WHITE } from '@/theme/color'
+import { glassStyles, glassText, TEXT } from '@/theme/glass'
 import {
   CardIllustration,
   MessageIllustration,
@@ -18,6 +18,8 @@ interface FocusableInputProps {
   placeholder: string
   iconName: IconName
   onChangeText: (v: string) => void
+  // 유리 판 안에 놓일 때: 판보다 어둡게 파인 입력칸 (영상의 Target Mobile Number)
+  inset?: boolean
 }
 
 const ICONS: Record<IconName, () => JSX.Element> = {
@@ -33,6 +35,7 @@ export const FocusableInput = ({
   onChangeText,
   placeholder,
   iconName,
+  inset,
 }: FocusableInputProps) => {
   const [focus, setFocus] = useState(false)
   const onFocus = () => setFocus(true)
@@ -47,9 +50,10 @@ export const FocusableInput = ({
           onFocus={onFocus}
           onBlur={offFocus}
           style={[
-            glassStyles.field,
+            inset ? glassStyles.inset : glassStyles.field,
             styles.input,
-            focus && glassStyles.fieldFocused,
+            focus &&
+              (inset ? glassStyles.insetFocused : glassStyles.fieldFocused),
           ]}
           value={value}
           onChangeText={onChangeText}
@@ -66,7 +70,7 @@ export const FocusableInput = ({
 
 const styles = StyleSheet.create({
   container: {
-    gap: 10,
+    gap: 8,
   },
   input: {
     paddingLeft: 40,
@@ -76,13 +80,9 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     maxWidth: 400,
   },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
+  title: glassText.label,
   titleFocused: {
-    color: WHITE,
+    color: TEXT.primary,
   },
   icon: {
     position: 'absolute',

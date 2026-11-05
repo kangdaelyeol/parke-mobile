@@ -9,3 +9,5 @@ export * from './toggle'
 export * from './ref-web-view'
 export * from './check-box-line'
 export * from './email-domain-input'
+// 영상(design/dashboard.mp4)에서 뽑은 테마 컴포넌트
+export * from '@/theme/themes/glass-dashboard/components'

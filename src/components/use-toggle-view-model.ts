@@ -6,13 +6,14 @@ import {
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated'
-import { BLUE_PRIMARY } from '@/theme/color'
 import { GLASS, withAlpha } from '@/theme/glass'
 import { ToggleProps, ToggleViewModel } from './types'
 
+// 켜짐 색: 영상에서 켜짐·정상 상태에 쓰는 에메랄드 (알약 글자색보다 한 단계 짙게)
+const TRACK_COLOR = '#10b981'
 // 애니메이션 스타일(worklet) 안에서는 일반 함수를 부를 수 없어 색을 미리 계산해 둔다
-const TRACK_ON = withAlpha(BLUE_PRIMARY, 0.85)
-const TRACK_ON_BORDER = withAlpha(BLUE_PRIMARY, 0.95)
+const TRACK_ON = withAlpha(TRACK_COLOR, 0.85)
+const TRACK_ON_BORDER = withAlpha(TRACK_COLOR, 0.95)
 
 export const useToggleViewModel = ({
   value,
@@ -25,7 +26,7 @@ export const useToggleViewModel = ({
     transform: [{ translateX: 28 - toggleProgress.value * 28 }],
   }))
 
-  // 켜짐: 파란 유리 / 꺼짐: 투명한 유리 (progress 0 = 켜짐)
+  // 켜짐: 초록 유리 / 꺼짐: 투명한 유리 (progress 0 = 켜짐)
   const backgroundStyle = useAnimatedStyle(() => ({
     backgroundColor: interpolateColor(
       toggleProgress.value,

@@ -9,6 +9,7 @@ import Animated, {
 } from 'react-native-reanimated'
 import { GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
+import { TONE } from '@/theme/glass'
 import { CheckIllustration } from '@login/components/illustrations'
 
 interface Props {
@@ -43,12 +44,12 @@ export const CheckBoxLine = ({
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      ['#000000', '#5555ff'],
+      ['#000000', TONE.accent],
     ),
     borderColor: interpolateColor(
       progress.value,
       [0, 1],
-      [GRAY_DEEP, '#5555ff'],
+      [GRAY_DEEP, TONE.accent],
     ),
   }))
 
