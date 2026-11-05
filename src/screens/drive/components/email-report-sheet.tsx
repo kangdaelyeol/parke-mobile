@@ -14,16 +14,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { PressableButton } from '@/components'
 import { getEmailSuggestions, isEmail } from '@/utils'
 import { DriveEmailSheetProps } from '@/screens/drive/types'
-import {
-  DARK,
-  DARK_LIGHT,
-  GRAY,
-  GRAY_DEEP,
-  GRAY_LIGHT,
-  WHITE,
-} from '@/theme/color'
+import { GRAY, GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { glassStyles } from '@/theme/glass'
+import { GLASS, glassStyles } from '@/theme/glass'
 
 // 운행 기록을 받을 이메일 입력. '@' 뒤 도메인은 목록에서 골라 완성할 수 있다
 export const EmailReportSheet = ({
@@ -182,12 +175,14 @@ const styles = StyleSheet.create({
   dismiss: {
     flex: 1,
   },
+  // 위쪽 테두리만 밝은 유리 시트
   sheet: {
-    backgroundColor: DARK,
+    backgroundColor: '#0e0e10',
+    experimental_backgroundImage: GLASS.sheen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     borderTopWidth: 1,
-    borderColor: DARK_LIGHT,
+    borderColor: GLASS.highlight,
     paddingHorizontal: 20,
     paddingTop: 22,
     gap: 14,

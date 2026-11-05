@@ -1,52 +1,39 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { FontAwesome6 } from '@react-native-vector-icons/fontawesome6'
+import { StyleSheet, Text, View } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { GlassIconButton } from '@/components'
 import { DriveRecordHeaderProps } from '@/screens/drive-record/types'
 import { PRETENDARD } from '@/theme/fonts'
-import { GRAY } from '@/theme/color'
+import { TEXT } from '@/theme/glass'
 
-export const Header = ({ title, onBack }: DriveRecordHeaderProps) => (
-  <View style={styles.wrapper}>
-    <Pressable style={styles.backBtn} onPress={onBack} hitSlop={10}>
-      {({ pressed }) => (
-        <FontAwesome6
-          name="angle-left"
-          iconStyle="solid"
-          size={20}
-          style={[styles.btn, pressed && styles.btnPressed]}
-        />
-      )}
-    </Pressable>
-    <Text style={styles.title} numberOfLines={1}>
-      {title}
-    </Text>
-  </View>
-)
+// 뒤로 가기(유리 원형 버튼) + 제목
+export const Header = ({ title, onBack }: DriveRecordHeaderProps) => {
+  const { top } = useSafeAreaInsets()
+  return (
+    <View style={[styles.wrapper, { paddingTop: top + 14 }]}>
+      <GlassIconButton round size={36} icon="chevron-left" onPress={onBack} />
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   wrapper: {
     width: '100%',
-    maxWidth: 360,
+    maxWidth: 400,
     marginHorizontal: 'auto',
-    paddingBottom: 15,
+    paddingHorizontal: 18,
+    paddingBottom: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
   },
   title: {
-    color: '#eeeeee',
+    flexShrink: 1,
+    color: TEXT.primary,
     fontSize: 20,
-    marginTop: 60,
-    paddingHorizontal: 30,
     fontFamily: PRETENDARD.BOLD,
-    textAlign: 'center',
-  },
-  backBtn: {
-    position: 'absolute',
-    top: 62,
-    left: 0,
-    zIndex: 3,
-  },
-  btn: {
-    color: '#ebebeb',
-  },
-  btnPressed: {
-    color: GRAY,
+    letterSpacing: -0.3,
   },
 })

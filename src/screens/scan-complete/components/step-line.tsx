@@ -23,7 +23,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#363636',
   },
   activeLine: {
+    width: '100%',
     height: '100%',
     backgroundColor: BLUE_PRIMARY,
+    transformOrigin: 'left',
   },
 })

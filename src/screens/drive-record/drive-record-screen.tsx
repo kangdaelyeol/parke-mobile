@@ -2,9 +2,9 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { PressableButton } from '@/components'
+import { PressableButton, StatCard } from '@/components'
 import { RootStackParamList } from '@/navigation/types'
-import { DriveMap, DriveStat } from '@/screens/drive/components'
+import { DriveMap } from '@/screens/drive/components'
 import { useDriveRecordViewModel } from '@/screens/drive-record/view-model'
 import {
   formatClock,
@@ -13,8 +13,8 @@ import {
   formatKm,
   toKmh,
 } from '@/utils'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
+import { GLASS, TEXT } from '@/theme/glass'
 
 type DriveRecordScreenProps = {
   route: RouteProp<RootStackParamList, 'DriveRecord'>
@@ -45,7 +45,7 @@ export default function DriveRecordScreen({ route }: DriveRecordScreenProps) {
             name="angle-left"
             iconStyle="solid"
             size={16}
-            color={WHITE}
+            color={TEXT.primary}
           />
           <Text style={styles.backText}>{record.cardTitle}</Text>
         </Pressable>
@@ -62,27 +62,40 @@ export default function DriveRecordScreen({ route }: DriveRecordScreenProps) {
             {formatClock(record.startAt)} ~ {formatClock(record.endAt)}
           </Text>
         </View>
+        {/* 요약 4칸 (영상 상단의 통계 카드 네 장) */}
         <View style={styles.statRow}>
-          <DriveStat
-            label="이동 거리"
+          <StatCard
+            style={styles.stat}
+            title="이동 거리"
             value={formatKm(record.distance)}
             unit="km"
+            icon="route"
+            tone="info"
           />
-          <DriveStat
-            label="주행 시간"
+          <StatCard
+            style={styles.stat}
+            title="주행 시간"
             value={formatDuration(record.endAt - record.startAt)}
+            icon="stopwatch"
+            tone="violet"
           />
         </View>
         <View style={styles.statRow}>
-          <DriveStat
-            label="평균 속도"
+          <StatCard
+            style={styles.stat}
+            title="평균 속도"
             value={String(toKmh(record.averageSpeed))}
             unit="km/h"
+            icon="gauge-high"
+            tone="success"
           />
-          <DriveStat
-            label="최고 속도"
+          <StatCard
+            style={styles.stat}
+            title="최고 속도"
             value={String(toKmh(record.maxSpeed))}
             unit="km/h"
+            icon="bolt"
+            tone="warning"
           />
         </View>
         <PressableButton
@@ -94,6 +107,9 @@ export default function DriveRecordScreen({ route }: DriveRecordScreenProps) {
     </View>
   )
 }
+
+// 지도 위에 뜨는 요소는 뒤 지도에 묻히지 않도록 짙은 유리
+const MAP_GLASS = 'rgba(16,16,18,0.88)'
 
 const styles = StyleSheet.create({
   container: {
@@ -109,15 +125,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: DARK,
+    backgroundColor: MAP_GLASS,
     borderWidth: 1,
-    borderColor: DARK_LIGHT,
+    borderColor: GLASS.border,
+    borderTopColor: GLASS.highlight,
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
   backText: {
-    color: WHITE,
+    color: TEXT.primary,
     fontFamily: DM_SANS.BOLD,
     fontSize: 14,
   },
@@ -125,41 +142,48 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 16,
     alignSelf: 'center',
-    backgroundColor: DARK,
+    backgroundColor: MAP_GLASS,
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 8,
   },
   loadingText: {
-    color: GRAY,
+    color: TEXT.secondary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 13,
   },
+  // 지도 아래 판: 위쪽 테두리만 밝은 유리
   panel: {
-    backgroundColor: DARK,
+    backgroundColor: '#0c0c0e',
+    experimental_backgroundImage: GLASS.sheen,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     borderTopWidth: 1,
-    borderColor: DARK_LIGHT,
-    paddingHorizontal: 20,
+    borderColor: GLASS.highlight,
+    paddingHorizontal: 16,
     paddingTop: 20,
-    gap: 18,
+    gap: 10,
   },
   header: {
     gap: 4,
+    paddingHorizontal: 4,
+    marginBottom: 4,
   },
   title: {
-    color: WHITE,
+    color: TEXT.primary,
     fontFamily: DM_SANS.BOLD,
     fontSize: 20,
   },
   subTitle: {
-    color: GRAY,
+    color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 13,
   },
   statRow: {
     flexDirection: 'row',
-    gap: 16,
+    gap: 10,
+  },
+  stat: {
+    flex: 1,
   },
 })

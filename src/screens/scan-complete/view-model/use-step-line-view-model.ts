@@ -33,8 +33,9 @@ export const useStepLineViewModel = ({
     }
   }, [step, currentStep, activeLineWidth])
 
+  // 너비를 바꾸는 대신 왼쪽을 기준으로 늘린다 (매 프레임 레이아웃을 다시 계산하지 않는다)
   const lineStyle = useAnimatedStyle(() => ({
-    width: activeLineWidth.value * 190,
+    transform: [{ scaleX: activeLineWidth.value }],
   }))
 
   return {
