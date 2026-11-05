@@ -1,12 +1,9 @@
 import { RefObject } from 'react'
+import type { GeoPoint } from '@/domain/drive'
 import { DocType, ViewModel } from '@/types/common'
 
-export interface GeoPoint {
-  latitude: number
-  longitude: number
-  timestamp: number
-  speed: number | null // m/s
-}
+// 주행 경로의 위치 (도메인 타입을 화면 타입과 함께 내보낸다)
+export type { GeoPoint }
 
 // consent: 위치 동의 전 (동의해야 기록을 시작한다)
 export type DrivePhase = 'consent' | 'driving' | 'summary'

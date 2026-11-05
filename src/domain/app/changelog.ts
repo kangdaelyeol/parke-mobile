@@ -25,6 +25,18 @@ export interface ChangelogEntry {
 // 맨 위 항목이 현재 버전이므로 비어 있을 수 없다
 export const CHANGELOG: [ChangelogEntry, ...ChangelogEntry[]] = [
   {
+    version: '1.5.8',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '주행 모드 코드 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '주행 경로에 넣을 위치를 고르는 기준(정확도, 흔들림, 튐)을 따로 떼어 자동 테스트로 확인해요. 기록 방식은 그대로예요.',
+      },
+    ],
+  },
+  {
     version: '1.5.7',
     date: '2026-11-05',
     bump: 'patch',
