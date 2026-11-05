@@ -17,12 +17,10 @@ import {
   isOwnCard,
   canRenewPhoneNumber,
 } from '@/helpers'
-import {
-  bleCacheService,
-  cardService,
-  permissionService,
-  settingService,
-} from '@/services'
+import { bleCacheService } from './ble-cache-service'
+import { cardService } from './card-service'
+import { permissionService } from './permission-service'
+import { settingService } from './setting-service'
 import {
   extractNumber,
   showPhoneChangeConfirmNotification,

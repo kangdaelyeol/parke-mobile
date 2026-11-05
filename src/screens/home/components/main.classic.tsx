@@ -3,15 +3,13 @@ import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
-import {
-  EmptyCard,
-  SettingCard,
-  Card,
-  CardSkeleton,
-  EmptyView,
-  PaginationDots,
-  TodaySummary,
-} from '@home/components'
+import { EmptyCard } from './empty-card'
+import { SettingCard } from './setting-card'
+import { Card } from './card'
+import { CardSkeleton } from './card-skeleton'
+import { EmptyView } from './empty-view'
+import { PaginationDots } from './pagination-dots'
+import { TodaySummary } from './today-summary'
 import { useMainViewModel } from '@home/view-model'
 import { HomeMainProps } from '@home/types'
 import { DM_SANS } from '@/theme/fonts'

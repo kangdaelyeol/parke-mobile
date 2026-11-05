@@ -7,7 +7,7 @@ import {
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { Toggle } from '@home/components'
+import { Toggle } from './toggle'
 import { useCardViewModel } from '@home/view-model'
 import { Loading } from '@/components'
 import { formatPhone } from '@/utils'

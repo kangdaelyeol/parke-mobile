@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import { StepNode, StepLine } from '@scan-complete/components'
+import { StepNode } from './step-node'
+import { StepLine } from './step-line'
 import { stepList } from '@scan-complete/config/step.config'
 
 export const ProgressStepper = () => {

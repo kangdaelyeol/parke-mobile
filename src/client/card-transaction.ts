@@ -1,7 +1,7 @@
 import { db } from '@/firebaseApp'
 import { ref, update } from '@react-native-firebase/database'
-import { FirebaseResult } from './types'
-import { CardDto } from '@/domain/card'
+import type { FirebaseResult } from './types'
+import type { CardDto } from '@/domain/card'
 import { clientFail, clientOk } from '@/utils'
 
 export const createCardTransaction = async (

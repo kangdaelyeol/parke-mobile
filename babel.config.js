@@ -1,5 +1,16 @@
 /** @type {import('react-native-reanimated/plugin').PluginOptions} */
 
+const { compilerOptions } = require('./tsconfig.json')
+
+// 경로 별칭은 tsconfig.json의 paths 한 곳에서만 관리한다
+// ("@home/*": ["./src/screens/home/*"] → '@home': './src/screens/home')
+const alias = Object.fromEntries(
+  Object.entries(compilerOptions.paths).map(([key, [target]]) => [
+    key.replace(/\/\*$/, ''),
+    target.replace(/\/\*$/, ''),
+  ]),
+)
+
 module.exports = {
   presets: ['module:@react-native/babel-preset'],
   plugins: [
@@ -7,17 +18,7 @@ module.exports = {
       'module-resolver',
       {
         root: ['./src'],
-        alias: {
-          '@': './src',
-          '@home': './src/screens/home',
-          '@on-boarding': './src/screens/on-boarding',
-          '@profile': './src/screens/profile',
-          '@setting': './src/screens/setting',
-          '@search-ble': './src/screens/search-ble',
-          '@scan-complete': './src/screens/scan-complete',
-          '@permission': './src/screens/permission',
-          '@login': './src/screens/login',
-        },
+        alias,
         extensions: ['.js', '.ts', '.jsx', '.tsx', '.json'],
       },
     ],

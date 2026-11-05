@@ -1,7 +1,7 @@
 import { serverTimestamp } from '@react-native-firebase/database'
 import { cardClient, createCardTransaction } from '@/client'
 import { Card } from '@/domain/card'
-import { bleCacheService } from '@/services'
+import { bleCacheService } from './ble-cache-service'
 import { callFunction } from './functions-client'
 import { CardService, CardState, ServiceSuccess } from '@/services/types'
 import { getFirebaseErrorMessage, serviceFail, serviceOk } from '@/utils'

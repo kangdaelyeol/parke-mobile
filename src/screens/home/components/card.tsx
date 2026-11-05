@@ -5,7 +5,7 @@ import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
 import { useCardViewModel } from '@home/view-model'
 import { HomeCardProps } from '@home/types'
 import { Loading } from '@/components'
-import { CardBottomSheet } from '@home/components'
+import { CardBottomSheet } from './card-bottom-sheet'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 import {
   GRAY,

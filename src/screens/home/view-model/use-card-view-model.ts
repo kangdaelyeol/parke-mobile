@@ -7,7 +7,7 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useCardActions } from '@home/view-model'
+import { useCardActions } from './use-card-actions'
 import { HomeCardViewModel } from '@home/types'
 
 // 슬라이더 안의 카드: 카드 기능 + 선택 여부에 따른 모양 + 자동감지 점

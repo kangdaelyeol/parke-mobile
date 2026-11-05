@@ -6,6 +6,8 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "lint": "eslint .",
+    "check:cycles": "node scripts/check-cycles.js",
+    "check": "tsc --noEmit && eslint . && node scripts/check-cycles.js",
     "start": "react-native start",
     "test": "jest",
     "postinstall": "patch-package"

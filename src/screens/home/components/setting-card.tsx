@@ -13,13 +13,11 @@ import {
   useCardSettingContext,
   useSettingStaggerStyle,
 } from '@home/contexts'
-import {
-  AccentPicker,
-  CardWebPreview,
-  LayoutSelector,
-  ScaleStepper,
-  ThemeSelector,
-} from '@home/components'
+import { AccentPicker } from './accent-picker'
+import { CardWebPreview } from './card-web-preview'
+import { LayoutSelector } from './layout-selector'
+import { ScaleStepper } from './scale-stepper'
+import { ThemeSelector } from './theme-selector'
 import {
   EmailDomainInput,
   FocusableInput,

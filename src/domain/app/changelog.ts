@@ -24,6 +24,18 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.2',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '코드 구조 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '모듈끼리 서로를 불러오는 고리를 없애 앱 시작이 더 안정적이에요.',
+      },
+    ],
+  },
+  {
     version: '1.5.1',
     date: '2026-11-05',
     bump: 'patch',

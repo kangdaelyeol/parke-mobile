@@ -1,5 +1,5 @@
 import { ReactNativeFirebase } from '@react-native-firebase/app'
-import { ClientFailure } from '@/client'
+import type { ClientFailure } from '@/client'
 
 export const clientFail = (
   error: unknown,

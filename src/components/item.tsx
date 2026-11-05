@@ -10,7 +10,7 @@ import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 import { TEXT, withAlpha } from '@/theme/glass'
 import { useThemeId } from '@/theme/themed'
-import { Toggle } from '@/components'
+import { Toggle } from './toggle'
 import {
   ActiveIllustration,
   BellIllustration,

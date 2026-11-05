@@ -22,7 +22,7 @@ import { runOnJS } from 'react-native-worklets'
 import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
 import { useUserContext } from '@/contexts'
-import { useCardSettingContext } from '@home/contexts'
+import { useCardSettingContext } from './card-setting-context'
 import { useThemeId } from '@/theme/themed'
 
 /**

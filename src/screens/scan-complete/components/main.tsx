@@ -1,5 +1,6 @@
 import { View } from 'react-native'
-import { StepDevice, StepInfo } from '@scan-complete/components'
+import { StepDevice } from './step-device'
+import { StepInfo } from './step-info'
 import { useMainViewModel } from '@scan-complete/view-model'
 
 type MainProps = {

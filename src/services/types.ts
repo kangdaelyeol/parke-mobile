@@ -1,10 +1,10 @@
-import { DrivePathDto, DriveRecordDto } from '@/domain/drive'
-import { BleManager } from 'react-native-ble-plx'
-import { Event } from '@notifee/react-native'
-import { PhoneChangePending } from '@/client'
-import { CardDto, CardInfo } from '@/domain/card'
-import { UserDto } from '@/domain/user'
-import { ConsentKey, ConsentMap, ConsentRecord, DocType } from '@/types/common'
+import type { DrivePathDto, DriveRecordDto } from '@/domain/drive'
+import type { BleManager } from 'react-native-ble-plx'
+import type { Event } from '@notifee/react-native'
+import type { PhoneChangePending } from '@/client'
+import type { CardDto, CardInfo } from '@/domain/card'
+import type { UserDto } from '@/domain/user'
+import type { ConsentKey, ConsentMap, ConsentRecord, DocType } from '@/types/common'
 
 interface kakaoProfile {
   email: string

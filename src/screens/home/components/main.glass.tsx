@@ -5,15 +5,13 @@ import Animated from 'react-native-reanimated'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
-import {
-  CardSkeleton,
-  EmptyCard,
-  GlassCard,
-  GlassCardInfo,
-  GlassTopBar,
-  SettingCard,
-  TodaySummary,
-} from '@home/components'
+import { CardSkeleton } from './card-skeleton'
+import { EmptyCard } from './empty-card'
+import { GlassCard } from './glass-card'
+import { GlassCardInfo } from './glass-card-info'
+import { GlassTopBar } from './glass-top-bar'
+import { SettingCard } from './setting-card'
+import { TodaySummary } from './today-summary'
 import { useMainViewModel } from '@home/view-model'
 import { CardInfoTab, HomeMainProps } from '@home/types'
 import { useTabBarLayout } from '@/hooks'

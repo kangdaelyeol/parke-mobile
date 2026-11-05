@@ -12,5 +12,11 @@ module.exports = {
       files: ['src/utils/logger/*.ts'],
       rules: { 'no-console': 'off' },
     },
+    // 개발용 Node 스크립트
+    {
+      files: ['scripts/**/*.js'],
+      env: { node: true },
+      rules: { 'no-console': 'off' },
+    },
   ],
 }

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { PressableButton } from '@/components'
-import { DriveStat } from '@/screens/drive/components'
+import { DriveStat } from './drive-stat'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { formatClock, formatDuration, formatKm, toKmh } from '@/utils'
 import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'

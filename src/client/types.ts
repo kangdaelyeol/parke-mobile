@@ -1,9 +1,9 @@
-import { ReactNativeFirebase } from '@react-native-firebase/app'
-import { CardDto } from '@/domain/card'
-import { UserDto } from '@/domain/user'
-import { DrivePathDto, DriveRecordDto } from '@/domain/drive'
-import { LoginProvider } from '@/services/types'
-import { ConsentKey } from '@/types/common'
+import type { ReactNativeFirebase } from '@react-native-firebase/app'
+import type { CardDto } from '@/domain/card'
+import type { UserDto } from '@/domain/user'
+import type { DrivePathDto, DriveRecordDto } from '@/domain/drive'
+import type { LoginProvider } from '@/services/types'
+import type { ConsentKey } from '@/types/common'
 
 export interface ClientSuccess<T> {
   status: true

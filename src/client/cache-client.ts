@@ -1,6 +1,6 @@
 import { MMKV } from 'react-native-mmkv'
-import { CacheClient, PhoneChangePending } from '@/client'
-import { LoginProvider } from '@/services/types'
+import type { CacheClient, PhoneChangePending } from './types'
+import type { LoginProvider } from '@/services/types'
 export const kv = new MMKV()
 
 // 로그아웃·탈퇴 시 지우는 사용자별 기록 (ble:* 키 + 아래 키). 앱 설정·온보딩 여부는 남긴다
