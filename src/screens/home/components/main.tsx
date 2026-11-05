@@ -1,7 +1,8 @@
 import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
-import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
+import { SLIDER_GAP } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import {
   EmptyCard,
   SettingCard,
@@ -26,6 +27,8 @@ export const Main = ({ loading }: HomeMainProps) => {
   const { width } = useWindowDimensions()
   const isSmall = width < 400
   const isGlass = useThemeId() === 'glass-dashboard'
+  // 카드 칸 크기 (글래스는 오늘의 현황 판과 같은 폭)
+  const cardSize = useCardSize()
   // 수정 화면이나 카드 상세가 열리면 오늘의 현황·페이지 점은 사라지고 터치도 받지 않는다
   const hideHomeContent = state.isSetting || state.isDetail
 
@@ -47,7 +50,7 @@ export const Main = ({ loading }: HomeMainProps) => {
             </Animated.View>
             <GestureDetector gesture={actions.panGesture}>
               <Animated.View
-                style={[styles.cardContainer, animated.sliderStyle]}
+                style={[styles.cardContainer, cardSize, animated.sliderStyle]}
               >
                 {/* 글래스는 제목(내 기기)이 카드 유리 판 안에 있다 */}
                 <Animated.View style={animated.cardTitleStyle}>
@@ -66,7 +69,7 @@ export const Main = ({ loading }: HomeMainProps) => {
                     </View>
                   )}
                 </Animated.View>
-                <View style={styles.cardSlider}>
+                <View style={[styles.cardSlider, { width: cardSize.width }]}>
                   <Animated.View
                     style={[animated.moverStyle, styles.cardSliderMover]}
                   >
@@ -128,12 +131,9 @@ const styles = StyleSheet.create({
     maxWidth: 330,
   },
   cardContainer: {
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     marginHorizontal: 'auto',
   },
   cardSlider: {
-    width: CARD_WIDTH,
     // 상세 패널이 아래 페이지 점보다 위에 그려지도록
     zIndex: 1,
   },

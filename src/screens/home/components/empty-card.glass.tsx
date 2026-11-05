@@ -2,12 +2,8 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 import Animated from 'react-native-reanimated'
 import ReactNativeHapticFeedback from 'react-native-haptic-feedback'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import {
-  CARD_FRAME_HEADER,
-  CARD_FRAME_PADDING,
-  CARD_HEIGHT,
-  CARD_WIDTH,
-} from '@home/constants'
+import { CARD_FRAME_HEADER, CARD_FRAME_PADDING } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import { SectionLabel } from '@/components'
 import { useEmptyCardViewModel } from '@home/view-model'
 import { HomeEmptyCardProps } from '@home/types'
@@ -17,6 +13,9 @@ import { GLASS, glassStyles, TEXT } from '@/theme/glass'
 // 카드 추가 칸 (글래스): 유리 카드와 같은 테두리 안에 점선 빈자리를 둔다
 export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
   const { animated, actions } = useEmptyCardViewModel(idx)
+  // 유리 카드와 같은 크기
+  const { width, height } = useCardSize()
+  const slotHeight = height - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER
 
   return (
     <Animated.View style={animated.cardStyle}>
@@ -29,6 +28,7 @@ export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
             style={[
               glassStyles.surface,
               styles.frame,
+              { width },
               pressed && styles.pressed,
             ]}
           >
@@ -36,7 +36,13 @@ export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
             <View style={styles.frameHeader}>
               <SectionLabel>내 기기</SectionLabel>
             </View>
-            <View style={[styles.slot, pressed && styles.slotPressed]}>
+            <View
+              style={[
+                styles.slot,
+                { height: slotHeight },
+                pressed && styles.slotPressed,
+              ]}
+            >
               <View style={[styles.plus, pressed && styles.plusPressed]}>
                 <FontAwesome6
                   name="plus"
@@ -57,7 +63,6 @@ export const GlassEmptyCard = ({ idx }: HomeEmptyCardProps) => {
 
 const styles = StyleSheet.create({
   frame: {
-    width: CARD_WIDTH,
     marginHorizontal: 'auto',
     padding: CARD_FRAME_PADDING,
     borderRadius: 28,
@@ -72,7 +77,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   slot: {
-    height: CARD_HEIGHT - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER,
     borderRadius: 23,
     borderWidth: 1.5,
     borderStyle: 'dashed',

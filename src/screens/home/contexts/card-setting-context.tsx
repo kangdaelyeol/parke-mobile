@@ -16,7 +16,7 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { runOnJS } from 'react-native-worklets'
-import { CARD_HEIGHT } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import { useTabBarLayout } from '@/hooks'
 import { useThemeId } from '@/theme/themed'
 
@@ -107,6 +107,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const sliderMargin = isSmall ? 250 : 300
   // 카드 영역 아래를 덮는 탭바 몫
   const { space: footerSpace } = useTabBarLayout()
+  const { height: cardHeight } = useCardSize()
 
   const settingProgress = useSharedValue(0)
   const detailProgress = useSharedValue(0)
@@ -128,7 +129,7 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         // 카드 아래 남은 공간(탭바 위까지)에 패널이 다 들어가지 않으면 모자란 만큼 올린다
         const overflow =
           sliderMargin +
-          CARD_HEIGHT +
+          cardHeight +
           DETAIL_GAP +
           panelHeight +
           footerSpace +
@@ -162,7 +163,14 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
         setDetailCard(-1)
       },
     }),
-    [sliderMargin, mainHeight, footerSpace, detailLift, detailProgress],
+    [
+      sliderMargin,
+      mainHeight,
+      footerSpace,
+      cardHeight,
+      detailLift,
+      detailProgress,
+    ],
   )
   const [settingCard, setSettingCard] = useState(-1)
   const [settingOpened, setSettingOpened] = useState(false)

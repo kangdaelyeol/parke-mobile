@@ -7,7 +7,7 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated'
-import { CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import { DARK, DARK_LIGHT } from '@/theme/color'
 
 const BOTTOM_HEIGHT = 60
@@ -15,6 +15,8 @@ const BOTTOM_HEIGHT = 60
 // 카드를 처음 불러오는 동안 카드 자리에 보여주는 뼈대 (실제 카드와 같은 크기·배치)
 export const CardSkeleton = () => {
   const pulse = useSharedValue(0)
+  // 테마에 맞는 카드 크기
+  const cardSize = useCardSize()
 
   useEffect(() => {
     pulse.value = withRepeat(
@@ -29,7 +31,7 @@ export const CardSkeleton = () => {
   }))
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, cardSize]}>
       <Animated.View style={[styles.fill, shimmerStyle]}>
         <View style={[styles.bar, styles.brand]} />
         <View style={[styles.circle, styles.more]} />
@@ -47,8 +49,6 @@ export const CardSkeleton = () => {
 const styles = StyleSheet.create({
   container: {
     marginHorizontal: 'auto',
-    width: CARD_WIDTH,
-    height: CARD_HEIGHT,
     backgroundColor: '#141414',
     borderRadius: 20,
     borderWidth: 1,

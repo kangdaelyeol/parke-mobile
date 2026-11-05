@@ -7,12 +7,8 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import {
-  CARD_FRAME_HEADER,
-  CARD_FRAME_PADDING,
-  CARD_HEIGHT,
-  CARD_WIDTH,
-} from '@home/constants'
+import { CARD_FRAME_HEADER, CARD_FRAME_PADDING } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import { DETAIL_GAP } from '@home/contexts'
 import { useCardDetailViewModel } from '@home/view-model'
 import { CardDetailTab, HomeCardProps } from '@home/types'
@@ -137,10 +133,22 @@ export const GlassCard = ({ card, idx }: HomeCardProps) => {
     () => ({ experimental_backgroundImage: cardFace(accent) }),
     [accent],
   )
+  // 카드 크기 (오늘의 현황 판과 같은 폭). 테두리 판(안쪽 여백 + 테두리 1 + 제목 줄)이 정확히 카드 높이가 되도록 카드 면 높이를 정한다
+  const { width, height } = useCardSize()
+  const sizeStyles = useMemo(
+    () => ({
+      root: { width },
+      face: {
+        height: height - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER,
+      },
+      panelClip: { top: height + DETAIL_GAP },
+    }),
+    [width, height],
+  )
   const { progress } = animated
 
   return (
-    <Animated.View style={[styles.root, animated.cardStyle]}>
+    <Animated.View style={[styles.root, sizeStyles.root, animated.cardStyle]}>
       <View style={[glassStyles.surface, styles.frame]}>
         {state.loading && <Loading />}
         {/* 슬라이더 제목도 카드 유리 판 안에 */}
@@ -148,7 +156,7 @@ export const GlassCard = ({ card, idx }: HomeCardProps) => {
           <SectionLabel>내 기기</SectionLabel>
         </View>
         <Pressable onPress={actions.togglePress}>
-          <View style={[styles.face, faceStyle]}>
+          <View style={[styles.face, sizeStyles.face, faceStyle]}>
             <View style={styles.faceTop}>
               <View style={styles.faceTitle}>
                 <Text style={styles.title} numberOfLines={1}>
@@ -223,7 +231,7 @@ export const GlassCard = ({ card, idx }: HomeCardProps) => {
       {/* 상세: 카드 바로 아래 창 안에서 위에서 아래로 미끄러져 나온다.
           크기를 바꾸지 않고 위치(transform)만 움직여 매 프레임 레이아웃을 다시 계산하지 않는다 */}
       <View
-        style={styles.panelClip}
+        style={[styles.panelClip, sizeStyles.panelClip]}
         pointerEvents={state.open ? 'box-none' : 'none'}
       >
         <Animated.View
@@ -353,7 +361,6 @@ export const GlassCard = ({ card, idx }: HomeCardProps) => {
 
 const styles = StyleSheet.create({
   root: {
-    width: CARD_WIDTH,
     marginHorizontal: 'auto',
   },
   frame: {
@@ -365,9 +372,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     justifyContent: 'center',
   },
-  // 테두리 판(안쪽 여백 + 테두리 1 + 제목 줄)이 정확히 CARD_HEIGHT가 되도록
   face: {
-    height: CARD_HEIGHT - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER,
     borderRadius: 23,
     backgroundColor: '#050505',
     padding: 18,
@@ -463,7 +468,6 @@ const styles = StyleSheet.create({
   // 주행모드 버튼의 빛 그림자가 잘리지 않도록 양옆·아래로 여유를 둔다
   panelClip: {
     position: 'absolute',
-    top: CARD_HEIGHT + DETAIL_GAP,
     left: -PANEL_GLOW_SPACE,
     right: -PANEL_GLOW_SPACE,
     paddingHorizontal: PANEL_GLOW_SPACE,

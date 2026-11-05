@@ -19,7 +19,8 @@ import {
 } from 'react-native-reanimated'
 import { Gesture, PanGesture } from 'react-native-gesture-handler'
 import { runOnJS } from 'react-native-worklets'
-import { CARD_WIDTH, SLIDER_GAP } from '@home/constants'
+import { SLIDER_GAP } from '@home/constants'
+import { useCardSize } from '@home/hooks'
 import { useUserContext } from '@/contexts'
 import { useCardSettingContext } from '@home/contexts'
 
@@ -27,7 +28,6 @@ import { useCardSettingContext } from '@home/contexts'
  * 카드 슬라이더: 카드들 + 맨 끝 카드 추가 칸을 가로로 넘긴다.
  * 위치는 translateX 하나로만 움직이고, 선택한 칸(selectedCardIdx)은 손을 뗀 뒤에 정해진다.
  */
-const SLIDER_INTERVAL = CARD_WIDTH + SLIDER_GAP
 // 가로로 이만큼 움직여야 넘기기가 시작된다. 그 전에 손을 떼면 카드 터치로 처리된다
 const ACTIVE_OFFSET = 10
 // 이보다 빠르게 밀면 거리가 짧아도 민 방향으로 한 칸 넘긴다
@@ -65,6 +65,9 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const [selectedCardIdx, setSelectedCard] = useState(0)
   const translateX = useSharedValue(0)
   const dragStartX = useSharedValue(0)
+  // 칸 사이 간격 = 카드 폭 + 틈 (글래스는 카드 폭이 화면에 따라 달라진다)
+  const { width: cardWidth } = useCardSize()
+  const interval = cardWidth + SLIDER_GAP
 
   const slidingRef = useRef(false)
   const slideEndAtRef = useRef(0)
@@ -87,11 +90,18 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
     (idx: number) => {
       // 다른 카드로 옮기면 열려 있던 상세는 접는다
       if (detailCard !== -1 && detailCard !== idx) detailController.close()
-      translateX.value = withTiming(-idx * SLIDER_INTERVAL, SNAP)
+      translateX.value = withTiming(-idx * interval, SNAP)
       setSelectedCard(idx)
     },
-    [detailCard, detailController, translateX],
+    [detailCard, detailController, translateX, interval],
   )
+
+  // 테마를 바꿔 카드 폭이 달라지면 지금 칸 위치로 바로 맞춘다
+  useEffect(() => {
+    translateX.value = -selectedCardIdx * interval
+    // 칸을 고를 때는 goToIdx가 옮기므로 폭이 바뀔 때만 다시 맞춘다
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [interval, translateX])
 
   // 카드가 줄어 선택한 칸이 없어지면 마지막 칸으로 옮긴다
   useEffect(() => {
@@ -113,7 +123,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
           if (detailProgress.value > 0) runOnJS(closeDetail)()
         })
         .onUpdate(e => {
-          const minX = -lastIdx * SLIDER_INTERVAL
+          const minX = -lastIdx * interval
           const x = dragStartX.value + e.translationX
           if (x > 0) translateX.value = x * EDGE_RESISTANCE
           else if (x < minX)
@@ -121,14 +131,14 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
           else translateX.value = x
         })
         .onEnd(e => {
-          const position = -translateX.value / SLIDER_INTERVAL
+          const position = -translateX.value / interval
           let target = Math.round(position)
           // 빠르게 밀었으면 지금 위치에서 민 방향의 칸으로
           if (e.velocityX < -FLING_VELOCITY) target = Math.ceil(position)
           else if (e.velocityX > FLING_VELOCITY) target = Math.floor(position)
           target = clamp(target, 0, lastIdx)
 
-          translateX.value = withTiming(-target * SLIDER_INTERVAL, SNAP)
+          translateX.value = withTiming(-target * interval, SNAP)
           runOnJS(setSelectedCard)(target)
         })
         .onFinalize(() => {
@@ -137,6 +147,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
     [
       settingCard,
       lastIdx,
+      interval,
       closeDetail,
       detailProgress,
       translateX,

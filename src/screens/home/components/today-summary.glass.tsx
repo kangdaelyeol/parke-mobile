@@ -10,6 +10,7 @@ import {
 } from '@/components'
 import { GLASS, Tone } from '@/theme/glass'
 import { useTodaySummaryViewModel } from '@home/view-model'
+import { useCardSize } from '@home/hooks'
 
 const batteryIcon = (level: number): SolidIconName => {
   if (level >= 80) return 'battery-full'
@@ -26,10 +27,12 @@ const batteryTone = (level: number): Tone =>
 export const GlassTodaySummary = () => {
   const { state, animated } = useTodaySummaryViewModel()
   const battery = Number(state.batteryLevel) || 0
+  // 아래 카드와 같은 폭
+  const { width: cardWidth } = useCardSize()
 
   return (
     <Animated.View style={[styles.container, animated.containerStyle]}>
-      <GlassSurface style={styles.panel}>
+      <GlassSurface style={[styles.panel, { width: cardWidth }]}>
         <SectionLabel>오늘의 현황</SectionLabel>
         <View style={styles.stats}>
           <StatCard
@@ -79,8 +82,6 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   panel: {
-    width: '100%',
-    maxWidth: 360,
     marginHorizontal: 'auto',
     marginTop: 8,
     padding: 14,
