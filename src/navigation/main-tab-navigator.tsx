@@ -6,6 +6,7 @@ import { HomeScreen, ProfileScreen, SettingScreen } from '@/screens'
 import { CardSettingProvider } from '@home/contexts'
 import { Footer } from '@home/components'
 import { MainTabParamList } from '@/navigation/types'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 const Tab = createBottomTabNavigator<MainTabParamList>()
 
@@ -22,7 +23,7 @@ export default function MainTabNavigator() {
           headerShown: false,
           // 탭을 누르면 전환 효과 없이 바로 바꾼다
           animation: 'none',
-          sceneStyle: { backgroundColor: 'black' },
+          sceneStyle: { backgroundColor: SCREEN_BACKGROUND },
         }}
       >
         <Tab.Screen name="HomeTab" component={HomeScreen} />

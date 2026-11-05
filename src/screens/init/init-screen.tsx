@@ -3,6 +3,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Loading } from '@/components'
 import { InitContextProvider, useInitContext } from '@/screens/init/contexts'
 import { Main, Footer, Header } from './components'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 const InitContent = () => {
   const { state } = useInitContext()
@@ -29,6 +30,6 @@ export default function InitScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: SCREEN_BACKGROUND,
   },
 })

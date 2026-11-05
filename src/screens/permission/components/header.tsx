@@ -1,10 +1,10 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { GRAY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
+import { useIsSmallScreen } from '@/theme/layout'
 
 export const Header = () => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
 
   return (
     <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>

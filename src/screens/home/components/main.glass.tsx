@@ -15,6 +15,7 @@ import { TodaySummary } from './today-summary'
 import { useMainViewModel } from '@home/view-model'
 import { CardInfoTab, HomeMainProps } from '@home/types'
 import { useTabBarLayout } from '@/hooks'
+import { GLASS_LAYOUT } from '@/theme/glass'
 
 // 홈 본문 (글래스): 영상 Overview처럼 판을 위에서 아래로 쌓고 세로로 스크롤한다.
 // 상단 바 → 오늘의 현황(통계 카드 2×2) → 내 기기 판(좌우로 넘김) → 고른 카드의 정보 판.
@@ -38,7 +39,10 @@ export const GlassMain = ({ loading }: HomeMainProps) => {
     <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingTop: top + 8, paddingBottom: space }}
+        contentContainerStyle={{
+          paddingTop: top + GLASS_LAYOUT.topGap,
+          paddingBottom: space,
+        }}
       >
         {/* 수정 화면이 열리면 본문 전체가 제자리에서 사라지고 터치도 받지 않는다 */}
         <Animated.View

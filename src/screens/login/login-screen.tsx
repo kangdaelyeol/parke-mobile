@@ -2,6 +2,7 @@ import { View, StyleSheet } from 'react-native'
 import { Loading } from '@/components'
 import { LoginContextProvider, useLoginContext } from '@login/contexts'
 import { ConsentBottomSheet, Footer, Main } from '@login/components'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 const LoginContent = () => {
   const { state } = useLoginContext()
@@ -25,7 +26,7 @@ export default function LoginScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     flex: 1,
   },
 })

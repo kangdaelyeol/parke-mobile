@@ -15,6 +15,7 @@ import {
 import { Loading } from '@/components'
 import { PRETENDARD } from '@/theme/fonts'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 type ScanCompleteProps = {
   route: RouteProp<RootStackParamList, 'ScanComplete'>
@@ -57,7 +58,7 @@ export default function ScanCompleteScreen({ route }: ScanCompleteProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   wrapper: {
     marginTop: 25,

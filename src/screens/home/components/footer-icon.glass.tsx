@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native'
+import { Pressable, StyleSheet, View } from 'react-native'
 import Animated, {
   interpolateColor,
   useAnimatedStyle,
@@ -8,6 +8,7 @@ import { useSelectionProgress } from '@/components'
 import { DM_SANS } from '@/theme/fonts'
 import { GLASS, glassStyles, TEXT, TONE } from '@/theme/glass'
 import { FooterGlyph } from './footer-glyph'
+import { useIsSmallScreen } from '@/theme/layout'
 
 // 흐린 아이콘의 밝기
 const IDLE_ICON_OPACITY = 0.5
@@ -22,8 +23,7 @@ export const GlassFooterIcon = ({
   onPress,
   iconSize,
 }: HomeFooterIconProps) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   const selected = useSelectionProgress(active)
 
   const activeStyle = useAnimatedStyle(() => ({ opacity: selected.value }))

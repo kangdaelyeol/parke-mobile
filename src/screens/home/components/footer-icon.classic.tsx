@@ -1,15 +1,10 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import { HomeFooterIconProps } from '@home/types'
 import { ICON_COLOR, ICON_COLOR_PRESSED } from '@home/constants'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY_LIGHT, WHITE } from '@/theme/color'
 import { FooterGlyph } from './footer-glyph'
+import { useIsSmallScreen } from '@/theme/layout'
 
 // 기본 테마 탭바 한 칸 (처음 푸터 아이콘). 보고 있는 탭은 밝게, 나머지는 흐리게
 export const ClassicFooterIcon = ({
@@ -19,8 +14,7 @@ export const ClassicFooterIcon = ({
   onPress,
   iconSize,
 }: HomeFooterIconProps) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
 
   return (
     <Pressable onPress={onPress}>

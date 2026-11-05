@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { FocusableInput } from '@/components'
 import { useInitContext } from '@/screens/init/contexts'
 import { formatPhone } from '@/utils'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 export const Main = () => {
   const { state, actions } = useInitContext()
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     paddingHorizontal: 20,
   },

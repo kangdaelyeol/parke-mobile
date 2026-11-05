@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { StepNode } from './step-node'
 import { StepLine } from './step-line'
 import { stepList } from '@scan-complete/config/step.config'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 export const ProgressStepper = () => {
   return (
@@ -22,7 +23,7 @@ export const ProgressStepper = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     marginTop: 20,
     paddingBottom: 10,
   },

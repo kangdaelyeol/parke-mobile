@@ -11,7 +11,7 @@ import {
 } from '@/screens/drive/components'
 import { useDriveViewModel } from '@/screens/drive/view-model'
 import { formatClock } from '@/utils'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, WHITE, SCREEN_BACKGROUND } from '@/theme/color'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 
 type DriveScreenProps = {
@@ -83,7 +83,7 @@ export default function DriveScreen({ route }: DriveScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   map: {
     flex: 1,

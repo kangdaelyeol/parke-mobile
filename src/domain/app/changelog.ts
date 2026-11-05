@@ -24,6 +24,18 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.3',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '화면 배치 기준 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '글래스 대시보드의 하위 화면(주행 기록, 버전 정보, 설정)이 같은 화면 틀을 써서 위 여백과 본문 폭이 어디서나 같아요.',
+      },
+    ],
+  },
+  {
     version: '1.5.2',
     date: '2026-11-05',
     bump: 'patch',

@@ -3,6 +3,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Footer, Header, Radar, Title } from '@search-ble/components'
 import { SearchBleProvider } from '@search-ble/contexts'
 import { useSearchBleViewModel } from '@search-ble/view-model'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 const SearchBleContent = () => {
   useSearchBleViewModel()
@@ -31,7 +32,7 @@ export default function SearchBleScreen() {
 const styles = StyleSheet.create({
   container: {
     height: '100%',
-    backgroundColor: '#000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   scrollView: {
     minHeight: 700,

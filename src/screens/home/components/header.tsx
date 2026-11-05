@@ -12,15 +12,16 @@ import { LogoIcon } from '@/assets/logo'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { useBackgroundScanning } from '@/hooks'
 import { useUserContext } from '@/contexts'
-import { GRAY, GREEN, RED, WHITE } from '@/theme/color'
+import { GRAY, GREEN, RED, WHITE, SCREEN_BACKGROUND } from '@/theme/color'
 import { formatPhone } from '@/utils'
+import { CONTENT_MAX_WIDTH, SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 export const Header = () => {
   const scanning = useBackgroundScanning()
   const navigation = useNavigation<HomeStackNavigationProp>()
   const { user } = useUserContext()
   const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
   const iconSize = isSmall ? 28 : 35
 
   return (
@@ -79,11 +80,11 @@ export const Header = () => {
 const styles = StyleSheet.create({
   header: {
     width: '100%',
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     zIndex: 1,
   },
   headerWrapper: {
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginTop: 40,
     boxSizing: 'border-box',
     height: 60,

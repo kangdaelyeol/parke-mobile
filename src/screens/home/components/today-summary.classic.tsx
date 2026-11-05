@@ -4,12 +4,13 @@ import { DARK, GRAY, WHITE } from '@/theme/color'
 import { DM_MONO, DM_SANS } from '@/theme/fonts'
 import { BatteryIllustration } from './illustrations'
 import { useTodaySummaryViewModel } from '@home/view-model'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 // 오늘의 현황 (기본 테마: 처음 디자인)
 export const ClassicTodaySummary = () => {
   const { state, animated } = useTodaySummaryViewModel()
   const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   return (
     <Animated.View style={[styles.container, animated.containerStyle]}>

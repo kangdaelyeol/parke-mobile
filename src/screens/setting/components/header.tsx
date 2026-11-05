@@ -1,8 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { useHeaderViewModel } from '@setting/view-model'
-import { GlassTitleBar } from '@/components'
+import { GlassScreenHeader } from '@/components'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 import { themed } from '@/theme/themed'
@@ -38,30 +37,17 @@ const ClassicHeader = ({ title = '설정', back = false }: HeaderProps) => {
 // 글래스: 제목도 유리 막대 안에 (하위 화면은 막대 왼쪽에 ‹)
 const GlassHeader = ({ title = '설정', back = false }: HeaderProps) => {
   const { actions } = useHeaderViewModel()
-  const { top } = useSafeAreaInsets()
   return (
-    <View style={[styles.wrapper, { paddingTop: top + 8 }]}>
-      <GlassTitleBar
-        title={title}
-        onBack={back ? actions.backPress : undefined}
-      />
-    </View>
+    <GlassScreenHeader
+      title={title}
+      onBack={back ? actions.backPress : undefined}
+    />
   )
 }
 
 export const Header = themed({
   classic: ClassicHeader,
   'glass-dashboard': GlassHeader,
-})
-
-const styles = StyleSheet.create({
-  wrapper: {
-    width: '100%',
-    maxWidth: 400,
-    marginHorizontal: 'auto',
-    paddingHorizontal: 14,
-    paddingBottom: 4,
-  },
 })
 
 // 기본 테마 (처음 디자인)

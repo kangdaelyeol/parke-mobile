@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { Footer, Header, Main } from '@permission/components'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 export default function PermissionScreen() {
   return (
@@ -14,6 +15,6 @@ export default function PermissionScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
 })

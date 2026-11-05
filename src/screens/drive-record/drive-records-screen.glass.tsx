@@ -1,20 +1,18 @@
 import { useMemo, useState } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import {
   FilterChips,
+  GlassScreen,
   GlassTableColumn,
   GlassTableHeader,
   GlassTableRow,
   IconTile,
-  Loading,
   PanelHeader,
   SegmentOption,
 } from '@/components'
 import { DriveRecordDto } from '@/domain/drive'
 import { RootStackParamList } from '@/navigation/types'
-import { Header } from '@/screens/drive-record/components'
 import { useDriveRecordsViewModel } from '@/screens/drive-record/view-model'
 import { formatClock, formatDay, formatKm, formatMinutes } from '@/utils'
 import { DM_MONO, PRETENDARD } from '@/theme/fonts'
@@ -49,7 +47,6 @@ const rangeStart = (range: RecordRange) => {
 // 기록이 많아도 보이는 줄만 그리도록 줄은 FlatList로 그리고, 판 안에서 스크롤한다
 export function GlassDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
   const { state, actions } = useDriveRecordsViewModel(route.params.cardId)
-  const { bottom } = useSafeAreaInsets()
   const [range, setRange] = useState<RecordRange>('all')
 
   const records = useMemo(() => {
@@ -101,69 +98,47 @@ export function GlassDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
   )
 
   return (
-    <View style={styles.container}>
-      <Header
-        title={state.cardTitle || '주행 기록'}
-        onBack={actions.backPress}
-      />
-      {state.loading ? (
-        <Loading />
-      ) : (
-        <View style={[styles.body, { paddingBottom: bottom + 16 }]}>
-          <View style={[glassStyles.surface, styles.panel]}>
-            <PanelHeader
-              title="주행 기록"
-              subtitle={`${records.length}건 · ${totalKm}km`}
-              right={
-                <FilterChips
-                  options={RANGES}
-                  value={range}
-                  onChange={setRange}
-                />
-              }
-            />
-            <View style={styles.table}>
-              <GlassTableHeader columns={columns} />
-              <FlatList
-                style={styles.list}
-                data={records}
-                keyExtractor={record => record.id}
-                renderItem={({ item }) => (
-                  <GlassTableRow
-                    columns={columns}
-                    row={item}
-                    onPress={actions.recordPress}
-                  />
-                )}
-                ListEmptyComponent={
-                  <Text style={styles.empty}>
-                    {state.records.length
-                      ? '이 기간에는 주행 기록이 없어요.'
-                      : '아직 주행 기록이 없어요.\n주행 모드를 끝내면 여기에 저장됩니다.'}
-                  </Text>
-                }
+    <GlassScreen
+      title={state.cardTitle || '주행 기록'}
+      onBack={actions.backPress}
+      loading={state.loading}
+    >
+      <View style={[glassStyles.surface, styles.panel]}>
+        <PanelHeader
+          title="주행 기록"
+          subtitle={`${records.length}건 · ${totalKm}km`}
+          right={
+            <FilterChips options={RANGES} value={range} onChange={setRange} />
+          }
+        />
+        <View style={styles.table}>
+          <GlassTableHeader columns={columns} />
+          <FlatList
+            style={styles.list}
+            data={records}
+            keyExtractor={record => record.id}
+            renderItem={({ item }) => (
+              <GlassTableRow
+                columns={columns}
+                row={item}
+                onPress={actions.recordPress}
               />
-            </View>
-          </View>
+            )}
+            ListEmptyComponent={
+              <Text style={styles.empty}>
+                {state.records.length
+                  ? '이 기간에는 주행 기록이 없어요.'
+                  : '아직 주행 기록이 없어요.\n주행 모드를 끝내면 여기에 저장됩니다.'}
+              </Text>
+            }
+          />
         </View>
-      )}
-    </View>
+      </View>
+    </GlassScreen>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'black',
-  },
-  body: {
-    flex: 1,
-    width: '100%',
-    maxWidth: 400,
-    marginHorizontal: 'auto',
-    paddingHorizontal: 14,
-    paddingTop: 8,
-  },
   // 줄이 적으면 내용만큼, 많으면 화면 아래까지 늘어나고 안에서 스크롤한다
   panel: {
     flexShrink: 1,

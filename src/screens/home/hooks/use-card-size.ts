@@ -5,6 +5,7 @@ import {
   GLASS_CONTENT_MAX_WIDTH,
 } from '@home/constants'
 import { useThemeId } from '@/theme/themed'
+import { CONTENT_MAX_WIDTH, SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 // 홈 카드 크기 (슬라이더 칸 하나).
 // - 기본 테마: 처음 크기 그대로 (330 x 210)
@@ -15,7 +16,10 @@ export const useCardSize = () => {
   if (!isGlass) return { width: CARD_WIDTH, height: CARD_HEIGHT }
 
   // 홈 본문 폭(작은 화면 330, 큰 화면 400) 안에서 판 최대 폭까지
-  const contentWidth = Math.min(width, width < 400 ? 330 : 400)
+  const contentWidth = Math.min(
+    width,
+    width < SMALL_SCREEN_WIDTH ? 330 : CONTENT_MAX_WIDTH,
+  )
   const cardWidth = Math.min(contentWidth, GLASS_CONTENT_MAX_WIDTH)
   return {
     width: cardWidth,

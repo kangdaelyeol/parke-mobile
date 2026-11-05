@@ -6,13 +6,14 @@ import { footerIconList } from '@home/config/footer.config'
 import { useTabBarLayout } from '@/hooks'
 import { DARK } from '@/theme/color'
 import { ClassicFooterIcon } from './footer-icon.classic'
+import { CONTENT_MAX_WIDTH, SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 // 기본 테마 탭바: 화면 아래에 붙은 어두운 바 (처음 푸터). 홈 · My · 설정을 오가도 그대로 남는다
 export const ClassicFooter = ({ state, navigation }: BottomTabBarProps) => {
   const vm = useFooterViewModel({ state, navigation })
   const { width } = useWindowDimensions()
   const { height } = useTabBarLayout()
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   return (
     <Animated.View
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     paddingHorizontal: 30,
     paddingTop: 10,
     marginHorizontal: 'auto',

@@ -1,11 +1,5 @@
 import { JSX } from 'react'
-import {
-  StyleSheet,
-  View,
-  Text,
-  Pressable,
-  useWindowDimensions,
-} from 'react-native'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 import { TEXT, withAlpha } from '@/theme/glass'
@@ -20,6 +14,7 @@ import {
   QrIllustration,
   SerialIllustration,
 } from '@/components/illustrations/item'
+import { useIsSmallScreen } from '@/theme/layout'
 
 type ItemOption =
   | 'bluetooth'
@@ -94,8 +89,7 @@ export const Item = ({
   Right,
   onPress,
 }: ItemProps) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
 
   const Icon = ICONS[option]
   const isGlass = useThemeId() === 'glass-dashboard'

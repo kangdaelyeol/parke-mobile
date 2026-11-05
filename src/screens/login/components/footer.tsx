@@ -5,7 +5,7 @@ import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { KakaoLogo } from '@/assets/logo'
 import { useLoginContext } from '@login/contexts'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { GRAY, GRAY_DEEP } from '@/theme/color'
+import { GRAY, GRAY_DEEP, SCREEN_BACKGROUND } from '@/theme/color'
 import { GoogleIllustration } from '@login/components/illustrations'
 import { OriginalsLogoText } from '@/assets/illustrations'
 export const Footer = () => {
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   wrapper: {
     width: '100%',

@@ -21,6 +21,7 @@ import {
   ToolbarSample,
 } from './components'
 import { useThemeGalleryViewModel } from './view-model'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 type ThemeGalleryScreenProps = {
   route: RouteProp<RootStackParamList, 'ThemeGallery'>
@@ -112,7 +113,7 @@ export default function ThemeGalleryScreen({ route }: ThemeGalleryScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   header: {
     width: '100%',

@@ -1,5 +1,6 @@
 import { StyleSheet } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 /**
  * 첫 번째 테마 「글래스 대시보드」 토큰 (design/dashboard.mp4에서 배경만 빼고 옮김)
@@ -113,7 +114,22 @@ export const ACCENT_FILL =
 export const ACCENT_TILE = 'linear-gradient(160deg, #5c5fff 0%, #2c2fd1 100%)'
 export const ACCENT_GLOW = '0px 6px 18px rgba(56,59,249,0.4)'
 
+// 화면 배치
+export const GLASS_LAYOUT = {
+  // 본문 좌우 여백
+  gutter: 14,
+  // 상태 표시줄 아래에서 첫 판까지
+  topGap: 8,
+} as const
+
 export const glassStyles = StyleSheet.create({
+  // 화면 본문 칸: 가운데에 놓이고 최대 폭까지, 좌우 여백
+  column: {
+    width: '100%',
+    maxWidth: CONTENT_MAX_WIDTH,
+    marginHorizontal: 'auto',
+    paddingHorizontal: GLASS_LAYOUT.gutter,
+  },
   // 판: 카드·목록·패널
   surface: {
     borderRadius: 20,

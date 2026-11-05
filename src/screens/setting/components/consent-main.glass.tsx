@@ -3,7 +3,7 @@ import { CheckBoxLine, GlassSection } from '@/components'
 import { useConsentViewModel } from '@setting/view-model'
 import { ConsentItem } from '@setting/types'
 import { PRETENDARD } from '@/theme/fonts'
-import { GLASS, TEXT } from '@/theme/glass'
+import { GLASS, glassStyles, TEXT } from '@/theme/glass'
 import { formatDateTime } from '@/utils'
 
 // 선택 동의 관리 본문 (글래스)
@@ -38,7 +38,7 @@ export const GlassConsentMain = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
+      <View style={[glassStyles.column, styles.container]}>
         {/* 묶음 이름·항목·안내 문구를 모두 한 판 안에 */}
         <GlassSection title="선택 동의" style={styles.section}>
           <View style={styles.items}>
@@ -66,11 +66,7 @@ export const GlassConsentMain = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    maxWidth: 400,
-    paddingHorizontal: 14,
     paddingBottom: 80,
-    marginHorizontal: 'auto',
   },
   section: {
     marginTop: 28,

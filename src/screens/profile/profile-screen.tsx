@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native'
 import { Main, Header } from '@profile/components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { useTabBarLayout } from '@/hooks'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 export default function ProfileScreen() {
   const { space } = useTabBarLayout()
@@ -22,7 +23,7 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     flex: 1,
   },
 })

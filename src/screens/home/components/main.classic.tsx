@@ -1,4 +1,4 @@
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import { SLIDER_GAP } from '@home/constants'
@@ -14,6 +14,7 @@ import { useMainViewModel } from '@home/view-model'
 import { HomeMainProps } from '@home/types'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
+import { CONTENT_MAX_WIDTH, useIsSmallScreen } from '@/theme/layout'
 
 // 홈 본문 (기본 테마): 화면 가운데 카드 슬라이더 + 위쪽 오늘의 현황 + 아래 페이지 점
 export const ClassicMain = ({ loading }: HomeMainProps) => {
@@ -21,8 +22,7 @@ export const ClassicMain = ({ loading }: HomeMainProps) => {
   // 카드를 아직 한 번도 못 불러온 상태에서만 뼈대를 보여준다.
   // 이미 카드가 있으면 다시 동기화하는 동안에도 기존 카드를 그대로 둔다.
   const showSkeleton = loading && state.cardLength === 0
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   // 카드 칸 크기
   const cardSize = useCardSize()
   // 수정 화면이 열리면 오늘의 현황·페이지 점은 사라지고 터치도 받지 않는다
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     paddingBottom: 200,
     flex: 1,

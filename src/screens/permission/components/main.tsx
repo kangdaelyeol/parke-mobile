@@ -2,6 +2,7 @@ import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { Item, ItemDivider, ItemList } from '@/components'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GRAY, GRAY_DEEP } from '@/theme/color'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 const Badge = () => {
   return (
@@ -14,7 +15,7 @@ const Badge = () => {
 export const Main = () => {
   const { width } = useWindowDimensions()
 
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   return (
     <View style={[styles.container, isSmall && styles.containerSmall]}>

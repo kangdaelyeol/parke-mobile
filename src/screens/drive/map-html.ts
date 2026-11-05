@@ -1,5 +1,11 @@
 import { KAKAO_MAP_JS_KEY } from '@/constants'
 
+// 지도 위 출발·도착 표시 색 (주행 기록 범례도 같은 색을 쓴다)
+export const MAP_PIN_COLORS = {
+  start: '#2fbf71',
+  end: '#ed3a3a',
+} as const
+
 // WebView 안에서 실행되는 카카오맵 페이지.
 // RN → 지도: window.addPoint / setPath / recenter / showSummary 호출 (injectJavaScript)
 // 지도 → RN: { type: 'ready' } / { type: 'error', message } 메시지
@@ -13,8 +19,8 @@ export const buildMapHtml = (accent: string) => `<!DOCTYPE html>
         border: 3px solid #ffffff; box-shadow: 0 0 10px ${accent}; }
   .pin { padding: 4px 8px; border-radius: 10px; color: #ffffff; font: bold 12px sans-serif;
          border: 2px solid #ffffff; white-space: nowrap; }
-  .start { background: #2fbf71; }
-  .end { background: #ed3a3a; }
+  .start { background: ${MAP_PIN_COLORS.start}; }
+  .end { background: ${MAP_PIN_COLORS.end}; }
 </style>
 <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=${KAKAO_MAP_JS_KEY}&autoload=false"></script>
 </head>

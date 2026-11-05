@@ -14,6 +14,7 @@ import { formatPhone } from '@/utils'
 import { DM_MONO, DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { RED_LIGHT } from '@/theme/color'
 import { BluetoothIllustration, PhoneIllustration } from './illustrations'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 interface BottomSheetProps {
   idx: number
@@ -235,7 +236,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     paddingHorizontal: 15,
     paddingBottom: 15,

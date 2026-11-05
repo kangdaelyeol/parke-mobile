@@ -3,10 +3,14 @@ import { RouteProp } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Loading } from '@/components'
 import { RootStackParamList } from '@/navigation/types'
-import { ClassicRecordItem, Header } from '@/screens/drive-record/components'
+import {
+  ClassicHeader,
+  ClassicRecordItem,
+} from '@/screens/drive-record/components'
 import { useDriveRecordsViewModel } from '@/screens/drive-record/view-model'
-import { GRAY } from '@/theme/color'
+import { GRAY, SCREEN_BACKGROUND } from '@/theme/color'
 import { PRETENDARD } from '@/theme/fonts'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 type DriveRecordsScreenProps = {
   route: RouteProp<RootStackParamList, 'DriveRecords'>
@@ -19,7 +23,7 @@ export function ClassicDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
 
   return (
     <View style={styles.container}>
-      <Header
+      <ClassicHeader
         title={state.cardTitle ? `${state.cardTitle} 주행 기록` : '주행 기록'}
         onBack={actions.backPress}
       />
@@ -52,11 +56,11 @@ export function ClassicDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   list: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     paddingHorizontal: 16,
     paddingTop: 20,

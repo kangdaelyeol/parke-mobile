@@ -1,5 +1,5 @@
 import { PropsWithChildren, useMemo } from 'react'
-import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import Animated, {
   interpolate,
   useAnimatedStyle,
@@ -24,12 +24,13 @@ import {
   GlassSurface,
   PressableButton,
 } from '@/components'
-import { glassStyles, glassText } from '@/theme/glass'
+import { GLASS_LAYOUT, glassStyles, glassText } from '@/theme/glass'
 import { useTabBarLayout } from '@/hooks'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useThemeId } from '@/theme/themed'
-import { DARK } from '@/theme/color'
+import { DARK, SCREEN_BACKGROUND } from '@/theme/color'
 import { formatPhone } from '@/utils'
+import { useIsSmallScreen } from '@/theme/layout'
 
 // 수정 화면 요소를 순서대로 나타나게 하는 래퍼 (index가 클수록 늦게, 0번: 미리보기)
 const Stagger = ({
@@ -43,8 +44,7 @@ const Stagger = ({
 
 export const SettingCard = ({ card }: HomeSettingCardProps) => {
   const { state, actions } = useSettingCardViewModel(card)
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   const { settingProgress, settingOpened } = useCardSettingContext()
 
   // 카드가 투명해지는 동안 배경이 어두워지며 덮는다
@@ -103,7 +103,7 @@ export const SettingCard = ({ card }: HomeSettingCardProps) => {
         <KeyboardAwareScrollView
           contentContainerStyle={[
             styles.wrapper,
-            isGlass && { paddingTop: top + 8 },
+            isGlass && { paddingTop: top + GLASS_LAYOUT.topGap },
           ]}
           extraScrollHeight={15}
           enableOnAndroid
@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
     right: 0,
     marginHorizontal: 'auto',
     bottom: 0,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   wrapper: {
     width: '100%',

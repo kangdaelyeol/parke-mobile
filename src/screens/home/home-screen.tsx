@@ -3,6 +3,7 @@ import { SliderContextProvider } from '@home/contexts'
 import { Header, Main } from '@home/components'
 import { useHomeViewModel } from '@home/view-model'
 import { useThemeId } from '@/theme/themed'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 const HomeScreenContent = () => {
   const { state } = useHomeViewModel()
@@ -30,6 +31,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: SCREEN_BACKGROUND,
   },
 })

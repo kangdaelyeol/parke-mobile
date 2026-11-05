@@ -2,13 +2,14 @@ import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { OnBoardingIcon1_1 } from '@/assets/illustrations'
 import { DM_SANS } from '@/theme/fonts'
 import { GRAY, WHITE } from '@/theme/color'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 export const MainArticle1 = () => {
   // const { width, height } = useWindowDimensions()
   const { width } = useWindowDimensions()
   const widthRatio = 466 / 190
 
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   return (
     <View style={styles.container}>

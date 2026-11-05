@@ -3,6 +3,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import { LogoIcon1024 } from '@/assets/logo'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { BLUE_PRIMARY, DARK, GRAY_DEEP, WHITE } from '@/theme/color'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 export const Main = () => {
   return (
     <View style={styles.container}>
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     flex: 1,
     justifyContent: 'center',

@@ -8,6 +8,7 @@ import {
   StatusPill,
 } from '@/components'
 import { LEGAL_DOCS } from '@/constants'
+import { glassStyles } from '@/theme/glass'
 import { useTabBarLayout } from '@/hooks'
 import { ThemeSection } from './theme-section'
 import { DocType } from '@/types/common'
@@ -29,7 +30,7 @@ export const GlassMain = () => {
   return (
     // 아래 탭바에 가리지 않도록 탭바만큼 더 비워 둔다
     <ScrollView contentContainerStyle={{ paddingBottom: space }}>
-      <View style={styles.container}>
+      <View style={[glassStyles.column, styles.container]}>
         <ThemeSection
           themes={state.themes}
           themeId={state.themeId}
@@ -124,11 +125,7 @@ export const GlassMain = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
-    maxWidth: 400,
-    paddingHorizontal: 14,
     paddingBottom: 40,
-    marginHorizontal: 'auto',
   },
   section: {
     marginTop: 28,

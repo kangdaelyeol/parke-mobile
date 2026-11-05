@@ -1,10 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { PanelHeader, PressableButton, StatCard } from '@/components'
+import {
+  GlassScreen,
+  PanelHeader,
+  PressableButton,
+  StatCard,
+} from '@/components'
 import { RootStackParamList } from '@/navigation/types'
 import { DriveMap } from '@/screens/drive/components'
-import { Header } from '@/screens/drive-record/components'
+import { MAP_PIN_COLORS } from '@/screens/drive/map-html'
 import { useDriveRecordViewModel } from '@/screens/drive-record/view-model'
 import {
   formatClock,
@@ -20,118 +24,104 @@ type DriveRecordScreenProps = {
   route: RouteProp<RootStackParamList, 'DriveRecord'>
 }
 
-// 지도 위 출발·도착 표시와 같은 색 (drive/map-html.ts의 .start · .end)
-const START_COLOR = '#2fbf71'
-const END_COLOR = '#ed3a3a'
-
 // 주행 기록 상세 (글래스): 영상 Analytics처럼 위에 통계 카드 네 장, 아래에 큰 판(경로 지도 + 범례 줄)
 export function GlassDriveRecordScreen({ route }: DriveRecordScreenProps) {
   const { state, actions } = useDriveRecordViewModel(route.params.record)
-  const { bottom } = useSafeAreaInsets()
   const { record } = state
 
   return (
-    <View style={styles.container}>
-      <Header title={record.cardTitle} onBack={actions.backPress} />
-      <View style={[styles.body, { paddingBottom: bottom + 16 }]}>
-        <View style={styles.statRow}>
-          <StatCard
-            style={styles.stat}
-            title="이동 거리"
-            value={formatKm(record.distance)}
-            unit="km"
-            icon="route"
-            tone="info"
-          />
-          <StatCard
-            style={styles.stat}
-            title="주행 시간"
-            value={formatDuration(record.endAt - record.startAt)}
-            icon="stopwatch"
-            tone="violet"
-          />
-        </View>
-        <View style={styles.statRow}>
-          <StatCard
-            style={styles.stat}
-            title="평균 속도"
-            value={String(toKmh(record.averageSpeed))}
-            unit="km/h"
-            icon="gauge-high"
-            tone="success"
-          />
-          <StatCard
-            style={styles.stat}
-            title="최고 속도"
-            value={String(toKmh(record.maxSpeed))}
-            unit="km/h"
-            icon="bolt"
-            tone="warning"
-          />
-        </View>
-
-        {/* 경로 판: 머리줄(날짜 · 시각) + 지도 + 아래 범례 줄 (영상 큰 차트 판의 아래 범례처럼) */}
-        <View style={[glassStyles.surface, styles.mapPanel]}>
-          <PanelHeader
-            title="주행 경로"
-            subtitle={`${formatDay(record.startAt)} · ${formatClock(
-              record.startAt,
-            )} ~ ${formatClock(record.endAt)}`}
-          />
-          <View style={styles.map}>
-            <DriveMap
-              ref={state.mapRef}
-              phase="summary"
-              points={state.points}
-              current={null}
-              accent={state.accent}
-            />
-            {state.loading && (
-              <View style={styles.loading}>
-                <Text style={styles.loadingText}>경로를 불러오는 중…</Text>
-              </View>
-            )}
-          </View>
-          <View style={styles.legend}>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendDot, styles.startDot]} />
-              <Text style={styles.legendText}>출발</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View style={[styles.legendDot, styles.endDot]} />
-              <Text style={styles.legendText}>도착</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <View
-                style={[styles.legendLine, { backgroundColor: state.accent }]}
-              />
-              <Text style={styles.legendText}>경로</Text>
-            </View>
-          </View>
-        </View>
-
-        <PressableButton
-          variant="danger"
-          title={state.deleting ? '삭제 중…' : '기록 삭제'}
-          onPress={actions.deletePress}
+    <GlassScreen
+      title={record.cardTitle}
+      onBack={actions.backPress}
+      bodyStyle={styles.body}
+    >
+      <View style={styles.statRow}>
+        <StatCard
+          style={styles.stat}
+          title="이동 거리"
+          value={formatKm(record.distance)}
+          unit="km"
+          icon="route"
+          tone="info"
+        />
+        <StatCard
+          style={styles.stat}
+          title="주행 시간"
+          value={formatDuration(record.endAt - record.startAt)}
+          icon="stopwatch"
+          tone="violet"
         />
       </View>
-    </View>
+      <View style={styles.statRow}>
+        <StatCard
+          style={styles.stat}
+          title="평균 속도"
+          value={String(toKmh(record.averageSpeed))}
+          unit="km/h"
+          icon="gauge-high"
+          tone="success"
+        />
+        <StatCard
+          style={styles.stat}
+          title="최고 속도"
+          value={String(toKmh(record.maxSpeed))}
+          unit="km/h"
+          icon="bolt"
+          tone="warning"
+        />
+      </View>
+
+      {/* 경로 판: 머리줄(날짜 · 시각) + 지도 + 아래 범례 줄 (영상 큰 차트 판의 아래 범례처럼) */}
+      <View style={[glassStyles.surface, styles.mapPanel]}>
+        <PanelHeader
+          title="주행 경로"
+          subtitle={`${formatDay(record.startAt)} · ${formatClock(
+            record.startAt,
+          )} ~ ${formatClock(record.endAt)}`}
+        />
+        <View style={styles.map}>
+          <DriveMap
+            ref={state.mapRef}
+            phase="summary"
+            points={state.points}
+            current={null}
+            accent={state.accent}
+          />
+          {state.loading && (
+            <View style={styles.loading}>
+              <Text style={styles.loadingText}>경로를 불러오는 중…</Text>
+            </View>
+          )}
+        </View>
+        <View style={styles.legend}>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, styles.startDot]} />
+            <Text style={styles.legendText}>출발</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View style={[styles.legendDot, styles.endDot]} />
+            <Text style={styles.legendText}>도착</Text>
+          </View>
+          <View style={styles.legendItem}>
+            <View
+              style={[styles.legendLine, { backgroundColor: state.accent }]}
+            />
+            <Text style={styles.legendText}>경로</Text>
+          </View>
+        </View>
+      </View>
+
+      <PressableButton
+        variant="danger"
+        title={state.deleting ? '삭제 중…' : '기록 삭제'}
+        onPress={actions.deletePress}
+      />
+    </GlassScreen>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#000000',
-  },
   body: {
-    flex: 1,
-    width: '100%',
-    maxWidth: 400,
-    marginHorizontal: 'auto',
-    paddingHorizontal: 14,
-    paddingTop: 8,
     gap: 10,
   },
   statRow: {
@@ -183,10 +173,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   startDot: {
-    backgroundColor: START_COLOR,
+    backgroundColor: MAP_PIN_COLORS.start,
   },
   endDot: {
-    backgroundColor: END_COLOR,
+    backgroundColor: MAP_PIN_COLORS.end,
   },
   legendLine: {
     width: 14,

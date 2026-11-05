@@ -6,6 +6,7 @@ import { footerIconList } from '@home/config/footer.config'
 import { useTabBarLayout } from '@/hooks'
 import { GLASS } from '@/theme/glass'
 import { GlassFooterIcon } from './footer-icon.glass'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 // 위쪽이 살짝 밝은 광택
 const SHEEN =
@@ -18,7 +19,7 @@ export const GlassFooter = ({ state, navigation }: BottomTabBarProps) => {
   const vm = useFooterViewModel({ state, navigation })
   const { width } = useWindowDimensions()
   const { height, bottom } = useTabBarLayout()
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
   const padding = isSmall ? BAR_PADDING_SMALL : BAR_PADDING
 
   return (

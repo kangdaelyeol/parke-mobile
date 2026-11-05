@@ -11,9 +11,11 @@ import {
   GRAY_LIGHT,
   RED_LIGHT,
   WHITE,
+  SCREEN_BACKGROUND,
 } from '@/theme/color'
 import { BUMP_LABEL, CHANGE_LABEL } from './labels'
 import { useChangelogViewModel } from './view-model'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 const CHANGE_COLOR: Record<ChangeType, string> = {
   feature: BLUE_PRIMARY,
@@ -81,7 +83,7 @@ export const ClassicChangelogScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'black',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   header: {
     width: '100%',
@@ -110,7 +112,7 @@ const styles = StyleSheet.create({
   },
   content: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     paddingHorizontal: 10,
     marginHorizontal: 'auto',
   },

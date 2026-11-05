@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import { ConsentMain, Header } from '@setting/components'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 export default function ConsentSettingScreen() {
   return (
@@ -12,7 +13,7 @@ export default function ConsentSettingScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'black',
+    backgroundColor: SCREEN_BACKGROUND,
     flex: 1,
   },
 })

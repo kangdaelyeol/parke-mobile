@@ -8,10 +8,11 @@ import {
 import { OnBoardingIcon3 } from '@/assets/illustrations'
 import { GRAY, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 export const MainArticle3 = () => {
   const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   return (
     <View style={styles.container}>

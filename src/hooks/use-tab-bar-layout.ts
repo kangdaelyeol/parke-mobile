@@ -1,6 +1,7 @@
 import { useWindowDimensions } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useThemeId } from '@/theme/themed'
+import { SMALL_SCREEN_WIDTH } from '@/theme/layout'
 
 // 아래 탭바의 높이와 화면 아래에서 띄우는 거리. 탭 화면들은 space만큼 아래를 비워 둔다
 // - 기본 테마: 화면 아래에 붙은 바 (처음 푸터 높이)
@@ -9,7 +10,7 @@ export const useTabBarLayout = () => {
   const { width } = useWindowDimensions()
   const { bottom: safeBottom } = useSafeAreaInsets()
   const isGlass = useThemeId() === 'glass-dashboard'
-  const isSmall = width < 400
+  const isSmall = width < SMALL_SCREEN_WIDTH
 
   if (!isGlass) {
     const height = isSmall ? 60 : 90

@@ -6,6 +6,7 @@ import { DM_MONO, PRETENDARD } from '@/theme/fonts'
 import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
 import { GLASS, glassStyles, glassText, TEXT } from '@/theme/glass'
 import { useThemedSheet } from '@/theme/themed'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 const ACCENT_PRESETS = [
   '#383bf9',
@@ -101,7 +102,7 @@ const glass = StyleSheet.create({
     height: 55,
     color: WHITE,
     fontFamily: DM_MONO.MEDIUM,
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
   },
   icon: {
     position: 'absolute',
@@ -145,7 +146,7 @@ const classic = StyleSheet.create({
     height: 55,
     color: WHITE,
     fontFamily: DM_MONO.MEDIUM,
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
   },
   icon: {
     position: 'absolute',

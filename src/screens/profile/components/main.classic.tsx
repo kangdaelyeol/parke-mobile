@@ -7,7 +7,7 @@ import {
   PressableButton,
 } from '@/components'
 import { useMainViewModel } from '@profile/view-model'
-import { DARK, GRAY, RED_LIGHT } from '@/theme/color'
+import { DARK, GRAY, RED_LIGHT, SCREEN_BACKGROUND } from '@/theme/color'
 import { formatPhone } from '@/utils'
 
 // My 본문 (기본 테마: 처음 디자인)
@@ -75,7 +75,7 @@ export const ClassicMain = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     flex: 1,
   },
   wrapper: {

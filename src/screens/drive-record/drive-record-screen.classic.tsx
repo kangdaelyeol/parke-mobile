@@ -13,7 +13,7 @@ import {
   formatKm,
   toKmh,
 } from '@/utils'
-import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY, WHITE, SCREEN_BACKGROUND } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 
 type DriveRecordScreenProps = {
@@ -98,7 +98,7 @@ export function ClassicDriveRecordScreen({ route }: DriveRecordScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   map: {
     flex: 1,

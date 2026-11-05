@@ -10,6 +10,7 @@ import {
   MyIllustration,
   PhoneIllustration,
 } from '@/components/illustrations/focusable-input'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 type IconName = 'my' | 'phone' | 'card' | 'message'
 
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
     height: 55,
     color: WHITE,
     fontFamily: PRETENDARD.MEDIUM,
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
   },
   title: glassText.label,
   titleFocused: {

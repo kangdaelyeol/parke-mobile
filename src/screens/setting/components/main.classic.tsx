@@ -8,6 +8,7 @@ import { LEGAL_DOCS } from '@/constants'
 import { DocType } from '@/types/common'
 import { useTabBarLayout } from '@/hooks'
 import { ThemeSection } from './theme-section'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 // 설정 화면에 보여줄 법률 문서 순서
 const DOC_MENU: DocType[] = [
@@ -145,7 +146,7 @@ export const ClassicMain = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     paddingHorizontal: 10,
     paddingBottom: 80,
     marginHorizontal: 'auto',

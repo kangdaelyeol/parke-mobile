@@ -1,6 +1,8 @@
 import { PressableButton } from '@/components'
 import { useScanCompleteContext } from '@scan-complete/contexts'
 import { StyleSheet, View } from 'react-native'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
+import { SCREEN_BACKGROUND } from '@/theme/color'
 
 export const Footer = () => {
   const { state, actions } = useScanCompleteContext()
@@ -36,12 +38,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     zIndex: 1,
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     paddingBottom: 30,
     marginHorizontal: 'auto',
   },

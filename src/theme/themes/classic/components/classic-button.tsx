@@ -1,11 +1,5 @@
 import { ComponentProps } from 'react'
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  useWindowDimensions,
-  View,
-} from 'react-native'
+import { Pressable, StyleSheet, Text, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { DM_SANS } from '@/theme/fonts'
 import {
@@ -19,6 +13,7 @@ import {
   WHITE,
 } from '@/theme/color'
 import { GlassButton } from '@/theme/themes/glass-dashboard/components/glass-button'
+import { useIsSmallScreen } from '@/theme/layout'
 
 // 글래스 버튼과 같은 props를 받는다 (테마를 바꿔도 부르는 쪽은 그대로)
 type ClassicButtonProps = ComponentProps<typeof GlassButton>
@@ -48,8 +43,7 @@ export const ClassicButton = ({
   textStyle,
   pressableStyle,
 }: ClassicButtonProps) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   const small = size === 'sm'
   const colors = disabled ? COLORS.disabled : COLORS[variant]
   const background = 'background' in colors ? colors.background : null

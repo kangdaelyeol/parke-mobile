@@ -5,7 +5,7 @@ import {
   useMemo,
   useState,
 } from 'react'
-import { StyleProp, useWindowDimensions, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import {
   Easing,
   interpolate,
@@ -15,6 +15,7 @@ import {
   withTiming,
 } from 'react-native-reanimated'
 import { runOnJS } from 'react-native-worklets'
+import { useIsSmallScreen } from '@/theme/layout'
 
 /**
  * 카드 → 수정 화면 전환은 진행값 하나(settingProgress, 0~1)로 연출한다.
@@ -76,8 +77,7 @@ const cardSettingContext = createContext<CardSettingContext>(
 )
 
 export const CardSettingProvider = ({ children }: PropsWithChildren) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   const sliderMargin = isSmall ? 250 : 300
 
   const settingProgress = useSharedValue(0)

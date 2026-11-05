@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from 'react-native'
 import { Camera } from 'react-native-vision-camera'
 import { LogoText, PressableButton } from '@/components'
 import { useQrScanViewModel } from '@scan-complete/view-model'
-import { WHITE } from '@/theme/color'
+import { WHITE, SCREEN_BACKGROUND } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 2,
-    backgroundColor: '#000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   wrapper: {
     marginHorizontal: 'auto',

@@ -5,6 +5,7 @@ import { ConsentItem } from '@setting/types'
 import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { formatDateTime } from '@/utils'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 // 선택 동의 관리 본문 (기본 테마: 처음 디자인)
 export const ClassicConsentMain = () => {
@@ -68,7 +69,7 @@ export const ClassicConsentMain = () => {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     paddingHorizontal: 10,
     paddingBottom: 80,
     marginHorizontal: 'auto',

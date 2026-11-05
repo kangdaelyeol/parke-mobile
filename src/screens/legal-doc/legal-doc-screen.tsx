@@ -19,7 +19,7 @@ import {
   RootStackParamList,
 } from '@/navigation/types'
 import { legalService } from '@/services'
-import { DARK, GRAY, WHITE } from '@/theme/color'
+import { DARK, GRAY, WHITE, SCREEN_BACKGROUND } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { EXTRACT_DOC_JS, HIDE_UNTIL_READY_JS } from './legal-doc-scripts'
 
@@ -130,7 +130,7 @@ export default function LegalDocScreen({ route }: LegalDocScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   header: {
     height: 52,
@@ -157,14 +157,14 @@ const styles = StyleSheet.create({
   // 로딩 중 흰 화면이 번쩍이지 않도록 검은 배경
   webView: {
     flex: 1,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
   },
   failedText: {
     color: WHITE,

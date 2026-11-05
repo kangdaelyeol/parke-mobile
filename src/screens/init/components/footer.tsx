@@ -1,7 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { PressableButton } from '@/components'
-import { GRAY_DEEP } from '@/theme/color'
+import { GRAY_DEEP, SCREEN_BACKGROUND } from '@/theme/color'
 import { useInitContext } from '@/screens/init/contexts'
+import { CONTENT_MAX_WIDTH } from '@/theme/layout'
 
 export const Footer = () => {
   const { actions } = useInitContext()
@@ -29,7 +30,7 @@ export const Footer = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000000',
+    backgroundColor: SCREEN_BACKGROUND,
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     width: '100%',
-    maxWidth: 400,
+    maxWidth: CONTENT_MAX_WIDTH,
     marginHorizontal: 'auto',
     paddingHorizontal: 20,
   },

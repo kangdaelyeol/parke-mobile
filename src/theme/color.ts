@@ -1,3 +1,5 @@
+// 화면 바탕 (두 테마 공통)
+export const SCREEN_BACKGROUND = '#000000'
 export const DARK = '#1c1c1c'
 export const DARK_LIGHT = '#2a2a2a'
 export const GRAY = '#666'

@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Text,
   TextStyle,
-  useWindowDimensions,
   View,
   ViewStyle,
 } from 'react-native'
@@ -19,6 +18,7 @@ import {
   withAlpha,
 } from '../tokens'
 import { SolidIconName } from './types'
+import { useIsSmallScreen } from '@/theme/layout'
 
 // primary: 강조색 유리 (기본 파랑, tint로 다른 색)
 // secondary: 투명한 유리 (취소·완료 등)
@@ -67,8 +67,7 @@ export const GlassButton = ({
   textStyle,
   pressableStyle,
 }: GlassButtonProps) => {
-  const { width } = useWindowDimensions()
-  const isSmall = width < 400
+  const isSmall = useIsSmallScreen()
   const small = size === 'sm'
   const kind = disabled ? 'secondary' : variant
   const textColor =
