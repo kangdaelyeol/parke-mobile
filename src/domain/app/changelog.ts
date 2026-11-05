@@ -24,6 +24,26 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.0',
+    date: '2026-11-05',
+    bump: 'minor',
+    title: '주행 기록 기간 보기와 글래스 배치',
+    changes: [
+      {
+        type: 'feature',
+        text: '글래스 대시보드 주행 기록을 전체 · 이번 주 · 이번 달로 골라 볼 수 있어요. 고른 기간의 건수와 거리 합계도 보여줘요.',
+      },
+      {
+        type: 'improve',
+        text: '글래스 대시보드 주행 기록 목록을 표 하나로 정리했어요. 기록이 많으면 판 안에서 스크롤해요.',
+      },
+      {
+        type: 'improve',
+        text: '글래스 대시보드 기록 상세는 위에 통계 카드 네 장, 아래에 경로 지도를 크게 보여주고 출발 · 도착 · 경로 표시를 덧붙였어요.',
+      },
+    ],
+  },
+  {
     version: '1.4.1',
     date: '2026-11-05',
     bump: 'patch',

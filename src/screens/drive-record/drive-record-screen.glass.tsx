@@ -1,68 +1,39 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { PressableButton, StatCard } from '@/components'
+import { PanelHeader, PressableButton, StatCard } from '@/components'
 import { RootStackParamList } from '@/navigation/types'
 import { DriveMap } from '@/screens/drive/components'
+import { Header } from '@/screens/drive-record/components'
 import { useDriveRecordViewModel } from '@/screens/drive-record/view-model'
 import {
   formatClock,
-  formatDateTime,
+  formatDay,
   formatDuration,
   formatKm,
   toKmh,
 } from '@/utils'
-import { DM_SANS, PRETENDARD } from '@/theme/fonts'
-import { GLASS, TEXT } from '@/theme/glass'
+import { PRETENDARD } from '@/theme/fonts'
+import { glassStyles, TEXT } from '@/theme/glass'
 
 type DriveRecordScreenProps = {
   route: RouteProp<RootStackParamList, 'DriveRecord'>
 }
 
-// 주행 기록 상세 (글래스): 경로 지도 + 통계 카드 네 장
+// 지도 위 출발·도착 표시와 같은 색 (drive/map-html.ts의 .start · .end)
+const START_COLOR = '#2fbf71'
+const END_COLOR = '#ed3a3a'
+
+// 주행 기록 상세 (글래스): 영상 Analytics처럼 위에 통계 카드 네 장, 아래에 큰 판(경로 지도 + 범례 줄)
 export function GlassDriveRecordScreen({ route }: DriveRecordScreenProps) {
   const { state, actions } = useDriveRecordViewModel(route.params.record)
-  const { top, bottom } = useSafeAreaInsets()
+  const { bottom } = useSafeAreaInsets()
   const { record } = state
 
   return (
     <View style={styles.container}>
-      <View style={styles.map}>
-        <DriveMap
-          ref={state.mapRef}
-          phase="summary"
-          points={state.points}
-          current={null}
-          accent={state.accent}
-        />
-        <Pressable
-          onPress={actions.backPress}
-          style={[styles.backChip, { top: top + 10 }]}
-          hitSlop={8}
-        >
-          <FontAwesome6
-            name="angle-left"
-            iconStyle="solid"
-            size={16}
-            color={TEXT.primary}
-          />
-          <Text style={styles.backText}>{record.cardTitle}</Text>
-        </Pressable>
-        {state.loading && (
-          <View style={styles.loading}>
-            <Text style={styles.loadingText}>경로를 불러오는 중…</Text>
-          </View>
-        )}
-      </View>
-      <View style={[styles.panel, { paddingBottom: bottom + 16 }]}>
-        <View style={styles.header}>
-          <Text style={styles.title}>{formatDateTime(record.startAt)}</Text>
-          <Text style={styles.subTitle}>
-            {formatClock(record.startAt)} ~ {formatClock(record.endAt)}
-          </Text>
-        </View>
-        {/* 요약 4칸 (영상 상단의 통계 카드 네 장) */}
+      <Header title={record.cardTitle} onBack={actions.backPress} />
+      <View style={[styles.body, { paddingBottom: bottom + 16 }]}>
         <View style={styles.statRow}>
           <StatCard
             style={styles.stat}
@@ -98,6 +69,47 @@ export function GlassDriveRecordScreen({ route }: DriveRecordScreenProps) {
             tone="warning"
           />
         </View>
+
+        {/* 경로 판: 머리줄(날짜 · 시각) + 지도 + 아래 범례 줄 (영상 큰 차트 판의 아래 범례처럼) */}
+        <View style={[glassStyles.surface, styles.mapPanel]}>
+          <PanelHeader
+            title="주행 경로"
+            subtitle={`${formatDay(record.startAt)} · ${formatClock(
+              record.startAt,
+            )} ~ ${formatClock(record.endAt)}`}
+          />
+          <View style={styles.map}>
+            <DriveMap
+              ref={state.mapRef}
+              phase="summary"
+              points={state.points}
+              current={null}
+              accent={state.accent}
+            />
+            {state.loading && (
+              <View style={styles.loading}>
+                <Text style={styles.loadingText}>경로를 불러오는 중…</Text>
+              </View>
+            )}
+          </View>
+          <View style={styles.legend}>
+            <View style={styles.legendItem}>
+              <View style={[styles.legendDot, styles.startDot]} />
+              <Text style={styles.legendText}>출발</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View style={[styles.legendDot, styles.endDot]} />
+              <Text style={styles.legendText}>도착</Text>
+            </View>
+            <View style={styles.legendItem}>
+              <View
+                style={[styles.legendLine, { backgroundColor: state.accent }]}
+              />
+              <Text style={styles.legendText}>경로</Text>
+            </View>
+          </View>
+        </View>
+
         <PressableButton
           variant="danger"
           title={state.deleting ? '삭제 중…' : '기록 삭제'}
@@ -108,41 +120,44 @@ export function GlassDriveRecordScreen({ route }: DriveRecordScreenProps) {
   )
 }
 
-// 지도 위에 뜨는 요소는 뒤 지도에 묻히지 않도록 짙은 유리
-const MAP_GLASS = 'rgba(16,16,18,0.88)'
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000000',
   },
-  map: {
+  body: {
+    flex: 1,
+    width: '100%',
+    maxWidth: 400,
+    marginHorizontal: 'auto',
+    paddingHorizontal: 14,
+    paddingTop: 8,
+    gap: 10,
+  },
+  statRow: {
+    flexDirection: 'row',
+    gap: 10,
+  },
+  stat: {
     flex: 1,
   },
-  backChip: {
-    position: 'absolute',
-    left: 16,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    backgroundColor: MAP_GLASS,
-    borderWidth: 1,
-    borderColor: GLASS.border,
-    borderTopColor: GLASS.highlight,
-    borderRadius: 20,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
+  // 남은 높이를 모두 쓰는 큰 판 (지도가 늘어난다)
+  mapPanel: {
+    flex: 1,
+    padding: 16,
+    gap: 12,
   },
-  backText: {
-    color: TEXT.primary,
-    fontFamily: DM_SANS.BOLD,
-    fontSize: 14,
+  map: {
+    flex: 1,
+    minHeight: 140,
+    borderRadius: 14,
+    overflow: 'hidden',
   },
   loading: {
     position: 'absolute',
-    bottom: 16,
+    bottom: 12,
     alignSelf: 'center',
-    backgroundColor: MAP_GLASS,
+    backgroundColor: 'rgba(16,16,18,0.88)',
     borderRadius: 16,
     paddingHorizontal: 14,
     paddingVertical: 8,
@@ -152,38 +167,35 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 13,
   },
-  // 지도 아래 판: 위쪽 테두리만 밝은 유리
-  panel: {
-    backgroundColor: '#0c0c0e',
-    experimental_backgroundImage: GLASS.sheen,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderTopWidth: 1,
-    borderColor: GLASS.highlight,
-    paddingHorizontal: 16,
-    paddingTop: 20,
-    gap: 10,
+  legend: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
   },
-  header: {
-    gap: 4,
-    paddingHorizontal: 4,
-    marginBottom: 4,
+  legendItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
-  title: {
-    color: TEXT.primary,
-    fontFamily: DM_SANS.BOLD,
-    fontSize: 20,
+  legendDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
   },
-  subTitle: {
+  startDot: {
+    backgroundColor: START_COLOR,
+  },
+  endDot: {
+    backgroundColor: END_COLOR,
+  },
+  legendLine: {
+    width: 14,
+    height: 3,
+    borderRadius: 2,
+  },
+  legendText: {
     color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
-    fontSize: 13,
-  },
-  statRow: {
-    flexDirection: 'row',
-    gap: 10,
-  },
-  stat: {
-    flex: 1,
+    fontSize: 12,
   },
 })

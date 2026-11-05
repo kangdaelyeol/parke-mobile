@@ -26,8 +26,77 @@ const ALIGN = {
   right: 'flex-end',
 } as const
 
+interface GlassTableHeaderProps<T> {
+  columns: GlassTableColumn<T>[]
+}
+
+// 표 머리줄: 칸 이름을 작은 글자로 (영상의 USER · METHOD · STATUS)
+export const GlassTableHeader = <T,>({ columns }: GlassTableHeaderProps<T>) => (
+  <View style={[styles.row, styles.headerRow]}>
+    {columns.map(column => (
+      <View
+        key={column.key}
+        style={[
+          styles.cell,
+          {
+            flex: column.flex ?? 1,
+            alignItems: ALIGN[column.align ?? 'left'],
+          },
+        ]}
+      >
+        <Text style={styles.headerText} numberOfLines={1}>
+          {column.title}
+        </Text>
+      </View>
+    ))}
+  </View>
+)
+
+interface GlassTableRowProps<T> {
+  columns: GlassTableColumn<T>[]
+  row: T
+  onPress?: (row: T) => void
+}
+
+// 표 한 줄: 아래 얇은 구분선. 누를 수 있으면 누르는 동안 살짝 밝아진다
+export const GlassTableRow = <T,>({
+  columns,
+  row,
+  onPress,
+}: GlassTableRowProps<T>) => (
+  <Pressable disabled={!onPress} onPress={() => onPress?.(row)}>
+    {({ pressed }) => (
+      <View style={[styles.row, styles.bodyRow, pressed && styles.pressed]}>
+        {columns.map(column => {
+          const content = column.render(row)
+          return (
+            <View
+              key={column.key}
+              style={[
+                styles.cell,
+                {
+                  flex: column.flex ?? 1,
+                  alignItems: ALIGN[column.align ?? 'left'],
+                },
+              ]}
+            >
+              {typeof content === 'string' || typeof content === 'number' ? (
+                <Text style={styles.cellText} numberOfLines={1}>
+                  {content}
+                </Text>
+              ) : (
+                content
+              )}
+            </View>
+          )
+        })}
+      </View>
+    )}
+  </Pressable>
+)
+
 // 표 (영상의 Recent Verification Challenges): 대문자 머리줄 + 얇은 구분선 줄들.
-// 화면이 좁으면 칸을 3~4개로 줄여 쓴다
+// 화면이 좁으면 칸을 3~4개로 줄여 쓴다. 줄이 많으면 머리줄·줄을 따로 써서 FlatList에 넣는다
 export const GlassTable = <T,>({
   columns,
   rows,
@@ -35,59 +104,14 @@ export const GlassTable = <T,>({
   onRowPress,
 }: GlassTableProps<T>) => (
   <View>
-    <View style={[styles.row, styles.headerRow]}>
-      {columns.map(column => (
-        <View
-          key={column.key}
-          style={[
-            styles.cell,
-            {
-              flex: column.flex ?? 1,
-              alignItems: ALIGN[column.align ?? 'left'],
-            },
-          ]}
-        >
-          <Text style={styles.headerText} numberOfLines={1}>
-            {column.title}
-          </Text>
-        </View>
-      ))}
-    </View>
+    <GlassTableHeader columns={columns} />
     {rows.map(row => (
-      <Pressable
+      <GlassTableRow
         key={keyExtractor(row)}
-        disabled={!onRowPress}
-        onPress={() => onRowPress?.(row)}
-      >
-        {({ pressed }) => (
-          <View style={[styles.row, styles.bodyRow, pressed && styles.pressed]}>
-            {columns.map(column => {
-              const content = column.render(row)
-              return (
-                <View
-                  key={column.key}
-                  style={[
-                    styles.cell,
-                    {
-                      flex: column.flex ?? 1,
-                      alignItems: ALIGN[column.align ?? 'left'],
-                    },
-                  ]}
-                >
-                  {typeof content === 'string' ||
-                  typeof content === 'number' ? (
-                    <Text style={styles.cellText} numberOfLines={1}>
-                      {content}
-                    </Text>
-                  ) : (
-                    content
-                  )}
-                </View>
-              )
-            })}
-          </View>
-        )}
-      </Pressable>
+        columns={columns}
+        row={row}
+        onPress={onRowPress}
+      />
     ))}
   </View>
 )

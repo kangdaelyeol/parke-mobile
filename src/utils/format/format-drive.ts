@@ -29,3 +29,26 @@ export const formatDateTime = (timestamp: number) => {
     date.getMonth() + 1
   }월 ${date.getDate()}일 ${pad(date.getHours())}:${pad(date.getMinutes())}`
 }
+
+const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
+
+// 10월 22일 (수) (올해가 아니면 앞에 연도)
+export const formatDay = (timestamp: number) => {
+  const date = new Date(timestamp)
+  const day = `${date.getMonth() + 1}월 ${date.getDate()}일 (${
+    WEEKDAYS[date.getDay()]
+  })`
+  return date.getFullYear() === new Date().getFullYear()
+    ? day
+    : `${date.getFullYear()}년 ${day}`
+}
+
+// 32분, 1시간 5분 (1분이 안 되면 1분 미만)
+export const formatMinutes = (ms: number) => {
+  const total = Math.floor(Math.max(0, ms) / 60000)
+  if (total < 1) return '1분 미만'
+  const h = Math.floor(total / 60)
+  const m = total % 60
+  if (!h) return `${m}분`
+  return m ? `${h}시간 ${m}분` : `${h}시간`
+}
