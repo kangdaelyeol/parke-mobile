@@ -25,6 +25,18 @@ export interface ChangelogEntry {
 // 맨 위 항목이 현재 버전이므로 비어 있을 수 없다
 export const CHANGELOG: [ChangelogEntry, ...ChangelogEntry[]] = [
   {
+    version: '1.5.9',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '마지막 감지 시간 표시 수정',
+    changes: [
+      {
+        type: 'fix',
+        text: '기본 테마에서 아직 감지 기록이 없을 때 마지막 감지 시간이 흘러가 보이던 문제를 고쳤어요.',
+      },
+    ],
+  },
+  {
     version: '1.5.8',
     date: '2026-11-05',
     bump: 'patch',

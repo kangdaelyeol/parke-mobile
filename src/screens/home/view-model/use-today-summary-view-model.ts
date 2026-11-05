@@ -44,10 +44,10 @@ export const useTodaySummaryViewModel = (): HomeTodaySummaryViewModel => {
       bleScanCount: dashboard.bleScanCount,
       phoneChangeCount: dashboard.phoneChangeCount,
       batteryLevel: dashboard.batteryLevel,
-      lastScanTime: Math.max(
-        0,
-        Math.floor((now - dashboard.lastScanTime) / MINUTE_MS),
-      ),
+      // 감지 기록이 없으면 저장된 시각 대신 지금 시각이 읽히므로 0으로 둔다 (시간이 흐르지 않게)
+      lastScanTime: dashboard.lastScanDeviceName
+        ? Math.max(0, Math.floor((now - dashboard.lastScanTime) / MINUTE_MS))
+        : 0,
     },
     animated: {
       containerStyle,
