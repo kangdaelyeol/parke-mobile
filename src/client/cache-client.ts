@@ -25,6 +25,8 @@ export const cacheClient: CacheClient = {
       .filter(key => key.startsWith('ble:') || USER_RECORD_KEYS.includes(key))
       .forEach(key => kv.delete(key))
   },
+  setThemeId: v => kv.set('app:theme', v),
+  getThemeId: () => kv.getString('app:theme') ?? '',
   setLoginProvider: v => kv.set('auth:loginProvider', v),
   getLoginProvider: () =>
     (kv.getString('auth:loginProvider') as LoginProvider) ?? '',

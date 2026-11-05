@@ -75,6 +75,9 @@ export interface DriveClient {
 export interface CacheClient {
   clearDeviceRecords: (deviceId: string) => void
   clearUserRecords: () => void
+  // 고른 화면 테마 (기기 설정이라 로그아웃해도 남긴다)
+  setThemeId: (v: string) => void
+  getThemeId: () => string
   setLoginProvider: (v: string) => void
   getLoginProvider: () => LoginProvider | ''
   setAppleUser: (v: string) => void

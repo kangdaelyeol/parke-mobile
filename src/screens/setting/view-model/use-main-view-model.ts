@@ -7,11 +7,13 @@ import {
   settingService,
 } from '@/services'
 import { DocType } from '@/types/common'
+import { ThemeId } from '@/theme/themes'
 import { SettingMainViewModel } from '@setting/types'
-import { useUserContext } from '@/contexts'
+import { useAppTheme, useUserContext } from '@/contexts'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { SettingStackNavigationProp } from '@/navigation/types'
 import { resetRoot } from '@/navigation/actions'
+import { SHOW_THEME_GALLERY } from '@/constants'
 
 export const useMainViewModel = (): SettingMainViewModel => {
   const { user, validateUser } = useUserContext()
@@ -21,6 +23,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
   const [active, setActive] = useState(true)
 
   const navigation = useNavigation<SettingStackNavigationProp>()
+  const { theme, themes, selectTheme } = useAppTheme()
 
   // init settings value on UI
   useEffect(() => {
@@ -54,6 +57,9 @@ export const useMainViewModel = (): SettingMainViewModel => {
     notice,
     autoSet,
     active,
+    themes,
+    themeId: theme.id,
+    showThemeGallery: SHOW_THEME_GALLERY,
   }
 
   const actions = {
@@ -86,6 +92,9 @@ export const useMainViewModel = (): SettingMainViewModel => {
       cacheService.setHasSeenOnBoarding(false)
       navigation.dispatch(resetRoot('OnBoarding'))
     },
+    themeSelect: selectTheme,
+    themeGalleryPress: (themeId: ThemeId) =>
+      navigation.navigate('ThemeGallery', { themeId }),
   }
 
   return {

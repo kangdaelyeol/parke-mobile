@@ -3,7 +3,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { NavigationContainer } from '@react-navigation/native'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
-import { UserContextProvider } from '@/contexts'
+import { ThemeContextProvider, UserContextProvider } from '@/contexts'
 import { useAppViewModel } from '@/hooks'
 import RootNavigator from '@/navigation/root-navigator'
 
@@ -23,13 +23,15 @@ function App() {
   return (
     <GestureHandlerRootView style={styles.handlerView}>
       <SafeAreaProvider>
-        <NavigationContainer>
-          <BottomSheetModalProvider>
-            <UserContextProvider>
-              <AppContent />
-            </UserContextProvider>
-          </BottomSheetModalProvider>
-        </NavigationContainer>
+        <ThemeContextProvider>
+          <NavigationContainer>
+            <BottomSheetModalProvider>
+              <UserContextProvider>
+                <AppContent />
+              </UserContextProvider>
+            </BottomSheetModalProvider>
+          </NavigationContainer>
+        </ThemeContextProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   )

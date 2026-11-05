@@ -6,6 +6,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 import { DriveRecordDto } from '@/domain/drive'
 import { DocType } from '@/types/common'
+import { ThemeId } from '@/theme/themes'
 
 // 홈 아래 탭 (유리 탭바가 계속 떠 있는 화면들)
 export type MainTabParamList = {
@@ -31,6 +32,8 @@ export type RootStackParamList = {
   DriveRecords: { cardId: string }
   DriveRecord: { record: DriveRecordDto }
   LegalDoc: { docType: DocType }
+  // 테마에 담긴 컴포넌트 전체 보기 (설정 → 테마)
+  ThemeGallery: { themeId: ThemeId }
 }
 
 type RootNavigationProp<T extends keyof RootStackParamList> =
@@ -58,3 +61,4 @@ export type DriveStackNavigationProp = RootNavigationProp<'Drive'>
 export type DriveRecordsStackNavigationProp = RootNavigationProp<'DriveRecords'>
 export type DriveRecordStackNavigationProp = RootNavigationProp<'DriveRecord'>
 export type LegalDocStackNavigationProp = RootNavigationProp<'LegalDoc'>
+export type ThemeGalleryStackNavigationProp = RootNavigationProp<'ThemeGallery'>

@@ -1,4 +1,5 @@
 import { ConsentKey, DocType, ViewModel } from '@/types/common'
+import { AppTheme, ThemeId } from '@/theme/themes'
 
 interface HeaderActions {
   backPress: () => void
@@ -11,6 +12,9 @@ interface MainActions {
   docPress: (docType: DocType) => void
   consentSettingPress: () => void
   onBoardingPress: () => void
+  // 테마 고르기 / 테마에 담긴 컴포넌트 전체 보기
+  themeSelect: (id: ThemeId) => void
+  themeGalleryPress: (id: ThemeId) => void
 }
 
 interface MainState {
@@ -21,6 +25,10 @@ interface MainState {
   notice: boolean
   autoSet: boolean
   active: boolean
+  themes: AppTheme[]
+  themeId: ThemeId
+  // [개발용] 구성 요소 보기 줄을 보일지
+  showThemeGallery: boolean
 }
 
 export interface ConsentItem {

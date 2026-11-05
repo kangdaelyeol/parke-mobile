@@ -114,6 +114,9 @@ export interface CacheService {
   getAppleUser: () => string | null
   setAppleUser: (v: string) => void
   clearAppleUser: () => void
+  // 고른 화면 테마
+  setThemeId: (v: string) => void
+  getThemeId: () => string
   setLoginProvider: (v: LoginProvider) => void
   getLoginProvider: () => LoginProvider | ''
   clearLoginProvider: () => void
