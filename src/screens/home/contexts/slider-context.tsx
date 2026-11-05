@@ -60,7 +60,7 @@ const sliderContext = createContext({} as SliderContextValue)
 
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const { cards } = useUserContext()
-  const { settingCard } = useCardSettingContext()
+  const { isSetting } = useCardSettingContext()
   const scrollable = useThemeId() === 'glass-dashboard'
   // 마지막 칸은 카드 추가(EmptyCard)
   const lastIdx = cards?.length ?? 0
@@ -112,7 +112,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   // 수정 화면에서는 넘기지 않는다
   const panGesture = useMemo(() => {
     const pan = Gesture.Pan()
-      .enabled(settingCard === -1)
+      .enabled(!isSetting)
       .activeOffsetX([-ACTIVE_OFFSET, ACTIVE_OFFSET])
     if (scrollable) pan.failOffsetY([-SCROLL_FAIL_OFFSET, SCROLL_FAIL_OFFSET])
     return pan
@@ -144,7 +144,7 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
         runOnJS(markSlideEnd)()
       })
   }, [
-    settingCard,
+    isSetting,
     scrollable,
     lastIdx,
     interval,
@@ -160,18 +160,20 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
 
   const sliderController = useMemo(() => ({ goToIdx }), [goToIdx])
 
+  // 값이 그대로면 같은 객체를 넘겨, 쓰는 쪽이 괜히 다시 그려지지 않게 한다
+  const value = useMemo(
+    () => ({
+      selectedCardIdx,
+      isSliding,
+      panGesture,
+      moverStyle,
+      sliderController,
+    }),
+    [selectedCardIdx, isSliding, panGesture, moverStyle, sliderController],
+  )
+
   return (
-    <sliderContext.Provider
-      value={{
-        selectedCardIdx,
-        isSliding,
-        panGesture,
-        moverStyle,
-        sliderController,
-      }}
-    >
-      {children}
-    </sliderContext.Provider>
+    <sliderContext.Provider value={value}>{children}</sliderContext.Provider>
   )
 }
 

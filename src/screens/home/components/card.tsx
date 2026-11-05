@@ -59,7 +59,7 @@ export const Card = ({ card, idx }: HomeCardProps) => {
             </View>
           </View>
           <View style={styles.divider} />
-          {state.settingCard === -1 && (
+          {!state.isSetting && (
             <View style={styles.bottomSection}>
               <View style={styles.bottomLeft}>
                 <Pressable onPress={actions.drivePress}>

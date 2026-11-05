@@ -13,7 +13,7 @@ export const useFooterViewModel = ({
   state,
   navigation,
 }: Pick<BottomTabBarProps, 'state' | 'navigation'>): HomeFooterViewModel => {
-  const { settingCard, settingProgress } = useCardSettingContext()
+  const { isSetting, settingProgress } = useCardSettingContext()
   const { height, bottom } = useTabBarLayout()
   const focusedName = state.routes[state.index].name
   // 그림자까지 화면 밖으로 내려가도록
@@ -47,7 +47,7 @@ export const useFooterViewModel = ({
   }
 
   return {
-    state: { focusedName, isSetting: settingCard !== -1 },
+    state: { focusedName, isSetting },
     actions: { itemPress },
     animated: { containerStyle },
   }

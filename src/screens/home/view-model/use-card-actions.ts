@@ -12,7 +12,7 @@ import { PARKE_WEB_URL } from '@/constants'
 // 카드와 글래스 홈의 카드 정보 판이 함께 쓴다
 export const useCardActions = (idx: number): HomeCardActions => {
   const navigation = useNavigation<HomeStackNavigationProp>()
-  const { settingCard, cardSettingController } = useCardSettingContext()
+  const { isSetting, cardSettingController } = useCardSettingContext()
   const { selectedCardIdx, sliderController, isSliding } =
     useCardSliderContext()
   const { user, cards, actions: userContextActions } = useUserContext()
@@ -28,7 +28,7 @@ export const useCardActions = (idx: number): HomeCardActions => {
       navigation.navigate('Drive', { cardId: card.id })
     },
     cardPress: () => {
-      if (settingCard !== -1 || isSliding()) return
+      if (isSetting || isSliding()) return
 
       if (!isSelected) sliderController.goToIdx(idx)
     },
@@ -89,5 +89,5 @@ export const useCardActions = (idx: number): HomeCardActions => {
     },
   }
 
-  return { loading, settingCard, isSelected, actions }
+  return { loading, isSetting, isSelected, actions }
 }

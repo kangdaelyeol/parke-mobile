@@ -14,12 +14,7 @@ import { ProfileMainViewModel } from '@profile/types'
 import { resetRoot } from '@/navigation/actions'
 
 export const useMainViewModel = (): ProfileMainViewModel => {
-  const {
-    user,
-    actions: userContextActions,
-    validateUser,
-    setCards,
-  } = useUserContext()
+  const { user, actions: userContextActions, validateUser } = useUserContext()
   const [nickname, setNickname] = useState('')
   const [phone, setPhone] = useState('')
   const [loading, setLoading] = useState(false)
@@ -104,7 +99,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
               await authService.signOut()
               // 기기에 남은 사용자별 기록(BLE 감지, 오늘의 현황, 수신 이메일)을 지운다
               cacheService.clearUserData()
-              setCards([])
+              userContextActions.clearCards()
               return navigation.navigate('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')
@@ -150,7 +145,7 @@ export const useMainViewModel = (): ProfileMainViewModel => {
               await authService.signOut()
               // 기기에 남은 개인정보도 지운다
               cacheService.clearUserData()
-              setCards([])
+              userContextActions.clearCards()
               return navigation.replace('Login')
             } catch (e) {
               Alert.alert('오류가 발생했습니다. 다시 시도해주세요.')

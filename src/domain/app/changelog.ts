@@ -24,6 +24,18 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.4',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '홈 화면 상태 관리 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '홈의 카드 넘기기·카드 수정 상태가 바뀌지 않았을 때는 화면을 다시 그리지 않아 더 가벼워졌어요.',
+      },
+    ],
+  },
+  {
     version: '1.5.3',
     date: '2026-11-05',
     bump: 'patch',

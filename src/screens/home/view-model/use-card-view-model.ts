@@ -12,7 +12,7 @@ import { HomeCardViewModel } from '@home/types'
 
 // 슬라이더 안의 카드: 카드 기능 + 선택 여부에 따른 모양 + 자동감지 점
 export const useCardViewModel = (idx: number): HomeCardViewModel => {
-  const { loading, settingCard, isSelected, actions } = useCardActions(idx)
+  const { loading, isSetting, isSelected, actions } = useCardActions(idx)
   const bottomSheetModalRef = useRef<BottomSheetModal>(null)
 
   const cardOpacity = useSharedValue(isSelected ? 1 : 0)
@@ -54,7 +54,7 @@ export const useCardViewModel = (idx: number): HomeCardViewModel => {
   return {
     state: {
       loading,
-      settingCard,
+      isSetting,
       bottomSheetModalRef,
     },
     animated: { cardStyle, scanOnDotStyle },

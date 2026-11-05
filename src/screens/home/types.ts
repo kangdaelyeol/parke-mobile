@@ -26,7 +26,8 @@ interface MainActions {
 
 interface CardComponentState {
   loading: boolean
-  settingCard: number
+  // 카드 수정 화면이 떠 있는지
+  isSetting: boolean
   bottomSheetModalRef: React.RefObject<BottomSheetModal | null>
 }
 
@@ -111,7 +112,8 @@ export type HomeCardViewModel = AnimatedViewModel<
 export interface HomeCardActions {
   // 삭제·번호 변경 중
   loading: boolean
-  settingCard: number
+  // 카드 수정 화면이 떠 있는지
+  isSetting: boolean
   isSelected: boolean
   actions: Omit<CardActions, 'morePress'>
 }

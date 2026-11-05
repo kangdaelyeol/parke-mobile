@@ -65,11 +65,12 @@ interface CardSettingContext {
     showSetting: (_: number) => void
     hideSetting: () => void
   }
-  // 수정 중인 카드 (닫는 애니메이션이 끝날 때까지 유지된다)
-  settingCard: number
+  // 수정 중인 카드 번호. 수정 중이 아니면 null (닫는 애니메이션이 끝날 때까지 유지된다)
+  settingCard: number | null
+  // 수정 화면이 떠 있는지 (settingCard !== null)
+  isSetting: boolean
   // 여는 애니메이션이 끝났는지. 무거운 요소(웹뷰)는 이때 만든다
   settingOpened: boolean
-  setSettingCard: React.Dispatch<React.SetStateAction<number>>
 }
 
 const cardSettingContext = createContext<CardSettingContext>(
@@ -81,36 +82,40 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const sliderMargin = isSmall ? 250 : 300
 
   const settingProgress = useSharedValue(0)
-  const [settingCard, setSettingCard] = useState(-1)
+  const [settingCard, setSettingCard] = useState<number | null>(null)
   const [settingOpened, setSettingOpened] = useState(false)
 
-  const cardSettingController = {
-    showSetting: (idx: number) => {
-      setSettingCard(idx)
-      // 수정 화면을 처음 그리는 프레임과 애니메이션 첫 프레임이 겹치지 않도록 한 프레임 뒤에 시작
-      requestAnimationFrame(() => {
+  // 상태 setter와 공유 값만 쓰므로 한 번 만들어 계속 쓴다
+  const cardSettingController = useMemo(
+    () => ({
+      showSetting: (idx: number) => {
+        setSettingCard(idx)
+        // 수정 화면을 처음 그리는 프레임과 애니메이션 첫 프레임이 겹치지 않도록 한 프레임 뒤에 시작
+        requestAnimationFrame(() => {
+          settingProgress.value = withTiming(
+            1,
+            { duration: OPEN_DURATION_MS, easing: Easing.linear },
+            finished => {
+              if (finished) runOnJS(setSettingOpened)(true)
+            },
+          )
+        })
+      },
+      // 거꾸로 재생이 끝난 뒤에 수정 화면을 내린다 (중간에 다시 열면 내리지 않는다)
+      hideSetting: () => {
         settingProgress.value = withTiming(
-          1,
-          { duration: OPEN_DURATION_MS, easing: Easing.linear },
+          0,
+          { duration: CLOSE_DURATION_MS, easing: Easing.linear },
           finished => {
-            if (finished) runOnJS(setSettingOpened)(true)
+            if (!finished) return
+            runOnJS(setSettingCard)(null)
+            runOnJS(setSettingOpened)(false)
           },
         )
-      })
-    },
-    // 거꾸로 재생이 끝난 뒤에 수정 화면을 내린다 (중간에 다시 열면 내리지 않는다)
-    hideSetting: () => {
-      settingProgress.value = withTiming(
-        0,
-        { duration: CLOSE_DURATION_MS, easing: Easing.linear },
-        finished => {
-          if (!finished) return
-          runOnJS(setSettingCard)(-1)
-          runOnJS(setSettingOpened)(false)
-        },
-      )
-    },
-  }
+      },
+    }),
+    [settingProgress],
+  )
 
   // 위아래 여백은 변하지 않으므로 애니메이션 스타일에 넣지 않는다
   // (레이아웃 속성이 섞이면 매 프레임 그 값까지 다시 반영한다)
@@ -126,7 +131,10 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
       [1, 0],
     ),
   }))
-  const sliderStyle = [sliderMarginStyle, sliderMotionStyle]
+  const sliderStyle = useMemo(
+    () => [sliderMarginStyle, sliderMotionStyle],
+    [sliderMarginStyle, sliderMotionStyle],
+  )
 
   // 수정 화면이 열리면 사라진다
   const homeContentStyle = useAnimatedStyle(() => ({
@@ -137,18 +145,29 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
     ),
   }))
 
+  // 값이 그대로면 같은 객체를 넘겨, 이 Provider가 다시 그려져도 쓰는 쪽은 다시 그리지 않는다
+  const value = useMemo(
+    () => ({
+      cardSettingController,
+      settingCard,
+      isSetting: settingCard !== null,
+      settingOpened,
+      sliderStyle,
+      homeContentStyle,
+      settingProgress,
+    }),
+    [
+      cardSettingController,
+      settingCard,
+      settingOpened,
+      sliderStyle,
+      homeContentStyle,
+      settingProgress,
+    ],
+  )
+
   return (
-    <cardSettingContext.Provider
-      value={{
-        cardSettingController,
-        settingCard,
-        settingOpened,
-        setSettingCard,
-        sliderStyle,
-        homeContentStyle,
-        settingProgress,
-      }}
-    >
+    <cardSettingContext.Provider value={value}>
       {children}
     </cardSettingContext.Provider>
   )

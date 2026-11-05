@@ -14,7 +14,6 @@ import { CardState, ServiceResponse } from '@/services/types'
 
 interface UserContextValue {
   cards: CardState[]
-  setCards: React.Dispatch<React.SetStateAction<CardState[]>>
   user: UserDto | null
   syncCardList: () => Promise<ServiceResponse<null>>
   validateUser: () => Promise<ServiceResponse<UserDto>>
@@ -22,6 +21,8 @@ interface UserContextValue {
   actions: {
     addCardId: (serial: string) => void
     deleteCard: (cardId: string) => void
+    // 로그아웃·탈퇴 때 카드 목록을 비운다
+    clearCards: () => void
     setUserNicknameAndPhone: (nickname: string, phone: string) => void
     setUserEmail: (email: string) => void
     updateCardEmail: (cardId: string, email: string) => void
@@ -103,6 +104,7 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
           prev ? { ...prev, cardIdList: [...prev.cardIdList, cardId] } : prev,
         )
       },
+      clearCards: () => setCards([]),
       deleteCard: (cardId: string) => {
         setCards(prev => prev.filter(card => card.id !== cardId))
         setUser(prev =>
@@ -156,7 +158,6 @@ export const UserContextProvider = ({ children }: PropsWithChildren) => {
     () => ({
       stateSession,
       cards,
-      setCards,
       user,
       syncCardList,
       validateUser,
