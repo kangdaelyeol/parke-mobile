@@ -1,5 +1,6 @@
 import {
   createContext,
+  useEffect,
   PropsWithChildren,
   useContext,
   useMemo,
@@ -17,6 +18,7 @@ import {
 import { runOnJS } from 'react-native-worklets'
 import { CARD_HEIGHT } from '@home/constants'
 import { useTabBarLayout } from '@/hooks'
+import { useThemeId } from '@/theme/themed'
 
 /**
  * 카드 → 수정 화면 전환은 진행값 하나(settingProgress, 0~1)로 연출한다.
@@ -110,6 +112,13 @@ export const CardSettingProvider = ({ children }: PropsWithChildren) => {
   const detailProgress = useSharedValue(0)
   const detailLift = useSharedValue(0)
   const [detailCard, setDetailCard] = useState(-1)
+
+  // 테마를 바꾸면 열려 있던 카드 상세를 닫는다 (기본 테마 카드에는 상세가 없어 닫을 수 없다)
+  const themeId = useThemeId()
+  useEffect(() => {
+    detailProgress.value = 0
+    setDetailCard(-1)
+  }, [themeId, detailProgress])
   const [mainHeight, setMainHeight] = useState(0)
 
   // 슬라이더 제스처가 close를 잡아 두므로 매 렌더마다 새로 만들지 않는다

@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import { isCardAccent } from '@/domain/card'
 import { HomeAccentPickerProps } from '@home/types'
-import { DM_MONO } from '@/theme/fonts'
-import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { DM_MONO, PRETENDARD } from '@/theme/fonts'
+import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
 import { GLASS, glassStyles, glassText, TEXT } from '@/theme/glass'
+import { useThemedSheet } from '@/theme/themed'
 
 const ACCENT_PRESETS = [
   '#383bf9',
@@ -19,6 +20,10 @@ export const AccentPicker = ({
   value,
   onChangeText,
 }: HomeAccentPickerProps) => {
+  const styles = useThemedSheet<typeof glass>({
+    classic,
+    'glass-dashboard': glass,
+  })
   const [focus, setFocus] = useState(false)
 
   return (
@@ -43,11 +48,7 @@ export const AccentPicker = ({
         <TextInput
           onFocus={() => setFocus(true)}
           onBlur={() => setFocus(false)}
-          style={[
-            glassStyles.field,
-            styles.input,
-            focus && glassStyles.fieldFocused,
-          ]}
+          style={[styles.inputBox, styles.input, focus && styles.inputFocused]}
           value={value}
           onChangeText={onChangeText}
           placeholder="#RRGGBB"
@@ -69,7 +70,10 @@ export const AccentPicker = ({
   )
 }
 
-const styles = StyleSheet.create({
+// 글래스
+const glass = StyleSheet.create({
+  inputBox: glassStyles.field,
+  inputFocused: glassStyles.fieldFocused,
   container: {
     gap: 10,
   },
@@ -91,6 +95,50 @@ const styles = StyleSheet.create({
   presetSelected: {
     borderColor: TEXT.primary,
   },
+  input: {
+    paddingLeft: 40,
+    fontSize: 17,
+    height: 55,
+    color: WHITE,
+    fontFamily: DM_MONO.MEDIUM,
+    maxWidth: 400,
+  },
+  icon: {
+    position: 'absolute',
+    height: '100%',
+    justifyContent: 'center',
+    left: 12,
+  },
+  preview: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 1,
+    borderColor: GRAY,
+  },
+})
+
+// 기본 테마 (처음 디자인)
+const classic = StyleSheet.create({
+  container: { gap: 10 },
+  title: { color: GRAY, fontFamily: PRETENDARD.BOLD, fontSize: 13 },
+  titleFocused: { color: WHITE },
+  presetList: { flexDirection: 'row', gap: 12 },
+  preset: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: DARK_LIGHT,
+  },
+  presetSelected: { borderColor: WHITE },
+  inputBox: {
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: DARK_LIGHT,
+    backgroundColor: DARK,
+  },
+  inputFocused: { borderColor: GRAY },
   input: {
     paddingLeft: 40,
     fontSize: 17,

@@ -10,6 +10,7 @@ import Animated, {
 import { GRAY_DEEP, GRAY_LIGHT, WHITE } from '@/theme/color'
 import { DM_SANS } from '@/theme/fonts'
 import { TONE } from '@/theme/glass'
+import { useThemed } from '@/theme/themed'
 import { CheckIllustration } from '@login/components/illustrations'
 
 interface Props {
@@ -35,6 +36,11 @@ export const CheckBoxLine = ({
   disabled,
 }: Props) => {
   const progress = useSharedValue(0)
+  // 체크된 색: 기본 테마는 처음 디자인의 보라빛 파랑, 글래스는 강조색
+  const checkedColor = useThemed({
+    classic: '#5555ff',
+    'glass-dashboard': TONE.accent,
+  })
 
   const checkIconStyle = useAnimatedStyle(() => ({
     opacity: progress.value,
@@ -44,12 +50,12 @@ export const CheckBoxLine = ({
     backgroundColor: interpolateColor(
       progress.value,
       [0, 1],
-      ['#000000', TONE.accent],
+      ['#000000', checkedColor],
     ),
     borderColor: interpolateColor(
       progress.value,
       [0, 1],
-      [GRAY_DEEP, TONE.accent],
+      [GRAY_DEEP, checkedColor],
     ),
   }))
 

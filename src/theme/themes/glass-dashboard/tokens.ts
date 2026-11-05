@@ -48,7 +48,8 @@ export const withAlpha = (hex: string, alpha: number) => {
 
 // 상태 색. 알약·아이콘 타일은 이 색을 옅게 깔고 테두리를 한 번 더 두른다
 export const TONE = {
-  accent: '#e4492f',
+  // 강조색: 기본 테마와 같은 파랑 (BLUE_PRIMARY)
+  accent: '#383bf9',
   success: '#34d399',
   info: '#38bdf8',
   warning: '#fbbf24',
@@ -105,12 +106,12 @@ export const CODE = {
   dots: ['#fe524a', '#fdd131', '#00d336'],
 } as const
 
-// 기본 버튼: 왼쪽이 더 붉고 오른쪽으로 갈수록 살짝 주황빛. 위쪽에 광택
+// 기본 버튼: 강조색 파랑을 가로로 살짝 밝게→짙게, 위쪽에 광택 (모양은 영상의 New 2FA Rule)
 export const ACCENT_FILL =
-  'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%), linear-gradient(90deg, #e5452e 0%, #d75b43 100%)'
+  'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 55%), linear-gradient(90deg, #4246ff 0%, #2f32e0 100%)'
 // 로고·아바타 타일: 왼쪽 위가 밝다
-export const ACCENT_TILE = 'linear-gradient(160deg, #f0644a 0%, #c9402a 100%)'
-export const ACCENT_GLOW = '0px 6px 18px rgba(228,73,47,0.35)'
+export const ACCENT_TILE = 'linear-gradient(160deg, #5c5fff 0%, #2c2fd1 100%)'
+export const ACCENT_GLOW = '0px 6px 18px rgba(56,59,249,0.4)'
 
 export const glassStyles = StyleSheet.create({
   // 판: 카드·목록·패널

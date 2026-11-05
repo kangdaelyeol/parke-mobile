@@ -20,7 +20,7 @@ import {
 } from '../tokens'
 import { SolidIconName } from './types'
 
-// primary: 강조색 유리 (기본 주황빛 빨강, tint로 다른 색)
+// primary: 강조색 유리 (기본 파랑, tint로 다른 색)
 // secondary: 투명한 유리 (취소·완료 등)
 // danger: 빨간 테두리 유리 (삭제·탈퇴)
 export type GlassButtonVariant = 'primary' | 'secondary' | 'danger'
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   },
   primaryPressed: {
     opacity: 0.9,
-    boxShadow: '0px 3px 10px rgba(228,73,47,0.25)',
+    boxShadow: '0px 3px 10px rgba(56,59,249,0.28)',
   },
   secondary: {
     backgroundColor: GLASS.fill,

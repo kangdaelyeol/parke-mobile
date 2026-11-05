@@ -7,7 +7,12 @@ import Animated, {
   useAnimatedStyle,
 } from 'react-native-reanimated'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
-import { CARD_FRAME_PADDING, CARD_HEIGHT, CARD_WIDTH } from '@home/constants'
+import {
+  CARD_FRAME_HEADER,
+  CARD_FRAME_PADDING,
+  CARD_HEIGHT,
+  CARD_WIDTH,
+} from '@home/constants'
 import { DETAIL_GAP } from '@home/contexts'
 import { useCardDetailViewModel } from '@home/view-model'
 import { CardDetailTab, HomeCardProps } from '@home/types'
@@ -15,6 +20,7 @@ import {
   IconTile,
   Loading,
   PressableButton,
+  SectionLabel,
   SegmentedControl,
   SegmentOption,
   SolidIconName,
@@ -137,6 +143,10 @@ export const GlassCard = ({ card, idx }: HomeCardProps) => {
     <Animated.View style={[styles.root, animated.cardStyle]}>
       <View style={[glassStyles.surface, styles.frame]}>
         {state.loading && <Loading />}
+        {/* 슬라이더 제목도 카드 유리 판 안에 */}
+        <View style={styles.frameHeader}>
+          <SectionLabel>내 기기</SectionLabel>
+        </View>
         <Pressable onPress={actions.togglePress}>
           <View style={[styles.face, faceStyle]}>
             <View style={styles.faceTop}>
@@ -350,9 +360,14 @@ const styles = StyleSheet.create({
     padding: CARD_FRAME_PADDING,
     borderRadius: 28,
   },
-  // 테두리 판(안쪽 여백 + 테두리 1)이 정확히 CARD_HEIGHT가 되도록
+  frameHeader: {
+    height: CARD_FRAME_HEADER,
+    paddingHorizontal: 10,
+    justifyContent: 'center',
+  },
+  // 테두리 판(안쪽 여백 + 테두리 1 + 제목 줄)이 정확히 CARD_HEIGHT가 되도록
   face: {
-    height: CARD_HEIGHT - (CARD_FRAME_PADDING + 1) * 2,
+    height: CARD_HEIGHT - (CARD_FRAME_PADDING + 1) * 2 - CARD_FRAME_HEADER,
     borderRadius: 23,
     backgroundColor: '#050505',
     padding: 18,

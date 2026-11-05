@@ -3,9 +3,10 @@ import { ActivityIndicator, StyleSheet, Text, View } from 'react-native'
 import { RefWebView } from '@/components'
 import { PARKE_WEB_URL } from '@/constants'
 import { HomeCardWebPreviewProps } from '@home/types'
-import { GRAY } from '@/theme/color'
+import { DARK, DARK_LIGHT, GRAY } from '@/theme/color'
 import { GLASS, glassText, TEXT } from '@/theme/glass'
 import { PRETENDARD } from '@/theme/fonts'
+import { useThemedSheet } from '@/theme/themed'
 
 // 입력이 멈춘 뒤 이 시간이 지나면 새 값으로 다시 불러온다
 const PREVIEW_RELOAD_DEBOUNCE_MS = 500
@@ -40,6 +41,10 @@ export const CardWebPreview = ({
   card,
   active,
 }: HomeCardWebPreviewProps) => {
+  const styles = useThemedSheet<typeof glass>({
+    classic,
+    'glass-dashboard': glass,
+  })
   const [uri, setUri] = useState(() => buildPreviewUri(cardId, card))
   const [loading, setLoading] = useState(true)
   const [loadedOnce, setLoadedOnce] = useState(false)
@@ -101,14 +106,13 @@ export const CardWebPreview = ({
 // 미리보기를 불러오기 전 바탕 (카드 수정 화면의 검은 배경보다 살짝 밝게)
 const PREVIEW_BG = '#0b0b0d'
 
-const styles = StyleSheet.create({
+// 글래스
+const glass = StyleSheet.create({
   container: {
     gap: 10,
   },
-  title: {
-    ...glassText.label,
-    marginTop: 15,
-  },
+  // 글래스는 판 안에 들어가므로 위 여백 없이
+  title: glassText.label,
   frame: {
     height: PREVIEW_HEIGHT,
     borderRadius: 18,
@@ -146,4 +150,40 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },
+})
+
+// 기본 테마 (처음 디자인)
+const classic = StyleSheet.create({
+  container: { gap: 10 },
+  title: {
+    color: GRAY,
+    fontFamily: PRETENDARD.BOLD,
+    fontSize: 13,
+    marginTop: 15,
+  },
+  frame: {
+    height: PREVIEW_HEIGHT,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: DARK_LIGHT,
+    overflow: 'hidden',
+    backgroundColor: DARK,
+  },
+  webView: { flex: 1, backgroundColor: DARK },
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: DARK,
+  },
+  reloading: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    padding: 6,
+    borderRadius: 12,
+    backgroundColor: DARK,
+  },
+  failedText: { color: GRAY, fontFamily: PRETENDARD.MEDIUM, fontSize: 13 },
+  caption: { color: GRAY, fontFamily: PRETENDARD.MEDIUM, fontSize: 12 },
 })

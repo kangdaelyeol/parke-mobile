@@ -1,34 +1,19 @@
-import { CHART, CODE, GLASS, TEXT, TONE } from './glass-dashboard/tokens'
+import { ComponentType } from 'react'
 
 // 테마 이름 (테마가 늘면 여기에 더한다)
-export type ThemeId = 'glass-dashboard'
+export type ThemeId = 'classic' | 'glass-dashboard'
 
-type Strings<T> = {
-  readonly [K in keyof T]: T[K] extends string ? string : T[K]
-}
-
-// 테마가 갖춰야 할 토큰. 첫 번째 테마의 토큰 모양을 기준으로 한다
-export interface ThemeTokens {
-  glass: Strings<typeof GLASS>
-  text: Strings<typeof TEXT>
-  tone: Strings<typeof TONE>
-  accent: { fill: string; tile: string; glow: string }
-  link: string
-  chart: Strings<typeof CHART>
-  code: Strings<typeof CODE>
-}
-
-// 테마 하나: 설정에 보이는 정보 + 미리보기 색 + 토큰
+// 테마 하나: 설정에 보이는 정보 + 미리보기
 export interface AppTheme {
   id: ThemeId
   name: string
   description: string
-  // 따라 만든 디자인 파일
+  // 따라 만든 디자인 (영상 파일·이전 버전)
   source: string
-  // 설정의 테마 카드 미리보기에 쓰는 색
-  preview: {
-    accent: string
-    tones: string[]
-  }
-  tokens: ThemeTokens
+  // 설정의 테마 카드에 그리는 작은 미리보기
+  Preview: ComponentType
+  // 강조색 (설정에서 고른 테마 카드 테두리)
+  accent: string
+  // 테마에 담긴 컴포넌트 전체를 보는 화면이 있는지
+  hasGallery: boolean
 }

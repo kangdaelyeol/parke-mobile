@@ -1,12 +1,7 @@
-import { StyleSheet, useWindowDimensions, View } from 'react-native'
+import { StyleSheet, Text, useWindowDimensions, View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
 import Animated, { FadeIn } from 'react-native-reanimated'
-import {
-  CARD_DETAIL_DROPDOWN,
-  CARD_HEIGHT,
-  CARD_WIDTH,
-  SLIDER_GAP,
-} from '@home/constants'
+import { CARD_HEIGHT, CARD_WIDTH, SLIDER_GAP } from '@home/constants'
 import {
   EmptyCard,
   SettingCard,
@@ -19,7 +14,9 @@ import {
 } from '@home/components'
 import { useMainViewModel } from '@home/view-model'
 import { HomeMainProps } from '@home/types'
-import { SectionLabel } from '@/components'
+import { useThemeId } from '@/theme/themed'
+import { DM_SANS } from '@/theme/fonts'
+import { GRAY } from '@/theme/color'
 
 export const Main = ({ loading }: HomeMainProps) => {
   const { state, actions, animated } = useMainViewModel()
@@ -28,6 +25,7 @@ export const Main = ({ loading }: HomeMainProps) => {
   const showSkeleton = loading && state.cardLength === 0
   const { width } = useWindowDimensions()
   const isSmall = width < 400
+  const isGlass = useThemeId() === 'glass-dashboard'
   // 수정 화면이나 카드 상세가 열리면 오늘의 현황·페이지 점은 사라지고 터치도 받지 않는다
   const hideHomeContent = state.isSetting || state.isDetail
 
@@ -51,12 +49,22 @@ export const Main = ({ loading }: HomeMainProps) => {
               <Animated.View
                 style={[styles.cardContainer, animated.sliderStyle]}
               >
+                {/* 글래스는 제목(내 기기)이 카드 유리 판 안에 있다 */}
                 <Animated.View style={animated.cardTitleStyle}>
-                  <SectionLabel
-                    style={[styles.title, isSmall && styles.titleSmall]}
-                  >
-                    내 기기
-                  </SectionLabel>
+                  {isGlass ? null : (
+                    <View
+                      style={[classic.title, isSmall && classic.titleSmall]}
+                    >
+                      <Text
+                        style={[
+                          classic.titleText,
+                          isSmall && classic.titleTextSmall,
+                        ]}
+                      >
+                        내 기기
+                      </Text>
+                    </View>
+                  )}
                 </Animated.View>
                 <View style={styles.cardSlider}>
                   <Animated.View
@@ -71,7 +79,8 @@ export const Main = ({ loading }: HomeMainProps) => {
                             key={card.id}
                             entering={FadeIn.duration(350)}
                           >
-                            {CARD_DETAIL_DROPDOWN ? (
+                            {/* 기본 테마: 처음 카드 + [...] 바텀시트 / 글래스: 터치하면 아래로 펼쳐지는 상세 */}
+                            {isGlass ? (
                               <GlassCard card={card} idx={idx} />
                             ) : (
                               <Card card={card} idx={idx} />
@@ -133,12 +142,25 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
     gap: SLIDER_GAP,
   },
+})
+
+// 기본 테마 (처음 디자인)
+const classic = StyleSheet.create({
   title: {
     position: 'absolute',
-    top: -30,
-    left: 4,
+    top: -40,
+    left: -10,
   },
   titleSmall: {
-    top: -24,
+    top: -25,
+    left: -5,
+  },
+  titleText: {
+    color: GRAY,
+    fontSize: 15,
+    fontFamily: DM_SANS.BOLD,
+  },
+  titleTextSmall: {
+    fontSize: 13,
   },
 })

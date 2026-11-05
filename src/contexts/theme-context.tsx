@@ -18,7 +18,12 @@ interface ThemeContextValue {
   selectTheme: (id: ThemeId) => void
 }
 
-const themeContext = createContext({} as ThemeContextValue)
+// 제공자 밖에서 그려져도(테스트 등) 기본 테마로 동작한다
+const themeContext = createContext<ThemeContextValue>({
+  theme: findTheme(null),
+  themes: THEMES,
+  selectTheme: () => {},
+})
 
 // 고른 테마를 기기에 저장하고 앱 전체에 알려준다
 export const ThemeContextProvider = ({ children }: PropsWithChildren) => {

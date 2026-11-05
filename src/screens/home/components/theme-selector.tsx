@@ -3,6 +3,8 @@ import { CARD_THEMES, CardTheme } from '@/domain/card'
 import { HomeThemeSelectorProps } from '@home/types'
 import { PRETENDARD } from '@/theme/fonts'
 import { GLASS, glassText, TEXT } from '@/theme/glass'
+import { useThemedSheet } from '@/theme/themed'
+import { DARK, DARK_LIGHT, GRAY, WHITE } from '@/theme/color'
 
 const THEME_LABEL: Record<CardTheme, string> = {
   dark: 'Dark',
@@ -19,6 +21,10 @@ const THEME_COLOR: Record<CardTheme, string> = {
 }
 
 export const ThemeSelector = ({ value, onChange }: HomeThemeSelectorProps) => {
+  const styles = useThemedSheet<typeof glass>({
+    classic,
+    'glass-dashboard': glass,
+  })
   return (
     <View style={styles.container}>
       <Text style={styles.title}>테마</Text>
@@ -46,7 +52,8 @@ export const ThemeSelector = ({ value, onChange }: HomeThemeSelectorProps) => {
   )
 }
 
-const styles = StyleSheet.create({
+// 글래스
+const glass = StyleSheet.create({
   container: {
     gap: 10,
   },
@@ -90,4 +97,32 @@ const styles = StyleSheet.create({
   labelSelected: {
     color: TEXT.primary,
   },
+})
+
+// 기본 테마 (처음 디자인)
+const classic = StyleSheet.create({
+  container: { gap: 10 },
+  title: { color: GRAY, fontFamily: PRETENDARD.BOLD, fontSize: 13 },
+  list: { flexDirection: 'row', gap: 8 },
+  pressable: { flex: 1 },
+  chip: {
+    height: 55,
+    borderRadius: 16,
+    borderWidth: 1,
+    borderColor: DARK_LIGHT,
+    backgroundColor: DARK,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  chipSelected: { borderColor: WHITE },
+  dot: {
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    borderWidth: 1,
+    borderColor: GRAY,
+  },
+  label: { color: GRAY, fontFamily: PRETENDARD.MEDIUM, fontSize: 12 },
+  labelSelected: { color: WHITE },
 })

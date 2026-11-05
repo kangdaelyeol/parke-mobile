@@ -6,6 +6,8 @@ export * from './selection'
 // 판·글자
 export * from './glass-surface'
 export * from './glass-panel'
+export * from './glass-section'
+export * from './glass-title-bar'
 export * from './section-label'
 // 버튼·입력
 export * from './glass-button'

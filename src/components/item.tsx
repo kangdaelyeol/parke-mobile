@@ -7,7 +7,9 @@ import {
   useWindowDimensions,
 } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
+import { GRAY } from '@/theme/color'
 import { TEXT, withAlpha } from '@/theme/glass'
+import { useThemeId } from '@/theme/themed'
 import { Toggle } from '@/components'
 import {
   ActiveIllustration,
@@ -71,6 +73,17 @@ const ICON_TILES = Object.fromEntries(
   ]),
 ) as Record<ItemOption, { backgroundColor: string; borderColor: string }>
 
+// 기본 테마 아이콘 바탕 (처음 디자인: 어두운 색 칸)
+const ICON_BG_COLORS: Record<ItemOption, string> = {
+  bluetooth: '#1a1a3a',
+  notify: '#1a2a1a',
+  active: '#2a1a1a',
+  camera: '#19192a',
+  qr: '#1a1a2a',
+  serial: '#1a2a1a',
+  location: '#2a221a',
+}
+
 export const Item = ({
   option,
   title,
@@ -85,26 +98,48 @@ export const Item = ({
   const isSmall = width < 400
 
   const Icon = ICONS[option]
+  const isGlass = useThemeId() === 'glass-dashboard'
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.container, isSmall && styles.containerSmall]}
+      style={[
+        isGlass ? styles.container : classic.container,
+        isSmall && styles.containerSmall,
+      ]}
     >
       <View style={styles.left}>
         <View
           style={[
-            styles.iconContainer,
+            isGlass ? styles.iconContainer : classic.iconContainer,
             isSmall && styles.iconContainerSmall,
-            ICON_TILES[option],
+            isGlass && ICON_TILES[option],
           ]}
         >
+          {!isGlass && (
+            <View
+              style={[
+                classic.iconBackground,
+                { backgroundColor: ICON_BG_COLORS[option] },
+              ]}
+            />
+          )}
           <Icon />
         </View>
         <View style={styles.descSection}>
-          <Text style={[styles.title, isSmall && styles.titleSmall]}>
+          <Text
+            style={[
+              isGlass ? styles.title : classic.title,
+              isSmall && styles.titleSmall,
+            ]}
+          >
             {title}
           </Text>
-          <Text style={[styles.subTitle, isSmall && styles.subTitleSmall]}>
+          <Text
+            style={[
+              isGlass ? styles.subTitle : classic.subTitle,
+              isSmall && styles.subTitleSmall,
+            ]}
+          >
             {subTitle}
           </Text>
         </View>
@@ -178,4 +213,37 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   right: { justifyContent: 'center' },
+})
+
+// 기본 테마 (처음 디자인)
+const classic = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 18,
+  },
+  iconContainer: {
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 42,
+    height: 42,
+    borderRadius: 9,
+    padding: 8,
+  },
+  iconBackground: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  title: {
+    color: 'white',
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 16,
+  },
+  subTitle: {
+    color: GRAY,
+    fontFamily: PRETENDARD.MEDIUM,
+    fontSize: 12,
+  },
 })

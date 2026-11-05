@@ -5,6 +5,7 @@ import { AnimatedViewModel } from '@/types/common'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { StyleProp, ViewStyle } from 'react-native'
 import { PanGesture } from 'react-native-gesture-handler'
+import { footerIconList } from '@home/config/footer.config'
 
 interface MainState {
   selectedCardIdx: number
@@ -180,6 +181,31 @@ export interface HomeCardProps {
 export interface HomeEmptyCardProps {
   idx: number
 }
+
+// 아래 탭바: 두 테마가 같은 동작을 쓰고 모양만 다르다
+interface FooterState {
+  // 지금 보고 있는 탭 (footer.config의 key)
+  focusedName: string
+  // 카드 수정 중이면 탭바를 누를 수 없다
+  isSetting: boolean
+}
+
+interface FooterActions {
+  itemPress: (item: FooterItem) => void
+}
+
+interface FooterAnimated {
+  // 카드 수정 중에는 아래로 내려가 숨는다
+  containerStyle: StyleProp<ViewStyle>
+}
+
+export type FooterItem = (typeof footerIconList)[number]
+
+export type HomeFooterViewModel = AnimatedViewModel<
+  FooterState,
+  FooterActions,
+  FooterAnimated
+>
 
 export interface HomeFooterIconProps {
   iconSize: number
