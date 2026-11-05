@@ -23,7 +23,8 @@ import { useCardSize } from '@home/hooks'
 import { useUserContext } from '@/contexts'
 import { useCardSettingContext } from './card-setting-context'
 import { resistEdges, snapIndex } from './slider-math'
-import { useThemeId } from '@/theme/themed'
+import { useThemed } from '@/theme/themed'
+import type { ThemeId } from '@/theme/themes'
 
 /**
  * 카드 슬라이더: 카드들 + 맨 끝 카드 추가 칸을 가로로 넘긴다.
@@ -33,6 +34,11 @@ import { useThemeId } from '@/theme/themed'
 const ACTIVE_OFFSET = 10
 // 글래스 홈은 세로로 스크롤된다. 가로보다 세로로 먼저 이만큼 움직이면 넘기기를 그만두고 스크롤에 넘긴다
 const SCROLL_FAIL_OFFSET = 14
+// 테마별로 홈 본문이 세로로 스크롤되는지 (글래스: 상단 바부터 카드 정보 판까지 함께 스크롤)
+const HOME_SCROLLS: Record<ThemeId, boolean> = {
+  classic: false,
+  'glass-dashboard': true,
+}
 const SNAP = { duration: 300, easing: Easing.out(Easing.cubic) }
 
 interface SliderController {
@@ -57,7 +63,7 @@ const sliderContext = createContext({} as SliderContextValue)
 export const SliderContextProvider = ({ children }: PropsWithChildren) => {
   const { cards } = useUserContext()
   const { isSetting } = useCardSettingContext()
-  const scrollable = useThemeId() === 'glass-dashboard'
+  const scrollable = useThemed(HOME_SCROLLS)
   // 마지막 칸은 카드 추가(EmptyCard)
   const lastIdx = cards?.length ?? 0
 

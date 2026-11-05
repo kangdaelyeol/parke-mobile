@@ -25,6 +25,18 @@ export interface ChangelogEntry {
 // 맨 위 항목이 현재 버전이므로 비어 있을 수 없다
 export const CHANGELOG: [ChangelogEntry, ...ChangelogEntry[]] = [
   {
+    version: '1.5.7',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '테마 구조 정리',
+    changes: [
+      {
+        type: 'improve',
+        text: '테마별로 다른 모양과 배치를 한곳에서 고르도록 정리해, 새 테마를 더할 때 빠진 곳이 없게 했어요.',
+      },
+    ],
+  },
+  {
     version: '1.5.6',
     date: '2026-11-05',
     bump: 'patch',

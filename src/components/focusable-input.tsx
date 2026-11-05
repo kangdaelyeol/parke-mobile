@@ -1,9 +1,7 @@
 import { JSX, useState } from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
-import { glassStyles, glassText, TEXT } from '@/theme/glass'
-import { useThemeId } from '@/theme/themed'
+import { GRAY_DEEP, WHITE } from '@/theme/color'
 import {
   CardIllustration,
   MessageIllustration,
@@ -11,6 +9,7 @@ import {
   PhoneIllustration,
 } from '@/components/illustrations/focusable-input'
 import { CONTENT_MAX_WIDTH } from '@/theme/layout'
+import { useFieldStyles } from './field-styles'
 
 type IconName = 'my' | 'phone' | 'card' | 'message'
 
@@ -43,35 +42,16 @@ export const FocusableInput = ({
   const onFocus = () => setFocus(true)
   const offFocus = () => setFocus(false)
   const Icon = ICONS[iconName]
-  const isGlass = useThemeId() === 'glass-dashboard'
-
-  // 기본 테마: 어두운 칸 + 회색 테두리 / 글래스: 떠 있는 유리 칸(판 안에서는 파인 칸)
-  const box = isGlass
-    ? inset
-      ? glassStyles.inset
-      : glassStyles.field
-    : classic.box
-  const boxFocused = isGlass
-    ? inset
-      ? glassStyles.insetFocused
-      : glassStyles.fieldFocused
-    : classic.boxFocused
+  const field = useFieldStyles(inset)
 
   return (
-    <View style={isGlass ? styles.container : classic.container}>
-      <Text
-        style={[
-          isGlass ? styles.title : classic.title,
-          focus && (isGlass ? styles.titleFocused : classic.titleFocused),
-        ]}
-      >
-        {title}
-      </Text>
+    <View style={field.container}>
+      <Text style={[field.title, focus && field.titleFocused]}>{title}</Text>
       <View>
         <TextInput
           onFocus={onFocus}
           onBlur={offFocus}
-          style={[box, styles.input, focus && boxFocused]}
+          style={[field.box, styles.input, focus && field.boxFocused]}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder}
@@ -86,9 +66,6 @@ export const FocusableInput = ({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 8,
-  },
   input: {
     paddingLeft: 40,
     fontSize: 17,
@@ -97,38 +74,10 @@ const styles = StyleSheet.create({
     fontFamily: PRETENDARD.MEDIUM,
     maxWidth: CONTENT_MAX_WIDTH,
   },
-  title: glassText.label,
-  titleFocused: {
-    color: TEXT.primary,
-  },
   icon: {
     position: 'absolute',
     height: '100%',
     justifyContent: 'center',
     left: 12,
-  },
-})
-
-// 기본 테마 (처음 디자인)
-const classic = StyleSheet.create({
-  container: {
-    gap: 10,
-  },
-  box: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
-  },
-  boxFocused: {
-    borderColor: GRAY,
-  },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
-  titleFocused: {
-    color: WHITE,
   },
 })

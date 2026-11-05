@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Alert } from 'react-native'
 import { useCardSettingContext } from '@home/contexts'
 import { useUserContext } from '@/contexts'
@@ -30,6 +30,10 @@ export const useSettingCardViewModel = (
   const [accent, setAccent] = useState(card.custom.accent)
   const [scale, setScale] = useState(card.custom.scale)
   const [email, setEmail] = useState(savedEmail)
+  const previewCard = useMemo(
+    () => ({ title, phone, theme, layout, custom: { accent, scale, message } }),
+    [title, phone, theme, layout, accent, scale, message],
+  )
   const actions = {
     savePress: async () => {
       if (!isCardAccent(accent))
@@ -86,6 +90,7 @@ export const useSettingCardViewModel = (
       accent,
       scale,
       email,
+      previewCard,
     },
     actions,
     animated: {},

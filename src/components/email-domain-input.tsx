@@ -3,9 +3,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
 import FontAwesome6 from '@react-native-vector-icons/fontawesome6'
 import { DEFAULT_EMAIL_DOMAIN, EMAIL_DOMAINS } from '@/constants'
 import { PRETENDARD } from '@/theme/fonts'
-import { DARK, DARK_LIGHT, GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
-import { glassStyles, glassText, TEXT } from '@/theme/glass'
-import { useThemeId } from '@/theme/themed'
+import { GRAY, GRAY_DEEP, WHITE } from '@/theme/color'
+import { useFieldStyles } from './field-styles'
 
 interface EmailDomainInputProps {
   title: string
@@ -75,32 +74,19 @@ export const EmailDomainInput = ({
   }
 
   const active = focus || open
-  const isGlass = useThemeId() === 'glass-dashboard'
-  // 기본 테마: 어두운 칸 + 회색 테두리 / 글래스: 떠 있는 유리 칸(판 안에서는 파인 칸)
-  const box = isGlass
-    ? inset
-      ? glassStyles.inset
-      : glassStyles.field
-    : classic.box
-  const boxFocused = isGlass
-    ? inset
-      ? glassStyles.insetFocused
-      : glassStyles.fieldFocused
-    : classic.boxFocused
+  const field = useFieldStyles(inset)
 
   return (
-    <View style={isGlass ? styles.container : classic.container}>
-      <Text
-        style={[
-          isGlass ? styles.title : classic.title,
-          active && (isGlass ? styles.titleFocused : classic.titleFocused),
-        ]}
-      >
-        {title}
-      </Text>
+    <View style={field.container}>
+      <Text style={[field.title, active && field.titleFocused]}>{title}</Text>
       <View style={styles.row}>
         <TextInput
-          style={[box, styles.box, styles.input, focus && boxFocused]}
+          style={[
+            field.box,
+            styles.box,
+            styles.input,
+            focus && field.boxFocused,
+          ]}
           value={local}
           onChangeText={localInput}
           onFocus={() => setFocus(true)}
@@ -112,7 +98,14 @@ export const EmailDomainInput = ({
           autoCorrect={false}
         />
         <Text style={styles.at}>@</Text>
-        <View style={[box, styles.box, styles.domainBox, open && boxFocused]}>
+        <View
+          style={[
+            field.box,
+            styles.box,
+            styles.domainBox,
+            open && field.boxFocused,
+          ]}
+        >
           {custom ? (
             <TextInput
               style={[styles.input, styles.domainText]}
@@ -149,24 +142,13 @@ export const EmailDomainInput = ({
         </View>
       </View>
       {open && (
-        <View
-          style={[
-            isGlass ? glassStyles.field : classic.options,
-            styles.options,
-          ]}
-        >
+        <View style={[field.options, styles.options]}>
           {[...EMAIL_DOMAINS, CUSTOM].map(option => {
             const selected = custom ? option === CUSTOM : option === domain
             return (
               <Pressable key={option} onPress={() => select(option)}>
                 {({ pressed }) => (
-                  <View
-                    style={[
-                      styles.option,
-                      pressed &&
-                        (isGlass ? glassStyles.pressed : classic.optionPressed),
-                    ]}
-                  >
+                  <View style={[styles.option, pressed && field.optionPressed]}>
                     <Text
                       style={[
                         styles.optionText,
@@ -195,13 +177,6 @@ export const EmailDomainInput = ({
 }
 
 const styles = StyleSheet.create({
-  container: {
-    gap: 8,
-  },
-  title: glassText.label,
-  titleFocused: {
-    color: TEXT.primary,
-  },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -260,38 +235,5 @@ const styles = StyleSheet.create({
   optionSelected: {
     color: WHITE,
     fontFamily: PRETENDARD.BOLD,
-  },
-})
-
-// 기본 테마 (처음 디자인)
-const classic = StyleSheet.create({
-  container: {
-    gap: 10,
-  },
-  title: {
-    color: GRAY,
-    fontFamily: PRETENDARD.BOLD,
-    fontSize: 13,
-  },
-  titleFocused: {
-    color: WHITE,
-  },
-  box: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
-  },
-  boxFocused: {
-    borderColor: GRAY,
-  },
-  options: {
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: DARK_LIGHT,
-    backgroundColor: DARK,
-  },
-  optionPressed: {
-    backgroundColor: DARK_LIGHT,
   },
 })

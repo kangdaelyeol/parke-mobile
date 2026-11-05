@@ -24,7 +24,7 @@ import {
 } from '@/theme/color'
 import { DM_SANS, PRETENDARD } from '@/theme/fonts'
 import { GLASS, glassStyles } from '@/theme/glass'
-import { useThemeId } from '@/theme/themed'
+import { useThemedSheet } from '@/theme/themed'
 
 // 운행 기록을 받을 이메일 입력. '@' 뒤 도메인은 목록에서 골라 완성할 수 있다
 export const EmailReportSheet = ({
@@ -46,7 +46,10 @@ export const EmailReportSheet = ({
   }, [visible, initialEmail])
 
   const suggestions = focused ? getEmailSuggestions(email) : []
-  const isGlass = useThemeId() === 'glass-dashboard'
+  const themed = useThemedSheet<typeof glass>({
+    classic,
+    'glass-dashboard': glass,
+  })
   const valid = isEmail(email)
 
   return (
@@ -64,12 +67,7 @@ export const EmailReportSheet = ({
           style={styles.dismiss}
           onPress={sending ? undefined : onClose}
         />
-        <View
-          style={[
-            isGlass ? styles.sheet : classic.sheet,
-            { paddingBottom: bottom + 16 },
-          ]}
-        >
+        <View style={[themed.sheet, { paddingBottom: bottom + 16 }]}>
           <Text style={styles.title}>운행 기록 보내기</Text>
           <Text style={styles.description}>
             운행 정보와 이동 경로 지도를 보고서로 정리해 보내드려요.
@@ -92,19 +90,13 @@ export const EmailReportSheet = ({
               onSubmitEditing={() => valid && onSend(email.trim())}
               editable={!sending}
               style={[
-                isGlass ? glassStyles.field : classic.field,
+                themed.field,
                 styles.input,
-                focused &&
-                  (isGlass ? glassStyles.fieldFocused : classic.fieldFocused),
+                focused && themed.fieldFocused,
               ]}
             />
             {suggestions.length > 0 && (
-              <View
-                style={[
-                  isGlass ? glassStyles.field : classic.suggestionBox,
-                  styles.suggestions,
-                ]}
-              >
+              <View style={[themed.suggestionBox, styles.suggestions]}>
                 {suggestions.map(suggestion => {
                   const at = suggestion.indexOf('@')
                   return (
@@ -116,10 +108,7 @@ export const EmailReportSheet = ({
                         <View
                           style={[
                             styles.suggestion,
-                            pressed &&
-                              (isGlass
-                                ? glassStyles.pressed
-                                : classic.suggestionPressed),
+                            pressed && themed.suggestionPressed,
                           ]}
                         >
                           <Text
@@ -198,18 +187,6 @@ const styles = StyleSheet.create({
   dismiss: {
     flex: 1,
   },
-  // 위쪽 테두리만 밝은 유리 시트
-  sheet: {
-    backgroundColor: '#0e0e10',
-    experimental_backgroundImage: GLASS.sheen,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderTopWidth: 1,
-    borderColor: GLASS.highlight,
-    paddingHorizontal: 20,
-    paddingTop: 22,
-    gap: 14,
-  },
   title: {
     color: WHITE,
     fontFamily: DM_SANS.BOLD,
@@ -271,6 +248,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+})
+
+// 글래스: 위쪽 테두리만 밝은 유리 시트와 유리 입력칸
+const glass = StyleSheet.create({
+  sheet: {
+    backgroundColor: '#0e0e10',
+    experimental_backgroundImage: GLASS.sheen,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: 1,
+    borderColor: GLASS.highlight,
+    paddingHorizontal: 20,
+    paddingTop: 22,
+    gap: 14,
+  },
+  field: glassStyles.field,
+  fieldFocused: glassStyles.fieldFocused,
+  suggestionBox: glassStyles.field,
+  suggestionPressed: glassStyles.pressed,
 })
 
 // 기본 테마 (처음 디자인)

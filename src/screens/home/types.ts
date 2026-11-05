@@ -68,6 +68,8 @@ interface SettingCardState {
   scale: number
   // 운행 기록 이메일 (내 계정에 카드별로 저장)
   email: string
+  // 수정 중인 값을 그대로 담은 미리보기 카드 (값이 바뀔 때만 새 객체)
+  previewCard: HomeCardWebPreviewProps['card']
 }
 
 // 수정 화면 애니메이션은 카드 설정 컨텍스트의 진행값이 담당한다

@@ -1,9 +1,10 @@
 import { JSX } from 'react'
-import { StyleSheet, View, Text, Pressable } from 'react-native'
+import { StyleSheet, View, Text, Pressable, ViewStyle } from 'react-native'
 import { PRETENDARD } from '@/theme/fonts'
 import { GRAY } from '@/theme/color'
 import { TEXT, withAlpha } from '@/theme/glass'
-import { useThemeId } from '@/theme/themed'
+import { useThemed, useThemedSheet } from '@/theme/themed'
+import type { ThemeId } from '@/theme/themes'
 import { Toggle } from './toggle'
 import {
   ActiveIllustration,
@@ -57,17 +58,6 @@ const ICON_COLORS: Record<ItemOption, string> = {
   location: '#ffb84d',
 }
 
-// 렌더할 때마다 색 문자열을 만들지 않도록 종류별 타일 색을 미리 만들어 둔다
-const ICON_TILES = Object.fromEntries(
-  Object.entries(ICON_COLORS).map(([option, color]) => [
-    option,
-    {
-      backgroundColor: withAlpha(color, 0.14),
-      borderColor: withAlpha(color, 0.28),
-    },
-  ]),
-) as Record<ItemOption, { backgroundColor: string; borderColor: string }>
-
 // 기본 테마 아이콘 바탕 (처음 디자인: 어두운 색 칸)
 const ICON_BG_COLORS: Record<ItemOption, string> = {
   bluetooth: '#1a1a3a',
@@ -77,6 +67,26 @@ const ICON_BG_COLORS: Record<ItemOption, string> = {
   qr: '#1a1a2a',
   serial: '#1a2a1a',
   location: '#2a221a',
+}
+
+// 테마별 종류마다 아이콘 칸 색. 렌더할 때마다 색 문자열을 만들지 않도록 미리 만들어 둔다
+const ICON_TILES: Record<ThemeId, Record<ItemOption, ViewStyle>> = {
+  classic: Object.fromEntries(
+    Object.entries(ICON_BG_COLORS).map(([option, color]) => [
+      option,
+      { backgroundColor: color },
+    ]),
+  ) as Record<ItemOption, ViewStyle>,
+  // 글래스: 아이콘 선 색을 옅게 깐 유리 타일
+  'glass-dashboard': Object.fromEntries(
+    Object.entries(ICON_COLORS).map(([option, color]) => [
+      option,
+      {
+        backgroundColor: withAlpha(color, 0.14),
+        borderColor: withAlpha(color, 0.28),
+      },
+    ]),
+  ) as Record<ItemOption, ViewStyle>,
 }
 
 export const Item = ({
@@ -92,48 +102,31 @@ export const Item = ({
   const isSmall = useIsSmallScreen()
 
   const Icon = ICONS[option]
-  const isGlass = useThemeId() === 'glass-dashboard'
+  const themed = useThemedSheet<typeof glass>({
+    classic,
+    'glass-dashboard': glass,
+  })
+  const iconTile = useThemed(ICON_TILES)[option]
   return (
     <Pressable
       onPress={onPress}
-      style={[
-        isGlass ? styles.container : classic.container,
-        isSmall && styles.containerSmall,
-      ]}
+      style={[themed.container, isSmall && styles.containerSmall]}
     >
       <View style={styles.left}>
         <View
           style={[
-            isGlass ? styles.iconContainer : classic.iconContainer,
+            themed.iconContainer,
             isSmall && styles.iconContainerSmall,
-            isGlass && ICON_TILES[option],
+            iconTile,
           ]}
         >
-          {!isGlass && (
-            <View
-              style={[
-                classic.iconBackground,
-                { backgroundColor: ICON_BG_COLORS[option] },
-              ]}
-            />
-          )}
           <Icon />
         </View>
         <View style={styles.descSection}>
-          <Text
-            style={[
-              isGlass ? styles.title : classic.title,
-              isSmall && styles.titleSmall,
-            ]}
-          >
+          <Text style={[themed.title, isSmall && styles.titleSmall]}>
             {title}
           </Text>
-          <Text
-            style={[
-              isGlass ? styles.subTitle : classic.subTitle,
-              isSmall && styles.subTitleSmall,
-            ]}
-          >
+          <Text style={[themed.subTitle, isSmall && styles.subTitleSmall]}>
             {subTitle}
           </Text>
         </View>
@@ -154,14 +147,8 @@ export const Item = ({
   )
 }
 
+// 두 테마 공통 (작은 화면 크기 등)
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 15,
-  },
   containerSmall: {
     paddingHorizontal: 10,
     paddingVertical: 10,
@@ -169,16 +156,6 @@ const styles = StyleSheet.create({
   left: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  iconContainer: {
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 38,
-    height: 38,
-    borderRadius: 11,
-    borderWidth: 1,
-    padding: 8,
   },
   iconContainerSmall: {
     width: 30,
@@ -190,23 +167,44 @@ const styles = StyleSheet.create({
     marginLeft: 13,
     gap: 3,
   },
+  titleSmall: {
+    fontSize: 14,
+  },
+  subTitleSmall: {
+    fontSize: 10,
+  },
+  right: { justifyContent: 'center' },
+})
+
+// 글래스: 유리 판 안의 줄
+const glass = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 15,
+  },
+  iconContainer: {
+    overflow: 'hidden',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 38,
+    height: 38,
+    borderRadius: 11,
+    borderWidth: 1,
+    padding: 8,
+  },
   title: {
     color: TEXT.strong,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 15,
-  },
-  titleSmall: {
-    fontSize: 14,
   },
   subTitle: {
     color: TEXT.tertiary,
     fontFamily: PRETENDARD.MEDIUM,
     fontSize: 12,
   },
-  subTitleSmall: {
-    fontSize: 10,
-  },
-  right: { justifyContent: 'center' },
 })
 
 // 기본 테마 (처음 디자인)
@@ -226,9 +224,6 @@ const classic = StyleSheet.create({
     height: 42,
     borderRadius: 9,
     padding: 8,
-  },
-  iconBackground: {
-    ...StyleSheet.absoluteFillObject,
   },
   title: {
     color: 'white',

@@ -10,7 +10,7 @@ import { EmptyCard } from './empty-card'
 import { GlassCard } from './glass-card'
 import { GlassCardInfo } from './glass-card-info'
 import { GlassTopBar } from './glass-top-bar'
-import { SettingCard } from './setting-card'
+import { GlassSettingCard } from './setting-card.glass'
 import { TodaySummary } from './today-summary'
 import { useMainViewModel } from '@home/view-model'
 import { CardInfoTab, HomeMainProps } from '@home/types'
@@ -82,7 +82,7 @@ export const GlassMain = ({ loading }: HomeMainProps) => {
           )}
         </Animated.View>
       </ScrollView>
-      {state.editingCard && <SettingCard card={state.editingCard} />}
+      {state.editingCard && <GlassSettingCard card={state.editingCard} />}
     </View>
   )
 }

@@ -4,7 +4,8 @@ import Animated, { FadeIn } from 'react-native-reanimated'
 import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
 import { EmptyCard } from './empty-card'
-import { SettingCard } from './setting-card'
+import { Header } from './header'
+import { ClassicSettingCard } from './setting-card.classic'
 import { Card } from './card'
 import { CardSkeleton } from './card-skeleton'
 import { EmptyView } from './empty-view'
@@ -29,71 +30,77 @@ export const ClassicMain = ({ loading }: HomeMainProps) => {
   const hideHomeContent = state.isSetting
 
   return (
-    <View style={styles.container}>
-      <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
-        {state.cardLength === 0 && !showSkeleton ? (
-          <EmptyView />
-        ) : (
-          <>
-            <Animated.View
-              pointerEvents={hideHomeContent ? 'none' : 'auto'}
-              style={[StyleSheet.absoluteFill, animated.homeContentStyle]}
-            >
-              <TodaySummary />
-            </Animated.View>
-            <GestureDetector gesture={actions.panGesture}>
+    <>
+      {/* 머리는 화면 위에 고정된다 (글래스는 상단 바가 본문과 함께 스크롤된다) */}
+      <Header />
+      <View style={styles.container}>
+        <View style={[styles.wrapper, isSmall && styles.wrapperSmall]}>
+          {state.cardLength === 0 && !showSkeleton ? (
+            <EmptyView />
+          ) : (
+            <>
               <Animated.View
-                style={[styles.cardContainer, cardSize, animated.sliderStyle]}
+                pointerEvents={hideHomeContent ? 'none' : 'auto'}
+                style={[StyleSheet.absoluteFill, animated.homeContentStyle]}
               >
-                <Animated.View style={animated.cardTitleStyle}>
-                  <View style={[classic.title, isSmall && classic.titleSmall]}>
-                    <Text
-                      style={[
-                        classic.titleText,
-                        isSmall && classic.titleTextSmall,
-                      ]}
-                    >
-                      내 기기
-                    </Text>
-                  </View>
-                </Animated.View>
-                <View style={{ width: cardSize.width }}>
-                  <Animated.View
-                    style={[animated.moverStyle, styles.cardSliderMover]}
-                  >
-                    {showSkeleton ? (
-                      <CardSkeleton />
-                    ) : (
-                      <>
-                        {state.cards.map((card, idx) => (
-                          <Animated.View
-                            key={card.id}
-                            entering={FadeIn.duration(350)}
-                          >
-                            {/* 처음 카드 + [...] 바텀시트 */}
-                            <Card card={card} idx={idx} />
-                          </Animated.View>
-                        ))}
-                        <EmptyCard idx={state.cardLength} />
-                      </>
-                    )}
-                  </Animated.View>
-                </View>
-                {!showSkeleton && (
-                  <Animated.View
-                    pointerEvents={hideHomeContent ? 'none' : 'auto'}
-                    style={animated.homeContentStyle}
-                  >
-                    <PaginationDots />
-                  </Animated.View>
-                )}
+                <TodaySummary />
               </Animated.View>
-            </GestureDetector>
-          </>
-        )}
+              <GestureDetector gesture={actions.panGesture}>
+                <Animated.View
+                  style={[styles.cardContainer, cardSize, animated.sliderStyle]}
+                >
+                  <Animated.View style={animated.cardTitleStyle}>
+                    <View
+                      style={[classic.title, isSmall && classic.titleSmall]}
+                    >
+                      <Text
+                        style={[
+                          classic.titleText,
+                          isSmall && classic.titleTextSmall,
+                        ]}
+                      >
+                        내 기기
+                      </Text>
+                    </View>
+                  </Animated.View>
+                  <View style={{ width: cardSize.width }}>
+                    <Animated.View
+                      style={[animated.moverStyle, styles.cardSliderMover]}
+                    >
+                      {showSkeleton ? (
+                        <CardSkeleton />
+                      ) : (
+                        <>
+                          {state.cards.map((card, idx) => (
+                            <Animated.View
+                              key={card.id}
+                              entering={FadeIn.duration(350)}
+                            >
+                              {/* 처음 카드 + [...] 바텀시트 */}
+                              <Card card={card} idx={idx} />
+                            </Animated.View>
+                          ))}
+                          <EmptyCard idx={state.cardLength} />
+                        </>
+                      )}
+                    </Animated.View>
+                  </View>
+                  {!showSkeleton && (
+                    <Animated.View
+                      pointerEvents={hideHomeContent ? 'none' : 'auto'}
+                      style={animated.homeContentStyle}
+                    >
+                      <PaginationDots />
+                    </Animated.View>
+                  )}
+                </Animated.View>
+              </GestureDetector>
+            </>
+          )}
+        </View>
+        {state.editingCard && <ClassicSettingCard card={state.editingCard} />}
       </View>
-      {state.editingCard && <SettingCard card={state.editingCard} />}
-    </View>
+    </>
   )
 }
 
