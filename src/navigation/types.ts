@@ -34,6 +34,8 @@ export type RootStackParamList = {
   LegalDoc: { docType: DocType }
   // 테마에 담긴 컴포넌트 전체 보기 (설정 → 테마)
   ThemeGallery: { themeId: ThemeId }
+  // 버전별 변경 내역 (설정 → 현재 버전)
+  Changelog: undefined
 }
 
 type RootNavigationProp<T extends keyof RootStackParamList> =
@@ -62,3 +64,4 @@ export type DriveRecordsStackNavigationProp = RootNavigationProp<'DriveRecords'>
 export type DriveRecordStackNavigationProp = RootNavigationProp<'DriveRecord'>
 export type LegalDocStackNavigationProp = RootNavigationProp<'LegalDoc'>
 export type ThemeGalleryStackNavigationProp = RootNavigationProp<'ThemeGallery'>
+export type ChangelogStackNavigationProp = RootNavigationProp<'Changelog'>

@@ -14,6 +14,7 @@ import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { SettingStackNavigationProp } from '@/navigation/types'
 import { resetRoot } from '@/navigation/actions'
 import { SHOW_THEME_GALLERY } from '@/constants'
+import { APP_STAGE, APP_VERSION } from '@/domain/app'
 
 export const useMainViewModel = (): SettingMainViewModel => {
   const { user, validateUser } = useUserContext()
@@ -60,6 +61,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
     themes,
     themeId: theme.id,
     showThemeGallery: SHOW_THEME_GALLERY,
+    appVersion: `${APP_VERSION} ${APP_STAGE}`,
   }
 
   const actions = {
@@ -95,6 +97,7 @@ export const useMainViewModel = (): SettingMainViewModel => {
     themeSelect: selectTheme,
     themeGalleryPress: (themeId: ThemeId) =>
       navigation.navigate('ThemeGallery', { themeId }),
+    versionPress: () => navigation.navigate('Changelog'),
   }
 
   return {

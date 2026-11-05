@@ -12,6 +12,7 @@ import {
   DriveRecordScreen,
   LegalDocScreen,
   ThemeGalleryScreen,
+  ChangelogScreen,
 } from '@/screens'
 import { RootStackParamList } from '@/navigation/types'
 import MainTabNavigator from '@/navigation/main-tab-navigator'
@@ -36,6 +37,7 @@ export default function RootNavigator() {
       <Stack.Screen name="DriveRecords" component={DriveRecordsScreen} />
       <Stack.Screen name="DriveRecord" component={DriveRecordScreen} />
       <Stack.Screen name="ThemeGallery" component={ThemeGalleryScreen} />
+      <Stack.Screen name="Changelog" component={ChangelogScreen} />
       {/* 법률 문서: 동의 시트·주행 화면 위로 뜨도록 모달로 표시 */}
       <Stack.Screen
         name="LegalDoc"

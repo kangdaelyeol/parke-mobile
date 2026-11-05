@@ -15,6 +15,8 @@ interface MainActions {
   // 테마 고르기 / 테마에 담긴 컴포넌트 전체 보기
   themeSelect: (id: ThemeId) => void
   themeGalleryPress: (id: ThemeId) => void
+  // 현재 버전을 누르면 변경 내역으로
+  versionPress: () => void
 }
 
 interface MainState {
@@ -29,6 +31,8 @@ interface MainState {
   themeId: ThemeId
   // [개발용] 구성 요소 보기 줄을 보일지
   showThemeGallery: boolean
+  // 앱의 현재 버전 (예: 1.3.0 Beta)
+  appVersion: string
 }
 
 export interface ConsentItem {

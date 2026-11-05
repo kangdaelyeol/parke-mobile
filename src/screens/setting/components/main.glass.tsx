@@ -100,7 +100,14 @@ export const GlassMain = () => {
           ))}
         </GlassSection>
         <GlassSection title="버전" style={styles.section}>
-          <GlassRow icon="code-branch" title="현재 버전" value="1.0.0 Beta" />
+          {/* 누르면 버전별 변경 내역 */}
+          <GlassRow
+            icon="code-branch"
+            title="현재 버전"
+            value={state.appVersion}
+            chevron
+            onPress={actions.versionPress}
+          />
         </GlassSection>
         <GlassSection title="기타" style={styles.section}>
           <GlassRow

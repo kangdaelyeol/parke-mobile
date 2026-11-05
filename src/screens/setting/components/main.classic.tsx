@@ -115,9 +115,16 @@ export const ClassicMain = () => {
         <View style={styles.section}>
           <Text style={styles.title}>버전</Text>
           <View style={styles.termSection}>
-            <View style={styles.termLine}>
-              <Text style={styles.termText}>1.0.0 Beta</Text>
-            </View>
+            {/* 누르면 버전별 변경 내역 */}
+            <Pressable onPress={actions.versionPress} style={styles.termLine}>
+              <Text style={styles.termText}>{state.appVersion}</Text>
+              <FontAwesome6
+                name="angle-right"
+                size={14}
+                iconStyle="solid"
+                style={styles.angle}
+              />
+            </Pressable>
           </View>
         </View>
         <View style={styles.section}>
