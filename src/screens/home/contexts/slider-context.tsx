@@ -11,7 +11,6 @@ import {
 import { StyleProp, ViewStyle } from 'react-native'
 import {
   cancelAnimation,
-  clamp,
   Easing,
   useAnimatedStyle,
   useSharedValue,
@@ -23,6 +22,7 @@ import { SLIDER_GAP } from '@home/constants'
 import { useCardSize } from '@home/hooks'
 import { useUserContext } from '@/contexts'
 import { useCardSettingContext } from './card-setting-context'
+import { resistEdges, snapIndex } from './slider-math'
 import { useThemeId } from '@/theme/themed'
 
 /**
@@ -33,10 +33,6 @@ import { useThemeId } from '@/theme/themed'
 const ACTIVE_OFFSET = 10
 // 글래스 홈은 세로로 스크롤된다. 가로보다 세로로 먼저 이만큼 움직이면 넘기기를 그만두고 스크롤에 넘긴다
 const SCROLL_FAIL_OFFSET = 14
-// 이보다 빠르게 밀면 거리가 짧아도 민 방향으로 한 칸 넘긴다
-const FLING_VELOCITY = 500
-// 처음/마지막 칸에서 더 밀면 손가락을 이 비율만큼만 따라간다
-const EDGE_RESISTANCE = 0.3
 const SNAP = { duration: 300, easing: Easing.out(Easing.cubic) }
 
 interface SliderController {
@@ -122,21 +118,17 @@ export const SliderContextProvider = ({ children }: PropsWithChildren) => {
         dragStartX.value = translateX.value
       })
       .onUpdate(e => {
-        const minX = -lastIdx * interval
-        const x = dragStartX.value + e.translationX
-        if (x > 0) translateX.value = x * EDGE_RESISTANCE
-        else if (x < minX)
-          translateX.value = minX + (x - minX) * EDGE_RESISTANCE
-        else translateX.value = x
+        translateX.value = resistEdges(
+          dragStartX.value + e.translationX,
+          -lastIdx * interval,
+        )
       })
       .onEnd(e => {
-        const position = -translateX.value / interval
-        let target = Math.round(position)
-        // 빠르게 밀었으면 지금 위치에서 민 방향의 칸으로
-        if (e.velocityX < -FLING_VELOCITY) target = Math.ceil(position)
-        else if (e.velocityX > FLING_VELOCITY) target = Math.floor(position)
-        target = clamp(target, 0, lastIdx)
-
+        const target = snapIndex(
+          -translateX.value / interval,
+          e.velocityX,
+          lastIdx,
+        )
         translateX.value = withTiming(-target * interval, SNAP)
         runOnJS(setSelectedCard)(target)
       })

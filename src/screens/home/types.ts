@@ -89,6 +89,7 @@ interface TodaySummaryState {
   bleScanCount: number
   phoneChangeCount: number
   batteryLevel: string
+  // 마지막 감지 뒤 지난 시간(분)
   lastScanTime: number
 }
 

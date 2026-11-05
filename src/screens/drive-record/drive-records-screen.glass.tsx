@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { FlatList, StyleSheet, Text, View } from 'react-native'
 import { RouteProp } from '@react-navigation/native'
 import {
@@ -11,7 +11,7 @@ import {
   PanelHeader,
   SegmentOption,
 } from '@/components'
-import { DriveRecordDto } from '@/domain/drive'
+import { DriveRecordDto, RecordRange } from '@/domain/drive'
 import { RootStackParamList } from '@/navigation/types'
 import { useDriveRecordsViewModel } from '@/screens/drive-record/view-model'
 import { formatClock, formatDay, formatKm, formatMinutes } from '@/utils'
@@ -22,39 +22,16 @@ type DriveRecordsScreenProps = {
   route: RouteProp<RootStackParamList, 'DriveRecords'>
 }
 
-type RecordRange = 'all' | 'week' | 'month'
-
 const RANGES: readonly SegmentOption<RecordRange>[] = [
   { key: 'all', label: '전체' },
   { key: 'week', label: '이번 주' },
   { key: 'month', label: '이번 달' },
 ]
 
-// 기간의 시작 시각 (이번 주는 월요일 0시부터, 이번 달은 1일 0시부터)
-const rangeStart = (range: RecordRange) => {
-  const now = new Date()
-  if (range === 'month')
-    return new Date(now.getFullYear(), now.getMonth(), 1).getTime()
-  const fromMonday = (now.getDay() + 6) % 7
-  return new Date(
-    now.getFullYear(),
-    now.getMonth(),
-    now.getDate() - fromMonday,
-  ).getTime()
-}
-
 // 카드별 주행 기록 목록 (글래스): 영상의 최근 기록 표처럼 판 하나에 제목 · 필터 칩 · 머리줄 · 줄.
 // 기록이 많아도 보이는 줄만 그리도록 줄은 FlatList로 그리고, 판 안에서 스크롤한다
 export function GlassDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
   const { state, actions } = useDriveRecordsViewModel(route.params.cardId)
-  const [range, setRange] = useState<RecordRange>('all')
-
-  const records = useMemo(() => {
-    if (range === 'all') return state.records
-    const from = rangeStart(range)
-    return state.records.filter(record => record.startAt >= from)
-  }, [state.records, range])
-  const totalKm = formatKm(records.reduce((sum, r) => sum + r.distance, 0))
 
   const columns = useMemo<GlassTableColumn<DriveRecordDto>[]>(
     () => [
@@ -106,16 +83,22 @@ export function GlassDriveRecordsScreen({ route }: DriveRecordsScreenProps) {
       <View style={[glassStyles.surface, styles.panel]}>
         <PanelHeader
           title="주행 기록"
-          subtitle={`${records.length}건 · ${totalKm}km`}
+          subtitle={`${state.visibleRecords.length}건 · ${formatKm(
+            state.totalDistance,
+          )}km`}
           right={
-            <FilterChips options={RANGES} value={range} onChange={setRange} />
+            <FilterChips
+              options={RANGES}
+              value={state.range}
+              onChange={actions.rangeChange}
+            />
           }
         />
         <View style={styles.table}>
           <GlassTableHeader columns={columns} />
           <FlatList
             style={styles.list}
-            data={records}
+            data={state.visibleRecords}
             keyExtractor={record => record.id}
             renderItem={({ item }) => (
               <GlassTableRow

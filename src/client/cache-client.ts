@@ -1,4 +1,5 @@
 import { MMKV } from 'react-native-mmkv'
+import { toDateKey } from '@/utils/format'
 import type { CacheClient, PhoneChangePending } from './types'
 import type { LoginProvider } from '@/services/types'
 export const kv = new MMKV()
@@ -71,8 +72,7 @@ export const cacheClient: CacheClient = {
   getAutoSet: () => kv.getBoolean('setting:autoSet') ?? false,
 
   // today dashboard
-  getToday: () =>
-    kv.getString('today') ?? new Date().toISOString().slice(0, 10),
+  getToday: () => kv.getString('today') ?? toDateKey(),
   setToday: date => kv.set('today', date),
   getBleScanCount: () => kv.getNumber('bleScanCount') ?? 0,
   setBleScanCount: count => kv.set('bleScanCount', count),

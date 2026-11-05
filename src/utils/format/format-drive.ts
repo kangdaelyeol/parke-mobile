@@ -33,12 +33,12 @@ export const formatDateTime = (timestamp: number) => {
 const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
 
 // 10월 22일 (수) (올해가 아니면 앞에 연도)
-export const formatDay = (timestamp: number) => {
+export const formatDay = (timestamp: number, now = Date.now()) => {
   const date = new Date(timestamp)
   const day = `${date.getMonth() + 1}월 ${date.getDate()}일 (${
     WEEKDAYS[date.getDay()]
   })`
-  return date.getFullYear() === new Date().getFullYear()
+  return date.getFullYear() === new Date(now).getFullYear()
     ? day
     : `${date.getFullYear()}년 ${day}`
 }

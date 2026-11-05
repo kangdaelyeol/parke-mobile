@@ -1,4 +1,5 @@
 import { cacheClient } from '@/client'
+import { toDateKey } from '@/utils/format'
 import { CacheService } from './types'
 
 export const cacheService: CacheService = {
@@ -23,7 +24,7 @@ export const cacheService: CacheService = {
   getHasSeenOnBoarding: () => cacheClient.getHasSeenOnBoarding(),
   ensureTodayDashBoardCache: () => {
     const cacheToday = cacheClient.getToday()
-    const nowToday = new Date().toISOString().slice(0, 10)
+    const nowToday = toDateKey()
 
     if (cacheToday !== nowToday) {
       cacheClient.setBleScanCount(0)

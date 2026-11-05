@@ -24,6 +24,26 @@ export interface ChangelogEntry {
  */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: '1.5.5',
+    date: '2026-11-05',
+    bump: 'patch',
+    title: '오늘의 현황 시간 기준 바로잡기',
+    changes: [
+      {
+        type: 'fix',
+        text: '오늘의 현황(감지·번호 변경 횟수)이 오전 9시가 아니라 자정에 새로 시작해요.',
+      },
+      {
+        type: 'fix',
+        text: '홈에 머무는 동안에도 마지막 감지가 몇 분 전인지 1분마다 다시 세요. 앱을 처음 열 때 잠깐 보이던 임시 값도 없앴어요.',
+      },
+      {
+        type: 'improve',
+        text: '주행 기록 기간 계산, 날짜 표시, 카드 넘기기 계산을 자동 테스트로 확인해요.',
+      },
+    ],
+  },
+  {
     version: '1.5.4',
     date: '2026-11-05',
     bump: 'patch',

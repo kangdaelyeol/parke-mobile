@@ -1,9 +1,14 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Alert } from 'react-native'
 import { useFocusEffect, useNavigation } from '@react-navigation/native'
 import { useUserContext } from '@/contexts'
 import { DEFAULT_CARD_CUSTOM } from '@/domain/card'
-import { DriveRecordDto } from '@/domain/drive'
+import {
+  DriveRecordDto,
+  filterRecordsByRange,
+  RecordRange,
+  sumDistance,
+} from '@/domain/drive'
 import { DriveRecordsStackNavigationProp } from '@/navigation/types'
 import { driveRecordService } from '@/services'
 import { DriveRecordsViewModel } from '@/screens/drive-record/types'
@@ -16,6 +21,11 @@ export const useDriveRecordsViewModel = (
   const card = cards.find(c => c.id === cardId)
   const [records, setRecords] = useState<DriveRecordDto[]>([])
   const [loading, setLoading] = useState(true)
+  const [range, setRange] = useState<RecordRange>('all')
+  const visibleRecords = useMemo(
+    () => filterRecordsByRange(records, range),
+    [records, range],
+  )
 
   // 상세에서 기록을 지우고 돌아올 수 있으므로 화면에 올 때마다 다시 불러온다
   useFocusEffect(
@@ -40,11 +50,15 @@ export const useDriveRecordsViewModel = (
       cardTitle: card?.title ?? '',
       accent: card?.custom.accent ?? DEFAULT_CARD_CUSTOM.accent,
       records,
+      range,
+      visibleRecords,
+      totalDistance: sumDistance(visibleRecords),
       loading,
     },
     actions: {
       backPress: () => navigation.goBack(),
       recordPress: record => navigation.navigate('DriveRecord', { record }),
+      rangeChange: setRange,
     },
   }
 }

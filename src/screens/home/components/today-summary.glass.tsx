@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native'
 import { SolidIconName, StatCard } from '@/components'
+import { BatteryStatus, batteryStatus } from '@/domain/card'
 import { Tone } from '@/theme/glass'
 import { useTodaySummaryViewModel } from '@home/view-model'
+import { formatElapsed } from '@/utils'
 
 const batteryIcon = (level: number): SolidIconName => {
   if (level >= 80) return 'battery-full'
@@ -11,19 +13,10 @@ const batteryIcon = (level: number): SolidIconName => {
   return 'battery-empty'
 }
 
-const batteryState = (level: number): { label: string; tone: Tone } => {
-  if (level >= 50) return { label: '양호', tone: 'success' }
-  if (level >= 20) return { label: '보통', tone: 'warning' }
-  return { label: '부족', tone: 'danger' }
-}
-
-// 지난 시간(분)을 큰 숫자 + 단위로 (방금 / n분 전 / n시간 전 / n일 전)
-const elapsed = (minutes: number): { value: string; unit?: string } => {
-  if (minutes < 1) return { value: '방금' }
-  if (minutes < 60) return { value: String(minutes), unit: '분 전' }
-  if (minutes < 60 * 24)
-    return { value: String(Math.floor(minutes / 60)), unit: '시간 전' }
-  return { value: String(Math.floor(minutes / (60 * 24))), unit: '일 전' }
+const BATTERY_BADGE: Record<BatteryStatus, { label: string; tone: Tone }> = {
+  good: { label: '양호', tone: 'success' },
+  fair: { label: '보통', tone: 'warning' },
+  low: { label: '부족', tone: 'danger' },
 }
 
 // 오늘의 현황 (글래스): 영상 맨 위 통계 카드 줄처럼 카드 네 장을 2×2로 놓는다
@@ -32,7 +25,8 @@ export const GlassTodaySummary = () => {
   // 아직 한 번도 감지하지 않았으면 배터리·마지막 감지는 비워 둔다
   const hasScan = !!state.deviceName
   const battery = Number(state.batteryLevel) || 0
-  const last = elapsed(state.lastScanTime)
+  const last = formatElapsed(state.lastScanTime)
+  const batteryBadge = BATTERY_BADGE[batteryStatus(battery)]
 
   return (
     <View style={styles.grid}>
@@ -62,8 +56,8 @@ export const GlassTodaySummary = () => {
             value={String(battery)}
             unit="%"
             icon={batteryIcon(battery)}
-            tone={batteryState(battery).tone}
-            badge={batteryState(battery)}
+            tone={batteryBadge.tone}
+            badge={batteryBadge}
           />
         ) : (
           <StatCard
